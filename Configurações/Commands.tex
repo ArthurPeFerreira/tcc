@@ -1,0 +1,63 @@
+% ==================================================
+% Padrão Desenvolvido por Arthur Pedro Ferreira
+% LinkedIn: https://www.linkedin.com/in/arthur-ferreira-477b8b243/
+% ==================================================
+
+\DeclareRobustCommand{\perthousand}{% % Define um comando robusto para o símbolo de permilagem
+  \ifmmode
+    \text{\textperthousand}% % Verifica se está no modo matemático e insere o símbolo de permilagem como texto
+  \else
+    \textperthousand % Caso contrário, insere o símbolo de permilagem diretamente
+  \fi
+}
+
+% Redefinir contadores se já estiverem definidos para evitar conflito
+\makeatletter
+\@ifundefined{c@lotdepth}{}{\let\c@lotdepth\relax} % Verifica e redefine o contador 'lotdepth' se já existir
+\@ifundefined{c@lofdepth}{}{\let\c@lofdepth\relax} % Verifica e redefine o contador 'lofdepth' se já existir
+\makeatother
+
+\usepackage{tocloft} % Personaliza a aparência do sumário e listas de figuras/tabelas
+
+% Definir um novo tipo de lista para equações
+\newcommand{\listequationsname}{\Large\textbf{Lista de Equações}} % Define o título da lista de equações
+\newlistof{myequations}{equ}{\listequationsname} % Cria uma nova lista para equações
+
+% Comando para adicionar equações à lista
+\newcommand{\myequation}[4]{ % Define um comando para inserir equações e adicioná-las à lista de equações
+    \begin{equation}
+    #1 \quad \ensuremath{\text{[#4]}} % Insere a equação e a unidade de medida entre colchetes
+    \label{#2} % Associa a equação a um rótulo
+    \end{equation}
+    \addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#3} % Adiciona a equação à lista de equações
+}
+
+
+% Configurações para quando utilizar algum código no programa
+\lstset{
+    basicstyle=\ttfamily\footnotesize, % Define a fonte do código
+    keywordstyle=\bfseries\color{blue},% Cor das palavras-chave
+    commentstyle=\itshape\color{brown}, % Cor dos comentários
+    stringstyle=\color{red},          % Cor das strings
+    numbers=left,                     % Exibe a numeração das linhas à esquerda
+    numberstyle=\tiny\color{gray},    % Formatação da numeração
+    stepnumber=1,                     % Númera todas as linhas
+    numbersep=10pt,                   % Distância entre os números e o código
+    % backgroundcolor=\color{lightgray},% Cor de fundo do código
+    frame=single,                     % Adiciona uma moldura ao redor do código
+    breaklines=true,                  % Quebra as linhas longas automaticamente
+    captionpos=b,                     % Coloca a legenda abaixo do código
+    tabsize=4,                        % Tamanho do tab
+    showspaces=false,                 % Não exibe espaços extras
+    showstringspaces=false            % Não exibe espaços dentro de strings
+}
+
+% Configuração do pacote siunitx para seguir o padrão brasileiro (ABNT)
+\sisetup{
+  output-decimal-marker = {,},        % Usa vírgula como separador decimal
+  group-separator = {.},              % Usa ponto como separador de milhar
+  group-minimum-digits = 4,           % Aplica separador a partir de 4 dígitos (ex: 1.000)
+  per-mode = symbol,                  % Exibe unidades por símbolo (ex: m/s e não m·s⁻¹)
+  detect-weight = true,               % Adapta a espessura da fonte às unidades
+  detect-family = true                % Adapta a família da fonte (serif/sans-serif)
+}

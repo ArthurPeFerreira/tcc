@@ -1,0 +1,72 @@
+% ==================================================
+% Importando os pacotes e comandos de arquivos externos
+% ==================================================
+\documentclass[a4paper, 12pt]{article} % Define o documento como um artigo em papel A4 com fonte 12pt
+\usepackage[bottom=3cm, top=2cm, left=2cm, right=2cm]{geometry} % Define as margens do documento
+\usepackage[brazil]{babel} % Configura o idioma do documento para português do Brasil
+\usepackage{amsmath} % Pacote para fórmulas matemáticas avançadas
+\usepackage{multicol} % Permite criar múltiplas colunas de texto
+\usepackage{color} % Permite o uso de cores no texto
+\usepackage{comment} % Permite comentar partes do texto
+\usepackage{amssymb} % Pacote adicional para símbolos matemáticos
+\usepackage{graphicx} % Permite a inclusão de imagens
+\graphicspath{{./Images/}} % Define o diretório para imagens
+\setlength{\marginparwidth}{2cm} % Ajusta a largura da margem lateral para notas
+\usepackage[colorinlistoftodos]{todonotes} % Permite adicionar notas e tarefas no texto
+\usepackage{tabularx} % Permite criar tabelas ajustáveis
+\usepackage{indentfirst} % Indenta o primeiro parágrafo de cada seção
+\usepackage{textcomp} % Inclui o símbolo de "por mil" e outros símbolos
+\usepackage{gensymb} % Adiciona símbolos
+\usepackage{subfig} % Permite a criação de subfiguras (figuras compostas)
+\usepackage{enumerate} % Cria listas numeradas com estilos personalizados
+\usepackage[normalem]{ulem} % Adiciona estilos como sublinhado e riscado, preservando o comportamento padrão de \emph
+\usepackage{caption} % Personaliza legendas de figuras e tabelas
+\usepackage{csquotes} % Permite citações tipográficas adequadas
+\usepackage[useregional]{datetime2} % Formatação de datas de acordo com a configuração regional
+\usepackage{ragged2e} % Permite controle de alinhamento do texto, como 'RaggedRight'
+\usepackage{circuitikz} % Pacote para desenhar circuitos elétricos
+\usepackage{listings} % Pacote para inclusão de códigos-fonte
+\usepackage{xcolor}   % Pacote para definir cores (opcional, mas útil para destacar sintaxe)
+\usepackage[hidelinks]{hyperref} %Identificar Hiperlink
+\usepackage{float} %Biblioteca para arrumar as imagens que as vezes bugam [H] dos objetos
+\usepackage{pgfplots} % Importa o pacote pgfplots para criação de gráficos científicos
+\usepackage{siunitx} % Pacote para formatação correta de unidades do Sistema Internacional
+\usepackage{datatool} % Permite o uso de arquivos CSV para importação de dados
+\pgfplotsset{compat=1.18} % Define a versão de compatibilidade com o pgfplots (evita warnings e erros)
+\usepackage[backend=biber,style=abnt,language=brazilian]{biblatex} % Configura o biblatex com estilo ABNT para citações e referências
+\addbibresource{Referencias.bib} % Inclui o arquivo de referências .bib
+\input{Configurações/Commands} % Importa comandos personalizados 
+
+% ==================================================
+% Variáveis do Documento
+% ==================================================
+\newcommand{\Autor}{Arthur Pedro Ferreira} % Associa valor à variável \Autor
+\newcommand{\Titulo}{Título} % Associa valor à variável \Titulo
+\newcommand{\Subtitulo}{Sub Título} % Associa valor à variável \Subtitulo
+\newcommand{\Cidade}{Blumenau} % Associa valor à variável \Cidade
+\newcommand{\Data}{2025} % Define o comando \Data que insere o ano atual
+
+% ==================================================
+% Início do Documento
+% ==================================================
+\begin{document}
+
+% Inclui os capítulos do documento
+\include{Capitulos/01_Capa} % Capa
+\include{Capitulos/02_Contra-Capa} % Contra-Capa
+\include{Capitulos/03_Dedicatoria} % Dedicatória
+\include{Capitulos/04_Agradecimentos} % Agradecimentos
+\include{Capitulos/05_Epigrafe} % Epígrafe
+\include{Capitulos/06_Resumo} % Resumo
+\include{Capitulos/07_Lista_Imagens} % Lista de Imagens
+\include{Capitulos/08_Lista Siglas} % Lista de Siglas
+\include{Capitulos/09_Lista de Simbolos} % Lista de Símbolos
+\include{Capitulos/10_Lista de Equações} % Lista de Equações
+\include{Capitulos/11_Lista de Tabelas} % Lista de Tabelas
+\include{Capitulos/12_Sumário} % Sumário
+\include{Capitulos/13_Introducao} % Introdução
+\include{Capitulos/14_Desenvolvimento} % Desenvolvimento
+\include{Capitulos/15_Conclusão} % Conclusão
+\include{Capitulos/00_Referencias.tex} % Referências
+
+\end{document}
