@@ -2,10 +2,48 @@
 \clearpage % Finaliza a página atual
 
 \section{Introdução} % Inicia a seção "Introdução"
-\subsection{subCap 1}
+\subsection{Contextualização}
+
+\par Desde o início da industrialização, os avanços tecnológicos provocaram mudanças de paradigma hoje reunidas sob o termo ``revoluções industriais'': a mecanização (1ª revolução), a difusão da energia elétrica (2ª) e a digitalização dos processos produtivos (3ª) \cite{LASI_INDUSTRY_40}.
+\par A figura~\ref{fig:revolucoes_industriais} resume essa linha do tempo. Na terceira fase, a automação voltada a controladores lógicos programáveis (CLPs) expandiu a lógica de comando para além de relés e painéis dedicados, em paralelo, tornou-se necessário monitorar, registrar e intervir em plantas de forma centralizada, práticas que se consolidaram nos sistemas supervisórios industriais.
+
+\begin{figure}[H]
+    \centering
+    \caption{Revoluções Industriais}
+    \centering
+    \includegraphics[scale = .35]{Imagens/Introducao/Contextualizacao/evolucoes-industriais.png}
+    \centering
+    \vspace{0.2cm} \\
+    Fonte: \cite{PISCHING2017}.
+    \label{fig:revolucoes_industriais}
+\end{figure}
+
+
+
+
+
+
+
+\par A visão de produção futura contém sistemas de fabricação modulares e eficientes e caracteriza cenários em que os produtos controlam seu próprio processo de fabricação.\cite{LASI_INDUSTRY_40}
+
+\par Esta visão é suposta para realizar a fabricação de produtos individuais em um lote de tamanho um enquanto mantém as condições econômicas da produção em massa.\cite{LASI_INDUSTRY_40}
+
+\par Inspirado por esta expectativa futura, o termo "Industry 4.0" foi estabelecido antecipadamente para uma "4ª revolução industrial" planejada, o termo sendo um lembrança da versão de software.\cite{LASI_INDUSTRY_40}
+
+
+
+
+\subsection{Justificativa}
+\subsection{Objetivos}
+\subsubsection{Objetivo Geral}
+\subsubsection{Objetivos Específicos}
+\subsection{Estrutura do Trabalho}
+
+
+
 
 % Exemplo Citação
-Exemplo citação \cite{Mussoi} 
+Exemplo citação \cite{Mussoi}
 
 % Exemplo Equação
 Exemplo de Equação:
@@ -23,83 +61,83 @@ def hello_world():
 % Exemplo Circuito
 Exemplo Circuito:
 \begin{figure}[H]
-\centering
-\caption{Exemplo Circuito}
-\centering
-\begin{circuitikz} \draw 
-    (0,0) node[above]{I/O Pin} to[short, o-] ++(2,0)
-    (2,0) to[push button] (2,-2) 
-    (2,0) to[R, l_=10k\ohm] (4,0)
-    (4,0) to[short] (4,2)
-    (2,-2) to[short] (2,-3)
-    (4,2) node[vcc]{+5V} 
-    (2,-3) node[ground]{}
-    (2,-3) node[anchor=west] {0V}
-    ;
-    \end{circuitikz} 
-\centering 
-\vspace{0.2cm} \\
-Fonte: Autor.
-\label{fig:ExemploCircuito}
+    \centering
+    \caption{Exemplo Circuito}
+    \centering
+    \begin{circuitikz} \draw
+        (0,0) node[above]{I/O Pin} to[short, o-] ++(2,0)
+        (2,0) to[push button] (2,-2)
+        (2,0) to[R, l_=10k\ohm] (4,0)
+        (4,0) to[short] (4,2)
+        (2,-2) to[short] (2,-3)
+        (4,2) node[vcc]{+5V}
+        (2,-3) node[ground]{}
+        (2,-3) node[anchor=west] {0V}
+        ;
+    \end{circuitikz}
+    \centering
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:ExemploCircuito}
 \end{figure}
 
 Exemplo chamada de referencia do circuito~\ref{fig:ExemploCircuito}.
 
 % Exemplo Imagem
 \begin{figure}[H]
-\centering
-\caption{Exemplo Imagem}
-\centering
-\includegraphics[scale = .5]{Imagens/Capa/01_Instituto.png}
-\centering 
-\vspace{0.2cm} \\
-Fonte: Autor.
-\label{fig:ExemploFigura}
+    \centering
+    \caption{Exemplo Imagem}
+    \centering
+    \includegraphics[scale = .5]{Imagens/Capa/01_Instituto.png}
+    \centering
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:ExemploFigura}
 \end{figure}
 
 Exemplo chamada de referencia da figura~\ref{fig:ExemploFigura}.
 
 % Exemplo Gráfico
 \begin{figure}[H]
-\centering
-\caption{Exemplo Gráfico}
-\begin{tikzpicture}
-\begin{axis}[
-    axis lines = middle,
-    xlabel = {$x$},
-    ylabel = {$f(x)$},
-    % title = {Gráfico de $f(x) = x^2$},
-    grid = both,
-]
-\addplot[
-    domain=-2:2,
-    samples=100,
-    thick,
-    blue
-]
-{x^2};
-\end{axis}
-\end{tikzpicture}
-\centering 
-\vspace{0.2cm} \\
-Fonte: Autor.
-\label{fig:ExemploGráfico}
+    \centering
+    \caption{Exemplo Gráfico}
+    \begin{tikzpicture}
+        \begin{axis}[
+                axis lines = middle,
+                xlabel = {$x$},
+                ylabel = {$f(x)$},
+                % title = {Gráfico de $f(x) = x^2$},
+                grid = both,
+            ]
+            \addplot[
+                domain=-2:2,
+                samples=100,
+                thick,
+                blue
+            ]
+            {x^2};
+        \end{axis}
+    \end{tikzpicture}
+    \centering
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:ExemploGráfico}
 \end{figure}
 
 Exemplo chamada de referencia da figura~\ref{fig:ExemploGráfico}.
 
 % Exemplo Tabela
 \begin{table}[H]
-\centering
-\caption{Exemplo Tabela}
-\begin{tabular}{|c|c|}
-\hline
-\textbf{Texto1} & \textbf{Texto 2} \\ \hline
-Teste1 & Teste2 \\ \hline
-\end{tabular}
-\vspace{0.25cm} \\
-Fonte: Autor.
-\label{tab:ExemploTabela}
+    \centering
+    \caption{Exemplo Tabela}
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Texto1} & \textbf{Texto 2} \\ \hline
+        Teste1          & Teste2           \\ \hline
+    \end{tabular}
+    \vspace{0.25cm} \\
+    Fonte: Autor.
+    \label{tab:ExemploTabela}
 \end{table}
 
 Exemplo chamada de referencia da tabela~\ref{tab:ExemploTabela}.
