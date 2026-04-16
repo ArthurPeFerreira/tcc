@@ -75,6 +75,92 @@
       \verb 10.1007/s12599-014-0334-4
       \endverb
     \endentry
+    \entry{MONOSTORI2016_CPS_MANUFACTURING}{article}{}
+      \name{author}{10}{}{%
+        {{un=0,uniquepart=base,hash=b2cc0cbfb233d15db8a31e15322a57b0}{%
+           family={Monostori},
+           familyi={M\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=6c3ce7577b0c1255e27fd556e8d61e0f}{%
+           family={Kádár},
+           familyi={K\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0e226fc1920d4c46cb1aab88f50cab04}{%
+           family={Bauernhansl},
+           familyi={B\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2fb68235ea266a83dbd5e479449e7818}{%
+           family={Kondoh},
+           familyi={K\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=68a22639cd3ce707b0322295399010d2}{%
+           family={Kumara},
+           familyi={K\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=150bc0f9c44b77ed3d971e33dfd41c91}{%
+           family={Reinhart},
+           familyi={R\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1fc8bef5eb4729eb8f4b07d266cdfc50}{%
+           family={Sauer},
+           familyi={S\bibinitperiod},
+           given={O.},
+           giveni={O\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=c9e65bdf02242fe86462fddffc74df45}{%
+           family={Schuh},
+           familyi={S\bibinitperiod},
+           given={G.},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a95f7eb1ec716beb1aabe38e665c8f6b}{%
+           family={Sihn},
+           familyi={S\bibinitperiod},
+           given={W.},
+           giveni={W\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=54319acea0a81f2db682549128a1437f}{%
+           family={Ueda},
+           familyi={U\bibinitperiod},
+           given={K.},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{192e3b5776d6a7228a4d7d41fa5f1807}
+      \strng{fullhash}{7057cd64b011572fe591b69bc9ef0702}
+      \strng{bibnamehash}{192e3b5776d6a7228a4d7d41fa5f1807}
+      \strng{authorbibnamehash}{192e3b5776d6a7228a4d7d41fa5f1807}
+      \strng{authornamehash}{192e3b5776d6a7228a4d7d41fa5f1807}
+      \strng{authorfullhash}{7057cd64b011572fe591b69bc9ef0702}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{CIRP Annals}
+      \field{number}{2}
+      \field{title}{Cyber-physical systems in manufacturing}
+      \field{volume}{65}
+      \field{year}{2016}
+      \field{pages}{621\bibrangedash 641}
+      \range{pages}{21}
+      \verb{doi}
+      \verb 10.1016/j.cirp.2016.06.005
+      \endverb
+    \endentry
     \entry{PISCHING2017}{thesis}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=7d544e832148f3c233b47c0abe09973a}{%
@@ -108,8 +194,38 @@
       \field{year}{2017}
       \field{dateera}{ce}
     \endentry
+    \entry{WEF_DAVOS_2016_THEME}{online}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=9f6d16e0eaf271813481bd46be0c7a35}{%
+           family={{World Economic Forum}},
+           familyi={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{9f6d16e0eaf271813481bd46be0c7a35}
+      \strng{fullhash}{9f6d16e0eaf271813481bd46be0c7a35}
+      \strng{bibnamehash}{9f6d16e0eaf271813481bd46be0c7a35}
+      \strng{authorbibnamehash}{9f6d16e0eaf271813481bd46be0c7a35}
+      \strng{authornamehash}{9f6d16e0eaf271813481bd46be0c7a35}
+      \strng{authorfullhash}{9f6d16e0eaf271813481bd46be0c7a35}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{What is the theme of Davos 2016?}
+      \field{urlday}{15}
+      \field{urlmonth}{4}
+      \field{urlyear}{2026}
+      \field{year}{2015}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.weforum.org/stories/2015/11/what-is-the-theme-of-davos-2016/
+      \endverb
+      \verb{url}
+      \verb https://www.weforum.org/stories/2015/11/what-is-the-theme-of-davos-2016/
+      \endverb
+    \endentry
   \enddatalist
-  \missing{Mussoi}
 \endrefsection
 \endinput
 

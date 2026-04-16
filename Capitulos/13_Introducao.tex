@@ -4,143 +4,268 @@
 \section{Introdução} % Inicia a seção "Introdução"
 \subsection{Contextualização}
 
-\par Desde o início da industrialização, os avanços tecnológicos provocaram mudanças de paradigma hoje reunidas sob o termo ``revoluções industriais'': a mecanização (1ª revolução), a difusão da energia elétrica (2ª) e a digitalização dos processos produtivos (3ª) \cite{LASI_INDUSTRY_40}.
-\par A figura~\ref{fig:revolucoes_industriais} resume essa linha do tempo. Na terceira fase, a automação voltada a controladores lógicos programáveis (CLPs) expandiu a lógica de comando para além de relés e painéis dedicados, em paralelo, tornou-se necessário monitorar, registrar e intervir em plantas de forma centralizada, práticas que se consolidaram nos sistemas supervisórios industriais.
+\par A indústria é o setor da economia que produz bens materiais através de diferentes recursos, entre eles humanos, energia e equipamentos altamente mecanizados e automatizados. Desde o início da industrialização, os avanços tecnológicos provocaram mudanças de paradigma hoje reunidas sob o termo "revoluções industriais" \label{def:revolucoes_industriais} \cite{LASI_INDUSTRY_40}.
+
+\par A Figura~\ref{fig:revolucoes_industriais} resume essa linha do tempo. Na primeira fase, destaca-se a mecanização da produção, na segunda, a difusão da energia elétrica e a produção em massa baseada no modelo Fordista e na terceira fase, a difusão da digitalização \cite{LASI_INDUSTRY_40}. Foi nessa fase que ocorreu a introdução tecnologia da informação e da eletrônica que propiciaram o início da automação dos processos produtivos, com a introdução de controladores lógicos programáveis (CLPs), CNCs (Computer Numeric Control) e robôs.
 
 \begin{figure}[H]
     \centering
-    \caption{Revoluções Industriais}
+    \caption{Linha do Tempo das Revoluções Industriais}
     \centering
-    \includegraphics[scale = .35]{Imagens/Introducao/Contextualizacao/evolucoes-industriais.png}
+    \includegraphics[scale = .4]{Imagens/Introducao/Contextualizacao/evolucoes-industriais.png}
     \centering
     \vspace{0.2cm} \\
     Fonte: \cite{PISCHING2017}.
     \label{fig:revolucoes_industriais}
 \end{figure}
 
+\par Atualmente, vive-se a quarta fase, a chamada Indústria 4.0. Baseada na industria inteligente, internet das coisas (IOT) e sistemas ciber-físicos (CPS - Cyber-Physical Systems), que são sistemas de entidades computacionais colaborativas que estão em intensa conexão com o mundo físico e seus processos em andamento, fornecendo e utilizando, ao mesmo tempo, serviços de acesso a dados e processamento de dados disponíveis na Internet \cite{MONOSTORI2016_CPS_MANUFACTURING}. O próprio Fórum Econômico Mundial observa o seguinte: As Revoluções Industriais anteriores avançaram o progresso humano através de novas formas de geração de energia, produção em massa e processamento de informação. Construindo sobre uma internet ubíqua e móvel, sensores menores, mais baratos e mais poderosos, além de inteligência artificial e aprendizado de máquina, a Quarta Revolução Industrial é distinta pela velocidade, escala e força com que transforma sistemas inteiros de produção, distribuição, consumo e possivelmente a essência da natureza humana \cite{WEF_DAVOS_2016_THEME}.
+
+\par A Indústria 4.0 caracteriza-se pelo grande avanço dos protocolos de comunicação e telemetria, aliada à estar no mesmo momento de popularização do desenvolvimento de software e à interconexão de máquinas e sistemas de forma inteligente. Tais avanços permitiram o monitoramento e a supervisão centralizada de processos complexos em tempo real, elevando o papel dos sistemas supervisórios de simples interfaces de operação para centrais estratégicas de análise de dados. Nesse cenário, este trabalho propõe o desenvolvimento de um sistema supervisório web orientado a microserviços.
 
 
 
 
 
 
-\par A visão de produção futura contém sistemas de fabricação modulares e eficientes e caracteriza cenários em que os produtos controlam seu próprio processo de fabricação.\cite{LASI_INDUSTRY_40}
-
-\par Esta visão é suposta para realizar a fabricação de produtos individuais em um lote de tamanho um enquanto mantém as condições econômicas da produção em massa.\cite{LASI_INDUSTRY_40}
-
-\par Inspirado por esta expectativa futura, o termo "Industry 4.0" foi estabelecido antecipadamente para uma "4ª revolução industrial" planejada, o termo sendo um lembrança da versão de software.\cite{LASI_INDUSTRY_40}
 
 
 
 
-\subsection{Justificativa}
+
+
+
+
+
+
+
+
+De acordo com Kagermann e Riemensperger (2014), a I4.0 pode ser entendida
+como a implementação da fábrica inteligente (smart factory) e está centrada na
+manufatura baseada em serviços e processos inteligentes. A fábrica inteligente busca
+inovar os processos produtivos e atender as flutuações das demandas, assim como
+permitir a oferta de produtos personalizados que atendam às necessidades
+individualizadas de clientes. Estes fatores mudam significativamente os conceitos de
+produção, visando agora a produção sob demanda e personalizada ao invés da
+produção em massa (PISCHING et al., 2015a). A I4.0 é considerada uma nova era
+industrial com o propósito de atender aos anseios e as flutuações do mercado mundial,
+que se torna possível por meio das TIC, Internet móvel e ubíqua, sensores de
+dimensões menores a baixos custos e mais potentes, assim como a inteligência
+artificial e máquinas que aprendem (CHANTANAYINGYONG, 2016). Essa nova era é
+apresentada por Brynjolfsson e McAfee (2014), que afirmam que o setor produtivo
+mundial está sendo impulsionado por três fatores principais, sendo eles: (1) o
+crescimento exponencial da capacidade dos computadores; (2) a vasta coleção de
+informações digitais; e (3) as inovações tecnológicas. Trata-se de uma visão
+digitalizada, onde as informações do ciclo de vida dos produtos e dos processos de
+produção são compartilhados em rede. As informações referentes aos projetos,
+arquiteturas, prototipagens, testes, estoques, manuais de equipamentos e produtos,
+normas, manutenções, descartes e tantas outras operações, devem ser arquivadas
+em formatos digitais, de modo que possam ser recuperadas e compartilhadas entre
+as partes interessadas a qualquer momento e em qualquer lugar. Os interesses dos
+consumidores e as flutuações de mercado intensificam a demanda por indústrias que
+possam responder rapidamente às expectativas dos mesmos, uma vez que há uma
+crescente tendência pela busca de produtos cujo ciclo de vida é menor e ao mesmo tempo em que há um aumento da procura de produtos sob medida que satisfaçam as
+intenções do cliente.
+No contexto da I4.0 é esperado que máquinas e produtos se comuniquem por
+meio dos CPSs e a IoT para trocar informações entre eles ao longo do ciclo de
+produção (KAGERMANN; WAHLSTER; HELBIG, 2013; HENG, 2014; LASI et al.,
+2014; MACDOUGALL, 2014; SCHUH et al., 2014a). Os CPSs fornecem uma rede
+integrada de processos e recursos para permitir a integração dos sistemas fisicos com
+os virtuais por meio da Internet (KAGERMANN; WAHLSTER; HELBIG, 2013;
+MACDOUGALL, 2014), onde sistemas embarcados (embedded system8
+
+) monitoram
+e controlam processos físicos por meio de sensores e atuadores com operações do
+
+tipo pedido/resposta, fazendo com que processos físicos afetem os virtuais e vice-
+versa. De acordo com Kang et al. (2016) um CPS passa a ser uma tecnologia chave
+
+para a concepção da manufatura inteligente (smart manufacturing) acompanhada de
+outras tecnologias, tais como a computação em nuvem, a IoT e big data9
+(megadados).
+Por outro lado, a IoT pode ser vista como uma infraestrutura de rede global e
+dinâmica composta por dispositivos conectados baseados em sensores, redes de
+comunicação, e tecnologias de processamento de informação (XU; HE; LI, 2014), que
+permitem o rastreamento e monitoramento de “coisas”, sejam elas virtuais ou físicas.
+Neste contexto, os CPSs conectados via Internet são compreendidos como elementos
+da IoT (JAZDI, 2014), isto é, os CPSs oferecem a base para a criação de um ambiente
+IoT, que combina a Internet dos serviços e dados para tornar possível a Indústria 4.0
+(KAGERMANN; WAHLSTER; HELBIG, 2013).
+No contexto da I4.0, os CPSs são parte das “coisas” da IoT, que por sua vez
+são definidas como uma rede de “coisas” que cooperam uns com os outros por meio
+de endereços únicos e exclusivos. Nesse contexto, os CPSs proporcionam a digitalização dos recursos e serviços físicos, além de oferecer maior autônomia da
+produção por meio da comunicação entre produtos e máquinas do sistema de
+produção (KAGERMANN; RIEMENSPERGER, 2014; HERMANN; PENTEK; OTTO,
+2016). De acordo com Kagermann e Riemensperger (2014) a digitalização de serviços
+físicos é o meio para o compartilhamento de recursos de modo a propiciar redes
+colaborativas de serviços. O compartilhamento de recursos virtuais segue a
+arquitetura orientada a serviços (SOA – Service Oriented Architecture) e é
+implementada por meio de serviços Web (WS - Web Services).
+De acordo com Kagermann; Wahlster e Helbig (2013), na I4.0 as pessoas, as
+máquinas, as matérias-primas e os produtos devem se comunicar entre si, assim
+como pessoas se comunicam em uma rede social (Figura 2). Desta forma, os recursos
+físicos devem ser digitalizados, precisando que sejam criados, publicados e
+compartilhados em uma infraestrutura baseada na Internet, para serem então
+utilizados por uma determinada empresa ou grupo de parceiros que visam atender a
+uma demanda específica.
+
+Neste cenário os produtos possuem identificadores exclusivos que são chaves
+para a localização de suas próprias informações, tais como, características, destino e lista de operações a serem realizadas, permitindo que possam ser monitorados e
+controlados de forma autônoma durante os processos de manufatura (LASI et al.,
+2014). Os produtos com essas características são baseados na IoT e são chamados
+de produtos inteligentes (smart products), apresentando como principal característica
+a capacidade de serem monitorados e rastreados, oferecendo informações que vão
+desde o processo produtivo até o pós-venda (GUTIERREZ et al., 2013). De acordo
+com McFarlane et al. (2013), os produtos inteligentes no contexto industrial
+compreendem a ligação de um produto ou pedido físico às informações e regras que
+coordenam a forma com que estes são manufaturados, armazenados e/ou
+transportados. Ainda, para McFarlane et al. (2013), uma abordagem que segue o
+paradigma de produto inteligente é descrita como a capacidade de tratar cada produto
+individualmente, dependendo de suas características e necessidades específicas.
+Assim sendo, os produtos inteligentes são considerados subcomponentes dos CPSs,
+principalmente pela capacidade de comunicação com o ambiente de produção
+(BECHTOLD et al., 2014; HERMANN; PENTEK; OTTO, 2016). Portanto, na I4.0 os
+recursos do setor produtivo devem se comunicar, e neste quesito, para Kagermann;
+Wahlster e Helbig (2013) os fabricantes de ferramentas e máquinas para o setor
+produtivo devem se preparar para compatibilizar a comunicação entre máquinas e
+produtos, sendo necessário a especificação de normas e arquiteturas que possam
+servir de base para a implementação da I4.0. Vale destacar que, segundo Hermann;
+Pentek e Otto (2016), a I4.0 apresenta seis princípios de projeto que requerem
+atenção e que são os desafios para sua consolidação, sendo eles: (1) a
+interoperabilidade, (2) a digitalização, (3) a descentralização, (4) a coleta e análise de
+dados em tempo real, (5) a orientação a serviços, e (6) a modularidade.
+A I4.0 deve ser provida de ferramentas e máquinas que se comuniquem em
+tempo real com bases de dados, sistemas operacionais, e outras ferramentas. Para
+isso há a necessidade da interação do mundo real com o virtual de forma que os
+equipamentos possam se comunicar e processar operações de acordo com os
+requisitos dos produtos com mínima intervenção humana, evidenciando assim novas
+oportunidades no campo da pesquisa e desenvolvimento (MACDOUGALL, 2014;
+UNGUREAN; GAITAN; GAITAN, 2014).
+Quanto às arquiteturas de sistemas produtivos voltadas à quarta revolução
+industrial, é fato que estas se apresentam em estágio inicial, e por este motivo muitos
+assuntos são explorados no campo de pesquisa e entre eles está a necessidade da
+
+27
+
+comunicação entre máquinas e produtos baseados nos conceitos de CPS e IoT, para
+possibilitar o processamento de operações de manufatura de forma mais autônoma.
+De acordo com Xu; He e Li (2014), normas técnicas e arquiteturas precisam ser
+estabelecidas para definir as especificações para processamento e troca de
+informações entre “coisas”. Para Bandyopadhyay e Sen (2011), o sucesso da IoT no
+contexto industrial depende de normatizações e arquiteturas que visem amparar a
+implantação de sistemas com suporte à comunicação entre recursos do sistema
+produtivo oferecendo autonomia, interoperabilidade, compatibilidade, confiabilidade e
+operações eficazes em uma escala global.
+De acordo com os estudos realizados em torno da I4.0, constata-se uma série
+de expectativas para atingir sua maturidade e se tornar realidade, dentre as quais se
+destacam:
+a) A criação de produtos personalizados e sob demanda para atender interesses
+individuais de consumidores.
+b) A indústria precisa ser ágil para atender as demandas personalizadas, ou seja,
+ao invés da produção em massa, a produção deve ser individualizada e as
+máquinas precisam ter autonomia para identificar quais são os processos que
+devem executar sobre os produtos presentes na linha de produção, levando em
+conta as especificidades de cada produto.
+c) As empresas, diante de um contexto globalizado, independente de tamanho,
+mas em especial as pequenas e médias empresas (PME), devem ter maior
+participação nos negócios por meio da prestação de serviços em redes
+colaborativas, ao mesmo tempo que as exigências individuais de consumidores
+devem potencializar a competição entre as empresas. A busca por soluções que
+venham a contribuir para o processo produtivo industrial e atender a demandas
+personalizadas requer uma indústria mais ágil. A formação de redes
+colaborativas de serviços (RCS) é uma forma de viabilizar a colaboração entre
+empresas e parceiros para prover soluções personalizadas aos seus clientes.
+Estas empresas podem estar localizadas muito próximas fisicamente ou
+dispersas, isto é, espalhadas pelo mundo.
+d) O uso da IoT como forma de permitir a comunicação entre produtos e máquinas
+de modo que cada peça receba o tratamento adequado durante os processos de
+produção e auxilie no desenvolvimento de produtos personalizados. Ainda, com
+o avanço da miniaturização dos componentes eletrônicos e o crescimento da
+
+28
+
+infraestrutura da Internet, a computação ubíqua tem se fortalecido e está se
+tornando realidade. Elementos computacionais passam a fazer parte de
+pequenos componentes eletrônicos capazes de enviar, receber, processar e
+armazenar informações de forma autônoma, em qualquer lugar, desde que haja
+meios de comunicação providos pela Internet.
+e) A digitalização dos serviços físicos e a disponibilização dos mesmos em uma
+infraestrutura baseada na computação em nuvem permite o compartilhamento
+de serviços. Estes serviços, no contexto da IoT e CPS são usados em diferentes
+momentos, como por exemplo, na engenharia de projetos de plantas industriais,
+na criação de produtos, em ambientes virtuais de ensino/treinamento, em
+sistemas de manutenção à distância, entre outros. A implementação e
+gerenciamento dos serviços são realizados por intermédio da arquitetura
+orientada a serviços (Service Oriented Architecture – SOA) e implementado por
+meio de serviços Web (Web Services – WS).
+Os anseios que giram em torno da Indústria 4.0, presentes nas recomendações
+descritas por Kagermann; Wahlster e Helbig (2013), assim como a necessidade de
+arquiteturas e serviços apresentados por Kagermann e Riemensperger (2014)
+reforçam a motivação para a realização de pesquisas sobre novas arquiteturas de
+sistemas produtivos e sua implementação prática. Em especial, nota-se que não há
+evidências de pesquisas e publicações que tratam de soluções para determinar
+objetivamente qual equipamento deve ser alocado para processar operações
+conforme os requisitos do produto. Os modelos de referências apresentam os
+detalhes sobre conceitos, normas e interações, porém é possível observar que não
+asseguram os detalhes de implementação e procedimentos de aplicação, tão pouco
+sugerem um meio de organizar e localizar equipamentos e dados para dar suporte à
+descoberta e seleção de máquinas para processar as operações exigidas pelos
+produtos.
+As propostas de arquiteturas para comunicação entre produtos e equipamentos
+envolvidos na linha de produção industrial requerem mais investigações de modo a
+viabilizar que as operações exigidas para a manufatura de produtos possam, de forma
+
+autônoma, serem identificadas e utilizadas para determinar a máquina para processá-
+las.
+
+O desenvolvimento de uma arquitetura de sistema como a que se propõe neste
+trabalho, envolve a modelagem conceitual e funcional do sistema para,
+
+29
+
+respectivamente, verificar e validar os componentes e a dinâmica da interação entre
+eles, que pode ser realizado por meio da simulação. De acordo com Pessoa (2015),
+a simulação possibilita a realização de uma análise comportamental do modelo e
+assim verificar e validar se ele atende aos requisitos funcionais. Também é importante
+destacar que a comunicação entre produtos e máquinas, assim como a descoberta
+de equipamentos são classificadas como sistemas a eventos discretos (SED).
+Segundo Miyagi (1996) uma técnica formal efetiva para a modelagem de SED é a rede
+de Petri (RdP), que possibilita também a visualização do sistema em diferentes níveis
+de abstração. Da RdP deriva a técnica Production Flow Schema (PFS) que é um grafo
+interpretado para a modelagem conceitual de sistemas (PESSOA et al., 2014). De
+acordo com da Silva et al. (2012), o PFS é efetiva para sistematizar e facilitar a
+modelagem em RdP de processos de sistemas produtivos. Segundo Hasegawa et al.
+(1999), um importante recurso do PFS é a representação do fluxo de diferentes tipos
+de itens (objetos físicos, mensagens, dados, etc.) e o processo de alocação e
+desalocação de recursos. Por meio de PFS é possível fazer uma representação
+hierárquica do modelo por meio de sucessivos refinamentos que resultam em modelos
+em RdP, que são utilizados para verificar e validar os comportamentos do sistema por
+meio da simulação. A técnica PFS/RdP oferece a base para a modelagem de
+arquiteturas de software, possibilitando a descrição das funcionalidades específicas
+de componentes e também da interação entre eles.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \subsection{Objetivos}
+
+\par A seguir são apresentados os objetivos gerais e específicos deste Trabalho de Conclusão de Curso.
+
 \subsubsection{Objetivo Geral}
 \subsubsection{Objetivos Específicos}
 \subsection{Estrutura do Trabalho}
 
 
 
-
-% Exemplo Citação
-Exemplo citação \cite{Mussoi}
-
-% Exemplo Equação
-Exemplo de Equação:
-\myequation{Z_C(\omega) = \frac{1}{\omega \cdot C}}{eq:Exemplo}{Impedância de um capacitor}{$\Omega$}
-Exemplo chamada de referencia da Equação~\ref{eq:Exemplo}
-
-
-% Exemplo Codigo
-Exemplo codigo:
-\begin{lstlisting}[language=Python]
-def hello_world():
-    print("Hello, World!")
-\end{lstlisting}
-
-% Exemplo Circuito
-Exemplo Circuito:
-\begin{figure}[H]
-    \centering
-    \caption{Exemplo Circuito}
-    \centering
-    \begin{circuitikz} \draw
-        (0,0) node[above]{I/O Pin} to[short, o-] ++(2,0)
-        (2,0) to[push button] (2,-2)
-        (2,0) to[R, l_=10k\ohm] (4,0)
-        (4,0) to[short] (4,2)
-        (2,-2) to[short] (2,-3)
-        (4,2) node[vcc]{+5V}
-        (2,-3) node[ground]{}
-        (2,-3) node[anchor=west] {0V}
-        ;
-    \end{circuitikz}
-    \centering
-    \vspace{0.2cm} \\
-    Fonte: Autor.
-    \label{fig:ExemploCircuito}
-\end{figure}
-
-Exemplo chamada de referencia do circuito~\ref{fig:ExemploCircuito}.
-
-% Exemplo Imagem
-\begin{figure}[H]
-    \centering
-    \caption{Exemplo Imagem}
-    \centering
-    \includegraphics[scale = .5]{Imagens/Capa/01_Instituto.png}
-    \centering
-    \vspace{0.2cm} \\
-    Fonte: Autor.
-    \label{fig:ExemploFigura}
-\end{figure}
-
-Exemplo chamada de referencia da figura~\ref{fig:ExemploFigura}.
-
-% Exemplo Gráfico
-\begin{figure}[H]
-    \centering
-    \caption{Exemplo Gráfico}
-    \begin{tikzpicture}
-        \begin{axis}[
-                axis lines = middle,
-                xlabel = {$x$},
-                ylabel = {$f(x)$},
-                % title = {Gráfico de $f(x) = x^2$},
-                grid = both,
-            ]
-            \addplot[
-                domain=-2:2,
-                samples=100,
-                thick,
-                blue
-            ]
-            {x^2};
-        \end{axis}
-    \end{tikzpicture}
-    \centering
-    \vspace{0.2cm} \\
-    Fonte: Autor.
-    \label{fig:ExemploGráfico}
-\end{figure}
-
-Exemplo chamada de referencia da figura~\ref{fig:ExemploGráfico}.
-
-% Exemplo Tabela
-\begin{table}[H]
-    \centering
-    \caption{Exemplo Tabela}
-    \begin{tabular}{|c|c|}
-        \hline
-        \textbf{Texto1} & \textbf{Texto 2} \\ \hline
-        Teste1          & Teste2           \\ \hline
-    \end{tabular}
-    \vspace{0.25cm} \\
-    Fonte: Autor.
-    \label{tab:ExemploTabela}
-\end{table}
-
-Exemplo chamada de referencia da tabela~\ref{tab:ExemploTabela}.
-
-
-\par Exemplo do uso do SI \SI{6,660}{\hertz}, \SI{100}{\hertz}, \SI{0,5}{\volt} e \SI{3,5}{\volt}.
