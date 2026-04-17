@@ -19,6 +19,39 @@
 
 \refsection{0}
   \datalist[entry]{nty/global//global/global}
+    \entry{BIGHETI2020}{thesis}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=e5ded9e370e30ea25474d4852d4fdeef}{%
+           family={Bigheti},
+           familyi={B\bibinitperiod},
+           given={Jeferson\bibnamedelima André},
+           giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{institution}{1}{%
+        {Universidade Estadual Paulista "Júlio de Mesquita Filho"}%
+      }
+      \list{location}{1}{%
+        {Bauru}%
+      }
+      \strng{namehash}{e5ded9e370e30ea25474d4852d4fdeef}
+      \strng{fullhash}{e5ded9e370e30ea25474d4852d4fdeef}
+      \strng{bibnamehash}{e5ded9e370e30ea25474d4852d4fdeef}
+      \strng{authorbibnamehash}{e5ded9e370e30ea25474d4852d4fdeef}
+      \strng{authornamehash}{e5ded9e370e30ea25474d4852d4fdeef}
+      \strng{authorfullhash}{e5ded9e370e30ea25474d4852d4fdeef}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{bookpagination}{sheet}
+      \field{title}{Arquitetura de Automação e Controle Orientada a Microserviços para a Indústria 4.0}
+      \field{type}{phdthesis}
+      \field{year}{2020}
+      \field{dateera}{ce}
+    \endentry
     \entry{LASI_INDUSTRY_40}{article}{}
       \name{author}{5}{}{%
         {{un=0,uniquepart=base,hash=bbbfc2e139b4fbf801d5d4ea03048311}{%
