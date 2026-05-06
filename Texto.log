@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.25)  16 APR 2026 21:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.25)  6 MAY 2026 20:47
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -984,7 +984,7 @@ Package biblatex Info: ... file 'blx-dm.def' found.
 File: blx-dm.def 2023/03/05 v3.19 biblatex localization (PK/MW)
 )
 Package biblatex Info: Trying to load biblatex style data model...
-Package biblatex Info: ... file 'abnt.dbx' not found.
+Package biblatex Info: ... file 'abnt-numeric.dbx' not found.
 Package biblatex Info: Trying to load biblatex custom data model...
 Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
 \c@afterword=\count456
@@ -1092,6 +1092,10 @@ File: biblatex.def 2023/03/05 v3.19 biblatex compatibility (PK/MW)
 \biburllcskip=\muskip21
 \c@smartand=\count532
 )
+Package biblatex Info: Trying to load bibliography style 'abnt-numeric'...
+Package biblatex Info: ... file 'abnt-numeric.bbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex-abnt/abnt-numeric.bbx
+File: abnt-numeric.bbx 2018-11-17 v3.4 ABNT BibLaTeX citation style
 Package biblatex Info: Trying to load bibliography style 'abnt'...
 Package biblatex Info: ... file 'abnt.bbx' found.
  (/usr/share/texlive/texmf-dist/tex/latex/biblatex-abnt/abnt.bbx
@@ -1113,36 +1117,42 @@ Package biblatex Info: ... file 'standard.bbx' found.
 File: standard.bbx 2023/03/05 v3.19 biblatex bibliography style (PK/MW)
 \c@bbx:relatedcount=\count534
 \c@bbx:relatedtotal=\count535
-))
-Package biblatex Info: Trying to load citation style 'abnt'...
-Package biblatex Info: ... file 'abnt.cbx' found.
- (/usr/share/texlive/texmf-dist/tex/latex/biblatex-abnt/abnt.cbx
-File: abnt.cbx 2018-11-17 v3.4 ABNT BibLaTeX citation style
-Package biblatex Info: Trying to load citation style 'authoryear-comp'...
-Package biblatex Info: ... file 'authoryear-comp.cbx' found.
- (/usr/share/texlive/texmf-dist/tex/latex/biblatex/cbx/authoryear-comp.cbx
-File: authoryear-comp.cbx 2023/03/05 v3.19 biblatex citation style (PK/MW)
+)))
+Package biblatex Info: Trying to load citation style 'abnt-numeric'...
+Package biblatex Info: ... file 'abnt-numeric.cbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex-abnt/abnt-numeric.cbx
+File: abnt-numeric.cbx 2018-11-17 v3.4 ABNT BibLaTeX citation style
+Package biblatex Info: Trying to load citation style 'numeric'...
+Package biblatex Info: ... file 'numeric.cbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/cbx/numeric.cbx
+File: numeric.cbx 2023/03/05 v3.19 biblatex citation style (PK/MW)
 Package biblatex Info: Redefining '\cite'.
 Package biblatex Info: Redefining '\parencite'.
 Package biblatex Info: Redefining '\footcite'.
 Package biblatex Info: Redefining '\footcitetext'.
 Package biblatex Info: Redefining '\smartcite'.
+Package biblatex Info: Redefining '\supercite'.
 Package biblatex Info: Redefining '\textcite'.
 Package biblatex Info: Redefining '\textcites'.
 Package biblatex Info: Redefining '\cites'.
 Package biblatex Info: Redefining '\parencites'.
-Package biblatex Info: Redefining '\footcites'.
-Package biblatex Info: Redefining '\footcitetexts'.
 Package biblatex Info: Redefining '\smartcites'.
 )
+\c@cbx@tempcnta=\count536
+\c@cbx@tempcntb=\count537
 Package biblatex Info: Redefining '\cite'.
-Package biblatex Info: Redefining '\cites'.
+Package biblatex Info: Redefining '\parencite'.
 Package biblatex Info: Redefining '\footcite'.
-Package biblatex Info: Redefining '\footcites'.
-Package biblatex Info: Redefining '\citetitle'.
+Package biblatex Info: Redefining '\footcitetext'.
 Package biblatex Info: Redefining '\smartcite'.
-Package biblatex Info: Redefining '\citeauthor'.
-Package biblatex Info: Redefining '\citeyear'.
+Package biblatex Info: Redefining '\supercite'.
+Package biblatex Info: Redefining '\cbx@textcite'.
+Package biblatex Info: Redefining '\textcite'.
+Package biblatex Info: Redefining '\cbx@textcites'.
+Package biblatex Info: Redefining '\textcites'.
+Package biblatex Info: Redefining '\cites'.
+Package biblatex Info: Redefining '\parencites'.
+Package biblatex Info: Redefining '\smartcites'.
 )
 Package biblatex Info: Trying to load configuration file...
 Package biblatex Info: ... file 'biblatex.cfg' found.
@@ -1157,7 +1167,10 @@ Package biblatex Info: ... and expl3
 (biblatex)             setting 'casechanger=expl3'.
  (/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-case-expl3.sty
 Package: blx-case-expl3 2023/03/05 v3.19 expl3 case changing code for biblatex
-)) (./Configurações/Commands.tex (/usr/share/texlive/texmf-dist/tex/latex/tocloft/tocloft.sty
+)) (./Configurações/Commands.tex
+Package biblatex Info: Redefining '\cite' on input line 7.
+Package biblatex Info: Redefining '\cites' on input line 15.
+ (/usr/share/texlive/texmf-dist/tex/latex/tocloft/tocloft.sty
 Package: tocloft 2017/08/31 v2.3i parameterised ToC, etc., typesetting
 Package tocloft Info: The document has section divisions on input line 51.
 \cftparskip=\skip104
@@ -1186,19 +1199,19 @@ Package tocloft Info: The document has section divisions on input line 51.
 \cftbeforefigskip=\skip127
 \cftfigindent=\skip128
 \cftfignumwidth=\skip129
-\c@lofdepth=\count536
-\c@lotdepth=\count537
+\c@lofdepth=\count538
+\c@lotdepth=\count539
 \cftbeforelottitleskip=\skip130
 \cftafterlottitleskip=\skip131
 \cftbeforetabskip=\skip132
 \cfttabindent=\skip133
 \cfttabnumwidth=\skip134
 )
-\c@myequations=\count538
+\c@myequations=\count540
 \cftbeforemyequationsskip=\skip135
 \cftmyequationsindent=\skip136
 \cftmyequationsnumwidth=\skip137
-\c@equdepth=\count539
+\c@equdepth=\count541
 \cftbeforeequtitleskip=\skip138
 \cftafterequtitleskip=\skip139
 
@@ -1278,16 +1291,16 @@ LaTeX Font Info:    ... okay on input line 53.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count540
+\scratchcounter=\count542
 \scratchdimen=\dimen347
 \scratchbox=\box130
-\nofMPsegments=\count541
-\nofMParguments=\count542
+\nofMPsegments=\count543
+\nofMParguments=\count544
 \everyMPshowfont=\toks74
-\MPscratchCnt=\count543
+\MPscratchCnt=\count545
 \MPscratchDim=\dimen348
-\MPnumerator=\count544
-\makeMPintoPDFobject=\count545
+\MPnumerator=\count546
+\makeMPintoPDFobject=\count547
 \everyMPtoPDFconversion=\toks75
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -1312,7 +1325,7 @@ Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\c@lstlisting=\count546
+\c@lstlisting=\count548
 Package hyperref Info: Link coloring OFF on input line 53.
  (./Texto.out) (./Texto.out)
 \@outlinefile=\write7
@@ -1404,7 +1417,7 @@ Package biblatex Info: Reference segment=0 on input line 53.
 \openout2 = `Capitulos/01_Capa.aux'.
 
  (./Capitulos/01_Capa.tex
-<Imagens/Capa/01_Instituto.png, id=47, 429.605pt x 118.4425pt>
+<Imagens/Capa/01_Instituto.png, id=51, 429.605pt x 118.4425pt>
 File: Imagens/Capa/01_Instituto.png Graphic file (type png)
 <use Imagens/Capa/01_Instituto.png>
 Package pdftex.def Info: Imagens/Capa/01_Instituto.png  used on input line 8.
@@ -1550,10 +1563,10 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \openout2 = `Capitulos/13_Introducao.aux'.
 
  (./Capitulos/13_Introducao.tex
-<Imagens/Introducao/Contextualizacao/evolucoes-industriais.png, id=125, 1144.275pt x 723.70375pt>
+<Imagens/Introducao/Contextualizacao/evolucoes-industriais.png, id=130, 1144.275pt x 723.70375pt>
 File: Imagens/Introducao/Contextualizacao/evolucoes-industriais.png Graphic file (type png)
 <use Imagens/Introducao/Contextualizacao/evolucoes-industriais.png>
-Package pdftex.def Info: Imagens/Introducao/Contextualizacao/evolucoes-industriais.png  used on input line 16.
+Package pdftex.def Info: Imagens/Introducao/Contextualizacao/evolucoes-industriais.png  used on input line 15.
 (pdftex.def)             Requested size: 457.70189pt x 289.47636pt.
  [12
 
@@ -1561,17 +1574,27 @@ Package pdftex.def Info: Imagens/Introducao/Contextualizacao/evolucoes-industria
 
 
 
- <./Imagens/Introducao/Contextualizacao/evolucoes-industriais.png>] [13] [14] [15{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] [16] [17]) [18]
+ <./Imagens/Introducao/Contextualizacao/evolucoes-industriais.png>]
+<Imagens/Introducao/Contextualizacao/piramide-automacao.png, id=149, 947.54pt x 613.29124pt>
+File: Imagens/Introducao/Contextualizacao/piramide-automacao.png Graphic file (type png)
+<use Imagens/Introducao/Contextualizacao/piramide-automacao.png>
+Package pdftex.def Info: Imagens/Introducao/Contextualizacao/piramide-automacao.png  used on input line 32.
+(pdftex.def)             Requested size: 473.76883pt x 306.64487pt.
+ [13 <./Imagens/Introducao/Contextualizacao/piramide-automacao.png>] [14
+
+]) [15
+
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
 \openout2 = `Capitulos/14_Desenvolvimento.aux'.
 
- (./Capitulos/14_Desenvolvimento.tex) [19
+ (./Capitulos/14_Desenvolvimento.tex) [16
 
 
 
 ]
 \openout2 = `Capitulos/15_Conclusão.aux'.
 
- (./Capitulos/15_Conclusão.tex) [20
+ (./Capitulos/15_Conclusão.tex) [17
 
 
 
@@ -1579,7 +1602,7 @@ Package pdftex.def Info: Imagens/Introducao/Contextualizacao/evolucoes-industria
 ]
 \openout2 = `Capitulos/00_Referencias.aux'.
 
- (./Capitulos/00_Referencias.tex) [21
+ (./Capitulos/00_Referencias.tex) [18
 
 
 
@@ -1590,24 +1613,24 @@ LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2020/03/25>
  ***********
 Package rerunfilecheck Info: File `Texto.out' has not changed.
-(rerunfilecheck)             Checksum: D0E7D7010A1088660891D6E229279171;1232.
+(rerunfilecheck)             Checksum: 5DEB4B0E4B788BF3868053B40F38C4EB;1355.
 Package logreq Info: Writing requests to 'Texto.run.xml'.
 \openout1 = `Texto.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 69491 strings out of 474222
- 1710470 string characters out of 5748733
- 2900215 words of memory out of 5000000
- 90757 multiletter control sequences out of 15000+600000
+ 69471 strings out of 474222
+ 1710564 string characters out of 5748733
+ 2887952 words of memory out of 5000000
+ 90735 multiletter control sequences out of 15000+600000
  566127 words of font info for 66 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,7n,133p,1261b,4454s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,7n,133p,1180b,4454s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on Texto.pdf (22 pages, 264208 bytes).
+Output written on Texto.pdf (19 pages, 369586 bytes).
 PDF statistics:
- 221 PDF objects out of 1000 (max. 8388607)
- 183 compressed objects within 2 object streams
- 45 named destinations out of 1000 (max. 500000)
- 103 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 218 PDF objects out of 1000 (max. 8388607)
+ 181 compressed objects within 2 object streams
+ 44 named destinations out of 1000 (max. 500000)
+ 116 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -3,6 +3,17 @@
 % LinkedIn: https://www.linkedin.com/in/arthur-ferreira-477b8b243/
 % ==================================================
 
+% BibLaTeX (abnt-numeric): o estilo usa \cite com parênteses; aqui ficam colchetes [1], [2], …
+\DeclareCiteCommand{\cite}[\mkbibbrackets]
+{\usebibmacro{cite:init}%
+  \usebibmacro{prenote}}
+{\usebibmacro{citeindex}%
+  \usebibmacro{cite:comp}}
+{\iftoggle{comp}{}{\multicitedelim}}
+{\usebibmacro{cite:dump}%
+  \usebibmacro{postnote}}
+\DeclareMultiCiteCommand{\cites}[\mkbibbrackets]{\cite}{\multicitedelim}
+
 \DeclareRobustCommand{\perthousand}{% % Define um comando robusto para o símbolo de permilagem
   \ifmmode
     \text{\textperthousand}% % Verifica se está no modo matemático e insere o símbolo de permilagem como texto
@@ -25,31 +36,31 @@
 
 % Comando para adicionar equações à lista
 \newcommand{\myequation}[4]{ % Define um comando para inserir equações e adicioná-las à lista de equações
-    \begin{equation}
+  \begin{equation}
     #1 \quad \ensuremath{\text{[#4]}} % Insere a equação e a unidade de medida entre colchetes
     \label{#2} % Associa a equação a um rótulo
-    \end{equation}
-    \addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#3} % Adiciona a equação à lista de equações
+  \end{equation}
+  \addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#3} % Adiciona a equação à lista de equações
 }
 
 
 % Configurações para quando utilizar algum código no programa
 \lstset{
-    basicstyle=\ttfamily\footnotesize, % Define a fonte do código
-    keywordstyle=\bfseries\color{blue},% Cor das palavras-chave
-    commentstyle=\itshape\color{brown}, % Cor dos comentários
-    stringstyle=\color{red},          % Cor das strings
-    numbers=left,                     % Exibe a numeração das linhas à esquerda
-    numberstyle=\tiny\color{gray},    % Formatação da numeração
-    stepnumber=1,                     % Númera todas as linhas
-    numbersep=10pt,                   % Distância entre os números e o código
-    % backgroundcolor=\color{lightgray},% Cor de fundo do código
-    frame=single,                     % Adiciona uma moldura ao redor do código
-    breaklines=true,                  % Quebra as linhas longas automaticamente
-    captionpos=b,                     % Coloca a legenda abaixo do código
-    tabsize=4,                        % Tamanho do tab
-    showspaces=false,                 % Não exibe espaços extras
-    showstringspaces=false            % Não exibe espaços dentro de strings
+  basicstyle=\ttfamily\footnotesize, % Define a fonte do código
+  keywordstyle=\bfseries\color{blue},% Cor das palavras-chave
+  commentstyle=\itshape\color{brown}, % Cor dos comentários
+  stringstyle=\color{red},          % Cor das strings
+  numbers=left,                     % Exibe a numeração das linhas à esquerda
+  numberstyle=\tiny\color{gray},    % Formatação da numeração
+  stepnumber=1,                     % Númera todas as linhas
+  numbersep=10pt,                   % Distância entre os números e o código
+  % backgroundcolor=\color{lightgray},% Cor de fundo do código
+  frame=single,                     % Adiciona uma moldura ao redor do código
+  breaklines=true,                  % Quebra as linhas longas automaticamente
+  captionpos=b,                     % Coloca a legenda abaixo do código
+  tabsize=4,                        % Tamanho do tab
+  showspaces=false,                 % Não exibe espaços extras
+  showstringspaces=false            % Não exibe espaços dentro de strings
 }
 
 % Configuração do pacote siunitx para seguir o padrão brasileiro (ABNT)

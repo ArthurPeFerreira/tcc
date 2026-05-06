@@ -4,10 +4,9 @@
 \section{Introdução} % Inicia a seção "Introdução"
 \subsection{Contextualização}
 
-\par A indústria é o setor da economia que produz bens materiais através de diferentes recursos, entre eles humanos, energia e equipamentos altamente mecanizados e automatizados. Desde o início da industrialização, os avanços tecnológicos provocaram mudanças de paradigma hoje reunidas sob o termo "revoluções industriais" \label{def:revolucoes_industriais} \cite{LASI_INDUSTRY_40}.
+\par A indústria é o setor da economia dedicado à produção de bens materiais, apoiado em trabalho humano, energia e equipamentos de alto valor agregado. Ao longo de sua evolução, sucessivos saltos tecnológicos redefiniram processos, produtos e formas de organização do trabalho, as chamadas "revoluções industriais" \cite{LASI_INDUSTRY_40}.
 
-
-\par A Figura~\ref{fig:revolucoes_industriais} resume essa linha do tempo. Na primeira fase, destaca-se a mecanização da produção, na segunda, a difusão da energia elétrica e a produção em massa baseada no modelo Fordista e na terceira fase, a difusão da digitalização \cite{LASI_INDUSTRY_40}. Foi nessa fase que a introdução da tecnologia da informação, da automação e da eletrônica impulsionou o início da automação dos processos produtivos, com o advento dos controladores lógicos programáveis (CLPs), dos CNCs (Computer Numeric Control) e dos robôs, tecnologias que se tornaram essenciais para as indústrias que buscam maior eficiência e qualidade com menores custos e prazos, contribuindo diretamente para o aumento da produtividade \cite{BIGHETI2020}.
+\par A Figura~\ref{fig:revolucoes_industriais} resume essa linha do tempo. Na primeira fase, destaca-se a mecanização da produção, na segunda, a difusão da energia elétrica e a produção em massa baseada no modelo Fordista e na terceira fase, a digitalização. Foi nessa fase que a introdução da tecnologia da informação, da automação e da eletrônica impulsionou o início da automação dos processos produtivos, com o advento dos controladores lógicos programáveis (CLPs), dos Controladores Numéricos Computadorizados (CNCs) e dos robôs, tecnologias que se tornaram essenciais para as indústrias que buscam maior eficiência e qualidade com menores custos e prazos, contribuindo diretamente para o aumento da produtividade \cite{BIGHETI2020}, \cite{LASI_INDUSTRY_40}, \cite{PISCHING2017}.
 
 \begin{figure}[H]
     \centering
@@ -20,15 +19,30 @@
     \label{fig:revolucoes_industriais}
 \end{figure}
 
-\par Atualmente, vive-se a quarta fase, a chamada Indústria 4.0. Baseada na industria inteligente, internet das coisas (IOT) e sistemas ciber-físicos (CPS - Cyber-Physical Systems), que são sistemas de entidades computacionais colaborativas que estão em intensa conexão com o mundo físico e seus processos em andamento, fornecendo e utilizando, ao mesmo tempo, serviços de acesso a dados e processamento de dados disponíveis na Internet \cite{MONOSTORI2016_CPS_MANUFACTURING}. O próprio Fórum Econômico Mundial observa o seguinte: As Revoluções Industriais anteriores avançaram o progresso humano através de novas formas de geração de energia, produção em massa e processamento de informação. Construindo sobre uma internet ubíqua e móvel, sensores menores, mais baratos e mais poderosos, além de inteligência artificial e aprendizado de máquina, a Quarta Revolução Industrial é distinta pela velocidade, escala e força com que transforma sistemas inteiros de produção, distribuição, consumo e possivelmente a essência da natureza humana \cite{WEF_DAVOS_2016_THEME}.
+\par Atualmente, vive-se a quarta fase, a chamada Indústria 4.0. Baseada na indústria inteligente, na Internet das Coisas (IoT) e nos sistemas ciber-físicos (CPS - Cyber-Physical Systems), nos quais subsistemas computacionais cooperam entre si e permanecem integrados ao mundo físico e seus processos, permitindo medir, controlar e analisar dados em tempo real por meio da rede, inclusive a Internet \cite{BIGHETI2020}, \cite{MONOSTORI2016_CPS_MANUFACTURING}.
 
-\par A Indústria 4.0 caracteriza-se pelo grande avanço dos protocolos de comunicação e telemetria, aliada à estar no mesmo momento de popularização do desenvolvimento de software e à interconexão de máquinas e sistemas de forma inteligente. Tais avanços permitiram o monitoramento e a supervisão centralizada de processos complexos em tempo real, elevando o papel dos sistemas supervisórios de simples interfaces de operação para centrais estratégicas de análise de dados. Nesse cenário, este trabalho propõe o desenvolvimento de um sistema supervisório web orientado a microserviços.
+\par A Figura~\ref{fig:piramide_automacao} resume, em forma de pirâmide, como costuma ser organizada a automação na Indústria 4.0. No nível 0 está o próprio processo físico, no nível 1, sensores e atuadores, por exemplo, um medidor de nível em malha 4-20 mA ou uma válvula de controle. No nível 2 entram os controladores lógicos programáveis (CLPs), que conversam com o nível 1 por protocolos seriais ou, de modo mais direto, pelas entradas e saídas (I/O) do equipamento. Nos níveis 3 e 4 aparecem, respectivamente, os sistemas supervisórios para acompanhar e comandar o processo em tempo real e a camada de gestão empresarial, em que se destacam os ERPs \cite{BIGHETI2020}, \cite{COLOMBO2014_STATE_ART_AUTOMATION}.
 
+\par Nos últimos anos, os níveis 3 e 4 foram ganhando ainda mais peso: ao digitalizar serviços antes ligados só ao ambiente físico da planta, tornou-se comum ofertá-los também sobre infraestrutura de computação em nuvem e permitir que sejam compartilhados entre diferentes sistemas e usuários. Em linhas gerais, a implementação e o gerenciamento desses serviços seguem a ideia da arquitetura orientada a serviços (Service Oriented Architecture - SOA), materializada por meio de serviços Web (Web Services - WS) \cite{COLOMBO2014_STATE_ART_AUTOMATION}.
 
+\begin{figure}[H]
+    \centering
+    \caption{Pirâmide de Automação}
+    \centering
+    \includegraphics[scale = .5]{Imagens/Introducao/Contextualizacao/piramide-automacao.png}
+    \centering
+    \vspace{0.2cm} \\
+    Fonte: \cite{COLOMBO2014_STATE_ART_AUTOMATION}.
+    \label{fig:piramide_automacao}
+\end{figure}
 
 
+\par A Indústria 4.0 caracteriza-se pelo grande avanço dos protocolos de comunicação e telemetria, aliada à estar no mesmo momento de popularização do desenvolvimento de software e à interconexão de máquinas e sistemas de forma inteligente. Tais avanços permitiram o monitoramento e a supervisão centralizada de processos complexos em tempo real, elevando o papel dos sistemas supervisórios de simples interfaces de operação para centrais estratégicas de análise de dados. Nesse cenário, este trabalho propõe o desenvolvimento de um sistema supervisório web orientado a serviços.
 
+\newpage % Nova página
+\clearpage % Finaliza a página atual
 
+\subsection{Justificativa}
 
 
 
@@ -41,346 +55,41 @@
 
 
 
-Essa nova era é
-apresentada por Brynjolfsson e McAfee (2014), que afirmam que o setor produtivo
-mundial está sendo impulsionado por três fatores principais, sendo eles: (1) o
-crescimento exponencial da capacidade dos computadores; (2) a vasta coleção de
-informações digitais; e (3) as inovações tecnológicas. Trata-se de uma visão
-digitalizada, onde as informações do ciclo de vida dos produtos e dos processos de
-produção são compartilhados em rede. As informações referentes aos projetos,
-arquiteturas, prototipagens, testes, estoques, manuais de equipamentos e produtos,
-normas, manutenções, descartes e tantas outras operações, devem ser arquivadas
-em formatos digitais, de modo que possam ser recuperadas e compartilhadas entre
-as partes interessadas a qualquer momento e em qualquer lugar. Os interesses dos
-consumidores e as flutuações de mercado intensificam a demanda por indústrias que
-possam responder rapidamente às expectativas dos mesmos, uma vez que há uma
-crescente tendência pela busca de produtos cujo ciclo de vida é menor e ao mesmo tempo em que há um aumento da procura de produtos sob medida que satisfaçam as
-intenções do cliente.
 
 
 
 
 
-No contexto da I4.0 é esperado que máquinas e produtos se comuniquem por
-meio dos CPSs e a IoT para trocar informações entre eles ao longo do ciclo de
-produção (KAGERMANN; WAHLSTER; HELBIG, 2013; HENG, 2014; LASI et al.,
-2014; MACDOUGALL, 2014; SCHUH et al., 2014a). Os CPSs fornecem uma rede
-integrada de processos e recursos para permitir a integração dos sistemas fisicos com
-os virtuais por meio da Internet (KAGERMANN; WAHLSTER; HELBIG, 2013;
-MACDOUGALL, 2014), onde sistemas embarcados (embedded system) monitoram
-e controlam processos físicos por meio de sensores e atuadores com operações do tipo pedido/resposta, fazendo com que processos físicos afetem os virtuais e vice- versa. De acordo com Kang et al. (2016) um CPS passa a ser uma tecnologia chave para a concepção da manufatura inteligente (smart manufacturing) acompanhada de
-outras tecnologias, tais como a computação em nuvem, a IoT e big data (megadados).
-
-
-
-
-
-
-Por outro lado, a IoT pode ser vista como uma infraestrutura de rede global e
-dinâmica composta por dispositivos conectados baseados em sensores, redes de
-comunicação, e tecnologias de processamento de informação (XU; HE; LI, 2014), que
-permitem o rastreamento e monitoramento de “coisas”, sejam elas virtuais ou físicas.
-Neste contexto, os CPSs conectados via Internet são compreendidos como elementos
-da IoT (JAZDI, 2014), isto é, os CPSs oferecem a base para a criação de um ambiente
-IoT, que combina a Internet dos serviços e dados para tornar possível a Indústria 4.0
-(KAGERMANN; WAHLSTER; HELBIG, 2013).
-
-
-
-
-
-
-No contexto da I4.0, os CPSs são parte das “coisas” da IoT, que por sua vez
-são definidas como uma rede de “coisas” que cooperam uns com os outros por meio
-de endereços únicos e exclusivos. Nesse contexto, os CPSs proporcionam a digitalização dos recursos e serviços físicos, além de oferecer maior autônomia da
-produção por meio da comunicação entre produtos e máquinas do sistema de
-produção (KAGERMANN; RIEMENSPERGER, 2014; HERMANN; PENTEK; OTTO,
-2016). De acordo com Kagermann e Riemensperger (2014) a digitalização de serviços
-físicos é o meio para o compartilhamento de recursos de modo a propiciar redes
-colaborativas de serviços. O compartilhamento de recursos virtuais segue a
-arquitetura orientada a serviços (SOA – Service Oriented Architecture) e é
-implementada por meio de serviços Web (WS - Web Services).
-
-
-De acordo com Kagermann; Wahlster e Helbig (2013), na I4.0 as pessoas, as
-máquinas, as matérias-primas e os produtos devem se comunicar entre si, assim
-como pessoas se comunicam em uma rede social (Figura 2). Desta forma, os recursos
-físicos devem ser digitalizados, precisando que sejam criados, publicados e
-compartilhados em uma infraestrutura baseada na Internet, para serem então
-utilizados por uma determinada empresa ou grupo de parceiros que visam atender a
-uma demanda específica.
-
-A I4.0 deve ser provida de ferramentas e máquinas que se comuniquem em
-tempo real com bases de dados, sistemas operacionais, e outras ferramentas. Para
-isso há a necessidade da interação do mundo real com o virtual de forma que os
-equipamentos possam se comunicar e processar operações de acordo com os
-requisitos dos produtos com mínima intervenção humana, evidenciando assim novas
-oportunidades no campo da pesquisa e desenvolvimento (MACDOUGALL, 2014;
-UNGUREAN; GAITAN; GAITAN, 2014).
-
-De acordo com os estudos realizados em torno da I4.0, constata-se uma série
-de expectativas para atingir sua maturidade e se tornar realidade, dentre as quais se
-destacam:
-a) A criação de produtos personalizados e sob demanda para atender interesses
-individuais de consumidores.
-b) A indústria precisa ser ágil para atender as demandas personalizadas, ou seja,
-ao invés da produção em massa, a produção deve ser individualizada e as
-máquinas precisam ter autonomia para identificar quais são os processos que
-devem executar sobre os produtos presentes na linha de produção, levando em
-conta as especificidades de cada produto.
-c) As empresas, diante de um contexto globalizado, independente de tamanho,
-mas em especial as pequenas e médias empresas (PME), devem ter maior
-participação nos negócios por meio da prestação de serviços em redes
-colaborativas, ao mesmo tempo que as exigências individuais de consumidores
-devem potencializar a competição entre as empresas. A busca por soluções que
-venham a contribuir para o processo produtivo industrial e atender a demandas
-personalizadas requer uma indústria mais ágil. A formação de redes
-colaborativas de serviços (RCS) é uma forma de viabilizar a colaboração entre
-empresas e parceiros para prover soluções personalizadas aos seus clientes.
-Estas empresas podem estar localizadas muito próximas fisicamente ou
-dispersas, isto é, espalhadas pelo mundo.
-d) O uso da IoT como forma de permitir a comunicação entre produtos e máquinas
-de modo que cada peça receba o tratamento adequado durante os processos de
-produção e auxilie no desenvolvimento de produtos personalizados. Ainda, com
-o avanço da miniaturização dos componentes eletrônicos e o crescimento da infraestrutura da Internet, a computação ubíqua tem se fortalecido e está se
-tornando realidade. Elementos computacionais passam a fazer parte de
-pequenos componentes eletrônicos capazes de enviar, receber, processar e
-armazenar informações de forma autônoma, em qualquer lugar, desde que haja
-meios de comunicação providos pela Internet.
-e) A digitalização dos serviços físicos e a disponibilização dos mesmos em uma
-infraestrutura baseada na computação em nuvem permite o compartilhamento
-de serviços. Estes serviços, no contexto da IoT e CPS são usados em diferentes
-momentos, como por exemplo, na engenharia de projetos de plantas industriais,
-na criação de produtos, em ambientes virtuais de ensino/treinamento, em
-sistemas de manutenção à distância, entre outros. A implementação e
-gerenciamento dos serviços são realizados por intermédio da arquitetura
-orientada a serviços (Service Oriented Architecture – SOA) e implementado por
-meio de serviços Web (Web Services – WS).
-
-O desenvolvimento de uma arquitetura de sistema como a que se propõe neste
-trabalho, envolve a modelagem conceitual e funcional do sistema para, respectivamente, verificar e validar os componentes e a dinâmica da interação entre
-eles, que pode ser realizado por meio da simulação. De acordo com Pessoa (2015),
-a simulação possibilita a realização de uma análise comportamental do modelo e
-assim verificar e validar se ele atende aos requisitos funcionais. Também é importante
-destacar que a comunicação entre produtos e máquinas, assim como a descoberta
-de equipamentos são classificadas como sistemas a eventos discretos (SED).
-Segundo Miyagi (1996) uma técnica formal efetiva para a modelagem de SED é a rede
-de Petri (RdP), que possibilita também a visualização do sistema em diferentes níveis
-de abstração. Da RdP deriva a técnica Production Flow Schema (PFS) que é um grafo
-interpretado para a modelagem conceitual de sistemas (PESSOA et al., 2014). De
-acordo com da Silva et al. (2012), o PFS é efetiva para sistematizar e facilitar a
-modelagem em RdP de processos de sistemas produtivos. Segundo Hasegawa et al.
-(1999), um importante recurso do PFS é a representação do fluxo de diferentes tipos
-de itens (objetos físicos, mensagens, dados, etc.) e o processo de alocação e
-desalocação de recursos. Por meio de PFS é possível fazer uma representação
-hierárquica do modelo por meio de sucessivos refinamentos que resultam em modelos
-em RdP, que são utilizados para verificar e validar os comportamentos do sistema por
-meio da simulação. A técnica PFS/RdP oferece a base para a modelagem de
-arquiteturas de software, possibilitando a descrição das funcionalidades específicas
-de componentes e também da interação entre eles.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-A evolução e o desenvolvimento das tecnologias digitais propiciaram a criação de novos
-métodos de produção nas indústrias globais baseados na automação, robótica, inteligência
-artificial, Internet das Coisas (IoT – Internet of Things) e inteligência de dados, dentre outras
-inovações. A utilização dessas tecnologias no contexto industrial, coordenadas de modo a
-conferir competitividade ao negócio, otimizar a eficiência da cadeia produtiva, adicionar valor
-ao produto, racionalizar o uso dos recursos e customizar as soluções tecnológicas é chamada de
-Indústria 4.0 (I4.0).
-A I4.0, também chamada de Quarta Revolução Industrial, é um novo conceito que
-representa uma evolução dos sistemas produtivos atuais a partir da convergência entre novas
-tecnologias de automação (TA) e tecnologia da informação (TI) (BERGER, 2014; (LU, 2014)
-como pode ser visto na Figura 1.
-
-No contexto da I4.0, os sistemas de controle rígidos e centralizados das fábricas cedem
-seu lugar para inteligência descentralizada, num ambiente onde todos os equipamentos e
-máquinas estão conectadas em redes e disponibilizando informações de forma única
-(COLOMBO et al., 2014).
-A maioria das tecnologias necessárias à implementação da I4.0 já existem atualmente e
-se encontram em diferentes estágios de maturação. O caráter disruptivo que a I4.0 traz é fruto
-da articulação e convergência dessas tecnologias. Entre elas podem-se citar (ZUEHLKE, 2010;
-RAJKUMAR et al., 2010; STANKOVIC, 2014, LEE et al., 2015; HEGAZY \& HEFEEDA,
-2015):
-\begin{itemize}
-    \item Protocolo IPV6 para ampliação dos pontos de conexão IP a todos os equipamentos;
-    \item Ampliação das redes sem fio para flexibilização da comunicação e aquisição de dados;
-    \item Sistemas de controle via redes (NCS – Networked Control Systems) e sistemas ciber-
-          físicos (CPS – Cyber Physical Systems);
-    \item RFID para rastreamento e identificação de materiais e suas informações;
-    \item Uso de virtualização de sistemas e serviços;
-    \item Internet das Coisas Industrial (IIoT – Industrial Internet of Things) e Computação em
-          nuvem (Cloud Computing) visando a conexão integrada e interoperável de todos os
-          equipamentos em redes e o compartilhamento das informações na nuvem;
-    \item Big Data onde todas as informações são reunidas e utilizadas para tomada de decisões.
-\end{itemize}
-O grande desafio da I4.0, portanto, é promover a integração entre essas tecnologias,
-visando a obtenção de uma nova realidade produtiva, onde tudo estará conectado para que as
-melhores decisões de produção, custo e segurança sejam tomadas, tudo sob demanda e em
-tempo real. Nesse sentido, muitos trabalhos têm focado no desenvolvimento de soluções que
-agreguem essas tecnologias e permitam a integração dos processos produtivos e equipamentos
-de automação a serviços de TI que estão armazenados na nuvem. Na Figura 2 é mostrado a
-comunicação em nuvem entre “coisas”, isto é, entre os elementos envolvidos no sistema
-produtivo sobre uma infraestrutura baseada em Internet Industrial.
-Hegazy et al. (2015) apresentam um novo serviço na nuvem, “automação industrial como
-serviço”, onde os controladores são hospedados em dois servidores em nuvem, fisicamente
-separados. Nikolaidis et al. (2015) propõem a interação entre dois conceitos: a utilização de
-controladores em nuvem com dispositivos baseados em IIoT. Chen et al. 2010 apresentam a
-ideia de Robot as a Service ou RAAS, sendo esse um serviço na nuvem para acesso a hardware
-e software de um robô. Wu et al. (2013) exploram o conceito de Cloud Manufacturing, que é
-um modelo de produção baseado em nuvem. Por fim, Jammes et al. (2014) descrevem
-Arquiteturas Orientada a Serviço (SOA) promissoras, que podem ser utilizadas em Processo de Monitoramento e Controle com uso do protocolo como Constrained Application Protocol
-(CoAP), Open Platform Communications Unified Architecture (OPC UA) e entre outros, para
-acesso a sensores e atuadores.
-
-
-Interoperabilidade e segurança são os dois maiores desafios em torno da implantação da
-IIoT e da I4.0. Para SISINNI et al. (2018), o maior desafio está em torno da interoperabilidade
-entre dispositivos e máquinas que usam protocolos e arquiteturas diferentes nos diferentes
-níveis hierárquicos dos processos industriais. As indústrias estão sendo pressionadas a
-modernizar os seus sistemas e equipamentos para acompanhar a crescente velocidade e
-volatilidade do mercado e lidar com tecnologias que se modificam constantemente.
-Baseando-se nas necessidades e desafios citados, um paradigma recente para a indústria
-tem sido o desenvolvimento de soluções colaborativas por meio do uso e compartilhamento de
-serviços para obtenção de uma arquitetura flexível, escalável, interoperável, distribuída e
-totalmente integrada através de redes industriais. Nesse sentido, o desenvolvimento de
-arquiteturas orientadas a serviços (SOA – Service Oriented Architecture) para a aplicação da
-IIoT e I4.0 tem se destacado conforme descrito em Jammes et al. (2014). Diante desse contexto,
-esta pesquisa foca no estudo e desenvolvimento de uma arquitetura baseada em microserviços
-(MOA - Microservices Oriented Architecture), que representa uma evolução da SOA, para
-aplicações de IIoT e I4.0. Uma arquitetura de microserviços consiste em uma coleção de
-pequenos serviços autônomos, onde cada serviço é independente e implementa uma única
-funcionalidade.
-
-
-
-
-As soluções baseadas em Ethernet Industrial permitem ao usuário a integração dos
-equipamentos industriais a serviços de TI fornecidos por servidores (DECOTIGNIE, 2005).
-Dessa forma, tornou-se possível disponibilizar informações provenientes dos sistemas de
-automação por meio de protocolos com suporte ao Ethernet TCP/IP em aplicações Web, essa
-interconexão de dados, infraestruturas de rede de TI e de automação de forma segura e confiável
-representa uma tendência para o desenvolvimento de soluções inovadoras e integradoras na
-área industrial com a IIoT e a I4.0 (BERGER, 2014).
-A comunicação sem fio atualmente é de fundamental importância para que a
-implementação do conceito de Indústria 4.0 se tornem viáveis. Uma das tecnologias base para
-este conceito é a Internet das Coisas (IoT) e o Máquina para Máquina (M2M – Machine to
-Machine) (STANKOVIC, 2014). A Computação em Nuvem se refere, essencialmente, à noção
-de utilizar, em qualquer lugar e independente de plataforma, variadas aplicações por meio da
-Internet com a mesma facilidade de tê-las instaladas em computadores locais (DIVYA \&
-JEYALATHA, 2012). Kushida \& Pingali (2014) apresentam uma revisão sobre os requisitos
-para a aplicação da computação em nuvem na indústria, descrevendo potenciais vantagens
-dessa tecnologia e discutindo casos de estudo com resultados reais desse tipo de implementação.
-A Internet das Coisas Industrial (IIoT) tem revolucionado a fabricação de produtos,
-oferecendo oportunidades para as empresas se atualizarem, oferecerem novos serviços,
-melhorarem suas produções e, consequentemente, permitindo também a aquisição e o acesso
-de uma quantidade de dados sem precedentes, em velocidades muito maiores e com muito mais
-eficiência do que antes (SISINNI et al., 2018). A IIoT pode melhorar significativamente a
-conectividade, a eficiência, a escalabilidade, a economia de tempo e de custos para as
-organizações industriais. As redes de dispositivos inteligentes da IIoT permitem que as
-indústrias obtenham dados de toda sua corporação, de forma integrada, obtendo uma visão
-completa sobre a gestão da empresa e auxiliando na tomada das melhores decisões.
-Processos industriais, bem como muitas outras infraestruturas críticas dependem de
-sistemas Supervisory Control and Data Acquisition (SCADA) e Sistema Digital de Controle
-Distribuído (SDCD) para executar suas funcionalidades complexas. A IIoT é complementar a
-esses sistemas, utilizando as informações provenientes dos sistemas SCADA e SDCD como
-fontes de dados. Sistemas SCADA tem foco em monitoramento e controle, enquanto a IIoT
-busca analisar os dados para aumentar a produtividade e eficiência (KULKARNI, 2016).
-Ainda no contexto da IIoT e da I4.0, nota-se a crescente integração entre os sistemas
-industriais e a nuvem, por meio de alternativas como os Sistemas Ciber-Físicos (CPS - CyberPhysical Systems). Por meio de serviços remotos, busca-se obter maior flexibilidade da
-produção e ferramentas de monitoramento, otimização de recursos e gerenciamento do processo
-produtivo. Recentemente, tem-se discutido o potencial da Computação em Nuvem para
-virtualização de sistemas da I4.0 e aplicações de automação e controle em nuvem. Hegazy \&
-Hefeeda (2015) apresentam uma proposta de arquitetura de um sistema de automação em
-nuvem, apresentado na Figura 3.
-
-Nesta proposta da Figura 3, diversas aplicações como controle em malha fechada e
-virtualização de controladores são realizadas na nuvem. Os autores afirmam que a proposta
-traria inúmeros benefícios em termos de redução de custo e tempo de desenvolvimento por
-meio da virtualização de controladores, redução de hardware utilizado e tempo de
-desenvolvimento de aplicações. O trabalho apresenta uma implementação de redundância em
-nuvem de controladores industriais e um sistema de controle de uma planta utilizando a nuvem
-comercial da Amazon Web Services.
-Colombo et al. (2014) discutem o conceito de uma arquitetura de automação baseada no
-uso da Computação em Nuvem e de Serviços Web (Web Services) para comunicação e
-realização das tarefas entre os diferentes componentes e equipamentos de um sistema industrial.
-Os autores atestam que arquiteturas orientadas a serviço (SOA) são consideradas um caminho
-promissor para concepção do modelo de fábrica do futuro. No entanto, existe a necessidade e
-potencial para melhorar as funcionalidades e minimizar problemas de integração por meio de
-abordagens colaborativas de sistemas e serviços (COLOMBO et al., 2014).
-Nesse sentido é importante considerar os próximos passos para a evolução dos sistemas
-industriais por meio da IIoT e I4.0, de forma que consigam atender os desafios recentes como
-grau de descentralização e independência dos sistemas. Sendo assim, a proposta de arquiteturas
-SOA possui grande potencial, a partir da disponibilização de serviços em nuvem alocados em diferentes dispositivos, gateways ou sistemas, os quais facilitam e padronizam as interações
-entre eles. Leitão et al. (2016) apresentam um estudo sobre novas arquiteturas SOA para
-aplicações industriais.
-A evolução das arquiteturas de automação e controle industriais, mostrada na Figura 4,
-evidencia a tendência para a convergência do uso das tecnologias de automação e da
-informação. A primeira arquitetura era centralizada e com comunicação ponto a ponto entre
-equipamentos. Já a segunda e a terceira incorporaram o conceito de redes de comunicação,
-permitido a distribuição do controle, redução de custos e facilidade de comissionamento e
-manutenção.
-Adicionalmente, a terceira arquitetura incorporou as chamadas arquiteturas de controle
-via redes (NCS – Networked Control Systems) (Gupta \& Chow, 2010), provendo a
-descentralização do controle, modularização e flexibilização. O uso das redes sem fio em NCS,
-promovendo interoperabilidade entre redes com fio já existentes e novas redes sem fio
-nortearam o surgimento dos sistemas de controle via redes sem fio (WNCS - Wireless
-Networked Control Systems) (FISCHIONE et al. 2011).
-
-
-A quarta e atual arquitetura, ilustrada na Figura 5, é a baseada nos CPS alavancados pela
-total integração demandada pela IIoT e I4.0. Nessa nova proposta de arquitetura, um sistema
-de armazenamento de informações em nuvem será compartilhado pelos equipamentos e
-
-19
-sistemas, tornando possível o uso de serviços padronizados para comunicação entre os mesmos.
-Os serviços poderão ser acessados por aplicações, sistemas e outros serviços
-independentemente de onde eles estão alocados (hardware, software e rede de comunicação),
-propiciando uma arquitetura colaborativa.
-
-Para Leitão et al. (2016), a SOA em aplicações de IIoT e I4.0 é adequada para tratar os
-seus recursos, principalmente pela natureza heterogênea desses ambientes. Colombo et al.
-(2017) afirmam que a SOA conduz à ideia de que cada hardware programável pode ser
-considerado como um potencial dispositivo que pode ser publicado na forma de serviço
-virtualizado, o qual permite a sua programação e/ou configuração por meio de aplicativos.
-Nesse contexto, as funcionalidades dos dispositivos podem ser operadas por diferentes
-módulos, de sistemas independentes da heterogeneidade do hardware/software, permitindo a
-interoperabilidade dos sistemas como mostrado da Figura 6. Nessa figura verifica-se que novos
-serviços poderão ser criados a partir dos serviços existentes usando as técnicas de orquestração
-ou coreografia e há também uma migração da arquitetura tradicional hierárquica baseada em
-camadas definida pela ISA-95 para uma arquitetura SOA em nuvem, onde todos os recursos,
-equipamentos e sistemas são disponibilizados numa mesma infraestrutura em nuvem de forma
-padronizada e interoperável.
-
-Portanto, a consolidação das tecnologias de automação e informática industrial
-compatíveis com a ideia de uma arquitetura baseada em serviços em nuvem para aplicações
-IIoT e I4.0 norteiam essa pesquisa.
-
-
-
-
-
+\newpage % Nova página
+\clearpage % Finaliza a página atual
 
 \subsection{Objetivos}
 
 \par A seguir são apresentados os objetivos gerais e específicos deste Trabalho de Conclusão de Curso.
 
 \subsubsection{Objetivo Geral}
+
+\par Desenvolver um sistema supervisório web com arquitetura orientada a serviços, capaz de apoiar o monitoramento e a supervisão de processos industriais, com serviços bem definidos, reutilizáveis e acessíveis via interfaces web.
+
 \subsubsection{Objetivos Específicos}
+
+\begin{itemize}
+    \item Revisar os conceitos de Indústria~4.0, monitoramento industrial, arquitetura orientada a serviços (SOA) e serviços Web, de modo a embasar a solução proposta.
+    \item Especificar os requisitos funcionais e não funcionais e a arquitetura lógica do sistema, com destaque para a separação entre camada de apresentação (web), camada de serviços e camada de obtenção ou persistência dos dados de monitoramento.
+    \item Implementar os serviços de backend responsáveis pela leitura periódica ou sob demanda, pelo registro e pela disponibilização dos dados de processo de forma modular e interoperável.
+    \item Implementar a interface web de monitoramento, permitindo a visualização dos principais indicadores, tendências ou telas resumo associadas ao processo acompanhado.
+    \item Validar o módulo de monitoramento por meio de testes e de um cenário demonstrativo (ou estudo de caso), evidenciando o correto acesso às variáveis e a estabilidade da solução frente ao volume de dados esperado.
+\end{itemize}
+
 \subsection{Estrutura do Trabalho}
 
+\par Além do capítulo 1 de introdução, o trabalho está organizado em outros 5 capítulos. No capitulo 2 são abordados os conceitos e tecnologias utilizadas dentro do trabalho, conceitos de automação industrial, tecnologia da informação industrial e desenvolvimento de software e como todos esses conceitos se relacionam para a solução proposta.
+
+\par No Capítulo 3, são especificados os requisitos funcionais e não funcionais e a arquitetura do sistema, com destaque para a separação entre camada de apresentação (web), camada de serviços e camada de obtenção ou persistência dos dados de monitoramento.
+
+\par No Capítulo 4, são implementados os serviços de backend responsáveis pela leitura periódica ou sob demanda, pelo registro e pela disponibilização dos dados de processo de forma modular e interoperável.
 
 
+\par No Capítulo 5, são implementadas a interface web de monitoramento, permitindo a visualização dos principais indicadores, tendências ou telas resumo associadas ao processo acompanhado.
+
+\par No Capítulo 6, são validados o módulo de monitoramento por meio de testes e de um cenário demonstrativo, evidenciando o correto acesso às variáveis e a estabilidade da solução frente ao volume de dados esperado.

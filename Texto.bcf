@@ -51,10 +51,9 @@
       <bcf:key>labelnamespec</bcf:key>
       <bcf:value order="1">shortauthor</bcf:value>
       <bcf:value order="2">author</bcf:value>
-      <bcf:value order="3">holder</bcf:value>
-      <bcf:value order="4">shorteditor</bcf:value>
-      <bcf:value order="5">editor</bcf:value>
-      <bcf:value order="6">translator</bcf:value>
+      <bcf:value order="3">shorteditor</bcf:value>
+      <bcf:value order="4">editor</bcf:value>
+      <bcf:value order="5">translator</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>labeltitle</bcf:key>
@@ -72,7 +71,7 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>labeldateparts</bcf:key>
-      <bcf:value>1</bcf:value>
+      <bcf:value>0</bcf:value>
     </bcf:option>
     <bcf:option type="multivalued">
       <bcf:key>labeldatespec</bcf:key>
@@ -181,11 +180,11 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>uniquelist</bcf:key>
-      <bcf:value>true</bcf:value>
+      <bcf:value>false</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>uniquename</bcf:key>
-      <bcf:value>minfull</bcf:value>
+      <bcf:value>false</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>uniqueprimaryauthor</bcf:key>
@@ -295,10 +294,9 @@
       <bcf:key>labelnamespec</bcf:key>
       <bcf:value order="1">shortauthor</bcf:value>
       <bcf:value order="2">author</bcf:value>
-      <bcf:value order="3">holder</bcf:value>
-      <bcf:value order="4">shorteditor</bcf:value>
-      <bcf:value order="5">editor</bcf:value>
-      <bcf:value order="6">translator</bcf:value>
+      <bcf:value order="3">shorteditor</bcf:value>
+      <bcf:value order="4">editor</bcf:value>
+      <bcf:value order="5">translator</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>labeltitle</bcf:key>
@@ -316,7 +314,7 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>labeldateparts</bcf:key>
-      <bcf:value>1</bcf:value>
+      <bcf:value>0</bcf:value>
     </bcf:option>
     <bcf:option type="multivalued">
       <bcf:key>labeldatespec</bcf:key>
@@ -397,11 +395,11 @@
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>uniquelist</bcf:key>
-      <bcf:value>true</bcf:value>
+      <bcf:value>false</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>uniquename</bcf:key>
-      <bcf:value>minfull</bcf:value>
+      <bcf:value>false</bcf:value>
     </bcf:option>
     <bcf:option type="singlevalued">
       <bcf:key>uniqueprimaryauthor</bcf:key>
@@ -658,7 +656,8 @@
     <bcf:option datatype="boolean">justify</bcf:option>
     <bcf:option datatype="boolean">pretty</bcf:option>
     <bcf:option datatype="boolean">citecount</bcf:option>
-    <bcf:option datatype="boolean">sccite</bcf:option>
+    <bcf:option datatype="boolean">subentry</bcf:option>
+    <bcf:option datatype="boolean">comp</bcf:option>
     <bcf:option datatype="boolean">bibtexcaseprotection</bcf:option>
     <bcf:option datatype="integer">mincrossrefs</bcf:option>
     <bcf:option datatype="integer">minxrefs</bcf:option>
@@ -2444,11 +2443,16 @@
   </bcf:bibdata>
   <bcf:section number="0">
     <bcf:citekey order="1" intorder="1">LASI_INDUSTRY_40</bcf:citekey>
-    <bcf:citekey order="2" intorder="1">LASI_INDUSTRY_40</bcf:citekey>
-    <bcf:citekey order="3" intorder="1">BIGHETI2020</bcf:citekey>
+    <bcf:citekey order="2" intorder="1">BIGHETI2020</bcf:citekey>
+    <bcf:citekey order="3" intorder="1">LASI_INDUSTRY_40</bcf:citekey>
     <bcf:citekey order="4" intorder="1">PISCHING2017</bcf:citekey>
-    <bcf:citekey order="5" intorder="1">MONOSTORI2016_CPS_MANUFACTURING</bcf:citekey>
-    <bcf:citekey order="6" intorder="1">WEF_DAVOS_2016_THEME</bcf:citekey>
+    <bcf:citekey order="5" intorder="1">PISCHING2017</bcf:citekey>
+    <bcf:citekey order="6" intorder="1">BIGHETI2020</bcf:citekey>
+    <bcf:citekey order="7" intorder="1">MONOSTORI2016_CPS_MANUFACTURING</bcf:citekey>
+    <bcf:citekey order="8" intorder="1">BIGHETI2020</bcf:citekey>
+    <bcf:citekey order="9" intorder="1">COLOMBO2014_STATE_ART_AUTOMATION</bcf:citekey>
+    <bcf:citekey order="10" intorder="1">COLOMBO2014_STATE_ART_AUTOMATION</bcf:citekey>
+    <bcf:citekey order="11" intorder="1">COLOMBO2014_STATE_ART_AUTOMATION</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

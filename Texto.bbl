@@ -19,14 +19,133 @@
 
 \refsection{0}
   \datalist[entry]{nty/global//global/global}
+    \entry{COLOMBO2014_STATE_ART_AUTOMATION}{incollection}{}
+      \name{author}{9}{}{%
+        {{hash=dd615c9b539260a0d70842fd28a48113}{%
+           family={Bangemann},
+           familyi={B\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod}}}%
+        {{hash=2f9c1a8a8f3667184ed88fce2f2e85d9}{%
+           family={Karnouskos},
+           familyi={K\bibinitperiod},
+           given={Stamatis},
+           giveni={S\bibinitperiod}}}%
+        {{hash=a1dffb04996e129ec0fd47a656bd0c29}{%
+           family={Camp},
+           familyi={C\bibinitperiod},
+           given={Roberto},
+           giveni={R\bibinitperiod}}}%
+        {{hash=8105d059cff04a7f809d5e721729923f}{%
+           family={Carlsson},
+           familyi={C\bibinitperiod},
+           given={Oscar},
+           giveni={O\bibinitperiod}}}%
+        {{hash=9a0fd3416f44e0d249112d740dacad66}{%
+           family={Riedl},
+           familyi={R\bibinitperiod},
+           given={Matthias},
+           giveni={M\bibinitperiod}}}%
+        {{hash=3b4f6d64be2a8283ef84e7b0015c3800}{%
+           family={McLeod},
+           familyi={M\bibinitperiod},
+           given={Stuart},
+           giveni={S\bibinitperiod}}}%
+        {{hash=df214eef48f0db9312e04d3a43e6b28d}{%
+           family={Harrison},
+           familyi={H\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod}}}%
+        {{hash=317614d9bbb6de5a6584015db5d8e37e}{%
+           family={Colombo},
+           familyi={C\bibinitperiod},
+           given={Armando\bibnamedelima W.},
+           giveni={A\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=5484328a77c43b1a441fa9aca22a0af8}{%
+           family={Stluka},
+           familyi={S\bibinitperiod},
+           given={Petr},
+           giveni={P\bibinitperiod}}}%
+      }
+      \name{editor}{8}{}{%
+        {{hash=317614d9bbb6de5a6584015db5d8e37e}{%
+           family={Colombo},
+           familyi={C\bibinitperiod},
+           given={Armando\bibnamedelima W.},
+           giveni={A\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=dd615c9b539260a0d70842fd28a48113}{%
+           family={Bangemann},
+           familyi={B\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod}}}%
+        {{hash=2f9c1a8a8f3667184ed88fce2f2e85d9}{%
+           family={Karnouskos},
+           familyi={K\bibinitperiod},
+           given={Stamatis},
+           giveni={S\bibinitperiod}}}%
+        {{hash=21e80a3e381def1461de64d5617f05f6}{%
+           family={Delsing},
+           familyi={D\bibinitperiod},
+           given={Jerker},
+           giveni={J\bibinitperiod}}}%
+        {{hash=5484328a77c43b1a441fa9aca22a0af8}{%
+           family={Stluka},
+           familyi={S\bibinitperiod},
+           given={Petr},
+           giveni={P\bibinitperiod}}}%
+        {{hash=df214eef48f0db9312e04d3a43e6b28d}{%
+           family={Harrison},
+           familyi={H\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod}}}%
+        {{hash=bd27a3af94230fee85e5a5131c483b24}{%
+           family={Jammes},
+           familyi={J\bibinitperiod},
+           given={François},
+           giveni={F\bibinitperiod}}}%
+        {{hash=183d453e025a8a73881108b32e201d5a}{%
+           family={Lastra},
+           familyi={L\bibinitperiod},
+           given={José\bibnamedelima L.},
+           giveni={J\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cham}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{c09fc3f97fd63d50cf98bbadc6a53cc3}
+      \strng{fullhash}{853150c08aa5a542e6ed4fc6ee8731a5}
+      \strng{bibnamehash}{c09fc3f97fd63d50cf98bbadc6a53cc3}
+      \strng{authorbibnamehash}{c09fc3f97fd63d50cf98bbadc6a53cc3}
+      \strng{authornamehash}{c09fc3f97fd63d50cf98bbadc6a53cc3}
+      \strng{authorfullhash}{853150c08aa5a542e6ed4fc6ee8731a5}
+      \strng{editorbibnamehash}{1f0c5002b8d0b7d3325723d17aab416b}
+      \strng{editornamehash}{1f0c5002b8d0b7d3325723d17aab416b}
+      \strng{editorfullhash}{7889ac46b7728269948a14dec76cfd59}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booksubtitle}{The {IMC-AESOP} Approach}
+      \field{booktitle}{Industrial Cloud-Based Cyber-Physical Systems}
+      \field{isbn}{978-3-319-05623-4}
+      \field{title}{State of the Art in Industrial Automation}
+      \field{year}{2014}
+      \field{pages}{23\bibrangedash 47}
+      \range{pages}{25}
+      \verb{doi}
+      \verb 10.1007/978-3-319-05624-1_2
+      \endverb
+    \endentry
     \entry{BIGHETI2020}{thesis}{}
       \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=e5ded9e370e30ea25474d4852d4fdeef}{%
+        {{hash=e5ded9e370e30ea25474d4852d4fdeef}{%
            family={Bigheti},
            familyi={B\bibinitperiod},
            given={Jeferson\bibnamedelima André},
-           giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod},
-           givenun=0}}%
+           giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
       }
       \list{institution}{1}{%
         {Universidade Estadual Paulista "Júlio de Mesquita Filho"}%
@@ -42,8 +161,6 @@
       \strng{authorfullhash}{e5ded9e370e30ea25474d4852d4fdeef}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{bookpagination}{sheet}
@@ -54,36 +171,31 @@
     \endentry
     \entry{LASI_INDUSTRY_40}{article}{}
       \name{author}{5}{}{%
-        {{un=0,uniquepart=base,hash=bbbfc2e139b4fbf801d5d4ea03048311}{%
+        {{hash=bbbfc2e139b4fbf801d5d4ea03048311}{%
            family={Lasi},
            familyi={L\bibinitperiod},
            given={Heiner},
-           giveni={H\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=f88eb676c206753b0989fa3776b5a10c}{%
+           giveni={H\bibinitperiod}}}%
+        {{hash=f88eb676c206753b0989fa3776b5a10c}{%
            family={Fettke},
            familyi={F\bibinitperiod},
            given={Peter},
-           giveni={P\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=0aeb854e1980e96131ad11d6c7e59b76}{%
+           giveni={P\bibinitperiod}}}%
+        {{hash=0aeb854e1980e96131ad11d6c7e59b76}{%
            family={Kemper},
            familyi={K\bibinitperiod},
            given={Hans-Georg},
-           giveni={H\bibinithyphendelim G\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=d641a10adbc6d2e6bc6817d3af3ae40f}{%
+           giveni={H\bibinithyphendelim G\bibinitperiod}}}%
+        {{hash=d641a10adbc6d2e6bc6817d3af3ae40f}{%
            family={Feld},
            familyi={F\bibinitperiod},
            given={Thomas},
-           giveni={T\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=4539d354ecc875071164ba52f1c44812}{%
+           giveni={T\bibinitperiod}}}%
+        {{hash=4539d354ecc875071164ba52f1c44812}{%
            family={Hoffmann},
            familyi={H\bibinitperiod},
            given={Michael},
-           giveni={M\bibinitperiod},
-           givenun=0}}%
+           giveni={M\bibinitperiod}}}%
       }
       \strng{namehash}{db60fe2123f7df597a9f6b51093060c2}
       \strng{fullhash}{19799c67d0dbf629073f2f2d2d5fd4c0}
@@ -93,8 +205,6 @@
       \strng{authorfullhash}{19799c67d0dbf629073f2f2d2d5fd4c0}
       \field{sortinit}{L}
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Business \& Information Systems Engineering}
@@ -110,66 +220,56 @@
     \endentry
     \entry{MONOSTORI2016_CPS_MANUFACTURING}{article}{}
       \name{author}{10}{}{%
-        {{un=0,uniquepart=base,hash=b2cc0cbfb233d15db8a31e15322a57b0}{%
+        {{hash=b2cc0cbfb233d15db8a31e15322a57b0}{%
            family={Monostori},
            familyi={M\bibinitperiod},
            given={L.},
-           giveni={L\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=6c3ce7577b0c1255e27fd556e8d61e0f}{%
+           giveni={L\bibinitperiod}}}%
+        {{hash=6c3ce7577b0c1255e27fd556e8d61e0f}{%
            family={Kádár},
            familyi={K\bibinitperiod},
            given={B.},
-           giveni={B\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=0e226fc1920d4c46cb1aab88f50cab04}{%
+           giveni={B\bibinitperiod}}}%
+        {{hash=0e226fc1920d4c46cb1aab88f50cab04}{%
            family={Bauernhansl},
            familyi={B\bibinitperiod},
            given={T.},
-           giveni={T\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=2fb68235ea266a83dbd5e479449e7818}{%
+           giveni={T\bibinitperiod}}}%
+        {{hash=2fb68235ea266a83dbd5e479449e7818}{%
            family={Kondoh},
            familyi={K\bibinitperiod},
            given={S.},
-           giveni={S\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=68a22639cd3ce707b0322295399010d2}{%
+           giveni={S\bibinitperiod}}}%
+        {{hash=68a22639cd3ce707b0322295399010d2}{%
            family={Kumara},
            familyi={K\bibinitperiod},
            given={S.},
-           giveni={S\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=150bc0f9c44b77ed3d971e33dfd41c91}{%
+           giveni={S\bibinitperiod}}}%
+        {{hash=150bc0f9c44b77ed3d971e33dfd41c91}{%
            family={Reinhart},
            familyi={R\bibinitperiod},
            given={G.},
-           giveni={G\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=1fc8bef5eb4729eb8f4b07d266cdfc50}{%
+           giveni={G\bibinitperiod}}}%
+        {{hash=1fc8bef5eb4729eb8f4b07d266cdfc50}{%
            family={Sauer},
            familyi={S\bibinitperiod},
            given={O.},
-           giveni={O\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=c9e65bdf02242fe86462fddffc74df45}{%
+           giveni={O\bibinitperiod}}}%
+        {{hash=c9e65bdf02242fe86462fddffc74df45}{%
            family={Schuh},
            familyi={S\bibinitperiod},
            given={G.},
-           giveni={G\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=a95f7eb1ec716beb1aabe38e665c8f6b}{%
+           giveni={G\bibinitperiod}}}%
+        {{hash=a95f7eb1ec716beb1aabe38e665c8f6b}{%
            family={Sihn},
            familyi={S\bibinitperiod},
            given={W.},
-           giveni={W\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=54319acea0a81f2db682549128a1437f}{%
+           giveni={W\bibinitperiod}}}%
+        {{hash=54319acea0a81f2db682549128a1437f}{%
            family={Ueda},
            familyi={U\bibinitperiod},
            given={K.},
-           giveni={K\bibinitperiod},
-           givenun=0}}%
+           giveni={K\bibinitperiod}}}%
       }
       \strng{namehash}{192e3b5776d6a7228a4d7d41fa5f1807}
       \strng{fullhash}{7057cd64b011572fe591b69bc9ef0702}
@@ -179,8 +279,6 @@
       \strng{authorfullhash}{7057cd64b011572fe591b69bc9ef0702}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{CIRP Annals}
@@ -196,12 +294,11 @@
     \endentry
     \entry{PISCHING2017}{thesis}{}
       \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=7d544e832148f3c233b47c0abe09973a}{%
+        {{hash=7d544e832148f3c233b47c0abe09973a}{%
            family={Pisching},
            familyi={P\bibinitperiod},
            given={Marcos\bibnamedelima André},
-           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
-           givenun=0}}%
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
       }
       \list{institution}{1}{%
         {Universidade de São Paulo}%
@@ -217,8 +314,6 @@
       \strng{authorfullhash}{7d544e832148f3c233b47c0abe09973a}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{bookpagination}{sheet}
@@ -226,37 +321,6 @@
       \field{type}{phdthesis}
       \field{year}{2017}
       \field{dateera}{ce}
-    \endentry
-    \entry{WEF_DAVOS_2016_THEME}{online}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=9f6d16e0eaf271813481bd46be0c7a35}{%
-           family={{World Economic Forum}},
-           familyi={W\bibinitperiod}}}%
-      }
-      \strng{namehash}{9f6d16e0eaf271813481bd46be0c7a35}
-      \strng{fullhash}{9f6d16e0eaf271813481bd46be0c7a35}
-      \strng{bibnamehash}{9f6d16e0eaf271813481bd46be0c7a35}
-      \strng{authorbibnamehash}{9f6d16e0eaf271813481bd46be0c7a35}
-      \strng{authornamehash}{9f6d16e0eaf271813481bd46be0c7a35}
-      \strng{authorfullhash}{9f6d16e0eaf271813481bd46be0c7a35}
-      \field{sortinit}{W}
-      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{title}{What is the theme of Davos 2016?}
-      \field{urlday}{15}
-      \field{urlmonth}{4}
-      \field{urlyear}{2026}
-      \field{year}{2015}
-      \field{urldateera}{ce}
-      \verb{urlraw}
-      \verb https://www.weforum.org/stories/2015/11/what-is-the-theme-of-davos-2016/
-      \endverb
-      \verb{url}
-      \verb https://www.weforum.org/stories/2015/11/what-is-the-theme-of-davos-2016/
-      \endverb
     \endentry
   \enddatalist
 \endrefsection
