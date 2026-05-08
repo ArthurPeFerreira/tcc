@@ -2453,6 +2453,11 @@
     <bcf:citekey order="9" intorder="1">COLOMBO2014_STATE_ART_AUTOMATION</bcf:citekey>
     <bcf:citekey order="10" intorder="1">COLOMBO2014_STATE_ART_AUTOMATION</bcf:citekey>
     <bcf:citekey order="11" intorder="1">COLOMBO2014_STATE_ART_AUTOMATION</bcf:citekey>
+    <bcf:citekey order="12" intorder="1">AHMED2011_EFFICIENT_WEB_SCADA</bcf:citekey>
+    <bcf:citekey order="13" intorder="1">COLOMBO2014_STATE_ART_AUTOMATION</bcf:citekey>
+    <bcf:citekey order="14" intorder="1">HENRIQUES2010_CLOUD_COMPUTING_TCC</bcf:citekey>
+    <bcf:citekey order="15" intorder="1">PEDROSA2011_COMPUTACAO_NUVEM</bcf:citekey>
+    <bcf:citekey order="16" intorder="1">STANKOVIC2014_IOT_RESEARCH_DIRECTIONS</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

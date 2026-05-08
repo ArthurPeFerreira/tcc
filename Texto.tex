@@ -4,6 +4,7 @@
 \documentclass[a4paper, 12pt]{article} % Define o documento como um artigo em papel A4 com fonte 12pt
 \usepackage[bottom=3cm, top=2cm, left=2cm, right=2cm]{geometry} % Define as margens do documento
 \usepackage[brazil]{babel} % Configura o idioma do documento para português do Brasil
+\usepackage[T1]{fontenc} % Codificação T1: hifenização correta de acentos e menos avisos de overfull
 \usepackage{amsmath} % Pacote para fórmulas matemáticas avançadas
 \usepackage{multicol} % Permite criar múltiplas colunas de texto
 \usepackage{color} % Permite o uso de cores no texto
@@ -55,8 +56,8 @@ Serviços para a Indústria 4.0} % Associa valor à variável \Titulo
 % Inclui os capítulos do documento
 \include{Capitulos/01_Capa} % Capa
 \include{Capitulos/02_Contra-Capa} % Contra-Capa
-\include{Capitulos/03_Dedicatoria} % Dedicatória
-\include{Capitulos/04_Agradecimentos} % Agradecimentos
+% \include{Capitulos/03_Dedicatoria} % Dedicatória
+% \include{Capitulos/04_Agradecimentos} % Agradecimentos
 \include{Capitulos/05_Epigrafe} % Epígrafe
 \include{Capitulos/06_Resumo} % Resumo
 \include{Capitulos/07_Lista_Imagens} % Lista de Imagens

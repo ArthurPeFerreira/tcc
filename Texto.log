@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.25)  6 MAY 2026 20:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.25)  8 MAY 2026 20:50
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -58,7 +58,9 @@ Language: portuges 2021/07/09 v1.2t Portuguese support from the babel system
 Package babel Info: Hyphen rules for 'brazil' set to \l@portuguese
 (babel)             (\language53). Reported on input line 111.
 Package babel Info: Making " an active character on input line 143.
-)) (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+)) (/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
+) (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2023/05/13 v2.17o AMS math features
 \@mathmargin=\skip50
 
@@ -1233,27 +1235,27 @@ Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
 Package csquotes Info: Redefining alias 'default' -> 'brazil'.
- (./Texto.aux (./Capitulos/01_Capa.aux) (./Capitulos/02_Contra-Capa.aux) (./Capitulos/03_Dedicatoria.aux) (./Capitulos/04_Agradecimentos.aux) (./Capitulos/05_Epigrafe.aux) (./Capitulos/06_Resumo.aux) (./Capitulos/07_Lista_Imagens.aux) (./Capitulos/08_Lista Siglas.aux) (./Capitulos/09_Lista de Simbolos.aux) (./Capitulos/10_Lista de Equações.aux) (./Capitulos/11_Lista de Tabelas.aux) (./Capitulos/12_Sumário.aux) (./Capitulos/13_Introducao.aux) (./Capitulos/14_Desenvolvimento.aux) (./Capitulos/15_Conclusão.aux) (./Capitulos/00_Referencias.aux))
+ (./Texto.aux (./Capitulos/01_Capa.aux) (./Capitulos/02_Contra-Capa.aux) (./Capitulos/05_Epigrafe.aux) (./Capitulos/06_Resumo.aux) (./Capitulos/07_Lista_Imagens.aux) (./Capitulos/08_Lista Siglas.aux) (./Capitulos/09_Lista de Simbolos.aux) (./Capitulos/10_Lista de Equações.aux) (./Capitulos/11_Lista de Tabelas.aux) (./Capitulos/12_Sumário.aux) (./Capitulos/13_Introducao.aux) (./Capitulos/14_Desenvolvimento.aux) (./Capitulos/15_Conclusão.aux) (./Capitulos/00_Referencias.aux))
 \openout1 = `Texto.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1310,15 +1312,15 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 \symgns@font=\mathgroup6
 LaTeX Font Info:    Overwriting symbol font `gns@font' in version `bold'
-(Font)                  TS1/cmr/m/n --> TS1/cmr/b/n on input line 53.
-Package gensymb Info: Math companion symbols declared on input line 53.
-LaTeX Info: Redefining \degree on input line 53.
-LaTeX Info: Redefining \celsius on input line 53.
-LaTeX Info: Redefining \perthousand on input line 53.
-Package gensymb Info: Using text companion symbols for \degree, \celsius and \perthousand on input line 53.
-LaTeX Info: Redefining \ohm on input line 53.
-Package gensymb Info: Using \textohm for \ohm on input line 53.
-Package gensymb Info: Using \textmu for \micro on input line 53.
+(Font)                  TS1/cmr/m/n --> TS1/cmr/b/n on input line 54.
+Package gensymb Info: Math companion symbols declared on input line 54.
+LaTeX Info: Redefining \degree on input line 54.
+LaTeX Info: Redefining \celsius on input line 54.
+LaTeX Info: Redefining \perthousand on input line 54.
+Package gensymb Info: Using text companion symbols for \degree, \celsius and \perthousand on input line 54.
+LaTeX Info: Redefining \ohm on input line 54.
+Package gensymb Info: Using \textohm for \ohm on input line 54.
+Package gensymb Info: Using \textmu for \micro on input line 54.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: float package is loaded.
@@ -1326,7 +1328,7 @@ Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \c@lstlisting=\count548
-Package hyperref Info: Link coloring OFF on input line 53.
+Package hyperref Info: Link coloring OFF on input line 54.
  (./Texto.out) (./Texto.out)
 \@outlinefile=\write7
 \openout7 = `Texto.out'.
@@ -1337,7 +1339,7 @@ Package pgfplots notification 'compat/show suggested version=true': document has
 (/usr/share/texlive/texmf-dist/tex/latex/translations/translations-basic-dictionary-brazil.trsl
 File: translations-basic-dictionary-brazil.trsl (brazil translation file `translations-basic-dictionary')
 )
-Package translations Info: loading dictionary `translations-basic-dictionary' for `brazil'. on input line 53.
+Package translations Info: loading dictionary `translations-basic-dictionary' for `brazil'. on input line 54.
 Package biblatex Info: Trying to load language 'brazil' -> 'brazil-abnt'...
 Package biblatex Info: ... file 'brazil-abnt.lbx' found.
  (/usr/share/texlive/texmf-dist/tex/latex/biblatex-abnt/brazil-abnt.lbx
@@ -1412,8 +1414,8 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'Texto.bbl' found.
  (./Texto.bbl)
-Package biblatex Info: Reference section=0 on input line 53.
-Package biblatex Info: Reference segment=0 on input line 53.
+Package biblatex Info: Reference section=0 on input line 54.
+Package biblatex Info: Reference segment=0 on input line 54.
 \openout2 = `Capitulos/01_Capa.aux'.
 
  (./Capitulos/01_Capa.tex
@@ -1426,7 +1428,7 @@ Package pdftex.def Info: Imagens/Capa/01_Instituto.png  used on input line 8.
 
 
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./Imagens/Capa/01_Instituto.png>])
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc} <./Imagens/Capa/01_Instituto.png>])
 \openout2 = `Capitulos/02_Contra-Capa.aux'.
 
  (./Capitulos/02_Contra-Capa.tex
@@ -1441,27 +1443,9 @@ l.34 \clearpage
 
 
 ])
-\openout2 = `Capitulos/03_Dedicatoria.aux'.
-
- (./Capitulos/03_Dedicatoria.tex [2
-
-
-
-
-
-])
-\openout2 = `Capitulos/04_Agradecimentos.aux'.
-
- (./Capitulos/04_Agradecimentos.tex [3
-
-
-
-
-
-])
 \openout2 = `Capitulos/05_Epigrafe.aux'.
 
- (./Capitulos/05_Epigrafe.tex [4
+ (./Capitulos/05_Epigrafe.tex [2
 
 
 
@@ -1475,7 +1459,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 11--12
 
  []
 
-[5
+[3
 
 
 
@@ -1496,7 +1480,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \tf@lof=\write8
 \openout8 = `Texto.lof'.
 
- [6
+ [4
 
 
 
@@ -1505,7 +1489,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ])
 \openout2 = `"Capitulos/08_Lista Siglas.aux"'.
 
- (./Capitulos/08_Lista Siglas.tex [7
+ (./Capitulos/08_Lista Siglas.tex [5
 
 
 
@@ -1514,7 +1498,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ])
 \openout2 = `"Capitulos/09_Lista de Simbolos.aux"'.
 
- (./Capitulos/09_Lista de Simbolos.tex [8
+ (./Capitulos/09_Lista de Simbolos.tex [6
 
 
 
@@ -1527,7 +1511,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \tf@equ=\write9
 \openout9 = `Texto.equ'.
 
- [9
+ [7
 
 
 
@@ -1540,7 +1524,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \tf@lot=\write10
 \openout10 = `Texto.lot'.
 
- [10
+ [8
 
 
 
@@ -1553,7 +1537,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \tf@toc=\write11
 \openout11 = `Texto.toc'.
 
- [11
+ [9
 
 
 
@@ -1563,38 +1547,40 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \openout2 = `Capitulos/13_Introducao.aux'.
 
  (./Capitulos/13_Introducao.tex
-<Imagens/Introducao/Contextualizacao/evolucoes-industriais.png, id=130, 1144.275pt x 723.70375pt>
+<Imagens/Introducao/Contextualizacao/evolucoes-industriais.png, id=123, 1144.275pt x 723.70375pt>
 File: Imagens/Introducao/Contextualizacao/evolucoes-industriais.png Graphic file (type png)
 <use Imagens/Introducao/Contextualizacao/evolucoes-industriais.png>
 Package pdftex.def Info: Imagens/Introducao/Contextualizacao/evolucoes-industriais.png  used on input line 15.
 (pdftex.def)             Requested size: 457.70189pt x 289.47636pt.
- [12
+ [10
 
 
 
 
 
  <./Imagens/Introducao/Contextualizacao/evolucoes-industriais.png>]
-<Imagens/Introducao/Contextualizacao/piramide-automacao.png, id=149, 947.54pt x 613.29124pt>
+<Imagens/Introducao/Contextualizacao/piramide-automacao.png, id=142, 947.54pt x 613.29124pt>
 File: Imagens/Introducao/Contextualizacao/piramide-automacao.png Graphic file (type png)
 <use Imagens/Introducao/Contextualizacao/piramide-automacao.png>
 Package pdftex.def Info: Imagens/Introducao/Contextualizacao/piramide-automacao.png  used on input line 32.
 (pdftex.def)             Requested size: 473.76883pt x 306.64487pt.
- [13 <./Imagens/Introducao/Contextualizacao/piramide-automacao.png>] [14
-
-]) [15
-
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
+ [11 <./Imagens/Introducao/Contextualizacao/piramide-automacao.png>]
+<Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png, id=152, 611.28375pt x 567.11874pt>
+File: Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png Graphic file (type png)
+<use Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png>
+Package pdftex.def Info: Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png  used on input line 49.
+(pdftex.def)             Requested size: 366.77307pt x 340.27386pt.
+ [12 <./Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png>]) [13{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] [14]
 \openout2 = `Capitulos/14_Desenvolvimento.aux'.
 
- (./Capitulos/14_Desenvolvimento.tex) [16
+ (./Capitulos/14_Desenvolvimento.tex) [15
 
 
 
 ]
 \openout2 = `Capitulos/15_Conclusão.aux'.
 
- (./Capitulos/15_Conclusão.tex) [17
+ (./Capitulos/15_Conclusão.tex) [16
 
 
 
@@ -1602,12 +1588,16 @@ Package pdftex.def Info: Imagens/Introducao/Contextualizacao/piramide-automacao.
 ]
 \openout2 = `Capitulos/00_Referencias.aux'.
 
- (./Capitulos/00_Referencias.tex) [18
+ (./Capitulos/00_Referencias.tex
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 4.
+ (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
+)) [17
 
 
 
 
-] (./Texto.aux (./Capitulos/01_Capa.aux) (./Capitulos/02_Contra-Capa.aux) (./Capitulos/03_Dedicatoria.aux) (./Capitulos/04_Agradecimentos.aux) (./Capitulos/05_Epigrafe.aux) (./Capitulos/06_Resumo.aux) (./Capitulos/07_Lista_Imagens.aux) (./Capitulos/08_Lista Siglas.aux) (./Capitulos/09_Lista de Simbolos.aux) (./Capitulos/10_Lista de Equações.aux) (./Capitulos/11_Lista de Tabelas.aux) (./Capitulos/12_Sumário.aux) (./Capitulos/13_Introducao.aux) (./Capitulos/14_Desenvolvimento.aux) (./Capitulos/15_Conclusão.aux) (./Capitulos/00_Referencias.aux))
+] (./Texto.aux (./Capitulos/01_Capa.aux) (./Capitulos/02_Contra-Capa.aux) (./Capitulos/05_Epigrafe.aux) (./Capitulos/06_Resumo.aux) (./Capitulos/07_Lista_Imagens.aux) (./Capitulos/08_Lista Siglas.aux) (./Capitulos/09_Lista de Simbolos.aux) (./Capitulos/10_Lista de Equações.aux) (./Capitulos/11_Lista de Tabelas.aux) (./Capitulos/12_Sumário.aux) (./Capitulos/13_Introducao.aux) (./Capitulos/14_Desenvolvimento.aux) (./Capitulos/15_Conclusão.aux) (./Capitulos/00_Referencias.aux))
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2020/03/25>
@@ -1619,18 +1609,18 @@ Package logreq Info: Writing requests to 'Texto.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 69471 strings out of 474222
- 1710564 string characters out of 5748733
- 2887952 words of memory out of 5000000
- 90735 multiletter control sequences out of 15000+600000
- 566127 words of font info for 66 fonts, out of 8000000 for 9000
+ 69665 strings out of 474222
+ 1712375 string characters out of 5748733
+ 2882860 words of memory out of 5000000
+ 90928 multiletter control sequences out of 15000+600000
+ 570321 words of font info for 67 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,7n,133p,1180b,4454s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on Texto.pdf (19 pages, 369586 bytes).
+ 99i,7n,133p,1363b,4454s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on Texto.pdf (18 pages, 472208 bytes).
 PDF statistics:
- 218 PDF objects out of 1000 (max. 8388607)
- 181 compressed objects within 2 object streams
- 44 named destinations out of 1000 (max. 500000)
- 116 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 235 PDF objects out of 1000 (max. 8388607)
+ 194 compressed objects within 2 object streams
+ 46 named destinations out of 1000 (max. 500000)
+ 121 words of extra memory for PDF output out of 10000 (max. 10000000)
 
