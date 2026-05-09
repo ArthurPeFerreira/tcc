@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.25)  8 MAY 2026 20:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.25)  8 MAY 2026 20:59
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1547,7 +1547,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \openout2 = `Capitulos/13_Introducao.aux'.
 
  (./Capitulos/13_Introducao.tex
-<Imagens/Introducao/Contextualizacao/evolucoes-industriais.png, id=123, 1144.275pt x 723.70375pt>
+<Imagens/Introducao/Contextualizacao/evolucoes-industriais.png, id=124, 1144.275pt x 723.70375pt>
 File: Imagens/Introducao/Contextualizacao/evolucoes-industriais.png Graphic file (type png)
 <use Imagens/Introducao/Contextualizacao/evolucoes-industriais.png>
 Package pdftex.def Info: Imagens/Introducao/Contextualizacao/evolucoes-industriais.png  used on input line 15.
@@ -1559,13 +1559,13 @@ Package pdftex.def Info: Imagens/Introducao/Contextualizacao/evolucoes-industria
 
 
  <./Imagens/Introducao/Contextualizacao/evolucoes-industriais.png>]
-<Imagens/Introducao/Contextualizacao/piramide-automacao.png, id=142, 947.54pt x 613.29124pt>
+<Imagens/Introducao/Contextualizacao/piramide-automacao.png, id=143, 947.54pt x 613.29124pt>
 File: Imagens/Introducao/Contextualizacao/piramide-automacao.png Graphic file (type png)
 <use Imagens/Introducao/Contextualizacao/piramide-automacao.png>
 Package pdftex.def Info: Imagens/Introducao/Contextualizacao/piramide-automacao.png  used on input line 32.
 (pdftex.def)             Requested size: 473.76883pt x 306.64487pt.
  [11 <./Imagens/Introducao/Contextualizacao/piramide-automacao.png>]
-<Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png, id=152, 611.28375pt x 567.11874pt>
+<Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png, id=153, 611.28375pt x 567.11874pt>
 File: Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png Graphic file (type png)
 <use Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png>
 Package pdftex.def Info: Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png  used on input line 49.
@@ -1609,18 +1609,18 @@ Package logreq Info: Writing requests to 'Texto.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 69665 strings out of 474222
- 1712375 string characters out of 5748733
+ 69671 strings out of 474222
+ 1712489 string characters out of 5748733
  2882860 words of memory out of 5000000
- 90928 multiletter control sequences out of 15000+600000
- 570321 words of font info for 67 fonts, out of 8000000 for 9000
+ 90933 multiletter control sequences out of 15000+600000
+ 571005 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,7n,133p,1363b,4454s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on Texto.pdf (18 pages, 472208 bytes).
+ 99i,9n,133p,1363b,4454s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on Texto.pdf (18 pages, 499711 bytes).
 PDF statistics:
- 235 PDF objects out of 1000 (max. 8388607)
- 194 compressed objects within 2 object streams
+ 240 PDF objects out of 1000 (max. 8388607)
+ 197 compressed objects within 2 object streams
  46 named destinations out of 1000 (max. 500000)
  121 words of extra memory for PDF output out of 10000 (max. 10000000)
 
