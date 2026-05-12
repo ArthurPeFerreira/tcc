@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.25)  8 MAY 2026 20:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.25)  11 MAY 2026 21:01
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1235,7 +1235,7 @@ Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
 Package csquotes Info: Redefining alias 'default' -> 'brazil'.
- (./Texto.aux (./Capitulos/01_Capa.aux) (./Capitulos/02_Contra-Capa.aux) (./Capitulos/05_Epigrafe.aux) (./Capitulos/06_Resumo.aux) (./Capitulos/07_Lista_Imagens.aux) (./Capitulos/08_Lista Siglas.aux) (./Capitulos/09_Lista de Simbolos.aux) (./Capitulos/10_Lista de Equações.aux) (./Capitulos/11_Lista de Tabelas.aux) (./Capitulos/12_Sumário.aux) (./Capitulos/13_Introducao.aux) (./Capitulos/14_Desenvolvimento.aux) (./Capitulos/15_Conclusão.aux) (./Capitulos/00_Referencias.aux))
+ (./Texto.aux (./Capitulos/01_Capa.aux) (./Capitulos/02_Contra-Capa.aux) (./Capitulos/05_Epigrafe.aux) (./Capitulos/06_Resumo.aux) (./Capitulos/07_Lista_Imagens.aux) (./Capitulos/08_Lista Siglas.aux) (./Capitulos/09_Lista de Simbolos.aux) (./Capitulos/10_Lista de Equações.aux) (./Capitulos/11_Lista de Tabelas.aux) (./Capitulos/12_Sumário.aux) (./Capitulos/13_Introducao/13_1_Contextualizacao.aux) (./Capitulos/14_Desenvolvimento/14_1_Cap.aux) (./Capitulos/00_Referencias.aux))
 \openout1 = `Texto.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 54.
@@ -1419,7 +1419,7 @@ Package biblatex Info: Reference segment=0 on input line 54.
 \openout2 = `Capitulos/01_Capa.aux'.
 
  (./Capitulos/01_Capa.tex
-<Imagens/Capa/01_Instituto.png, id=51, 429.605pt x 118.4425pt>
+<Imagens/Capa/01_Instituto.png, id=75, 429.605pt x 118.4425pt>
 File: Imagens/Capa/01_Instituto.png Graphic file (type png)
 <use Imagens/Capa/01_Instituto.png>
 Package pdftex.def Info: Imagens/Capa/01_Instituto.png  used on input line 8.
@@ -1544,44 +1544,40 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 
 ])
-\openout2 = `Capitulos/13_Introducao.aux'.
+\openout2 = `Capitulos/13_Introducao/13_1_Contextualizacao.aux'.
 
- (./Capitulos/13_Introducao.tex
-<Imagens/Introducao/Contextualizacao/evolucoes-industriais.png, id=124, 1144.275pt x 723.70375pt>
+ (./Capitulos/13_Introducao/13_1_Contextualizacao.tex
+<Imagens/Introducao/Contextualizacao/evolucoes-industriais.png, id=154, 1144.275pt x 723.70375pt>
 File: Imagens/Introducao/Contextualizacao/evolucoes-industriais.png Graphic file (type png)
 <use Imagens/Introducao/Contextualizacao/evolucoes-industriais.png>
-Package pdftex.def Info: Imagens/Introducao/Contextualizacao/evolucoes-industriais.png  used on input line 15.
+Package pdftex.def Info: Imagens/Introducao/Contextualizacao/evolucoes-industriais.png  used on input line 12.
 (pdftex.def)             Requested size: 457.70189pt x 289.47636pt.
  [10
 
 
 
 
-
  <./Imagens/Introducao/Contextualizacao/evolucoes-industriais.png>]
-<Imagens/Introducao/Contextualizacao/piramide-automacao.png, id=143, 947.54pt x 613.29124pt>
+<Imagens/Introducao/Contextualizacao/piramide-automacao.png, id=174, 947.54pt x 613.29124pt>
 File: Imagens/Introducao/Contextualizacao/piramide-automacao.png Graphic file (type png)
 <use Imagens/Introducao/Contextualizacao/piramide-automacao.png>
-Package pdftex.def Info: Imagens/Introducao/Contextualizacao/piramide-automacao.png  used on input line 32.
+Package pdftex.def Info: Imagens/Introducao/Contextualizacao/piramide-automacao.png  used on input line 29.
 (pdftex.def)             Requested size: 473.76883pt x 306.64487pt.
- [11 <./Imagens/Introducao/Contextualizacao/piramide-automacao.png>]
-<Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png, id=153, 611.28375pt x 567.11874pt>
+) [11 <./Imagens/Introducao/Contextualizacao/piramide-automacao.png>] (./Capitulos/13_Introducao/13_2_Justificativa.tex
+<Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png, id=184, 611.28375pt x 567.11874pt>
 File: Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png Graphic file (type png)
 <use Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png>
-Package pdftex.def Info: Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png  used on input line 49.
+Package pdftex.def Info: Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png  used on input line 9.
 (pdftex.def)             Requested size: 366.77307pt x 340.27386pt.
- [12 <./Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png>]) [13{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] [14]
-\openout2 = `Capitulos/14_Desenvolvimento.aux'.
-
- (./Capitulos/14_Desenvolvimento.tex) [15
+) (./Capitulos/13_Introducao/13_3_Objetivos.tex [12
 
 
+ <./Imagens/Introducao/Justificativa/arquitetura-tipica-scada.png>]) (./Capitulos/13_Introducao/13_4_Estrutura.tex) [13{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] [14]
+\openout2 = `Capitulos/14_Desenvolvimento/14_1_Cap.aux'.
 
-]
-\openout2 = `Capitulos/15_Conclusão.aux'.
+ (./Capitulos/14_Desenvolvimento/14_1_Cap.tex) [15
 
- (./Capitulos/15_Conclusão.tex) [16
-
+] (./Capitulos/14_Desenvolvimento/14_2_Cap.tex) (./Capitulos/14_Desenvolvimento/14_3_Cap.tex) (./Capitulos/14_Desenvolvimento/14_4_Cap.tex) (./Capitulos/14_Desenvolvimento/14_5_Cap.tex) (./Capitulos/14_Desenvolvimento/14_6_Cap.tex) (./Capitulos/15_Conclusão.tex) [16
 
 
 
@@ -1595,32 +1591,30 @@ File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )) [17
 
 
-
-
-] (./Texto.aux (./Capitulos/01_Capa.aux) (./Capitulos/02_Contra-Capa.aux) (./Capitulos/05_Epigrafe.aux) (./Capitulos/06_Resumo.aux) (./Capitulos/07_Lista_Imagens.aux) (./Capitulos/08_Lista Siglas.aux) (./Capitulos/09_Lista de Simbolos.aux) (./Capitulos/10_Lista de Equações.aux) (./Capitulos/11_Lista de Tabelas.aux) (./Capitulos/12_Sumário.aux) (./Capitulos/13_Introducao.aux) (./Capitulos/14_Desenvolvimento.aux) (./Capitulos/15_Conclusão.aux) (./Capitulos/00_Referencias.aux))
+] (./Texto.aux (./Capitulos/01_Capa.aux) (./Capitulos/02_Contra-Capa.aux) (./Capitulos/05_Epigrafe.aux) (./Capitulos/06_Resumo.aux) (./Capitulos/07_Lista_Imagens.aux) (./Capitulos/08_Lista Siglas.aux) (./Capitulos/09_Lista de Simbolos.aux) (./Capitulos/10_Lista de Equações.aux) (./Capitulos/11_Lista de Tabelas.aux) (./Capitulos/12_Sumário.aux) (./Capitulos/13_Introducao/13_1_Contextualizacao.aux) (./Capitulos/14_Desenvolvimento/14_1_Cap.aux) (./Capitulos/00_Referencias.aux))
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2020/03/25>
  ***********
 Package rerunfilecheck Info: File `Texto.out' has not changed.
-(rerunfilecheck)             Checksum: 5DEB4B0E4B788BF3868053B40F38C4EB;1355.
+(rerunfilecheck)             Checksum: 1B85475DDF983F5BF761A4C4CE3ADF51;2498.
 Package logreq Info: Writing requests to 'Texto.run.xml'.
 \openout1 = `Texto.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 69671 strings out of 474222
- 1712489 string characters out of 5748733
- 2882860 words of memory out of 5000000
- 90933 multiletter control sequences out of 15000+600000
+ 69746 strings out of 474222
+ 1716243 string characters out of 5748733
+ 2883275 words of memory out of 5000000
+ 90978 multiletter control sequences out of 15000+600000
  571005 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,9n,133p,1363b,4454s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,9n,133p,1365b,4454s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on Texto.pdf (18 pages, 499711 bytes).
+Output written on Texto.pdf (18 pages, 505971 bytes).
 PDF statistics:
- 240 PDF objects out of 1000 (max. 8388607)
- 197 compressed objects within 2 object streams
- 46 named destinations out of 1000 (max. 500000)
- 121 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 279 PDF objects out of 1000 (max. 8388607)
+ 235 compressed objects within 3 object streams
+ 54 named destinations out of 1000 (max. 500000)
+ 169 words of extra memory for PDF output out of 10000 (max. 10000000)
 

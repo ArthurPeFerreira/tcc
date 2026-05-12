@@ -200,6 +200,46 @@
       \field{year}{2020}
       \field{dateera}{ce}
     \endentry
+    \entry{GAUSHELL_DARLINGTON_1987_SUPERVISORY_CONTROL_DATA_ACQUISITION}{article}{}
+      \name{author}{2}{}{%
+        {{hash=863f28129364452118ab491d28cdc0d3}{%
+           family={Gaushell},
+           familyi={G\bibinitperiod},
+           given={Dennis\bibnamedelima J.},
+           giveni={D\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=5418f9bb57da87390c1c04c00a19c11e}{%
+           family={Darlington},
+           familyi={D\bibinitperiod},
+           given={Henry\bibnamedelima T.},
+           giveni={H\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+      }
+      \strng{namehash}{ff3d7c746ded1a21944ffae38c2f87a7}
+      \strng{fullhash}{ff3d7c746ded1a21944ffae38c2f87a7}
+      \strng{bibnamehash}{ff3d7c746ded1a21944ffae38c2f87a7}
+      \strng{authorbibnamehash}{ff3d7c746ded1a21944ffae38c2f87a7}
+      \strng{authornamehash}{ff3d7c746ded1a21944ffae38c2f87a7}
+      \strng{authorfullhash}{ff3d7c746ded1a21944ffae38c2f87a7}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Proc. {IEEE}}
+      \field{number}{12}
+      \field{title}{Supervisory control and data acquisition}
+      \field{volume}{75}
+      \field{year}{1987}
+      \field{pages}{1645\bibrangedash 1658}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1109/PROC.1987.13932
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1109/PROC.1987.13932
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1109/PROC.1987.13932
+      \endverb
+    \endentry
     \entry{HENRIQUES2010_CLOUD_COMPUTING_TCC}{misc}{}
       \name{author}{1}{}{%
         {{hash=7cca313af4dc55ffe721eb958fc6ffa8}{%
@@ -436,6 +476,34 @@
       \verb{doi}
       \verb 10.1109/JIOT.2014.2312291
       \endverb
+    \endentry
+    \entry{ZANGHI2019_SCADA_CONCEITOS}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=b859a60766f8b28d1651039387461214}{%
+           family={Zanghi},
+           familyi={Z\bibinitperiod},
+           given={Eric},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Porto, Portugal}%
+      }
+      \list{publisher}{1}{%
+        {INESC TEC}%
+      }
+      \strng{namehash}{b859a60766f8b28d1651039387461214}
+      \strng{fullhash}{b859a60766f8b28d1651039387461214}
+      \strng{bibnamehash}{b859a60766f8b28d1651039387461214}
+      \strng{authorbibnamehash}{b859a60766f8b28d1651039387461214}
+      \strng{authornamehash}{b859a60766f8b28d1651039387461214}
+      \strng{authorfullhash}{b859a60766f8b28d1651039387461214}
+      \field{sortinit}{Z}
+      \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{Texto de divulgação técnica na área de Proteção e Comunicação de Sistemas Elétricos de Potência (INESC TEC)}
+      \field{title}{Sistemas {SCADA}: Conceitos}
+      \field{year}{2019}
     \endentry
   \enddatalist
 \endrefsection

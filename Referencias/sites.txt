@@ -1,1 +1,9 @@
 https://www.weforum.org/stories/2015/11/what-is-the-theme-of-davos-2016/
+
+Elipse:
+https://kb.elipse.com.br/boas-praticas-no-desenvolvimento-e-gestao-das-aplicacoes-baseadas-em-elipse-e3/
+https://kb.elipse.com.br/aquisicao-de-dados-criticos-e-redundancia-em-sistemas-scada/
+https://kb.elipse.com.br/a-ponte-entre-a-intuicao-humana-e-a-autonomia-industrial-o-papel-estrategico-do-epm-processor-na-transformacao-digital/
+https://kb.elipse.com.br/metodologia-para-desenvolvimento-de-ihms-de-alta-performance-visual/
+https://kb.elipse.com.br/melhores-praticas-para-o-desenvolvimento-de-uma-aplicacao-elipse-e3/
+https://kb.elipse.com.br/guia-de-virtualizacao-elipse-software/

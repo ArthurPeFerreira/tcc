@@ -2458,6 +2458,9 @@
     <bcf:citekey order="14" intorder="1">HENRIQUES2010_CLOUD_COMPUTING_TCC</bcf:citekey>
     <bcf:citekey order="15" intorder="1">PEDROSA2011_COMPUTACAO_NUVEM</bcf:citekey>
     <bcf:citekey order="16" intorder="1">STANKOVIC2014_IOT_RESEARCH_DIRECTIONS</bcf:citekey>
+    <bcf:citekey order="17" intorder="1">GAUSHELL_DARLINGTON_1987_SUPERVISORY_CONTROL_DATA_ACQUISITION</bcf:citekey>
+    <bcf:citekey order="18" intorder="1">ZANGHI2019_SCADA_CONCEITOS</bcf:citekey>
+    <bcf:citekey order="19" intorder="1">ZANGHI2019_SCADA_CONCEITOS</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">
