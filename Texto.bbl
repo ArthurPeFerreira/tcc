@@ -317,6 +317,66 @@
       \verb 10.1007/s12599-014-0334-4
       \endverb
     \endentry
+    \entry{MODBUS_TCP_IMPLEMENTATION_GUIDE}{manual}{}
+      \name{author}{1}{}{%
+        {{hash=d549d030b44e2ac21c00bfa3a5a09d5f}{%
+           family={{Modbus Organization}},
+           familyi={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{d549d030b44e2ac21c00bfa3a5a09d5f}
+      \strng{fullhash}{d549d030b44e2ac21c00bfa3a5a09d5f}
+      \strng{bibnamehash}{d549d030b44e2ac21c00bfa3a5a09d5f}
+      \strng{authorbibnamehash}{d549d030b44e2ac21c00bfa3a5a09d5f}
+      \strng{authornamehash}{d549d030b44e2ac21c00bfa3a5a09d5f}
+      \strng{authorfullhash}{d549d030b44e2ac21c00bfa3a5a09d5f}
+      \field{extraname}{1}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Modbus Messaging on {TCP/IP} Implementation Guide}
+      \field{urlday}{15}
+      \field{urlmonth}{5}
+      \field{urlyear}{2026}
+      \field{year}{2012}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.modbus.org/docs/Modbus_Messaging_Implementation_Guide_V1_0b.pdf
+      \endverb
+      \verb{url}
+      \verb https://www.modbus.org/docs/Modbus_Messaging_Implementation_Guide_V1_0b.pdf
+      \endverb
+    \endentry
+    \entry{MODBUS_SERIAL_SPEC}{manual}{}
+      \name{author}{1}{}{%
+        {{hash=d549d030b44e2ac21c00bfa3a5a09d5f}{%
+           family={{Modbus Organization}},
+           familyi={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{d549d030b44e2ac21c00bfa3a5a09d5f}
+      \strng{fullhash}{d549d030b44e2ac21c00bfa3a5a09d5f}
+      \strng{bibnamehash}{d549d030b44e2ac21c00bfa3a5a09d5f}
+      \strng{authorbibnamehash}{d549d030b44e2ac21c00bfa3a5a09d5f}
+      \strng{authornamehash}{d549d030b44e2ac21c00bfa3a5a09d5f}
+      \strng{authorfullhash}{d549d030b44e2ac21c00bfa3a5a09d5f}
+      \field{extraname}{2}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Modbus over Serial Line Specification and Implementation Guide}
+      \field{urlday}{15}
+      \field{urlmonth}{5}
+      \field{urlyear}{2026}
+      \field{year}{2012}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.modbus.org/docs/Modbus_over_serial_line_V1_02.pdf
+      \endverb
+      \verb{url}
+      \verb https://www.modbus.org/docs/Modbus_over_serial_line_V1_02.pdf
+      \endverb
+    \endentry
     \entry{MONOSTORI2016_CPS_MANUFACTURING}{article}{}
       \name{author}{10}{}{%
         {{hash=b2cc0cbfb233d15db8a31e15322a57b0}{%

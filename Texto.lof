@@ -2,3 +2,8 @@
 \contentsline {figure}{\numberline {1}{\ignorespaces Linha do Tempo das Revoluções Industriais}}{10}{figure.caption.5}%
 \contentsline {figure}{\numberline {2}{\ignorespaces Pirâmide de Automação}}{11}{figure.caption.6}%
 \contentsline {figure}{\numberline {3}{\ignorespaces Arquitetura típica de um sistema SCADA}}{12}{figure.caption.7}%
+\contentsline {figure}{\numberline {4}{\ignorespaces Arquitetura do Sistema}}{16}{figure.caption.8}%
+\contentsline {figure}{\numberline {5}{\ignorespaces Gateway ABS}}{17}{figure.caption.9}%
+\contentsline {figure}{\numberline {6}{\ignorespaces Modem GPRS ABS Cel X}}{17}{figure.caption.10}%
+\contentsline {figure}{\numberline {7}{\ignorespaces Composição lógica do Modbus TCP: cabeçalho MBAP seguido da PDU (código de função, dados ou exceção)}}{18}{figure.caption.11}%
+\contentsline {figure}{\numberline {8}{\ignorespaces Estrutura simplificada do quadro Modbus RTU (delimitação temporal entre quadros)}}{18}{figure.caption.12}%

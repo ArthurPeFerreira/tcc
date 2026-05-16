@@ -2461,6 +2461,10 @@
     <bcf:citekey order="17" intorder="1">GAUSHELL_DARLINGTON_1987_SUPERVISORY_CONTROL_DATA_ACQUISITION</bcf:citekey>
     <bcf:citekey order="18" intorder="1">ZANGHI2019_SCADA_CONCEITOS</bcf:citekey>
     <bcf:citekey order="19" intorder="1">ZANGHI2019_SCADA_CONCEITOS</bcf:citekey>
+    <bcf:citekey order="20" intorder="1">MODBUS_TCP_IMPLEMENTATION_GUIDE</bcf:citekey>
+    <bcf:citekey order="21" intorder="1">MODBUS_TCP_IMPLEMENTATION_GUIDE</bcf:citekey>
+    <bcf:citekey order="22" intorder="1">MODBUS_SERIAL_SPEC</bcf:citekey>
+    <bcf:citekey order="23" intorder="1">MODBUS_SERIAL_SPEC</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

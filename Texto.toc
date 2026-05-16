@@ -14,5 +14,9 @@
 \contentsline {subsubsection}{\numberline {2.1.4}Comando e Controle}{15}{subsubsection.2.1.4}%
 \contentsline {subsubsection}{\numberline {2.1.5}Escalabilidade}{15}{subsubsection.2.1.5}%
 \contentsline {subsubsection}{\numberline {2.1.6}Redundância}{15}{subsubsection.2.1.6}%
-\contentsline {section}{\numberline {3}Conclusão}{16}{section.3}%
-\contentsline {subsection}{\numberline {3.1}subCap 1}{16}{subsection.3.1}%
+\contentsline {subsection}{\numberline {2.2}Funcionamento}{16}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Aquisição de Dados}{16}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Protocolo Modbus TCP e Modbus RTU}{17}{subsubsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.3}Modelagem, serviço de leitura e agendamento}{18}{subsubsection.2.2.3}%
+\contentsline {section}{\numberline {3}Conclusão}{20}{section.3}%
+\contentsline {subsection}{\numberline {3.1}subCap 1}{20}{subsection.3.1}%

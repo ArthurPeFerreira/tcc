@@ -7,4 +7,6 @@ Falar oque é sistema SCADA
 Explicar as coisas dentro do trabalho, oque é CLP,
 oque é SCADA, oque é IOT, oque Industria 4.0, etc
 
+Sempre na terceira pessoa
+
 Escrever mais coisas

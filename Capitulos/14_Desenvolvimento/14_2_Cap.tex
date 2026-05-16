@@ -1,0 +1,106 @@
+\subsection{Funcionamento}
+
+\par O funcionamento do sistema organiza-se em camadas, conforme ilustrado na Figura~\ref{fig:arquitetura_sistema}. Essa organização separa responsabilidades entre a interface de supervisão, os serviços de domínio executados na nuvem, a persistência das informações e a conectividade com os equipamentos instalados.
+
+\begin{figure}[H]
+    \centering
+    \caption{Arquitetura do Sistema}
+    \centering
+    \includegraphics[scale = .4]{Imagens/Desenvolvimento/Cap2/diagrama_servidores.png}
+    \centering
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:arquitetura_sistema}
+\end{figure}
+
+\subsubsection{Aquisição de Dados}
+
+\par A camada de aquisição de dados é o subsistema responsável por traduzir o estado físico do processo (níveis, vazões, pressões, energia, status de bombas e válvulas, alarmes, contadores etc.) em valores digitais confiáveis, com referência temporal e com metadados suficientes para consumo pela supervisão, por relatórios operacionais e por rotinas de histórico. Em termos práticos, ela engloba desde a montagem das requisições até a entrega dos dados já convertidos para unidades de engenharia (valores nas unidades físicas usuais na operação, como metro, m$^3$/h, bar ou kW). Com frequência, o equipamento expõe a grandeza apenas como inteiro em um ou mais registradores Modbus; o programa do CLP grava então uma representação em ponto fixo (por exemplo, o nível em centímetros com uma casa decimal vem como inteiro que deve ser dividido por 10, ou a vazão usa divisor 100), e cabe à camada de aquisição aplicar a multiplicação ou divisão, somas de deslocamento (\textit{offset}) e demais fatores de escala cadastrados para reproduzir o valor real usado na operação, prontos para gravação em banco.
+
+\par Por operar em ambiente de nuvem, a arquitetura prevê um ponto de concentração na borda da solução (o \textit{gateway}) e dispositivos de campo (os modems), que mantêm a sessão com a infraestrutura central e encaminham o tráfego até o equipamento industrial conectado localmente, via serial RS-485 ou Ethernet. O \textit{gateway} recebe múltiplas conexões TCP vindas dos serviços na nuvem e, com base em regras de roteamento, direciona cada fluxo ao modem associado a um ponto remoto. O modem, por sua vez, materializa o enlace de longa distância (GPRS ou outro meio de acesso à internet) e encerra a parte WAN da comunicação, entregando ao equipamento final a mensagem no formato esperado.
+
+\par Na prática, é comum encontrar soluções integradas por fornecedores de telemetria, a título de exemplificação, o \textit{gateway} ABS (Figura~\ref{fig:gateway_abs}) e o modem GPRS ABS Cel X (Figura~\ref{fig:modem_gprs}) representam a camada física de conectividade adotada em muitos projetos: o primeiro agrega e roteia sessões, o segundo viabiliza o acesso móvel em um ponto de medição remoto.
+
+\begin{figure}[H]
+    \centering
+    \caption{Gateway ABS}
+    \centering
+    \includegraphics[scale = .4]{Imagens/Desenvolvimento/Cap2/gateway_abs.png}
+    \centering
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:gateway_abs}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption{Modem GPRS ABS Cel X}
+    \centering
+    \includegraphics[scale = .4]{Imagens/Desenvolvimento/Cap2/cel_x.png}
+    \centering
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:modem_gprs}
+\end{figure}
+
+
+
+% Parei aqui
+\par Entre a nuvem e o equipamento de campo, o protocolo de aplicação adotado para leitura e escrita das variáveis de processo é o Modbus. O encadeamento completo (serviço de aquisição, \textit{gateway}, modem e dispositivo escravo) preserva a semântica das funções Modbus (códigos de função, endereços de registradores ou \textit{coils}, dados de resposta), variando apenas o ``envelope'' de transporte: quadros TCP/IP na WAN e, no trecho serial, quadro RTU com verificação por CRC. O modo TCP e o modo RTU, bem como o encapsulamento usual em arquiteturas com telemetria, são tratados na Subseção~\ref{sec:modbus_tcp_rtu}.
+
+\subsubsection{Protocolo Modbus TCP e Modbus RTU}
+\label{sec:modbus_tcp_rtu}
+
+\par O Modbus surgiu como protocolo de requisição/resposta entre um cliente (\textit{master}) e um ou mais servidores (\textit{slaves}), hoje também denominados dispositivos de campo. Na supervisão, o sistema na nuvem atua como cliente: envia requisições que leem ou escrevem registradores e \textit{coils} no escravo; o escravo responde com dados ou com código de exceção quando a operação não é permitida. As funções mais empregadas em telemetria incluem leitura de \textit{holding registers} (Função~03), leitura de \textit{input registers} (Função~04), leitura de \textit{coils} (Função~01), leitura de entradas discretas (Função~02) e escrita em \textit{holding registers} ou \textit{coils} (Funções~06, 16, 05, 15, entre outras), conforme o fabricante do CLP ou medidor exponha o mapa de memória.
+
+\par O \textbf{Modbus TCP} (especificado na guia de implementação da Modbus Organization) transporta a PDU Modbus (\textit{Protocol Data Unit}) dentro de uma conexão TCP/IP, precedida pelo cabeçalho MBAP (\textit{Modbus Application Protocol}). O MBAP contém identificador de transação (para emparelhar requisição e resposta quando há várias pendentes), identificador de protocolo (valor zero para Modbus), campo de comprimento (número de bytes seguintes, incluindo o \textit{Unit ID} e a PDU) e o \textit{Unit ID}, que seleciona o escravo quando há multiplexer ou ponte serial/TCP no caminho. A Figura~\ref{fig:modbus_tcp_mbap} resume essa composição; a integridade no enlace TCP é delegada à pilha IP (checksums de camada de transporte e rede), não havendo CRC Modbus no quadro TCP.
+
+\begin{figure}[H]
+    \centering
+    \caption{Composição lógica do Modbus TCP: cabeçalho MBAP seguido da PDU (código de função, dados ou exceção)}
+    \label{fig:modbus_tcp_mbap}
+    \vspace{0.15cm}
+    \begin{tikzpicture}[font=\footnotesize\sffamily, box/.style={rectangle, draw=black!70, thick, minimum height=8mm, align=center}]
+        \node[box, minimum width=14mm] (tid) at (0,0) {Trans.\\ID};
+        \node[box, minimum width=14mm, anchor=west] (pid) at (tid.east) {Prot.\\ID};
+        \node[box, minimum width=14mm, anchor=west] (len) at (pid.east) {Compr.};
+        \node[box, minimum width=12mm, anchor=west] (uid) at (len.east) {Unit\\ID};
+        \node[box, minimum width=42mm, anchor=west] (pdu) at (uid.east) {PDU Modbus\\(FC + dados ou exceção)};
+        \node[font=\scriptsize\sffamily, anchor=south west] at ([shift={(0,0.35)}]tid.north west) {MBAP};
+    \end{tikzpicture}
+    \vspace{0.2cm} \\
+    Fonte: Elaborado pelo autor com base em \textcite{MODBUS_TCP_IMPLEMENTATION_GUIDE}.
+\end{figure}
+
+\par O \textbf{Modbus RTU} transmite a mesma PDU (sem o MBAP), em geral sobre RS-485 multiponto, com enquadramento binário e delimitação de mensagens por tempo de silêncio na linha (\textit{inter-frame}). Cada quadro contém endereço do escravo (1 byte), código de função, dados e dois bytes de CRC-16 sobre todo o trecho precedente ao CRC; o receptor recalcula o CRC para detectar ruídos ou colisões na serial. A Figura~\ref{fig:modbus_rtu_frame} ilustra essa estrutura. Em telemetria com modem ou conversor, é frequente o trecho WAN ser IP enquanto o CLP continua em RTU: o \textit{gateway} ou o modem encapsula o quadro RTU dentro de TCP (túnel transparente) ou converte TCP para RTU, mantendo o \textit{Unit ID} coerente com o endereço serial do escravo.
+
+\begin{figure}[H]
+    \centering
+    \caption{Estrutura simplificada do quadro Modbus RTU (delimitação temporal entre quadros)}
+    \label{fig:modbus_rtu_frame}
+    \vspace{0.15cm}
+    \begin{tikzpicture}[font=\footnotesize\sffamily, box/.style={rectangle, draw=black!70, thick, minimum height=8mm, align=center}]
+        \node[box, minimum width=12mm] (adr) at (0,0) {End.\\escravo};
+        \node[box, minimum width=12mm, anchor=west] (fc) at (adr.east) {Cód.\\função};
+        \node[box, minimum width=36mm, anchor=west] (data) at (fc.east) {Dados (0 a 252 bytes)};
+        \node[box, minimum width=18mm, anchor=west] (crc) at (data.east) {CRC-16};
+        \node[font=\scriptsize, anchor=north west] at (adr.south west) {silêncio $\geq 3{,}5$ caracteres antes do quadro};
+        \node[font=\scriptsize, anchor=north east] at (crc.south east) {silêncio entre quadros};
+    \end{tikzpicture}
+    \vspace{0.2cm} \\
+    Fonte: Elaborado pelo autor com base em \textcite{MODBUS_SERIAL_SPEC}.
+\end{figure}
+
+\par Em resumo, TCP e RTU diferem principalmente pelo meio e pelo enquadramento: no TCP, endereçamento e multiplexação usam conexão IP, porta e MBAP; no RTU, usam-se endereço de escravo na serial, tempos entre quadros e CRC explícito. Na arquitetura deste trabalho, o serviço na nuvem negocia TCP com o \textit{gateway}; a partir daí, conforme o cadastro do ponto, a mesma semântica Modbus pode chegar ao equipamento como TCP nativo (por exemplo, CLP com Ethernet e servidor Modbus TCP) ou como RTU no barramento local, caso típico de instrumentos e CLPs com porta serial isolada ao modem.
+
+\subsubsection{Modelagem, serviço de leitura e agendamento}
+
+\par O cadastro no banco de dados estrutura a aquisição em níveis hierárquicos (por exemplo, unidade operacional, equipamento, conjunto de variáveis (\textit{tags}) e parâmetros de comunicação) e armazena, para cada ponto, o mapeamento Modbus necessário: endereço da unidade (\textit{Unit ID}), código de função (leitura de \textit{holding registers}, \textit{input registers}, \textit{coils} ou \textit{discrete inputs}), endereço inicial, quantidade de elementos, tipo de dado bruto (inteiro de 16 ou 32 bits, \textit{float}, palavras múltiplas), ordem de bytes/\textit{words} quando relevante, fatores de escala e \textit{offset} para conversão em unidade física, limites de engenharia e classificação (leitura periódica, leitura sob demanda, escrita supervisionada). Essa modelagem permite que o mesmo serviço de aquisição atenda processos distintos apenas por configuração, sem alteração de código para cada novo medidor ou CLP.
+
+\par O serviço de aquisição implementa o ciclo ``ler configuração $\rightarrow$ compor telegramas Modbus $\rightarrow$ enviar $\rightarrow$ validar resposta $\rightarrow$ decodificar $\rightarrow$ publicar resultado''. Na etapa de validação, verifica-se coerência de tamanho, exceções Modbus (códigos de erro de função), tempos de resposta e integridade básica dos dados; na decodificação, aplicam-se máscaras, combinações de registradores e regras de engenharia para obter grandezas como vazão instantânea, nível filtrado ou estado discreto de um conjunto de bits. Quando a leitura falha (timeout, perda de enlace, recusa do escravo), o serviço pode registrar a falha, manter o último valor válido com indicador de ``desatualizado'' e alimentar mecanismos de alarme de comunicação na supervisão. Esse cuidado com a indisponibilidade do dado é aspecto central em SCADA, onde a ausência de dado precisa ser tão visível quanto um limite de processo ultrapassado.
+
+\par Em redes móveis e enlaces compartilhados, políticas conservadoras de concorrência evitam disparar centenas de requisições simultâneas contra o mesmo \textit{gateway} ou o mesmo modem. Uma abordagem plausível é limitar o número de sessões TCP paralelas, agrupar leituras em blocos contíguos de registradores quando o equipamento permitir (reduzindo idas e vindas) e respeitar tempos mínimos entre telegramas exigidos por alguns conversores. Parâmetros como tempo limite (\textit{timeout}), número de tentativas e \textit{backoff} exponencial entre retentativas podem ser configurados por equipamento ou por site, equilibrando resiliência e carga na rede.
+
+\par O agendamento da aquisição separa a decisão ``quando ler'' da execução ``como ler''. Em sistemas de supervisão, nem todas as variáveis exigem a mesma cadência: grandezas lentas (nível em reservatório volumoso) podem ser amostradas em minutos, enquanto indicadores críticos (pressão de sucção de bomba, intertravamentos) podem exigir segundos. O agendador mantém filas ou \textit{timelines} por periodicidade, evita sobreposição de ciclos longos para o mesmo equipamento quando a leitura anterior ainda não terminou e permite janelas de manutenção (redução temporária de frequência) ou leituras prioritárias (por exemplo, após comando de partida). Essa camada também pode coordenar leituras complementares: telemetria periódica para tendência e leituras sob demanda disparadas pela interface quando o operador abre uma tela detalhada.
+
+\par Por fim, os valores adquiridos são associados a carimbo de tempo do servidor (instante em que a resposta foi recebida) e, quando disponível no equipamento, a referências temporais adicionais; em seguida seguem para persistência histórica e para os mecanismos de atualização das telas gráficas. Assim, a aquisição fecha o laço entre o processo físico e a representação digital monitorada pelo operador, mantendo rastreabilidade e condições para auditoria operacional.
