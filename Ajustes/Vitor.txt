@@ -1,1 +1,16 @@
-hhh
+Comentários gerais:
+- adaptar referências para padrão ABNT
+- quanto sugestões fazem referência a frases muito longas, a ideia é separar em mais sentencas
+
+*** SUGESTÕES ***
+Seção 1.1 Contextualização:
+>>> Segundo parágrafo: 
+- "distribuir" referências
+- frase "Foi nessa fase que... ...para o aumento da produtividade", muito longa
+- parágrafo/frase "Atualmente, vive-se... ...inclusive a Internet", muito longo
+- página 10, último parágrafo: citar referência [2] no final da primeira frase, retira do final do parágrafo
+- página 10, última linha: "processo físico. No nível 1"
+- página 11, substituir palavra "peso" por algo como "notoriedade" ou "atenção"
+- página 11, última linha/frase: transformar em um paraágrafo, escrevendo um pouco mais sobre a proposta do trabalho
+
+to be continue...
