@@ -14,6 +14,8 @@ Seção 1.1 Contextualização:
 - página 11, substituir palavra "peso" por algo como "notoriedade" ou "atenção"
 - página 11, última linha/frase: transformar em um paraágrafo, escrevendo um pouco mais sobre a proposta do trabalho
 
+
+*** *** *** *** *** 21/05/2026 *** *** *** *** ***
 >>> Justificativa
 - senti falta de um "por que", da forma como está escrita é uma contextualização. Seria interessante um complemento descrevendo o "problema" observado, que justifica a tua proposta de trabalho (por que o teu trabalho é interessante? por que você quer desenvolver um sistema supervisório..?)
 
@@ -30,10 +32,15 @@ Seção 1.1 Contextualização:
 - equações, definir [u.e.] no texto (mesmo sendo óbvio)
 - pg 21, último parágrafo do exemplo: há possibilidade de enxugar esssas informações? os detalhes  são relevantes para o trabalho?
 - pg 22, ultimo parágrafo: separar primeira frase em duas
+- pg 30, primeira frase: retirar "discutidos na subseção anterior"
 
 
+>>> Geral
+- os termos utilizados em inglês, são utilizados persistentemente em todo documento? por exemplo: coils de CLP, openess, polling, application-pull, technology-push, smart factory ...
+- Nesse sentido, parte dos textos podem ser simplificados, apresentando conceitos importantes e relevantes para o trabalho, sem se tornar cansativo demais (foco); e ressaltando aquilo que você domina
 
-
-
+>>> LaTeX
+- sugiro editar tabelas com pacote booktabs
 
 to be continue...
+2.14
