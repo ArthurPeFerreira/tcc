@@ -7,10 +7,33 @@ Seção 1.1 Contextualização:
 >>> Segundo parágrafo: 
 - "distribuir" referências
 - frase "Foi nessa fase que... ...para o aumento da produtividade", muito longa
+
 - parágrafo/frase "Atualmente, vive-se... ...inclusive a Internet", muito longo
 - página 10, último parágrafo: citar referência [2] no final da primeira frase, retira do final do parágrafo
 - página 10, última linha: "processo físico. No nível 1"
 - página 11, substituir palavra "peso" por algo como "notoriedade" ou "atenção"
 - página 11, última linha/frase: transformar em um paraágrafo, escrevendo um pouco mais sobre a proposta do trabalho
+
+>>> Justificativa
+- senti falta de um "por que", da forma como está escrita é uma contextualização. Seria interessante um complemento descrevendo o "problema" observado, que justifica a tua proposta de trabalho (por que o teu trabalho é interessante? por que você quer desenvolver um sistema supervisório..?)
+
+>>> Conceitos e Tecnologias Utilizadas
+- Retirar, na primeira linha, "Conforme a estrutura apresentada na introdução". Começar diretamente com "Este capítulo..."
+- retirar "da quarta revolução discutida na Subseção 2.8"
+- primeiro parágrafo: referência?
+- segundo parágrafo, última frase: afinal, qual a referência? (três citadas)
+- terceiro parágrafo: "que serão discutidas, com maiores detalhes, na seção "
+- retirar "onda" em "quarta onda", pg17
+- seção 2.2: "Para Zanghi...", citar os itens (mesmo que depois serão detalhados em subseções)
+- diversificar referências
+- seção 2.3: "de um" CLP, conversor, etc
+- equações, definir [u.e.] no texto (mesmo sendo óbvio)
+- pg 21, último parágrafo do exemplo: há possibilidade de enxugar esssas informações? os detalhes  são relevantes para o trabalho?
+- pg 22, ultimo parágrafo: separar primeira frase em duas
+
+
+
+
+
 
 to be continue...
