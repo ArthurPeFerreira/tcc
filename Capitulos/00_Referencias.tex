@@ -1,7 +1,10 @@
 \newpage % Nova página
 \clearpage % Finaliza a página atual
-\begin{center} % Centraliza
-\printbibliography % Imprime a bibliografia
-\end{center} % Fim da centralização
+\defbibheading{referenciascentralizadas}[Referências]{%
+    \begin{center}
+        {\Large\bfseries #1}
+    \end{center}
+}
+\printbibliography[heading=referenciascentralizadas,title={Referências}] % Lista de referências em conformidade com a NBR 6023
 
 

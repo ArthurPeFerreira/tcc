@@ -55,9 +55,8 @@
       <file>biblatex.def</file>
       <file>standard.bbx</file>
       <file>abnt.bbx</file>
-      <file>abnt-numeric.bbx</file>
-      <file>numeric.cbx</file>
-      <file>abnt-numeric.cbx</file>
+      <file>authoryear-comp.cbx</file>
+      <file>abnt.cbx</file>
       <file>biblatex.cfg</file>
       <file>brazilian.lbx</file>
       <file>brazilian-abnt.lbx</file>

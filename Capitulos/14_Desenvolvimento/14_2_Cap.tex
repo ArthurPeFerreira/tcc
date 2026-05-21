@@ -1,4 +1,4 @@
-\subsection{Funcionamento}
+\section{Funcionamento}
 
 \par O funcionamento do sistema organiza-se em camadas, conforme ilustrado na Figura~\ref{fig:arquitetura_sistema}. Essa organização separa responsabilidades entre a interface de supervisão, os serviços de domínio executados na nuvem, a persistência das informações e a conectividade com os equipamentos instalados.
 
@@ -6,14 +6,91 @@
     \centering
     \caption{Arquitetura do Sistema}
     \centering
-    \includegraphics[scale = .4]{Imagens/Desenvolvimento/Cap2/diagrama_servidores.png}
+    \includegraphics[scale = .35]{Imagens/Desenvolvimento/Cap2/diagrama_servidores.png}
     \centering
     \vspace{0.2cm} \\
     Fonte: Autor.
     \label{fig:arquitetura_sistema}
 \end{figure}
 
-\subsubsection{Aquisição de Dados}
+\par A Figura~\ref{fig:arquitetura_sistema} detalha a arquitetura completa do sistema. O \textbf{frontend} é desenvolvido em Next.js (Subseção~\ref{sec:nextjs}) e oferece a interface web de supervisão acessada pelos operadores em qualquer ponto da rede. O \textbf{backend CRUD} é construído em Fastify (Subseção~\ref{sec:fastify}) e expõe os \textit{endpoints} REST para cadastro de equipamentos, configuração de \emph{tags}, consulta de históricos e disparo de comandos. A camada de \textbf{dados armazenados} integra o banco relacional PostgreSQL, gerenciado pelo Amazon RDS (Subseções~\ref{sec:banco_dados} e~\ref{sec:aws}), com o servidor de cache Redis no Amazon ElastiCache (Subseção~\ref{sec:redis}), reunindo persistência histórica de longa duração e acesso de baixa latência ao estado corrente de cada \emph{tag}. O \textbf{APScheduler} é um servidor dedicado de agendamento que carrega no início da execução todos os pontos cadastrados no banco com seus respectivos tempos de \emph{polling} e, para cada ponto, agenda um \emph{job} próprio; a cada disparo, publica uma mensagem com o identificador do ponto, sinalizando que chegou a hora de atualizar aquele dado. O barramento entre os serviços é orquestrado pelo \textbf{Moleculer} (Subseção~\ref{sec:moleculer}), que recebe os comandos de aquisição no canal \texttt{processing} e os encaminha aos \textbf{workers de aquisição} (M1, M2, \ldots, Mn). Esses workers consumem o canal \texttt{processing\_point}, estabelecem sessão TCP com o \textit{Gateway ABS}, executam a leitura Modbus correspondente conforme tratado nas Subseções~\ref{sec:modbus_tcp_rtu} e~\ref{sec:m2m}, e devolvem o resultado ao barramento; o Moleculer então publica no canal \texttt{update} a leitura processada para que o banco persista o histórico e o cache atualize o valor corrente.
+
+\subsection{Validações dos Requisitos do SCADA}
+\label{sec:validacoes}
+
+\par As subseções a seguir validam, item por item, o atendimento do sistema aos requisitos clássicos do SCADA descritos por \textcite{ZANGHI2019_SCADA_CONCEITOS} e revisados na Subseção~\ref{sec:scada}. Cada validação mostra como a arquitetura ilustrada na Figura~\ref{fig:arquitetura_sistema} e descrita acima atende aos seis pilares definidos: aquisição e registro de dados, sincronismo de tempo, níveis de operação, comando e controle, escalabilidade e redundância.
+
+\subsubsection{Aquisição e Registro de Dados}
+\label{sec:req_aquisicao}
+
+\par No quesito de aquisição e registro de dados discutido na Subseção~\ref{sec:scada}, o sistema atende a todos os requisitos descritos por \textcite{ZANGHI2019_SCADA_CONCEITOS}. A aquisição ocorre por meio dos workers, que se comunicam com IEDs e UTRs via Modbus pelo \textit{gateway} de borda e disponibilizam os valores em formato digital ao supervisório. Os pontos são cadastrados como \emph{tags} no banco de dados, classificadas como digitais (entrada DI, saída DO, memória DM) para representar estados binários como liga/desliga de motores e abertura/fechamento de válvulas, ou analógicas (entrada AI, saída AO, memória AM) para grandezas multibit como medições de pressão, vazão, nível e corrente. O registro contínuo das leituras na base de dados PostgreSQL sustenta as análises posteriores em gráficos de tendência e em relatórios sequenciais de eventos digitais, enquanto o cache Redis mantém os valores correntes acessíveis para a renderização imediata das telas de supervisão sem onerar o banco principal a cada atualização.
+
+\subsubsection{Sincronismo de Tempo}
+\label{sec:req_sincronismo}
+
+\par O sincronismo de tempo exigido pelo SCADA é garantido pela combinação entre o relógio do APScheduler, sincronizado por NTP com a infraestrutura da AWS, e o carimbo de tempo aplicado pelos workers no instante exato em que a resposta Modbus é recebida do dispositivo de campo. Cada mensagem que trafega pelo barramento Moleculer carrega esse carimbo de tempo, que se preserva inalterado ao longo de toda a cadeia: do worker para o canal \texttt{update}, do canal para o banco e para o cache, do banco para o backend e do backend para o frontend. Assim, alarmes e eventos digitais captados em diferentes pontos do sistema recebem estampas de tempo coerentes na escala de milissegundos, atendendo à exigência de cronologia precisa para análises \emph{a posteriori} de ocorrências e faltas, sobretudo em processos com dinâmica rápida.
+
+\subsubsection{Níveis de Operação}
+\label{sec:req_niveis}
+
+\par Os níveis de operação clássicos do SCADA mapeiam-se naturalmente sobre a arquitetura. O Nível 0, dos equipamentos de campo e seus sensores, corresponde aos transmissores, medidores e demais dispositivos físicos instalados nas unidades operacionais dos clientes. O Nível 1, da supervisão local junto aos IEDs, é representado pelos CLPs e modems no campo, que executam a comunicação Modbus com os instrumentos e, quando há, oferecem uma IHM simples para operação no próprio ponto. O Nível 2, da supervisão da instalação como um todo, é materializado pelos workers de aquisição, pelo Moleculer e pelos serviços de domínio na nuvem (cadastro, alarmes, históricos), que agregam os pontos relevantes de cada cliente em estações redundantes com telas elaboradas para supervisão completa da unidade. O Nível 3, do centro de operação remota, é o frontend Next.js acessado via navegador, que consolida pontos provenientes de múltiplas instalações geograficamente distribuídas, disponibilizando apenas o que é estritamente necessário para a gestão sistêmica.
+
+\subsubsection{Comando e Controle}
+\label{sec:req_comando}
+
+\par O comando e controle previstos pelo SCADA são implementados nas três variantes descritas por \textcite{ZANGHI2019_SCADA_CONCEITOS}. O telecomando instantâneo, em que o operador no frontend dispara mudança imediata do estado de um equipamento (acionamento de bomba, abertura de válvula, comando a disjuntor), é traduzido em uma escrita Modbus pelo worker correspondente. O telecontrole, em que um \emph{set point} é definido pelo operador para regular no tempo a resposta de um processo, percorre o mesmo caminho mas atualiza um \textit{holding register} específico. O telecomando ou telecontrole programado, em que ações são agendadas conforme cenários previamente definidos, é mantido como configuração no banco e disparado pelo APScheduler no horário marcado, com o instante de execução registrado. As quatro fases do processamento (seleção, verificação, confirmação e execução) são distribuídas entre frontend (seleção e confirmação explícita por modal), backend Fastify (verificação de intertravamentos e condições de segurança) e worker (execução da escrita Modbus); após a execução, o próprio worker realiza uma leitura de verificação para confirmar que a solicitação foi aceita pelo dispositivo de campo, e, em caso de falha, gera o alarme correspondente para sinalizar a inconsistência ao operador.
+
+\subsubsection{Escalabilidade}
+\label{sec:req_escalabilidade}
+
+\par A escalabilidade é atendida em três frentes complementares. Na expansão de cadastro, novos pontos e novas telas podem ser adicionados em produção sem alteração de código: o worker é parametrizado pelo banco (Subseção~\ref{sec:banco_dados}) e o frontend renderiza as telas dinamicamente conforme a configuração; o APScheduler reage à inclusão recarregando a lista de pontos e ajustando seus \emph{jobs}. Na capacidade de processamento, os workers (M1, M2, \ldots, Mn) podem ser replicados horizontalmente para distribuir a carga: o Moleculer faz balanceamento automático entre as instâncias que consomem o canal \texttt{processing\_point}, e o Amazon ECS (Subseção~\ref{sec:aws}) provisiona novas réplicas dos contêineres Docker conforme métricas de utilização. Na infraestrutura de dados, os serviços gerenciados Amazon RDS e ElastiCache escalam verticalmente sob demanda. Esse desenho elimina o gargalo de licenciamento por número de pontos típico de supervisórios comerciais e permite acompanhar a expansão das instalações sem reorçamento da solução, ainda que cuidados de capacidade dos elementos de rede e do barramento Moleculer devam ser considerados desde o projeto.
+
+\subsubsection{Redundância}
+\label{sec:req_redundancia}
+
+\par A redundância acompanha a arquitetura em todas as camadas críticas, contemplando as recomendações de \textcite{ZANGHI2019_SCADA_CONCEITOS} e \textcite{SALVADOR2019_AQUISICAO_REDUNDANCIA}. Os workers de aquisição operam como uma frota em que cada instância consome trabalho de uma mesma fila gerenciada pelo Moleculer, de modo que a perda de um worker é absorvida pelos demais sem perda de leituras pendentes. O banco de dados em RDS é configurado com réplica em zona de disponibilidade distinta, com \emph{failover} automático em caso de falha do nó primário e \emph{snapshots} programados para recuperação ponto-a-ponto (Subseção~\ref{sec:banco_dados}). O cache Redis opera no modo \emph{cluster} com réplicas espelhadas (Subseção~\ref{sec:redis}). O frontend Next.js e o backend Fastify são executados em múltiplos contêineres atrás de um balanceador de carga, e o próprio barramento Moleculer pode ser configurado em \emph{cluster} para tolerância a falhas no transporte. Esse conjunto de medidas atinge níveis de confiabilidade compatíveis com a criticidade exigida em aplicações industriais sensíveis.
+
+\subsection{Servidores}
+\label{sec:servidores}
+
+\par O sistema decompõe-se em sete componentes lógicos de servidor, cada qual com responsabilidade bem delimitada e ciclo de vida independente, em alinhamento com o paradigma de microsserviços discutido na Subseção~\ref{sec:microservicos} e defendido por \textcite{BIGHETI2020} para sistemas industriais orientados a serviços. Todos os componentes são empacotados como contêineres Docker (Subseção~\ref{sec:docker}) e orquestrados pelo Amazon ECS (Subseção~\ref{sec:aws}), o que permite implantação independente, escalabilidade granular e isolamento de dependências. Cada um dos sete servidores é descrito nas subseções a seguir quanto à tecnologia escolhida, à sua responsabilidade no sistema e às interfaces que mantém com os demais componentes.
+
+\subsubsection{Frontend}
+\label{sec:srv_frontend}
+
+\par O servidor de frontend é desenvolvido em Next.js (Subseção~\ref{sec:nextjs}) e materializa a interface de supervisão acessada pelo operador via navegador. Suas telas incluem visualização de pontos ao vivo, dashboards de tendência histórica, cadastro de equipamentos e \emph{tags}, painéis de alarmes ativos e formulários administrativos. As telas de operação em tempo real adotam renderização no cliente com atualização incremental via WebSocket, garantindo latência baixa entre a leitura no campo e a apresentação ao operador; as telas de cadastro e relatórios adotam renderização no servidor (SSR), aproveitando o pré-processamento e a verificação de credenciais. A comunicação com o restante do sistema ocorre exclusivamente via APIs REST/JSON (Subseção~\ref{sec:http_rest_json}) e WebSocket, sem acoplamento direto com o banco ou com o barramento de eventos.
+
+\subsubsection{Backend}
+\label{sec:srv_backend}
+
+\par O servidor de backend CRUD é construído sobre o \textit{framework} Fastify (Subseção~\ref{sec:fastify}) e expõe os \textit{endpoints} REST consumidos pelo frontend. Suas atribuições incluem operações de criação, leitura, atualização e remoção sobre o cadastro de clientes, unidades, equipamentos e \emph{tags}; consultas históricas com filtros de tempo, equipamento e ponto; gestão de usuários, perfis e permissões; e disparo de comandos de telecontrole pelo operador. Cada requisição é validada contra um esquema JSON Schema declarativo, autenticada por \emph{token} JWT armazenado no Redis e auditada em \textit{log} estruturado. Quando uma operação envolve interação com o campo (por exemplo, escrita Modbus), o backend não fala diretamente com os workers, mas publica um comando no barramento Moleculer, mantendo o desacoplamento entre a camada de aplicação e a camada de aquisição.
+
+\subsubsection{Banco de Dados}
+\label{sec:srv_banco_dados}
+
+\par O servidor de banco de dados é uma instância PostgreSQL gerenciada pelo Amazon RDS (Subseções~\ref{sec:banco_dados} e~\ref{sec:aws}), responsável pela persistência de longa duração de todo o estado relevante do sistema: cadastro hierárquico (cliente, unidade operacional, equipamento, \emph{tag}), histórico de leituras com carimbo de tempo, eventos de alarme, registros de auditoria, configuração de usuários e parâmetros de comunicação. O esquema relacional aproveita chaves estrangeiras para garantir integridade referencial; tabelas históricas são particionadas por intervalo de tempo para evitar tabelas monolíticas, e índices nos campos \texttt{tag\_id} e \texttt{timestamp} aceleram as consultas mais frequentes. A configuração em produção emprega réplica em zona de disponibilidade distinta, com \emph{failover} automático em caso de falha do nó primário e \emph{snapshots} programados para recuperação ponto-a-ponto, conforme recomendado por \textcite{SALVADOR2019_AQUISICAO_REDUNDANCIA}.
+
+\subsubsection{Cache}
+\label{sec:srv_cache}
+
+\par O servidor de cache é uma instância Redis provida pelo Amazon ElastiCache (Subseção~\ref{sec:redis}) e cumpre três papéis simultâneos. Como cache de leituras frequentes, mantém em memória o valor corrente de cada \emph{tag} ativa, acessado pelas telas de supervisão em tempo real sem onerar o banco principal a cada atualização. Como barramento publicador-assinante de baixa latência, distribui eventos de aquisição aos consumidores interessados (alarmes, históricos, frontend ao vivo). Como armazenamento efêmero, abriga \textit{tokens} de autenticação, contadores de limitação de requisições por usuário (\emph{rate limiting}) e travas distribuídas que evitam processamento duplicado de comandos críticos. O cluster opera com réplicas espelhadas em zonas distintas e expiração automática (TTL) das chaves voláteis.
+
+\subsubsection{APScheduler}
+\label{sec:srv_apscheduler}
+
+\par O servidor de agendamento executa a biblioteca APScheduler em um contêiner dedicado e é responsável por decidir o instante em que cada ponto deve ser lido. No início da execução, o serviço consulta o banco de dados, carrega todos os pontos cadastrados com seus respectivos tempos de \emph{polling} (intervalo entre uma leitura e a próxima) e agenda um \emph{job} próprio para cada ponto com base nesse tempo. A cada disparo, o \emph{job} carrega o identificador do ponto e publica uma mensagem no barramento Moleculer, sinalizando aos workers que chegou a hora de atualizar aquele dado. O servidor reage a mudanças no cadastro (inclusão, remoção ou alteração de periodicidade) por meio de mecanismo de invalidação que recarrega os \emph{jobs} afetados, sem necessidade de reinício; janelas de manutenção e leituras prioritárias também são tratadas nessa camada, separando a decisão ``quando ler'' da execução ``como ler''.
+
+\subsubsection{Barramento Moleculer}
+\label{sec:srv_moleculer}
+
+\par O servidor de barramento de mensagens é uma instância do Moleculer (Subseção~\ref{sec:moleculer}) que orquestra a comunicação assíncrona entre os demais componentes. Três canais principais estruturam o tráfego: o canal \texttt{processing} recebe comandos de aquisição emitidos pelo APScheduler e pelo backend (no caso de leituras sob demanda); o canal \texttt{processing\_point} é consumido pelos workers de aquisição em modo de balanceamento de carga; e o canal \texttt{update} carrega os resultados das leituras de volta para o banco e para o cache, além de servir como gatilho para os serviços de alarmes e de notificação. O Moleculer também fornece descoberta automática de serviços, balanceamento entre instâncias replicadas, \emph{circuit breakers} para isolamento de falhas em cascata e \emph{distributed tracing} para rastreabilidade fim a fim das requisições que atravessam vários serviços.
+
+\subsubsection{Workers de Aquisição}
+\label{sec:srv_workers}
+
+\par Os workers de aquisição (M1, M2, \ldots, Mn) constituem a frota responsável pela comunicação efetiva com o campo. Cada worker é uma instância idêntica de um contêiner Docker, replicável horizontalmente conforme a carga, e mantém um conjunto de sessões TCP ativas com os \textit{gateways} ABS de cada cliente. Ao consumir uma mensagem do canal \texttt{processing\_point}, o worker monta o telegrama Modbus correspondente (com base nos parâmetros do ponto recuperados do cadastro), envia a requisição pelo \textit{gateway}, valida a resposta, aplica a conversão para unidade de engenharia descrita na Subseção~\ref{sec:escala_engenharia} e publica o resultado no canal \texttt{update}. Os workers são \textit{stateless}, o que viabiliza adição ou remoção de instâncias sem perda de estado; políticas de \emph{timeout}, retentativa e \emph{backoff} exponencial são parametrizadas por equipamento, mantendo a robustez frente a falhas transitórias de comunicação.
+
+\subsection{Aquisição de Dados}
 
 \par A camada de aquisição de dados é o subsistema responsável por traduzir o estado físico do processo (níveis, vazões, pressões, energia, status de bombas e válvulas, alarmes, contadores etc.) em valores digitais confiáveis, com referência temporal e com metadados suficientes para consumo pela supervisão, por relatórios operacionais e por rotinas de histórico. Em termos práticos, ela engloba desde a montagem das requisições até a entrega dos dados já convertidos para unidades de engenharia (valores nas unidades físicas usuais na operação, como metro, m$^3$/h, bar ou kW). Com frequência, o equipamento expõe a grandeza apenas como inteiro em um ou mais registradores Modbus; o programa do CLP grava então uma representação em ponto fixo (por exemplo, o nível em centímetros com uma casa decimal vem como inteiro que deve ser dividido por 10, ou a vazão usa divisor 100), e cabe à camada de aquisição aplicar a multiplicação ou divisão, somas de deslocamento (\textit{offset}) e demais fatores de escala cadastrados para reproduzir o valor real usado na operação, prontos para gravação em banco.
 
@@ -25,7 +102,7 @@
     \centering
     \caption{Gateway ABS}
     \centering
-    \includegraphics[scale = .4]{Imagens/Desenvolvimento/Cap2/gateway_abs.png}
+    \includegraphics[scale = .4]{Imagens/Desenvolvimento/Cap2/gateway_abs.jpeg}
     \centering
     \vspace{0.2cm} \\
     Fonte: Autor.
@@ -45,62 +122,5 @@
 
 
 
-% Parei aqui
 \par Entre a nuvem e o equipamento de campo, o protocolo de aplicação adotado para leitura e escrita das variáveis de processo é o Modbus. O encadeamento completo (serviço de aquisição, \textit{gateway}, modem e dispositivo escravo) preserva a semântica das funções Modbus (códigos de função, endereços de registradores ou \textit{coils}, dados de resposta), variando apenas o ``envelope'' de transporte: quadros TCP/IP na WAN e, no trecho serial, quadro RTU com verificação por CRC. O modo TCP e o modo RTU, bem como o encapsulamento usual em arquiteturas com telemetria, são tratados na Subseção~\ref{sec:modbus_tcp_rtu}.
 
-\subsubsection{Protocolo Modbus TCP e Modbus RTU}
-\label{sec:modbus_tcp_rtu}
-
-\par O Modbus surgiu como protocolo de requisição/resposta entre um cliente (\textit{master}) e um ou mais servidores (\textit{slaves}), hoje também denominados dispositivos de campo. Na supervisão, o sistema na nuvem atua como cliente: envia requisições que leem ou escrevem registradores e \textit{coils} no escravo; o escravo responde com dados ou com código de exceção quando a operação não é permitida. As funções mais empregadas em telemetria incluem leitura de \textit{holding registers} (Função~03), leitura de \textit{input registers} (Função~04), leitura de \textit{coils} (Função~01), leitura de entradas discretas (Função~02) e escrita em \textit{holding registers} ou \textit{coils} (Funções~06, 16, 05, 15, entre outras), conforme o fabricante do CLP ou medidor exponha o mapa de memória.
-
-\par O \textbf{Modbus TCP} (especificado na guia de implementação da Modbus Organization) transporta a PDU Modbus (\textit{Protocol Data Unit}) dentro de uma conexão TCP/IP, precedida pelo cabeçalho MBAP (\textit{Modbus Application Protocol}). O MBAP contém identificador de transação (para emparelhar requisição e resposta quando há várias pendentes), identificador de protocolo (valor zero para Modbus), campo de comprimento (número de bytes seguintes, incluindo o \textit{Unit ID} e a PDU) e o \textit{Unit ID}, que seleciona o escravo quando há multiplexer ou ponte serial/TCP no caminho. A Figura~\ref{fig:modbus_tcp_mbap} resume essa composição; a integridade no enlace TCP é delegada à pilha IP (checksums de camada de transporte e rede), não havendo CRC Modbus no quadro TCP.
-
-\begin{figure}[H]
-    \centering
-    \caption{Composição lógica do Modbus TCP: cabeçalho MBAP seguido da PDU (código de função, dados ou exceção)}
-    \label{fig:modbus_tcp_mbap}
-    \vspace{0.15cm}
-    \begin{tikzpicture}[font=\footnotesize\sffamily, box/.style={rectangle, draw=black!70, thick, minimum height=8mm, align=center}]
-        \node[box, minimum width=14mm] (tid) at (0,0) {Trans.\\ID};
-        \node[box, minimum width=14mm, anchor=west] (pid) at (tid.east) {Prot.\\ID};
-        \node[box, minimum width=14mm, anchor=west] (len) at (pid.east) {Compr.};
-        \node[box, minimum width=12mm, anchor=west] (uid) at (len.east) {Unit\\ID};
-        \node[box, minimum width=42mm, anchor=west] (pdu) at (uid.east) {PDU Modbus\\(FC + dados ou exceção)};
-        \node[font=\scriptsize\sffamily, anchor=south west] at ([shift={(0,0.35)}]tid.north west) {MBAP};
-    \end{tikzpicture}
-    \vspace{0.2cm} \\
-    Fonte: Elaborado pelo autor com base em \textcite{MODBUS_TCP_IMPLEMENTATION_GUIDE}.
-\end{figure}
-
-\par O \textbf{Modbus RTU} transmite a mesma PDU (sem o MBAP), em geral sobre RS-485 multiponto, com enquadramento binário e delimitação de mensagens por tempo de silêncio na linha (\textit{inter-frame}). Cada quadro contém endereço do escravo (1 byte), código de função, dados e dois bytes de CRC-16 sobre todo o trecho precedente ao CRC; o receptor recalcula o CRC para detectar ruídos ou colisões na serial. A Figura~\ref{fig:modbus_rtu_frame} ilustra essa estrutura. Em telemetria com modem ou conversor, é frequente o trecho WAN ser IP enquanto o CLP continua em RTU: o \textit{gateway} ou o modem encapsula o quadro RTU dentro de TCP (túnel transparente) ou converte TCP para RTU, mantendo o \textit{Unit ID} coerente com o endereço serial do escravo.
-
-\begin{figure}[H]
-    \centering
-    \caption{Estrutura simplificada do quadro Modbus RTU (delimitação temporal entre quadros)}
-    \label{fig:modbus_rtu_frame}
-    \vspace{0.15cm}
-    \begin{tikzpicture}[font=\footnotesize\sffamily, box/.style={rectangle, draw=black!70, thick, minimum height=8mm, align=center}]
-        \node[box, minimum width=12mm] (adr) at (0,0) {End.\\escravo};
-        \node[box, minimum width=12mm, anchor=west] (fc) at (adr.east) {Cód.\\função};
-        \node[box, minimum width=36mm, anchor=west] (data) at (fc.east) {Dados (0 a 252 bytes)};
-        \node[box, minimum width=18mm, anchor=west] (crc) at (data.east) {CRC-16};
-        \node[font=\scriptsize, anchor=north west] at (adr.south west) {silêncio $\geq 3{,}5$ caracteres antes do quadro};
-        \node[font=\scriptsize, anchor=north east] at (crc.south east) {silêncio entre quadros};
-    \end{tikzpicture}
-    \vspace{0.2cm} \\
-    Fonte: Elaborado pelo autor com base em \textcite{MODBUS_SERIAL_SPEC}.
-\end{figure}
-
-\par Em resumo, TCP e RTU diferem principalmente pelo meio e pelo enquadramento: no TCP, endereçamento e multiplexação usam conexão IP, porta e MBAP; no RTU, usam-se endereço de escravo na serial, tempos entre quadros e CRC explícito. Na arquitetura deste trabalho, o serviço na nuvem negocia TCP com o \textit{gateway}; a partir daí, conforme o cadastro do ponto, a mesma semântica Modbus pode chegar ao equipamento como TCP nativo (por exemplo, CLP com Ethernet e servidor Modbus TCP) ou como RTU no barramento local, caso típico de instrumentos e CLPs com porta serial isolada ao modem.
-
-\subsubsection{Modelagem, serviço de leitura e agendamento}
-
-\par O cadastro no banco de dados estrutura a aquisição em níveis hierárquicos (por exemplo, unidade operacional, equipamento, conjunto de variáveis (\textit{tags}) e parâmetros de comunicação) e armazena, para cada ponto, o mapeamento Modbus necessário: endereço da unidade (\textit{Unit ID}), código de função (leitura de \textit{holding registers}, \textit{input registers}, \textit{coils} ou \textit{discrete inputs}), endereço inicial, quantidade de elementos, tipo de dado bruto (inteiro de 16 ou 32 bits, \textit{float}, palavras múltiplas), ordem de bytes/\textit{words} quando relevante, fatores de escala e \textit{offset} para conversão em unidade física, limites de engenharia e classificação (leitura periódica, leitura sob demanda, escrita supervisionada). Essa modelagem permite que o mesmo serviço de aquisição atenda processos distintos apenas por configuração, sem alteração de código para cada novo medidor ou CLP.
-
-\par O serviço de aquisição implementa o ciclo ``ler configuração $\rightarrow$ compor telegramas Modbus $\rightarrow$ enviar $\rightarrow$ validar resposta $\rightarrow$ decodificar $\rightarrow$ publicar resultado''. Na etapa de validação, verifica-se coerência de tamanho, exceções Modbus (códigos de erro de função), tempos de resposta e integridade básica dos dados; na decodificação, aplicam-se máscaras, combinações de registradores e regras de engenharia para obter grandezas como vazão instantânea, nível filtrado ou estado discreto de um conjunto de bits. Quando a leitura falha (timeout, perda de enlace, recusa do escravo), o serviço pode registrar a falha, manter o último valor válido com indicador de ``desatualizado'' e alimentar mecanismos de alarme de comunicação na supervisão. Esse cuidado com a indisponibilidade do dado é aspecto central em SCADA, onde a ausência de dado precisa ser tão visível quanto um limite de processo ultrapassado.
-
-\par Em redes móveis e enlaces compartilhados, políticas conservadoras de concorrência evitam disparar centenas de requisições simultâneas contra o mesmo \textit{gateway} ou o mesmo modem. Uma abordagem plausível é limitar o número de sessões TCP paralelas, agrupar leituras em blocos contíguos de registradores quando o equipamento permitir (reduzindo idas e vindas) e respeitar tempos mínimos entre telegramas exigidos por alguns conversores. Parâmetros como tempo limite (\textit{timeout}), número de tentativas e \textit{backoff} exponencial entre retentativas podem ser configurados por equipamento ou por site, equilibrando resiliência e carga na rede.
-
-\par O agendamento da aquisição separa a decisão ``quando ler'' da execução ``como ler''. Em sistemas de supervisão, nem todas as variáveis exigem a mesma cadência: grandezas lentas (nível em reservatório volumoso) podem ser amostradas em minutos, enquanto indicadores críticos (pressão de sucção de bomba, intertravamentos) podem exigir segundos. O agendador mantém filas ou \textit{timelines} por periodicidade, evita sobreposição de ciclos longos para o mesmo equipamento quando a leitura anterior ainda não terminou e permite janelas de manutenção (redução temporária de frequência) ou leituras prioritárias (por exemplo, após comando de partida). Essa camada também pode coordenar leituras complementares: telemetria periódica para tendência e leituras sob demanda disparadas pela interface quando o operador abre uma tela detalhada.
-
-\par Por fim, os valores adquiridos são associados a carimbo de tempo do servidor (instante em que a resposta foi recebida) e, quando disponível no equipamento, a referências temporais adicionais; em seguida seguem para persistência histórica e para os mecanismos de atualização das telas gráficas. Assim, a aquisição fecha o laço entre o processo físico e a representação digital monitorada pelo operador, mantendo rastreabilidade e condições para auditoria operacional.

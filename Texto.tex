@@ -15,6 +15,7 @@
 \setlength{\marginparwidth}{2cm} % Ajusta a largura da margem lateral para notas
 \usepackage[colorinlistoftodos]{todonotes} % Permite adicionar notas e tarefas no texto
 \usepackage{tabularx} % Permite criar tabelas ajustáveis
+\usepackage{multirow} % Permite mesclar células ao longo de múltiplas linhas em tabelas
 \usepackage{indentfirst} % Indenta o primeiro parágrafo de cada seção
 \usepackage{textcomp} % Inclui o símbolo de "por mil" e outros símbolos
 \usepackage{gensymb} % Adiciona símbolos
@@ -34,7 +35,7 @@
 \usepackage{siunitx} % Pacote para formatação correta de unidades do Sistema Internacional
 \usepackage{datatool} % Permite o uso de arquivos CSV para importação de dados
 \pgfplotsset{compat=1.18} % Define a versão de compatibilidade com o pgfplots (evita warnings e erros)
-\usepackage[backend=biber,style=abnt-numeric,language=brazilian]{biblatex} % ABNT na bibliografia; citações numéricas
+\usepackage[backend=biber, style=abnt, language=brazilian]{biblatex} % ABNT (NBR 6023 / NBR 10520) — citações autor-data
 \addbibresource{Referencias.bib} % Inclui o arquivo de referências .bib
 \input{Configurações/Commands} % Importa comandos personalizados 
 
@@ -82,7 +83,10 @@ Serviços para a Indústria 4.0} % Associa valor à variável \Titulo
 \input{Capitulos/14_Desenvolvimento/14_6_Cap}
 
 % Conclusão
-\input{Capitulos/15_Conclusão}
+% \input{Capitulos/15_Conclusão}
+
+% Cronograma
+\input{Capitulos/16_Cronograma}
 
 % Referências
 \include{Capitulos/00_Referencias.tex}

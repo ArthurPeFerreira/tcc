@@ -3,16 +3,8 @@
 % LinkedIn: https://www.linkedin.com/in/arthur-ferreira-477b8b243/
 % ==================================================
 
-% BibLaTeX (abnt-numeric): o estilo usa \cite com parênteses; aqui ficam colchetes [1], [2], …
-\DeclareCiteCommand{\cite}[\mkbibbrackets]
-{\usebibmacro{cite:init}%
-  \usebibmacro{prenote}}
-{\usebibmacro{citeindex}%
-  \usebibmacro{cite:comp}}
-{\iftoggle{comp}{}{\multicitedelim}}
-{\usebibmacro{cite:dump}%
-  \usebibmacro{postnote}}
-\DeclareMultiCiteCommand{\cites}[\mkbibbrackets]{\cite}{\multicitedelim}
+% Citações ABNT (style=abnt) — o próprio biblatex-abnt já define \cite no formato (AUTOR, ANO).
+% Não é necessário redeclarar \cite aqui.
 
 \DeclareRobustCommand{\perthousand}{% % Define um comando robusto para o símbolo de permilagem
   \ifmmode
