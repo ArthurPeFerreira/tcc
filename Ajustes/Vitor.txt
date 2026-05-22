@@ -1,6 +1,6 @@
 Comentários gerais:
 - adaptar referências para padrão ABNT
-- quanto sugestões fazem referência a frases muito longas, a ideia é separar em mais sentencas
+- quanto sugestões fazem referência a frases muito longas, a ideia é separar em mais sentenças
 
 *** SUGESTÕES ***
 Seção 1.1 Contextualização:
@@ -12,7 +12,7 @@ Seção 1.1 Contextualização:
 - página 10, último parágrafo: citar referência [2] no final da primeira frase, retira do final do parágrafo
 - página 10, última linha: "processo físico. No nível 1"
 - página 11, substituir palavra "peso" por algo como "notoriedade" ou "atenção"
-- página 11, última linha/frase: transformar em um paraágrafo, escrevendo um pouco mais sobre a proposta do trabalho
+- página 11, última linha/frase: transformar em um parágrafo, escrevendo um pouco mais sobre a proposta do trabalho
 
 
 *** *** *** *** *** 21/05/2026 *** *** *** *** ***
