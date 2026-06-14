@@ -257,44 +257,6 @@
       \verb https://kb.elipse.com.br/melhores-praticas-para-o-desenvolvimento-de-uma-aplicacao-elipse-e3/
       \endverb
     \endentry
-    \entry{GAUSHELL_DARLINGTON_1987_SUPERVISORY_CONTROL_DATA_ACQUISITION}{article}{}
-      \name{author}{2}{}{%
-        {{un=0,uniquepart=base,hash=863f28129364452118ab491d28cdc0d3}{%
-           family={Gaushell},
-           familyi={G\bibinitperiod},
-           given={Dennis\bibnamedelima J.},
-           giveni={D\bibinitperiod\bibinitdelim J\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=5418f9bb57da87390c1c04c00a19c11e}{%
-           family={Darlington},
-           familyi={D\bibinitperiod},
-           given={Henry\bibnamedelima T.},
-           giveni={H\bibinitperiod\bibinitdelim T\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{ff3d7c746ded1a21944ffae38c2f87a7}
-      \strng{fullhash}{ff3d7c746ded1a21944ffae38c2f87a7}
-      \strng{bibnamehash}{ff3d7c746ded1a21944ffae38c2f87a7}
-      \strng{authorbibnamehash}{ff3d7c746ded1a21944ffae38c2f87a7}
-      \strng{authornamehash}{ff3d7c746ded1a21944ffae38c2f87a7}
-      \strng{authorfullhash}{ff3d7c746ded1a21944ffae38c2f87a7}
-      \field{sortinit}{G}
-      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Proceedings of the {IEEE}}
-      \field{number}{12}
-      \field{title}{Supervisory control and data acquisition}
-      \field{volume}{75}
-      \field{year}{1987}
-      \field{pages}{1645\bibrangedash 1658}
-      \range{pages}{14}
-      \verb{doi}
-      \verb 10.1109/PROC.1987.13932
-      \endverb
-    \endentry
     \entry{HENRIQUES2010_CLOUD_COMPUTING_TCC}{thesis}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=7cca313af4dc55ffe721eb958fc6ffa8}{%
@@ -624,6 +586,56 @@
       \field{year}{2011}
       \field{dateera}{ce}
     \endentry
+    \entry{PHUYAL2020_COST_EFFICIENT_SCADA}{article}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=4da905c467d15fe164e31731c62b6ef6}{%
+           family={Phuyal},
+           familyi={P\bibinitperiod},
+           given={Sudip},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=03236a27608d6842168e6ca49d6a8118}{%
+           family={Bista},
+           familyi={B\bibinitperiod},
+           given={Diwakar},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4d2b1c40ce5a3f47251e8f3e95632b8f}{%
+           family={Izykowski},
+           familyi={I\bibinitperiod},
+           given={Jan},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8e28eaa2e2218fc16ce92e6367985431}{%
+           family={Bista},
+           familyi={B\bibinitperiod},
+           given={Rabindra},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{4cbc1e5dbf447c46b10dbb8ef768dd36}
+      \strng{fullhash}{8ec732fa2f1fa438f1f5d95416f930d0}
+      \strng{bibnamehash}{4cbc1e5dbf447c46b10dbb8ef768dd36}
+      \strng{authorbibnamehash}{4cbc1e5dbf447c46b10dbb8ef768dd36}
+      \strng{authornamehash}{4cbc1e5dbf447c46b10dbb8ef768dd36}
+      \strng{authorfullhash}{8ec732fa2f1fa438f1f5d95416f930d0}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{International Journal of Engineering and Manufacturing}
+      \field{number}{2}
+      \field{title}{Design and Implementation of Cost Efficient {SCADA} System for Industrial Automation}
+      \field{volume}{10}
+      \field{year}{2020}
+      \field{pages}{15\bibrangedash 28}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.5815/ijem.2020.02.02
+      \endverb
+    \endentry
     \entry{PISCHING2017}{thesis}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=7d544e832148f3c233b47c0abe09973a}{%
@@ -813,6 +825,124 @@
       \range{pages}{7}
       \verb{doi}
       \verb 10.1109/JIOT.2014.2312291
+      \endverb
+    \endentry
+    \entry{STOUFFER2015_NIST_ICS_SECURITY}{report}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=5a766e85ecd888c792f65fd4f41c094f}{%
+           family={Stouffer},
+           familyi={S\bibinitperiod},
+           given={Keith},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=df6784bfacac59148109091b132cfdd7}{%
+           family={Pillitteri},
+           familyi={P\bibinitperiod},
+           given={Victoria},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d62de7e60096ba284a7b4c208bd87cb5}{%
+           family={Lightman},
+           familyi={L\bibinitperiod},
+           given={Suzanne},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a3536cf39308357b64a1ccd98b48c92a}{%
+           family={Abrams},
+           familyi={A\bibinitperiod},
+           given={Marshall},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=944eb960106b96d985f5e822cb43eb2e}{%
+           family={Hahn},
+           familyi={H\bibinitperiod},
+           given={Adam},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{institution}{2}{%
+        {National Institute of Standards}%
+        {Technology}%
+      }
+      \list{location}{1}{%
+        {Gaithersburg, MD}%
+      }
+      \strng{namehash}{cd4652041c6e5cecda302d6a5d0dc79f}
+      \strng{fullhash}{e7ad4a0c0d8706e6a6778af5147ce7c7}
+      \strng{bibnamehash}{cd4652041c6e5cecda302d6a5d0dc79f}
+      \strng{authorbibnamehash}{cd4652041c6e5cecda302d6a5d0dc79f}
+      \strng{authornamehash}{cd4652041c6e5cecda302d6a5d0dc79f}
+      \strng{authorfullhash}{e7ad4a0c0d8706e6a6778af5147ce7c7}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{5}
+      \field{title}{Guide to Industrial Control Systems ({ICS}) Security}
+      \field{type}{NIST Special Publication 800-82, Revision 2}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{year}{2015}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.6028/NIST.SP.800-82r2
+      \endverb
+      \verb{urlraw}
+      \verb https://nvlpubs.nist.gov/nistpubs/specialpublications/nist.sp.800-82r2.pdf
+      \endverb
+      \verb{url}
+      \verb https://nvlpubs.nist.gov/nistpubs/specialpublications/nist.sp.800-82r2.pdf
+      \endverb
+    \endentry
+    \entry{YADAV2020_SCADA_ARCHITECTURE_REVIEW}{online}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=ab1faa296f3aa9c136362a40fab21556}{%
+           family={Yadav},
+           familyi={Y\bibinitperiod},
+           given={Geeta},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8856ab9d75c95b6b091847349992ef0c}{%
+           family={Paul},
+           familyi={P\bibinitperiod},
+           given={Kolin},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{organization}{1}{%
+        {arXiv}%
+      }
+      \strng{namehash}{be13e7d829249bb471b5bfe5914fd031}
+      \strng{fullhash}{be13e7d829249bb471b5bfe5914fd031}
+      \strng{bibnamehash}{be13e7d829249bb471b5bfe5914fd031}
+      \strng{authorbibnamehash}{be13e7d829249bb471b5bfe5914fd031}
+      \strng{authornamehash}{be13e7d829249bb471b5bfe5914fd031}
+      \strng{authorfullhash}{be13e7d829249bb471b5bfe5914fd031}
+      \field{sortinit}{Y}
+      \field{sortinithash}{fd67ad5a9ef0f7456bdd9aab10fe1495}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{day}{9}
+      \field{month}{1}
+      \field{note}{arXiv:2001.02925 [cs.CR]}
+      \field{title}{Architecture and Security of {SCADA} Systems: A Review}
+      \field{urlday}{13}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{year}{2020}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2001.02925
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2001.02925
       \endverb
     \endentry
     \entry{ZANGHI2019_SCADA_CONCEITOS}{report}{}

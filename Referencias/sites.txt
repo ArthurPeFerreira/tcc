@@ -7,3 +7,7 @@ https://kb.elipse.com.br/a-ponte-entre-a-intuicao-humana-e-a-autonomia-industria
 https://kb.elipse.com.br/metodologia-para-desenvolvimento-de-ihms-de-alta-performance-visual/
 https://kb.elipse.com.br/melhores-praticas-para-o-desenvolvimento-de-uma-aplicacao-elipse-e3/
 https://kb.elipse.com.br/guia-de-virtualizacao-elipse-software/
+
+Modbus:
+https://www.modbus.org/docs/Modbus_Messaging_Implementation_Guide_V1_0b.pdf
+https://www.modbus.org/docs/Modbus_over_serial_line_V1_02.pdf

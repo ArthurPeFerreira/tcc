@@ -1,6 +1,49 @@
 \section{Conceitos e Tecnologias Utilizadas}
 
-\par Conforme a estrutura apresentada na introdução, este capítulo aborda os conceitos e as tecnologias que sustentam o trabalho: automação industrial, tecnologia da informação aplicada ao contexto industrial e desenvolvimento de software. O objetivo é reunir definições, enquadramentos e ferramentas necessários para compreender, nas seções seguintes, a proposta de sistema supervisório web orientado a serviços, explicitando como cada tema se articula com a solução adotada.
+\par Este capítulo aborda os conceitos e as tecnologias que sustentam o trabalho: automação industrial, tecnologia da informação aplicada ao contexto industrial e desenvolvimento de software. O objetivo é reunir definições, enquadramentos e ferramentas necessários para compreender, nas seções seguintes, a proposta de sistema supervisório web orientado a serviços, explicitando como cada tema se articula com a solução adotada.
+
+\subsection{Sistema SCADA}
+\label{sec:scada}
+
+\par A indústria evoluiu muito na busca por mais monitoramento e controle dos processos. Com o tempo, os custos de processadores, memória e discos rígidos caíram bastante, o que reduziu também o preço de equipamentos como computadores, hubs e conversores de rede, ao passo que o software ganhava peso crescente nesse cenário. Junto a isso, cresceu a necessidade de acompanhar operações em locais remotos. As empresas de software industrial passaram a oferecer soluções com uma ampla gama de protocolos de comunicação e bem personalizadas para cada tipo de processo e indústria, a esse tipo de sistema deu-se o nome de SCADA, sigla em inglês para \emph{Supervisory Control and Data Acquisition} \cite{ZANGHI2019_SCADA_CONCEITOS}. De forma geral, um sistema SCADA pode ser entendido como a integração de componentes de hardware e software que viabiliza a supervisão e o controle de processos industriais de forma local ou remota \cite{PHUYAL2020_COST_EFFICIENT_SCADA, AHMED2011_EFFICIENT_WEB_SCADA}.
+
+\par Para \textcite{ZANGHI2019_SCADA_CONCEITOS}, um sistema SCADA deve conter os seguintes itens:
+
+\subsubsection{Aquisição e Registro de Dados}
+
+\par A aquisição das informações de campo é o primeiro grande desafio em um sistema SCADA. Ao longo das décadas, diferentes abordagens foram empregadas para trazer dados do processo até a sala de controle, evoluindo de longos cabeamentos diretos para soluções baseadas em dispositivos inteligentes próximos ao processo. Atualmente, predominam os painéis com Dispositivos Eletrônicos Inteligentes (\emph{Intelligent Electronic Devices} - IEDs) e as Unidades Terminais Remotas (UTRs), que aquisitam grandezas analógicas e digitais (medidas de processo, estados de equipamentos, alarmes) e as disponibilizam ao supervisório em formato binário por meio de uma rede de dados, tipicamente Ethernet \cite{ZANGHI2019_SCADA_CONCEITOS, YADAV2020_SCADA_ARCHITECTURE_REVIEW, STOUFFER2015_NIST_ICS_SECURITY}.
+
+\par Os pontos aquisitados em um sistema SCADA são denominados \emph{tags} e armazenados no banco de dados do supervisório. Podem ser \textbf{digitais} (de entrada, DI; de saída, DO; ou de memória, DM, calculados internamente), usados para representar estados binários como liga/desliga de motores, abertura/fechamento de válvulas e disjuntores, alarmes e eventos; ou \textbf{analógicos} (de entrada, AI; de saída, AO; ou de memória, AM), usados para grandezas multibit, como medições de pressão, vazão, nível, temperatura, tensão e corrente, comumente representadas em até 16 bits. O registro contínuo dessas informações pelo supervisório permite análises posteriores na forma de gráficos históricos de tendência e de sequenciais de eventos digitais \cite{ZANGHI2019_SCADA_CONCEITOS}.
+
+\subsubsection{Sincronismo de Tempo}
+
+\par Outro requisito fundamental dos sistemas SCADA é o sincronismo de tempo. Todo dado coletado deve possuir um registro de tempo de origem, a chamada estampa de tempo (\emph{time stamp}): cada variação de um sinal digital, seja para ``0'' ou ``1'', precisa ser registrada com o instante exato em que ocorreu. Essa exigência decorre da necessidade de análises \emph{a posteriori} de ocorrências e faltas, que dependem da cronologia precisa dos acontecimentos para permitir a identificação das causas, sobretudo em processos com dinâmica rápida \cite{ZANGHI2019_SCADA_CONCEITOS}.
+
+\par Para garantir essa sincronização, é comum o uso de equipamentos receptores de sinal de GPS conectados aos IEDs e ao próprio supervisório, ajustando seus relógios internos com precisão de pelo menos 1\,ms. Assim, alarmes e eventos digitais captados em diferentes pontos do sistema recebem estampas de tempo coerentes, sendo essa informação transportada ao supervisório pelo protocolo de comunicação empregado entre os dispositivos \cite{ZANGHI2019_SCADA_CONCEITOS}.
+
+\subsubsection{Níveis de Operação}
+
+\par Os sistemas SCADA são tipicamente organizados em diferentes níveis de operação, cada um atendendo a necessidades distintas e operando sobre um subconjunto dos pontos disponíveis nos níveis inferiores. No \textbf{Nível 0} estão os equipamentos de campo e seus sensores, fonte primária dos dados. O \textbf{Nível 1} corresponde à supervisão local, próxima aos painéis dos IEDs, normalmente implementada em uma Interface Homem-Máquina (IHM) simples, voltada à operação no próprio local da planta e sem necessidade de arquitetura redundante \cite{ZANGHI2019_SCADA_CONCEITOS}.
+
+\par O \textbf{Nível 2} representa a supervisão da instalação como um todo, agregando os pontos relevantes dos IEDs em estações de trabalho robustas, geralmente redundantes, com telas mais elaboradas que permitem supervisão e controle completos da unidade. Por fim, o \textbf{Nível 3} é o centro de operação remoto, que consolida dados provenientes de múltiplas instalações distribuídas geograficamente; nele apenas os pontos estritamente necessários à operação sistêmica são disponibilizados, exigindo otimização do volume de dados e alta robustez para funcionamento contínuo. À medida que se sobe na hierarquia, a quantidade de pontos é filtrada e o foco passa do controle local detalhado para a gestão integrada da operação \cite{ZANGHI2019_SCADA_CONCEITOS}.
+
+\subsubsection{Comando e Controle}
+
+\par As ações de operação executadas remotamente pelo supervisório são denominadas telecomando e telecontrole. O software SCADA deve prever três tipos básicos: o \textbf{telecomando instantâneo}, voltado à mudança rápida de estados de equipamentos com acionamento remoto (e.g., partida de uma bomba, abertura de uma válvula, comando a um disjuntor); o \textbf{telecontrole}, destinado a regular no tempo a resposta de um processo a partir de um valor desejado (\emph{set point}); e o \textbf{telecomando ou telecontrole programado}, que permite o agendamento de ações conforme condições ou cenários previamente definidos, registrando o instante de execução \cite{ZANGHI2019_SCADA_CONCEITOS}.
+
+\par O processamento de um telecomando segue quatro fases distintas: \textbf{seleção}, em que o operador escolhe na interface o equipamento a ser comandado; \textbf{verificação} dos elementos envolvidos, como intertravamentos e condições de segurança; \textbf{confirmação} pela ação explícita do operador; e \textbf{execução}, com o envio efetivo da ordem ao dispositivo responsável pelo elemento final de controle. Após a execução, é boa prática que o supervisório realize a verificação de confirmação, garantindo que a solicitação foi aceita e processada pelo dispositivo de campo; em caso de falha, um alarme correspondente deve ser gerado para sinalizar a inconsistência ao operador \cite{ZANGHI2019_SCADA_CONCEITOS}.
+
+\subsubsection{Escalabilidade}
+
+\par A expansão das instalações é uma realidade frequente em ambientes industriais, com inclusão de novos equipamentos, pontos de medição e circuitos. Para acompanhar essas mudanças, o software SCADA deve ser escalável, permitindo o acréscimo de pontos em sua base de dados e a criação de novas telas de operação sem comprometer o que já está em produção. A maioria dos supervisórios comerciais oferece essa capacidade, contudo as licenças associadas precisam contemplar a expansão prevista. Licenças com número ilimitado de pontos e telas existem, mas têm custo elevado, o que torna a análise correta da escalabilidade fundamental para o adequado dimensionamento e orçamento da solução \cite{ZANGHI2019_SCADA_CONCEITOS, PHUYAL2020_COST_EFFICIENT_SCADA}.
+
+\par Quando se considera o sistema SCADA como um todo, a análise da escalabilidade deve abranger não apenas o supervisório, mas também os elementos de aquisição, controle e rede. Os \emph{hardwares} envolvidos devem se manter íntegros em suas funções e permitir o acréscimo de novos dispositivos ao barramento de comunicação, o que torna essencial que essa integração seja prevista já na fase inicial do projeto de automação \cite{ZANGHI2019_SCADA_CONCEITOS}.
+
+\subsubsection{Redundância}
+
+\par A redundância consiste no acréscimo de um elemento idêntico ao original, de modo que, em caso de falha do primeiro, o segundo assuma as funções da maneira mais transparente possível para a operação. Essa prática se aplica a diversos componentes do sistema SCADA, como softwares supervisórios, dispositivos de aquisição e controle, e elementos de rede (por exemplo, \emph{switches}); apesar do custo adicional, permite alcançar graus elevados de confiabilidade, compatíveis com a criticidade exigida em aplicações industriais sensíveis \cite{ZANGHI2019_SCADA_CONCEITOS, SALVADOR2019_AQUISICAO_REDUNDANCIA}.
+
+\par Em uma arquitetura redundante típica, múltiplas estações de operação comunicam-se simultaneamente com os dispositivos de campo, garantindo que a perda de uma delas não impacte a atualização das informações; \emph{switches} interligados em topologia em anel, com portas redundantes, asseguram resiliência a falhas de cabeamento e de portas individuais; e as unidades de aquisição e controle podem operar em pares espelhados, mantendo comunicação duplicada com os \emph{switches} e com os dispositivos finais. Esse conjunto de medidas garante a continuidade da supervisão e do controle mesmo diante de falhas pontuais em equipamentos ou enlaces de rede \cite{ZANGHI2019_SCADA_CONCEITOS}.
 
 \subsection{Automação e Informática Industrial}
 \label{sec:automacao_industrial}
@@ -30,54 +73,163 @@
     Fonte: Elaborado pelo autor com base em \textcite{COLOMBO2014_STATE_ART_AUTOMATION} e \textcite{BIGHETI2020}.
 \end{figure}
 
-\par Historicamente, a evolução da automação industrial pode ser organizada em ondas tecnológicas correspondentes às revoluções industriais discutidas na Subseção~\ref{sec:industria_40}. A primeira, baseada em mecanização movida a vapor e água, mecanizou tarefas físicas. A segunda, baseada na eletricidade, introduziu a produção em massa, controladores eletromecânicos (relés, temporizadores, contatores) e os primeiros barramentos de comando. A terceira, baseada em eletrônica e tecnologias da informação, popularizou os controladores lógicos programáveis (CLPs), os sistemas de comando numérico computadorizado (CNC), os robôs industriais e, sobretudo, os sistemas de supervisão e aquisição de dados (SCADA) \cite{GAUSHELL_DARLINGTON_1987_SUPERVISORY_CONTROL_DATA_ACQUISITION,ZANGHI2019_SCADA_CONCEITOS}. A quarta onda, em curso, baseia-se em conectividade ubíqua, sistemas ciber-físicos (Subseção~\ref{sec:cps}) e em arquiteturas orientadas a serviços (Subseção~\ref{sec:microservicos}), reposicionando o SCADA como nó de uma rede distribuída de serviços em nuvem \cite{BIGHETI2020,COLOMBO2014_STATE_ART_AUTOMATION}.
+\par Historicamente, a evolução da automação industrial pode ser organizada em ondas tecnológicas correspondentes às revoluções industriais discutidas na Subseção~\ref{sec:industria_40}. A primeira, baseada em mecanização movida a vapor e água, mecanizou tarefas físicas. A segunda, baseada na eletricidade, introduziu a produção em massa, controladores eletromecânicos (relés, temporizadores, contatores) e os primeiros barramentos de comando. A terceira, baseada em eletrônica e tecnologias da informação, popularizou os controladores lógicos programáveis (CLPs), os sistemas de comando numérico computadorizado (CNC), os robôs industriais e, sobretudo, os sistemas de supervisão e aquisição de dados (SCADA) \cite{ZANGHI2019_SCADA_CONCEITOS}. A quarta onda, em curso, baseia-se em conectividade ubíqua, sistemas ciber-físicos (Subseção~\ref{sec:cps}) e em arquiteturas orientadas a serviços (Subseção~\ref{sec:microservicos}), reposicionando o SCADA como nó de uma rede distribuída de serviços em nuvem \cite{BIGHETI2020,COLOMBO2014_STATE_ART_AUTOMATION}.
 
 \par No plano normativo, a automação industrial é organizada segundo padrões que sustentam a integração entre os diferentes níveis funcionais. O mais influente é a ISA-95 (também conhecida como IEC 62264), que define a hierarquia clássica em cinco níveis: nível 0 (processo físico), nível 1 (sensoriamento e atuação), nível 2 (controle de supervisão), nível 3 (gerenciamento de operações de manufatura, com sistemas MES) e nível 4 (planejamento corporativo, com sistemas ERP). Essa pirâmide, detalhada na Subseção~\ref{sec:iiot} ao discutir a IIoT, organiza historicamente a separação entre TA (níveis baixos, com requisitos rígidos de tempo real) e TI (níveis altos, com foco em planejamento e logística). Como observado por \textcite{COLOMBO2014_STATE_ART_AUTOMATION} e por \textcite{MONOSTORI2016_CPS_MANUFACTURING}, essa estratificação rígida vem sendo gradualmente substituída por arquiteturas mais planas, em que serviços de diferentes níveis se compõem diretamente, viabilizadas pelos sistemas ciber-físicos e pelo paradigma de microsserviços.
 
-\par O sistema supervisório desenvolvido neste trabalho situa-se exatamente nessa fronteira entre a automação tradicional e a informática industrial moderna. No lado da TA, conecta-se a CLPs em campo por meio do protocolo Modbus (sobre RS-485 ou Ethernet), respeita as exigências de tempo real para aquisição cíclica e implementa as funções clássicas de um SCADA (sincronismo, aquisição, comando, telecontrole, alarmes, históricos). No lado da TI, expõe seus serviços em uma arquitetura web orientada a microsserviços, hospeda dados e aplicações em nuvem (Subseção~\ref{sec:computacao_nuvem}), oferece interfaces para operadores e gestores via navegador, e disponibiliza APIs REST padronizadas (Subseção~\ref{sec:http_rest_json}) para integração com outros sistemas corporativos. As subseções que se seguem detalham progressivamente cada um desses pilares, partindo da função clássica do SCADA até as tecnologias que viabilizam a operação em nuvem.
+\par O sistema supervisório desenvolvido neste trabalho situa-se exatamente nessa fronteira entre a automação tradicional e a informática industrial moderna. No lado da TA, conecta-se a CLPs em campo por meio do protocolo Modbus (sobre RS-485 ou Ethernet), respeita as exigências de tempo real para aquisição cíclica e implementa as funções clássicas de um SCADA (sincronismo, aquisição, comando, telecontrole, alarmes, históricos). No lado da TI, expõe seus serviços em uma arquitetura web orientada a microsserviços, hospeda dados e aplicações em nuvem (Subseção~\ref{sec:computacao_nuvem}), oferece interfaces para operadores e gestores via navegador, e disponibiliza APIs REST padronizadas (Subseção~\ref{sec:http_rest_json}) para integração com outros sistemas corporativos. As demais subseções deste capítulo detalham progressivamente cada um desses pilares, desde os paradigmas da Indústria 4.0 até as tecnologias que viabilizam a operação em nuvem.
 
-\subsection{Sistema SCADA}
-\label{sec:scada}
+\subsection{Indústria 4.0 e Tecnologias Habilitadoras}
+\label{sec:industria_40}
 
-\par A indústria evoluiu muito na busca por mais monitoramento e controle dos processos. Com o tempo, os custos caíram bastante para processadores, memória e discos rígidos, que levaram a redução dos custos de, por exemplo, computadores, hubs e conversores de rede, também o software foi ganhando mais peso nesse cenário. Junto a isso, cresceu a necessidade de acompanhar operações em locais remotos. As empresas de software industrial passaram a oferecer soluções com uma ampla gama de protocolos de comunicação e bem personalizadas para cada tipo de processo e industria, a esse tipo de sistema deu-se o nome de SCADA, sigla em inglês para \emph{Supervisory Control and Data Acquisition} \cite{GAUSHELL_DARLINGTON_1987_SUPERVISORY_CONTROL_DATA_ACQUISITION,ZANGHI2019_SCADA_CONCEITOS}.
+\par As tecnologias reunidas nesta seção compõem o pano de fundo conceitual da quarta revolução industrial e situam o sistema supervisório proposto nesse contexto. Parte-se da Internet das Coisas (IoT), paradigma mais amplo de conectividade entre objetos; segue-se para sua especialização industrial, a Internet Industrial das Coisas (IIoT), e para a comunicação Máquina a Máquina (M2M) que a sustenta; chega-se aos Sistemas Ciber-Físicos (CPS), que acoplam computação e mundo físico; e encerra-se com a síntese desses elementos no conceito de Indústria 4.0.
 
-\par Para \textcite{ZANGHI2019_SCADA_CONCEITOS}, um sistema SCADA deve conter os seguintes itens:
+\subsubsection{Internet das Coisas (IoT)}
+\label{sec:iot}
 
-\subsubsection{Aquisição e Registro de Dados}
+\par O termo \emph{Internet of Things} (IoT), ou Internet das Coisas, foi cunhado em 1999 por Kevin Ashton no contexto de gerenciamento de cadeias de suprimento e, desde então, expandiu-se para áreas tão diversas quanto saúde, transporte, habitação, agricultura e indústria \cite{PISCHING2017,BIGHETI2020}. O paradigma descreve uma infraestrutura de rede global e dinâmica, baseada em protocolos de comunicação interoperáveis, na qual ``coisas'' físicas e virtuais possuem identificadores únicos, atributos próprios e uma representação digital, capazes de se integrar à internet por meio de interfaces inteligentes \cite{PISCHING2017}. Em termos práticos, trata-se de um mundo de objetos embarcados com sensores e atuadores, conectados em rede, frequentemente sem fio, que trocam informações de forma autônoma e reagem a estímulos do ambiente \cite{BIGHETI2020}.
 
-\par A aquisição das informações de campo é o primeiro grande desafio em um sistema SCADA. Ao longo das décadas, diferentes abordagens foram empregadas para trazer dados do processo até a sala de controle, evoluindo de longos cabeamentos diretos para soluções baseadas em dispositivos inteligentes próximos ao processo. Atualmente, predominam os painéis com Dispositivos Eletrônicos Inteligentes (\emph{Intelligent Electronic Devices} - IEDs) e as Unidades Terminais Remotas (UTRs), que aquisitam grandezas analógicas e digitais (medidas de processo, estados de equipamentos, alarmes) e as disponibilizam ao supervisório em formato binário por meio de uma rede de dados, tipicamente Ethernet \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\par \textcite{STANKOVIC2014_IOT_RESEARCH_DIRECTIONS} argumenta que a IoT representa um ponto de convergência entre comunidades de pesquisa historicamente distintas, computação móvel, computação pervasiva, redes de sensores sem fio e sistemas ciber-físicos, cujas fronteiras se tornaram cada vez mais tênues à medida que sensoriamento, atuação, comunicação e controle se tornam ubíquos. A visão associada à IoT prevê uma transformação qualitativa quando a densidade de sensoriamento triplicar ou quadruplicar em relação à atualmente observada: cidades, edifícios e equipamentos passarão a ser permeados por sensores e atuadores que, em conjunto, configurarão uma ``utilidade'' (\textit{utility}) semelhante à eletricidade ou à água, sobre a qual aplicações personalizadas, urbanas e globais poderão ser executadas \cite{STANKOVIC2014_IOT_RESEARCH_DIRECTIONS}.
 
-\par Os pontos aquisitados em um sistema SCADA são denominados \emph{tags} e armazenados no banco de dados do supervisório. Podem ser \textbf{digitais} (de entrada, DI; de saída, DO; ou de memória, DM, calculados internamente), usados para representar estados binários como liga/desliga de motores, abertura/fechamento de válvulas e disjuntores, alarmes e eventos; ou \textbf{analógicos} (de entrada, AI; de saída, AO; ou de memória, AM), usados para grandezas multibit, como medições de pressão, vazão, nível, temperatura, tensão e corrente, comumente representadas em até 16 bits. O registro contínuo dessas informações pelo supervisório permite análises posteriores na forma de gráficos históricos de tendência e de sequenciais de eventos digitais \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\par A evolução da IoT pode ser organizada, segundo \textcite{PISCHING2017}, em três fases: a primeira, ligada à identificação automática por código de barras e RFID, voltada à automação de inventário e ao rastreamento de objetos; a segunda, atualmente em curso, marcada pela interconexão massiva de sensores, dispositivos, dados e aplicações; e a terceira, denominada ``IoT cognitiva'', em que a interoperabilidade semântica permitirá reutilizar informações de objetos e ampliar a capacidade de inferência das aplicações. A Figura~\ref{fig:iot_camadas} sintetiza a arquitetura em quatro camadas comumente adotada para descrever sistemas IoT, sensoriamento, rede, serviço e interface, na qual cada camada agrega abstração crescente sobre os dados originados no nível físico.
 
-\subsubsection{Sincronismo de Tempo}
+\begin{figure}[H]
+    \centering
+    \caption{Arquitetura em quatro camadas da IoT}
+    \centering
+    \includegraphics[width=0.9\textwidth]{Imagens/Desenvolvimento/Cap1/iot_camadas-073.png}
+    \centering
+    \vspace{0.2cm} \\
+    Fonte: \textcite[p.~72]{PISCHING2017}.
+    \label{fig:iot_camadas}
+\end{figure}
 
-\par Outro requisito fundamental dos sistemas SCADA é o sincronismo de tempo. Todo dado coletado deve possuir um registro de tempo de origem, a chamada estampa de tempo (\emph{time stamp}): cada variação de um sinal digital, seja para ``0'' ou ``1'', precisa ser registrada com o instante exato em que ocorreu. Essa exigência decorre da necessidade de análises \emph{a posteriori} de ocorrências e faltas, que dependem da cronologia precisa dos acontecimentos para permitir a identificação das causas, sobretudo em processos com dinâmica rápida \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\par A escala antevista para a IoT, da ordem de trilhões de dispositivos conectados à internet, impõe desafios técnicos significativos: como nomear, autenticar, manter e proteger esse universo de objetos; como suportar real-time e confiabilidade em redes heterogêneas; como armazenar e extrair conhecimento das massas de dados gerados; e como conciliar abertura (\textit{openness}) das aplicações com segurança e privacidade \cite{STANKOVIC2014_IOT_RESEARCH_DIRECTIONS}. Em particular, a interação cyber-físico introduzida pela IoT exige novas técnicas de análise: como os dispositivos atuam sobre o mundo físico, falhas podem ter consequências de segurança operacional, o que demanda inferência confiável a partir de dados ruidosos e modelos de robustez para sistemas de longa duração e operação não assistida \cite{STANKOVIC2014_IOT_RESEARCH_DIRECTIONS}.
 
-\par Para garantir essa sincronização, é comum o uso de equipamentos receptores de sinal de GPS conectados aos IEDs e ao próprio supervisório, ajustando seus relógios internos com precisão de pelo menos 1\,ms. Assim, alarmes e eventos digitais captados em diferentes pontos do sistema recebem estampas de tempo coerentes, sendo essa informação transportada ao supervisório pelo protocolo de comunicação empregado entre os dispositivos \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\subsubsection{Internet Industrial das Coisas (IIoT)}
+\label{sec:iiot}
 
-\subsubsection{Níveis de Operação}
+\par Quando o paradigma da IoT é trazido para o domínio industrial, sensoriamento de processos, controle de máquinas e otimização de cadeias produtivas, recebe a denominação \emph{Industrial Internet of Things} (IIoT). A IIoT é, em essência, um subconjunto da IoT especializado para aplicações industriais, no qual a interconexão de sensores, atuadores, equipamentos e sistemas de produção visa simplificar arquiteturas, ampliar a eficiência e tornar as plantas mais responsivas às demandas de operação \cite{BIGHETI2020}. Para \textcite{PISCHING2017}, a rápida proliferação da IoT no setor industrial vem transformando processos e infraestrutura, levando fabricantes de equipamentos de automação a investir em tecnologias embarcadas que suportem essa convergência entre tecnologia da informação (TI) e tecnologia da automação (TA).
 
-\par Os sistemas SCADA são tipicamente organizados em diferentes níveis de operação, cada um atendendo a necessidades distintas e operando sobre um subconjunto dos pontos disponíveis nos níveis inferiores. No \textbf{Nível 0} estão os equipamentos de campo e seus sensores, fonte primária dos dados. O \textbf{Nível 1} corresponde à supervisão local, próxima aos painéis dos IEDs, normalmente implementada em uma Interface Homem-Máquina (IHM) simples, voltada à operação no próprio local da planta e sem necessidade de arquitetura redundante \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\par Embora compartilhem o mesmo núcleo conceitual, a interconexão de objetos via redes baseadas em IP, IoT de consumo e IIoT diferem significativamente em requisitos técnicos, modelo de serviço e criticidade. A IoT de consumo está orientada a pessoas e cenários ad-hoc, com volume médio de dados e requisitos brandos de tempo de resposta e segurança; a IIoT, por sua vez, lida com nós fixos, redes estruturadas, volumes elevados de dados e requisitos rigorosos de confiabilidade, tempo real e segurança operacional, dado que falhas podem comprometer processos produtivos críticos \cite{BIGHETI2020}. A Tabela~\ref{tab:iot_vs_iiot} sintetiza esse contraste.
 
-\par O \textbf{Nível 2} representa a supervisão da instalação como um todo, agregando os pontos relevantes dos IEDs em estações de trabalho robustas, geralmente redundantes, com telas mais elaboradas que permitem supervisão e controle completos da unidade. Por fim, o \textbf{Nível 3} é o centro de operação remoto, que consolida dados provenientes de múltiplas instalações distribuídas geograficamente; nele apenas os pontos estritamente necessários à operação sistêmica são disponibilizados, exigindo otimização do volume de dados e alta robustez para funcionamento contínuo. À medida que se sobe na hierarquia, a quantidade de pontos é filtrada e o foco passa do controle local detalhado para a gestão integrada da operação \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\begin{table}[H]
+    \centering
+    \caption{Comparação entre IoT de consumo e IoT industrial}
+    \label{tab:iot_vs_iiot}
+    \vspace{0.2cm}
+    \begin{tabularx}{0.95\textwidth}{|l|X|X|}
+        \hline
+        \textbf{Critério} & \textbf{IoT de consumo}                & \textbf{IoT industrial (IIoT)}                                  \\
+        \hline
+        Impacto           & Revolução                              & Evolução                                                        \\ \hline
+        Modelo de serviço & Voltada ao ser humano                  & Orientada às máquinas                                           \\ \hline
+        Estado atual      & Novos dispositivos e padrões emergindo & Dispositivos e padrões já consolidados                          \\ \hline
+        Conectividade     & Não estruturada, ad-hoc ou móvel       & Estruturada, com nós fixos e gerenciamento centralizado de rede \\ \hline
+        Criticidade       & Pouco rigorosa                         & Rigorosa em tempo, confiabilidade, segurança e privacidade      \\ \hline
+        Volume de dados   & Médio a alto                           & Alto a muito alto                                               \\ \hline
+    \end{tabularx}
+    \vspace{0.2cm} \\
+    Fonte: Adaptado de \textcite{BIGHETI2020}, com base em Sisinni et al. (2018).
+\end{table}
 
-\subsubsection{Comando e Controle}
+\par No contexto da indústria, a IIoT viabiliza três paradigmas operacionais frequentemente associados à transformação digital da manufatura: o \textbf{produto inteligente} (\emph{smart product}), que carrega informações sobre si mesmo e sobre seu processo produtivo, permitindo rastreabilidade ao longo de todo o ciclo de vida; a \textbf{máquina inteligente} (\emph{smart machine}), capaz de se autoconfigurar, coordenar-se com outras máquinas e oferecer funcionalidades por meio de serviços de rede; e o \textbf{operador aumentado} (\emph{augmented operator}), apoiado por dispositivos vestíveis, \textit{tablets} e óculos inteligentes que ampliam a percepção e a capacidade de intervenção sobre o processo \cite{BIGHETI2020}.
 
-\par As ações de operação executadas remotamente pelo supervisório são denominadas telecomando e telecontrole. O software SCADA deve prever três tipos básicos: o \textbf{telecomando instantâneo}, voltado à mudança rápida de estados de equipamentos com acionamento remoto (e.g., partida de uma bomba, abertura de uma válvula, comando a um disjuntor); o \textbf{telecontrole}, destinado a regular no tempo a resposta de um processo a partir de um valor desejado (\emph{set point}); e o \textbf{telecomando ou telecontrole programado}, que permite o agendamento de ações conforme condições ou cenários previamente definidos, registrando o instante de execução \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\par A IIoT impacta diretamente a arquitetura tradicional da automação industrial, organizada historicamente em camadas hierárquicas segundo a norma ISA-95/IEC 62264 (processo, controle, supervisão, MES e ERP). \textcite{COLOMBO2014_STATE_ART_AUTOMATION} observam que, à medida que dispositivos de campo expõem suas funcionalidades como serviços de rede (por exemplo, via OPC-UA ou DPWS), a pirâmide ISA-95 tende a se ``achatar'' em uma arquitetura logicamente plana baseada em serviços, na qual um serviço exposto por uma válvula no nível de campo pode se compor diretamente com um serviço executado em um sistema MES. Essa transição é um dos vetores tecnológicos centrais da Indústria 4.0, sintetizada adiante nesta seção.
 
-\par O processamento de um telecomando segue quatro fases distintas: \textbf{seleção}, em que o operador escolhe na interface o equipamento a ser comandado; \textbf{verificação} dos elementos envolvidos, como intertravamentos e condições de segurança; \textbf{confirmação} pela ação explícita do operador; e \textbf{execução}, com o envio efetivo da ordem ao dispositivo responsável pelo elemento final de controle. Após a execução, é boa prática que o supervisório realize a verificação de confirmação, garantindo que a solicitação foi aceita e processada pelo dispositivo de campo; em caso de falha, um alarme correspondente deve ser gerado para sinalizar a inconsistência ao operador \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\subsubsection{Comunicação Máquina a Máquina (M2M)}
+\label{sec:m2m}
 
-\subsubsection{Escalabilidade}
+\par A comunicação \textbf{Máquina a Máquina} (\emph{Machine-to-Machine}, M2M) designa a troca direta de informações entre dispositivos físicos sem intervenção humana imediata. Originada no setor de telemetria industrial e nos primeiros sistemas SCADA, em que sensores remotos transmitiam leituras para uma estação central por meio de enlaces dedicados, a M2M precede e fundamenta historicamente a Internet das Coisas (Subseção~\ref{sec:iot}): enquanto a IoT é frequentemente associada a um cenário amplo e heterogêneo, com bilhões de objetos cotidianos conectados, a M2M, em sua acepção mais antiga, refere-se especificamente à comunicação ponto a ponto entre dispositivos industriais por meios determinísticos como redes celulares dedicadas, rádio, satélite ou cabeamento ponto a ponto.
 
-\par A expansão das instalações é uma realidade frequente em ambientes industriais, com inclusão de novos equipamentos, pontos de medição e circuitos. Para acompanhar essas mudanças, o software SCADA deve ser escalável, permitindo o acréscimo de pontos em sua base de dados e a criação de novas telas de operação sem comprometer o que já está em produção. A maioria dos supervisórios comerciais oferece essa capacidade, contudo as licenças associadas precisam contemplar a expansão prevista. Licenças com número ilimitado de pontos e telas existem, mas têm custo elevado, o que torna a análise correta da escalabilidade fundamental para o adequado dimensionamento e orçamento da solução \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\par No contexto da Indústria 4.0, a M2M é a base de comunicação que viabiliza a noção de \emph{Máquina Inteligente} (\emph{Smart Machine}) descrita por \textcite{BIGHETI2020} e \textcite{PISCHING2017}: dispositivos de campo que não apenas executam funções predefinidas, mas trocam informações com outros dispositivos, coordenam ações, ajustam parâmetros operacionais e reportam estados a sistemas de supervisão sem intervenção manual. Em uma planta industrial moderna, isso se traduz em CLPs que conversam diretamente com outros CLPs para sincronizar operações entre linhas de produção, inversores de frequência que negociam com sensores de processo para ajustar velocidade de bombas em função de medições de vazão, e medidores que reportam valores periódicos a múltiplas aplicações simultaneamente.
 
-\par Quando se considera o sistema SCADA como um todo, a análise da escalabilidade deve abranger não apenas o supervisório, mas também os elementos de aquisição, controle e rede. Os \emph{hardwares} envolvidos devem se manter íntegros em suas funções e permitir o acréscimo de novos dispositivos ao barramento de comunicação, o que torna essencial que essa integração seja prevista já na fase inicial do projeto de automação \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\begin{figure}[H]
+    \centering
+    \caption{Comunicação M2M em telemetria industrial: do dispositivo de campo aos serviços em nuvem}
+    \label{fig:m2m_telemetria}
+    \vspace{0.4cm}
+    \begin{tikzpicture}[
+            font=\footnotesize\sffamily,
+            dev/.style={rectangle, draw=black!70, thick, minimum width=22mm, minimum height=12mm, align=center, inner sep=3pt, rounded corners=2pt, fill=blue!10},
+            mid/.style={rectangle, draw=black!70, thick, minimum width=22mm, minimum height=12mm, align=center, inner sep=3pt, rounded corners=2pt, fill=orange!12},
+            nuvem/.style={rectangle, draw=black!70, thick, minimum width=22mm, minimum height=12mm, align=center, inner sep=3pt, rounded corners=8pt, fill=green!12},
+            arr/.style={->, thick, black!60}
+        ]
+        \node[dev]   (sens) at (0, 0)   {Sensor /\\CLP};
+        \node[mid]   (mod)  at (3.5, 0) {Modem\\GPRS/4G};
+        \node[mid]   (gw)   at (7, 0)   {Gateway};
+        \node[nuvem] (svc)  at (10.5, 0) {Serviços\\em nuvem};
 
-\subsubsection{Redundância}
+        \draw[arr] (sens) -- node[above, font=\scriptsize] {Modbus} (mod);
+        \draw[arr] (mod)  -- node[above, font=\scriptsize] {TCP/IP} (gw);
+        \draw[arr] (gw)   -- node[above, font=\scriptsize] {TCP/IP} (svc);
 
-\par A redundância consiste no acréscimo de um elemento idêntico ao original, de modo que, em caso de falha do primeiro, o segundo assuma as funções da maneira mais transparente possível para a operação. Essa prática se aplica a diversos componentes do sistema SCADA, como softwares supervisórios, dispositivos de aquisição e controle, e elementos de rede (por exemplo, \emph{switches}); apesar do custo adicional, permite alcançar graus elevados de confiabilidade, compatíveis com a criticidade exigida em aplicações industriais sensíveis \cite{ZANGHI2019_SCADA_CONCEITOS}.
+        \node[font=\scriptsize, anchor=north] at (0, -0.9)    {\textit{campo}};
+        \node[font=\scriptsize, anchor=north] at (3.5, -0.9)  {\textit{borda}};
+        \node[font=\scriptsize, anchor=north] at (7, -0.9)    {\textit{concentrador}};
+        \node[font=\scriptsize, anchor=north] at (10.5, -0.9) {\textit{nuvem}};
+    \end{tikzpicture}
+    \vspace{0.2cm} \\
+    Fonte: Elaborado pelo autor com base em \textcite{BIGHETI2020} e \textcite{PISCHING2017}.
+\end{figure}
 
-\par Em uma arquitetura redundante típica, múltiplas estações de operação comunicam-se simultaneamente com os dispositivos de campo, garantindo que a perda de uma delas não impacte a atualização das informações; \emph{switches} interligados em topologia em anel, com portas redundantes, asseguram resiliência a falhas de cabeamento e de portas individuais; e as unidades de aquisição e controle podem operar em pares espelhados, mantendo comunicação duplicada com os \emph{switches} e com os dispositivos finais. Esse conjunto de medidas garante a continuidade da supervisão e do controle mesmo diante de falhas pontuais em equipamentos ou enlaces de rede \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\par Tecnologicamente, a M2M industrial é sustentada por uma família de protocolos de comunicação, cada qual adequado a uma fatia de aplicações. O \textbf{Modbus} (Subseção~\ref{sec:modbus_tcp_rtu}) é o protocolo industrial mais difundido em telemetria, particularmente em sua versão sobre TCP/IP, que permite encapsular requisições entre CLPs distantes. O \textbf{MQTT} (\emph{Message Queuing Telemetry Transport}) é um protocolo publicador-assinante leve, projetado para ambientes com banda limitada e dispositivos restritos, amplamente adotado em IoT e em telemetria industrial moderna. O \textbf{OPC-UA} (\emph{Open Platform Communications Unified Architecture}), discutido por \textcite{COLOMBO2014_STATE_ART_AUTOMATION}, oferece um modelo unificado de informação para comunicação segura entre dispositivos heterogêneos, com forte adoção nas iniciativas mais recentes de Indústria 4.0. Outros protocolos, como CoAP, HTTP/REST (Subseção~\ref{sec:http_rest_json}) e gRPC, encontram nicho em integrações específicas conforme requisitos de banda, latência e segurança.
+
+\par No sistema supervisório proposto neste trabalho, a M2M materializa-se em uma cadeia bem definida (Figura~\ref{fig:m2m_telemetria}). No campo, os CLPs operam protocolo Modbus, expondo seus registradores e \emph{coils} a clientes remotos. Localmente, um modem GPRS ou 4G concentra a comunicação com o equipamento e estabelece a sessão WAN com o \emph{gateway} no provedor. O \emph{gateway} agrega múltiplas sessões e roteia requisições conforme cadastro, em um esquema discutido em detalhe na Subseção~\ref{sec:modbus_tcp_rtu}. Por fim, a aplicação em nuvem dispara as requisições de leitura segundo o agendador de aquisição, recebe as respostas e converte os valores brutos para unidade de engenharia (Subseção~\ref{sec:escala_engenharia}) antes de publicá-los aos serviços consumidores. Essa arquitetura permite que centenas de pontos remotos sejam supervisionados a partir de um único conjunto de serviços de nuvem, sem necessidade de hardware proprietário em cada cliente.
+
+\par Vale notar que a M2M também sustenta tendências de fronteira na automação contemporânea. A \textbf{computação na borda} (\emph{edge computing}) descentraliza parte do processamento para os próprios dispositivos de campo ou para concentradores próximos, reduzindo latência e tráfego para a nuvem. A \textbf{computação na névoa} (\emph{fog computing}) introduz camadas intermediárias entre borda e nuvem para tarefas com requisitos mistos de latência e capacidade. Modelos de \textbf{telemetria orientada a eventos} substituem o \textit{polling} cíclico por publicação assíncrona quando o valor amostrado muda significativamente, reduzindo consumo de banda e energia em dispositivos alimentados por bateria. Embora essas tendências estejam fora do escopo principal do presente trabalho, são extensões naturais da arquitetura M2M aqui adotada e podem ser incorporadas em iterações futuras do sistema.
+
+\subsubsection{Sistemas Ciber-Físicos (CPS)}
+\label{sec:cps}
+
+\par O termo \emph{Cyber-Physical Systems} (CPS), ou Sistemas Ciber-Físicos, foi proposto em 2006 por um grupo de pesquisadores ligados à \emph{National Science Foundation} (NSF) dos Estados Unidos, durante o primeiro workshop da área realizado em Austin, Texas, com o propósito de descrever o acoplamento crescente entre dispositivos de controle, computação e redes de comunicação \cite{PISCHING2017,MONOSTORI2016_CPS_MANUFACTURING}. \textcite{MONOSTORI2016_CPS_MANUFACTURING} definem CPS como sistemas de entidades computacionais colaborativas em conexão intensiva com o mundo físico circundante e com seus processos em curso, fornecendo e consumindo, ao mesmo tempo, serviços de acesso e processamento de dados disponíveis na internet. Mais relevante que a união das partes, observam os autores, é a \emph{interseção} entre o mundo físico e o cibernético: compreender as componentes separadamente não é suficiente; é a interação entre elas o que caracteriza o CPS.
+
+\par Os CPS herdam fortemente o legado dos \emph{sistemas embarcados} (sistemas computacionais integrados a sistemas mecânicos ou elétricos para executar funções específicas com restrições de tempo real), mas ampliam esse escopo ao incorporar conectividade em rede, autonomia e cooperação entre dispositivos \cite{MONOSTORI2016_CPS_MANUFACTURING}. No domínio da manufatura, são frequentemente denominados \emph{Cyber-Physical Production Systems} (CPPS) ou Sistemas Ciber-Físicos de Produção, sem que isso represente diferença conceitual significativa: trata-se de CPS contextualizados em maquinários, sistemas de estoque, sistemas de distribuição e linhas produtivas, com capacidade de operar de forma autônoma, trocar informações, disparar eventos e controlar uns aos outros independentemente \cite{PISCHING2017}.
+
+\par A Figura~\ref{fig:cps_estrutura} ilustra a estrutura básica de um CPS, organizada em torno do acoplamento entre sistemas físicos e a camada computacional. Sensores e atuadores constituem a interface bidirecional com o processo físico; o \textit{hardware} eletrônico e os sistemas embarcados executam algoritmos de aquisição, controle e diagnóstico em tempo real; e a camada de \textit{software}, conectada a outros sistemas e à internet, viabiliza serviços de mais alto nível, como otimização, manutenção preditiva e cooperação multi-agente.
+
+\begin{figure}[H]
+    \centering
+    \caption{Estrutura e componentes básicos de um CPS}
+    \centering
+    \includegraphics[width=0.9\textwidth]{Imagens/Desenvolvimento/Cap1/cps_estrutura-045.png}
+    \centering
+    \vspace{0.2cm} \\
+    Fonte: \textcite[p.~44]{PISCHING2017}.
+    \label{fig:cps_estrutura}
+\end{figure}
+
+\par \textcite{MONOSTORI2016_CPS_MANUFACTURING} destacam três características essenciais dos CPS aplicados à manufatura. A primeira é a \textbf{inteligência} (\emph{smartness}): os elementos do sistema são capazes de adquirir informações de seu entorno e agir autonomamente, sem depender de comando externo contínuo. A segunda é a \textbf{conectividade} (\emph{connectedness}): cada elemento estabelece e utiliza conexões com os demais elementos do sistema, com seres humanos e com serviços e conhecimento disponíveis na internet, viabilizando cooperação e colaboração. A terceira é a \textbf{responsividade} (\emph{responsiveness}): o sistema reage, em tempo apropriado, a mudanças internas e externas, ajustando seu comportamento sem necessidade de reconfiguração manual. Esse conjunto de capacidades também sustenta expectativas mais amplas: auto-organização, automanutenção, autorreparo, transparência, previsibilidade e diagnóstico remoto.
+
+\par No plano arquitetural, os CPS rompem parcialmente com a tradicional pirâmide de automação descrita na Subseção~\ref{sec:iiot}. Os níveis de controle e campo, com CLPs próximos aos processos técnicos e restrições de tempo real, permanecem em grande medida; contudo, nos níveis superiores, observa-se um modo de funcionamento mais descentralizado, no qual decisões antes concentradas em estações de supervisão passam a ser distribuídas entre dispositivos colaborativos \cite{MONOSTORI2016_CPS_MANUFACTURING}. Como observa \textcite{PISCHING2017}, os CPS conectados via internet podem ser compreendidos como elementos da IoT, isto é, os CPS oferecem a base física e computacional sobre a qual a IoT, conjugada à Internet dos Serviços e dos Dados, viabiliza o conceito de Indústria 4.0.
+
+\subsubsection{A Quarta Revolução Industrial}
+
+\par O termo \emph{Industrie 4.0} foi apresentado pela primeira vez em 2011, na Feira de Hannover, e oficializado em abril de 2013, no âmbito da estratégia de alta tecnologia do governo alemão, como parte de um plano de ação para elevar o nível de automatização e digitalização dos sistemas produtivos do país \cite{PISCHING2017,BIGHETI2020}. A nomenclatura, em referência ao versionamento de \textit{software}, posiciona-se como o anúncio \emph{ex-ante} de uma quarta revolução industrial, somando-se às transformações anteriores: a primeira, no final do século XVIII, baseada na mecanização movida a vapor e água; a segunda, no início do século XX, marcada pela eletricidade e pela produção em massa; e a terceira, na segunda metade do século XX, caracterizada pela eletrônica e pelas tecnologias da informação aplicadas à automação \cite{LASI_INDUSTRY_40,PISCHING2017}. No Brasil, o conceito tornou-se conhecido também como Manufatura Avançada, com discussões intensificadas a partir de 2013; nos Estados Unidos, recebe a denominação \emph{Smart Industry} \cite{BIGHETI2020}.
+
+\par \textcite{LASI_INDUSTRY_40} caracterizam a Indústria 4.0 como o resultado de duas forças simultâneas. De um lado, há um forte \emph{application-pull} associado a mudanças sociais, econômicas e políticas: períodos de desenvolvimento mais curtos (\textit{time to market}), individualização da demanda, chegando ao limite teórico do lote unitário, maior flexibilidade na produção, descentralização das decisões e maior eficiência no uso de recursos. De outro lado, há um intenso \emph{technology-push} fundado em três tendências tecnológicas convergentes: a contínua mecanização e automação dos processos, a digitalização e o aumento da conectividade entre componentes técnicos, e a miniaturização do \textit{hardware}, que permite incorporar capacidade computacional onde antes isso seria inviável.
+
+\par \textcite{BIGHETI2020} sintetiza esse contexto definindo a Indústria 4.0 como um conjunto de tecnologias aplicadas ao contexto industrial e coordenadas para conferir competitividade, otimizar a cadeia produtiva, agregar valor ao produto, racionalizar o uso de recursos e customizar soluções. Entre as tecnologias habilitadoras citadas pelo autor destacam-se: o IPv6, que amplia o espaço de endereçamento a todos os equipamentos; as redes sem fio para flexibilização da aquisição de dados; os sistemas ciber-físicos (CPS) e os sistemas de controle em rede; o uso de identificadores RFID para rastreamento; a virtualização de sistemas e serviços; a IIoT e a computação em nuvem; e o uso massivo de dados (\textit{big data}) para apoio à decisão. O conceito-síntese, em diversas formulações, é o de \emph{fábrica inteligente} (\emph{smart factory}): uma planta na qual produtos e máquinas comunicam-se por meio de CPS e IoT ao longo do ciclo produtivo, em um ambiente apoiado por infraestrutura de nuvem que combina Internet dos Serviços e Internet dos Dados \cite{PISCHING2017,LASI_INDUSTRY_40}.
+
+\par A Figura~\ref{fig:venn_iot_iiot_cps_i40} sintetiza graficamente as relações entre os quatro conceitos discutidos até aqui. A IoT figura como o universo mais amplo, abrangendo objetos conectados em contextos de consumo e industriais; a IIoT corresponde à interseção da IoT com o domínio industrial; os CPS situam-se como categoria parcialmente distinta, caracterizada pelo forte acoplamento computação-físico em tempo real; e a Indústria 4.0 emerge na interseção entre IIoT e CPS, materializando o conceito de fábrica inteligente sob infraestrutura de nuvem.
+
+\begin{figure}[H]
+    \centering
+    \caption{Interseções de IoT, CPS, IIoT e Indústria 4.0}
+    \centering
+    \includegraphics[width=0.9\textwidth]{Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps_i40-034.png}
+    \centering
+    \vspace{0.2cm} \\
+    Fonte: \textcite[p.~27]{BIGHETI2020}.
+    \label{fig:venn_iot_iiot_cps_i40}
+\end{figure}
+
+\par No nível de princípios de projeto, a Indústria 4.0 é frequentemente descrita por seis pilares, segundo \textcite{PISCHING2017}: \textbf{interoperabilidade}, capacidade de máquinas, dispositivos, sensores e pessoas se comunicarem por meio da IoT; \textbf{virtualização}, criação de cópias digitais do mundo físico que permitem simulação e supervisão; \textbf{descentralização}, distribuição da capacidade de decisão pelos diversos pontos do sistema; \textbf{operação em tempo real}, com coleta e análise contínuas de dados; \textbf{orientação a serviços}, em que funcionalidades são expostas e compostas via redes; e \textbf{modularidade}, permitindo adaptação flexível a mudanças de demanda e a novos cenários. Esses princípios materializam-se nos três aspectos centrais identificados por Bangemann et al. (2016): uma nova forma de organizar e controlar a cadeia de valor ao longo de todo o ciclo de vida dos produtos; a disponibilidade de informações relevantes em tempo real, em todas as instâncias envolvidas; e a constituição de redes de valor entre empresas, dinâmicas e auto-organizáveis, suportadas pela interconexão de pessoas, ``coisas'' e sistemas \cite{PISCHING2017}.
+
+\par Para organizar e padronizar a transição em torno desses princípios, foi apresentado em 2015, também na Feira de Hannover, o \emph{Reference Architectural Model for Industry 4.0} (RAMI 4.0). Trata-se de um modelo tridimensional que compatibiliza, em um único arcabouço, normas vigentes do setor produtivo, como a ISO/IEC 62264 (integração entre sistemas corporativos e de controle), a IEC 62541 (OPC-UA), a IEC 61512 (controle em batelada) e a IEC 62890 (ciclo de vida), com a perspectiva de integração vertical (entre níveis hierárquicos), horizontal (entre empresas em uma cadeia de valor) e fim a fim (entre fases de engenharia) \cite{PISCHING2017,BIGHETI2020}.
+
+\par Por fim, a Indústria 4.0 amplia o escopo dos sistemas SCADA tradicionais discutidos na Subseção~\ref{sec:scada}. Se historicamente o SCADA atuava como um sistema fechado de supervisão e aquisição de dados, ligado a CLPs por barramentos proprietários e a uma sala de controle local, a perspectiva da Indústria 4.0 o reposiciona como um nó de uma rede de serviços muito mais ampla, que integra produção, manutenção, logística, vendas e clientes em uma cadeia de valor digital \cite{BIGHETI2020,COLOMBO2014_STATE_ART_AUTOMATION}. Esse reposicionamento é o pano de fundo conceitual para a proposta de sistema supervisório baseado em nuvem e orientado a serviços apresentada no restante deste trabalho.
 
 \subsection{Ajuste para Escala de Engenharia e Linearização de Sensores}
 \label{sec:escala_engenharia}
@@ -179,176 +331,6 @@
 \end{itemize}
 
 \par Vale ressaltar duas situações em que essa abordagem precisa ser estendida. A primeira é o caso em que a relação entre a grandeza física e o sinal elétrico não é linear: termopares, por exemplo, possuem curva tensão-temperatura tabelada por norma e, na prática, são linearizados por aproximações polinomiais por trechos ou por tabelas \emph{lookup} já internas ao próprio CLP, de forma que o supervisório recebe um valor já compensado e aplica apenas o ajuste linear de escala descrito nesta subseção. A segunda é o caso em que o sensor exige, além do ajuste de escala, correções de \emph{zero} e \emph{span} para compensar derivas de calibração ao longo do tempo; nessa situação, $a$ e $b$ não são fixos, mas atualizáveis pela rotina de manutenção, sem que isso altere a estrutura matemática descrita pela Equação~\ref{eq:reta_linearizacao}.
-
-\subsection{Internet das Coisas (IoT)}
-\label{sec:iot}
-
-\par O termo \emph{Internet of Things} (IoT), ou Internet das Coisas, foi cunhado em 1999 por Kevin Ashton no contexto de gerenciamento de cadeias de suprimento e, desde então, expandiu-se para áreas tão diversas quanto saúde, transporte, habitação, agricultura e indústria \cite{PISCHING2017,BIGHETI2020}. O paradigma descreve uma infraestrutura de rede global e dinâmica, baseada em protocolos de comunicação interoperáveis, na qual ``coisas'' físicas e virtuais possuem identificadores únicos, atributos próprios e uma representação digital, capazes de se integrar à internet por meio de interfaces inteligentes \cite{PISCHING2017}. Em termos práticos, trata-se de um mundo de objetos embarcados com sensores e atuadores, conectados em rede, frequentemente sem fio, que trocam informações de forma autônoma e reagem a estímulos do ambiente \cite{BIGHETI2020}.
-
-\par \textcite{STANKOVIC2014_IOT_RESEARCH_DIRECTIONS} argumenta que a IoT representa um ponto de convergência entre comunidades de pesquisa historicamente distintas, computação móvel, computação pervasiva, redes de sensores sem fio e sistemas ciber-físicos, cujas fronteiras se tornaram cada vez mais tênues à medida que sensoriamento, atuação, comunicação e controle se tornam ubíquos. A visão associada à IoT prevê uma transformação qualitativa quando a densidade de sensoriamento triplicar ou quadruplicar em relação à atualmente observada: cidades, edifícios e equipamentos passarão a ser permeados por sensores e atuadores que, em conjunto, configurarão uma ``utilidade'' (\textit{utility}) semelhante à eletricidade ou à água, sobre a qual aplicações personalizadas, urbanas e globais poderão ser executadas \cite{STANKOVIC2014_IOT_RESEARCH_DIRECTIONS}.
-
-\par A evolução da IoT pode ser organizada, segundo \textcite{PISCHING2017}, em três fases: a primeira, ligada à identificação automática por código de barras e RFID, voltada à automação de inventário e ao rastreamento de objetos; a segunda, atualmente em curso, marcada pela interconexão massiva de sensores, dispositivos, dados e aplicações; e a terceira, denominada ``IoT cognitiva'', em que a interoperabilidade semântica permitirá reutilizar informações de objetos e ampliar a capacidade de inferência das aplicações. A Figura~\ref{fig:iot_camadas} sintetiza a arquitetura em quatro camadas comumente adotada para descrever sistemas IoT, sensoriamento, rede, serviço e interface, na qual cada camada agrega abstração crescente sobre os dados originados no nível físico.
-
-\begin{figure}[H]
-    \centering
-    \caption{Arquitetura em quatro camadas da IoT}
-    \centering
-    \includegraphics[width=0.45\textwidth]{Imagens/Desenvolvimento/Cap1/iot_camadas-073.png}
-    \centering
-    \vspace{0.2cm} \\
-    Fonte: \textcite[p.~72]{PISCHING2017}.
-    \label{fig:iot_camadas}
-\end{figure}
-
-\par A escala antevista para a IoT, da ordem de trilhões de dispositivos conectados à internet, impõe desafios técnicos significativos: como nomear, autenticar, manter e proteger esse universo de objetos; como suportar real-time e confiabilidade em redes heterogêneas; como armazenar e extrair conhecimento das massas de dados gerados; e como conciliar abertura (\textit{openness}) das aplicações com segurança e privacidade \cite{STANKOVIC2014_IOT_RESEARCH_DIRECTIONS}. Em particular, a interação cyber-físico introduzida pela IoT exige novas técnicas de análise: como os dispositivos atuam sobre o mundo físico, falhas podem ter consequências de segurança operacional, o que demanda inferência confiável a partir de dados ruidosos e modelos de robustez para sistemas de longa duração e operação não assistida \cite{STANKOVIC2014_IOT_RESEARCH_DIRECTIONS}.
-
-\subsection{Internet Industrial das Coisas (IIoT)}
-\label{sec:iiot}
-
-\par Quando o paradigma da IoT é trazido para o domínio industrial, sensoriamento de processos, controle de máquinas e otimização de cadeias produtivas, recebe a denominação \emph{Industrial Internet of Things} (IIoT). A IIoT é, em essência, um subconjunto da IoT especializado para aplicações industriais, no qual a interconexão de sensores, atuadores, equipamentos e sistemas de produção visa simplificar arquiteturas, ampliar a eficiência e tornar as plantas mais responsivas às demandas de operação \cite{BIGHETI2020}. Para \textcite{PISCHING2017}, a rápida proliferação da IoT no setor industrial vem transformando processos e infraestrutura, levando fabricantes de equipamentos de automação a investir em tecnologias embarcadas que suportem essa convergência entre tecnologia da informação (TI) e tecnologia da automação (TA).
-
-\par Embora compartilhem o mesmo núcleo conceitual, a interconexão de objetos via redes baseadas em IP, IoT de consumo e IIoT diferem significativamente em requisitos técnicos, modelo de serviço e criticidade. A IoT de consumo está orientada a pessoas e cenários ad-hoc, com volume médio de dados e requisitos brandos de tempo de resposta e segurança; a IIoT, por sua vez, lida com nós fixos, redes estruturadas, volumes elevados de dados e requisitos rigorosos de confiabilidade, tempo real e segurança operacional, dado que falhas podem comprometer processos produtivos críticos \cite{BIGHETI2020}. A Tabela~\ref{tab:iot_vs_iiot} sintetiza esse contraste.
-
-\begin{table}[H]
-    \centering
-    \caption{Comparação entre IoT de consumo e IoT industrial}
-    \label{tab:iot_vs_iiot}
-    \vspace{0.2cm}
-    \begin{tabularx}{0.95\textwidth}{|l|X|X|}
-        \hline
-        \textbf{Critério} & \textbf{IoT de consumo}                & \textbf{IoT industrial (IIoT)}                                  \\
-        \hline
-        Impacto           & Revolução                              & Evolução                                                        \\ \hline
-        Modelo de serviço & Voltada ao ser humano                  & Orientada às máquinas                                           \\ \hline
-        Estado atual      & Novos dispositivos e padrões emergindo & Dispositivos e padrões já consolidados                          \\ \hline
-        Conectividade     & Não estruturada, ad-hoc ou móvel       & Estruturada, com nós fixos e gerenciamento centralizado de rede \\ \hline
-        Criticidade       & Pouco rigorosa                         & Rigorosa em tempo, confiabilidade, segurança e privacidade      \\ \hline
-        Volume de dados   & Médio a alto                           & Alto a muito alto                                               \\ \hline
-    \end{tabularx}
-    \vspace{0.2cm} \\
-    Fonte: Adaptado de \textcite{BIGHETI2020}, com base em Sisinni et al. (2018).
-\end{table}
-
-\par No contexto da indústria, a IIoT viabiliza três paradigmas operacionais frequentemente associados à transformação digital da manufatura: o \textbf{produto inteligente} (\emph{smart product}), que carrega informações sobre si mesmo e sobre seu processo produtivo, permitindo rastreabilidade ao longo de todo o ciclo de vida; a \textbf{máquina inteligente} (\emph{smart machine}), capaz de se autoconfigurar, coordenar-se com outras máquinas e oferecer funcionalidades por meio de serviços de rede; e o \textbf{operador aumentado} (\emph{augmented operator}), apoiado por dispositivos vestíveis, \textit{tablets} e óculos inteligentes que ampliam a percepção e a capacidade de intervenção sobre o processo \cite{BIGHETI2020}.
-
-\par A IIoT impacta diretamente a arquitetura tradicional da automação industrial, organizada historicamente em camadas hierárquicas segundo a norma ISA-95/IEC 62264 (processo, controle, supervisão, MES e ERP). \textcite{COLOMBO2014_STATE_ART_AUTOMATION} observam que, à medida que dispositivos de campo expõem suas funcionalidades como serviços de rede (por exemplo, via OPC-UA ou DPWS), a pirâmide ISA-95 tende a se ``achatar'' em uma arquitetura logicamente plana baseada em serviços, na qual um serviço exposto por uma válvula no nível de campo pode se compor diretamente com um serviço executado em um sistema MES (Figura~\ref{fig:piramide_vs_plana}). Essa transição é um dos vetores tecnológicos centrais da indústria 4.0, discutida na Seção~\ref{sec:industria_40}.
-
-\begin{figure}[H]
-    \centering
-    \caption{Decomposição da hierarquia de automação com serviços distribuídos}
-    \centering
-    \includegraphics[width=0.85\textwidth]{Imagens/Desenvolvimento/Cap1/piramide_vs_plana-05.png}
-    \centering
-    \vspace{0.2cm} \\
-    Fonte: \textcite{MONOSTORI2016_CPS_MANUFACTURING}.
-    \label{fig:piramide_vs_plana}
-\end{figure}
-
-\subsection{Comunicação Máquina a Máquina (M2M)}
-\label{sec:m2m}
-
-\par A comunicação \textbf{Máquina a Máquina} (\emph{Machine-to-Machine}, M2M) designa a troca direta de informações entre dispositivos físicos sem intervenção humana imediata. Originada no setor de telemetria industrial e nos primeiros sistemas SCADA, em que sensores remotos transmitiam leituras para uma estação central por meio de enlaces dedicados, a M2M precede e fundamenta historicamente a Internet das Coisas (Subseção~\ref{sec:iot}): enquanto a IoT é frequentemente associada a um cenário amplo e heterogêneo, com bilhões de objetos cotidianos conectados, a M2M, em sua acepção mais antiga, refere-se especificamente à comunicação ponto a ponto entre dispositivos industriais por meios determinísticos como redes celulares dedicadas, rádio, satélite ou cabeamento ponto a ponto.
-
-\par No contexto da Indústria 4.0, a M2M é a base de comunicação que viabiliza a noção de \emph{Máquina Inteligente} (\emph{Smart Machine}) descrita por \textcite{BIGHETI2020} e \textcite{PISCHING2017}: dispositivos de campo que não apenas executam funções predefinidas, mas trocam informações com outros dispositivos, coordenam ações, ajustam parâmetros operacionais e reportam estados a sistemas de supervisão sem intervenção manual. Em uma planta industrial moderna, isso se traduz em CLPs que conversam diretamente com outros CLPs para sincronizar operações entre linhas de produção, inversores de frequência que negociam com sensores de processo para ajustar velocidade de bombas em função de medições de vazão, e medidores que reportam valores periódicos a múltiplas aplicações simultaneamente.
-
-\begin{figure}[H]
-    \centering
-    \caption{Comunicação M2M em telemetria industrial: do dispositivo de campo aos serviços em nuvem}
-    \label{fig:m2m_telemetria}
-    \vspace{0.4cm}
-    \begin{tikzpicture}[
-            font=\footnotesize\sffamily,
-            dev/.style={rectangle, draw=black!70, thick, minimum width=22mm, minimum height=12mm, align=center, inner sep=3pt, rounded corners=2pt, fill=blue!10},
-            mid/.style={rectangle, draw=black!70, thick, minimum width=22mm, minimum height=12mm, align=center, inner sep=3pt, rounded corners=2pt, fill=orange!12},
-            nuvem/.style={rectangle, draw=black!70, thick, minimum width=22mm, minimum height=12mm, align=center, inner sep=3pt, rounded corners=8pt, fill=green!12},
-            arr/.style={->, thick, black!60}
-        ]
-        \node[dev]   (sens) at (0, 0)   {Sensor /\\CLP};
-        \node[mid]   (mod)  at (3.5, 0) {Modem\\GPRS/4G};
-        \node[mid]   (gw)   at (7, 0)   {Gateway};
-        \node[nuvem] (svc)  at (10.5, 0) {Serviços\\em nuvem};
-
-        \draw[arr] (sens) -- node[above, font=\scriptsize] {Modbus} (mod);
-        \draw[arr] (mod)  -- node[above, font=\scriptsize] {TCP/IP} (gw);
-        \draw[arr] (gw)   -- node[above, font=\scriptsize] {TCP/IP} (svc);
-
-        \node[font=\scriptsize, anchor=north] at (0, -0.9)    {\textit{campo}};
-        \node[font=\scriptsize, anchor=north] at (3.5, -0.9)  {\textit{borda}};
-        \node[font=\scriptsize, anchor=north] at (7, -0.9)    {\textit{concentrador}};
-        \node[font=\scriptsize, anchor=north] at (10.5, -0.9) {\textit{nuvem}};
-    \end{tikzpicture}
-    \vspace{0.2cm} \\
-    Fonte: Elaborado pelo autor com base em \textcite{BIGHETI2020} e \textcite{PISCHING2017}.
-\end{figure}
-
-\par Tecnologicamente, a M2M industrial é sustentada por uma família de protocolos de comunicação, cada qual adequado a uma fatia de aplicações. O \textbf{Modbus} (Subseção~\ref{sec:modbus_tcp_rtu}) é o protocolo industrial mais difundido em telemetria, particularmente em sua versão sobre TCP/IP, que permite encapsular requisições entre CLPs distantes. O \textbf{MQTT} (\emph{Message Queuing Telemetry Transport}) é um protocolo publicador-assinante leve, projetado para ambientes com banda limitada e dispositivos restritos, amplamente adotado em IoT e em telemetria industrial moderna. O \textbf{OPC-UA} (\emph{Open Platform Communications Unified Architecture}), discutido por \textcite{COLOMBO2014_STATE_ART_AUTOMATION}, oferece um modelo unificado de informação para comunicação segura entre dispositivos heterogêneos, com forte adoção nas iniciativas mais recentes de Indústria 4.0. Outros protocolos, como CoAP, HTTP/REST (Subseção~\ref{sec:http_rest_json}) e gRPC, encontram nicho em integrações específicas conforme requisitos de banda, latência e segurança.
-
-\par No sistema supervisório proposto neste trabalho, a M2M materializa-se em uma cadeia bem definida (Figura~\ref{fig:m2m_telemetria}). No campo, os CLPs operam protocolo Modbus, expondo seus registradores e \emph{coils} a clientes remotos. Localmente, um modem GPRS ou 4G concentra a comunicação com o equipamento e estabelece a sessão WAN com o \emph{gateway} no provedor. O \emph{gateway} agrega múltiplas sessões e roteia requisições conforme cadastro, em um esquema discutido em detalhe na Subseção~\ref{sec:modbus_tcp_rtu}. Por fim, a aplicação em nuvem dispara as requisições de leitura segundo o agendador de aquisição, recebe as respostas e converte os valores brutos para unidade de engenharia (Subseção~\ref{sec:escala_engenharia}) antes de publicá-los aos serviços consumidores. Essa arquitetura permite que centenas de pontos remotos sejam supervisionados a partir de um único conjunto de serviços de nuvem, sem necessidade de hardware proprietário em cada cliente.
-
-\par Vale notar que a M2M também sustenta tendências de fronteira na automação contemporânea. A \textbf{computação na borda} (\emph{edge computing}) descentraliza parte do processamento para os próprios dispositivos de campo ou para concentradores próximos, reduzindo latência e tráfego para a nuvem. A \textbf{computação na névoa} (\emph{fog computing}) introduz camadas intermediárias entre borda e nuvem para tarefas com requisitos mistos de latência e capacidade. Modelos de \textbf{telemetria orientada a eventos} substituem o \textit{polling} cíclico por publicação assíncrona quando o valor amostrado muda significativamente, reduzindo consumo de banda e energia em dispositivos alimentados por bateria. Embora essas tendências estejam fora do escopo principal do presente trabalho, são extensões naturais da arquitetura M2M aqui adotada e podem ser incorporadas em iterações futuras do sistema.
-
-\subsection{Sistemas Ciber-Físicos (CPS)}
-\label{sec:cps}
-
-\par O termo \emph{Cyber-Physical Systems} (CPS), ou Sistemas Ciber-Físicos, foi proposto em 2006 por um grupo de pesquisadores ligados à \emph{National Science Foundation} (NSF) dos Estados Unidos, durante o primeiro workshop da área realizado em Austin, Texas, com o propósito de descrever o acoplamento crescente entre dispositivos de controle, computação e redes de comunicação \cite{PISCHING2017,MONOSTORI2016_CPS_MANUFACTURING}. \textcite{MONOSTORI2016_CPS_MANUFACTURING} definem CPS como sistemas de entidades computacionais colaborativas em conexão intensiva com o mundo físico circundante e com seus processos em curso, fornecendo e consumindo, ao mesmo tempo, serviços de acesso e processamento de dados disponíveis na internet. Mais relevante que a união das partes, observam os autores, é a \emph{interseção} entre o mundo físico e o cibernético: compreender as componentes separadamente não é suficiente; é a interação entre elas o que caracteriza o CPS.
-
-\par Os CPS herdam fortemente o legado dos \emph{sistemas embarcados} (sistemas computacionais integrados a sistemas mecânicos ou elétricos para executar funções específicas com restrições de tempo real), mas ampliam esse escopo ao incorporar conectividade em rede, autonomia e cooperação entre dispositivos \cite{MONOSTORI2016_CPS_MANUFACTURING}. No domínio da manufatura, são frequentemente denominados \emph{Cyber-Physical Production Systems} (CPPS) ou Sistemas Ciber-Físicos de Produção, sem que isso represente diferença conceitual significativa: trata-se de CPS contextualizados em maquinários, sistemas de estoque, sistemas de distribuição e linhas produtivas, com capacidade de operar de forma autônoma, trocar informações, disparar eventos e controlar uns aos outros independentemente \cite{PISCHING2017}.
-
-\par A Figura~\ref{fig:cps_estrutura} ilustra a estrutura básica de um CPS, organizada em torno do acoplamento entre sistemas físicos e a camada computacional. Sensores e atuadores constituem a interface bidirecional com o processo físico; o \textit{hardware} eletrônico e os sistemas embarcados executam algoritmos de aquisição, controle e diagnóstico em tempo real; e a camada de \textit{software}, conectada a outros sistemas e à internet, viabiliza serviços de mais alto nível, como otimização, manutenção preditiva e cooperação multi-agente.
-
-\begin{figure}[H]
-    \centering
-    \caption{Estrutura e componentes básicos de um CPS}
-    \centering
-    \includegraphics[width=0.55\textwidth]{Imagens/Desenvolvimento/Cap1/cps_estrutura-045.png}
-    \centering
-    \vspace{0.2cm} \\
-    Fonte: \textcite[p.~44]{PISCHING2017}.
-    \label{fig:cps_estrutura}
-\end{figure}
-
-\par \textcite{MONOSTORI2016_CPS_MANUFACTURING} destacam três características essenciais dos CPS aplicados à manufatura. A primeira é a \textbf{inteligência} (\emph{smartness}): os elementos do sistema são capazes de adquirir informações de seu entorno e agir autonomamente, sem depender de comando externo contínuo. A segunda é a \textbf{conectividade} (\emph{connectedness}): cada elemento estabelece e utiliza conexões com os demais elementos do sistema, com seres humanos e com serviços e conhecimento disponíveis na internet, viabilizando cooperação e colaboração. A terceira é a \textbf{responsividade} (\emph{responsiveness}): o sistema reage, em tempo apropriado, a mudanças internas e externas, ajustando seu comportamento sem necessidade de reconfiguração manual. Esse conjunto de capacidades também sustenta expectativas mais amplas: auto-organização, automanutenção, autorreparo, transparência, previsibilidade e diagnóstico remoto.
-
-\par No plano arquitetural, os CPS rompem parcialmente com a tradicional pirâmide de automação descrita na Subseção~\ref{sec:iiot}. Os níveis de controle e campo, com CLPs próximos aos processos técnicos e restrições de tempo real, permanecem em grande medida; contudo, nos níveis superiores, observa-se um modo de funcionamento mais descentralizado, no qual decisões antes concentradas em estações de supervisão passam a ser distribuídas entre dispositivos colaborativos \cite{MONOSTORI2016_CPS_MANUFACTURING}. Como observa \textcite{PISCHING2017}, os CPS conectados via internet podem ser compreendidos como elementos da IoT, isto é, os CPS oferecem a base física e computacional sobre a qual a IoT, conjugada à Internet dos Serviços e dos Dados, viabiliza o conceito de Indústria 4.0.
-
-\subsection{Indústria 4.0}
-\label{sec:industria_40}
-
-\par O termo \emph{Industrie 4.0} foi apresentado pela primeira vez em 2011, na Feira de Hannover, e oficializado em abril de 2013, no âmbito da estratégia de alta tecnologia do governo alemão, como parte de um plano de ação para elevar o nível de automatização e digitalização dos sistemas produtivos do país \cite{PISCHING2017,BIGHETI2020}. A nomenclatura, em referência ao versionamento de \textit{software}, posiciona-se como o anúncio \emph{ex-ante} de uma quarta revolução industrial, somando-se às transformações anteriores: a primeira, no final do século XVIII, baseada na mecanização movida a vapor e água; a segunda, no início do século XX, marcada pela eletricidade e pela produção em massa; e a terceira, na segunda metade do século XX, caracterizada pela eletrônica e pelas tecnologias da informação aplicadas à automação \cite{LASI_INDUSTRY_40,PISCHING2017}. No Brasil, o conceito tornou-se conhecido também como Manufatura Avançada, com discussões intensificadas a partir de 2013; nos Estados Unidos, recebe a denominação \emph{Smart Industry} \cite{BIGHETI2020}.
-
-\par \textcite{LASI_INDUSTRY_40} caracterizam a Indústria 4.0 como o resultado de duas forças simultâneas. De um lado, há um forte \emph{application-pull} associado a mudanças sociais, econômicas e políticas: períodos de desenvolvimento mais curtos (\textit{time to market}), individualização da demanda, chegando ao limite teórico do lote unitário, maior flexibilidade na produção, descentralização das decisões e maior eficiência no uso de recursos. De outro lado, há um intenso \emph{technology-push} fundado em três tendências tecnológicas convergentes: a contínua mecanização e automação dos processos, a digitalização e o aumento da conectividade entre componentes técnicos, e a miniaturização do \textit{hardware}, que permite incorporar capacidade computacional onde antes isso seria inviável.
-
-\par \textcite{BIGHETI2020} sintetiza esse contexto definindo a Indústria 4.0 como um conjunto de tecnologias aplicadas ao contexto industrial e coordenadas para conferir competitividade, otimizar a cadeia produtiva, agregar valor ao produto, racionalizar o uso de recursos e customizar soluções. Entre as tecnologias habilitadoras citadas pelo autor destacam-se: o IPv6, que amplia o espaço de endereçamento a todos os equipamentos; as redes sem fio para flexibilização da aquisição de dados; os sistemas ciber-físicos (CPS) e os sistemas de controle em rede; o uso de identificadores RFID para rastreamento; a virtualização de sistemas e serviços; a IIoT e a computação em nuvem; e o uso massivo de dados (\textit{big data}) para apoio à decisão. O conceito-síntese, em diversas formulações, é o de \emph{fábrica inteligente} (\emph{smart factory}): uma planta na qual produtos e máquinas comunicam-se por meio de CPS e IoT ao longo do ciclo produtivo, em um ambiente apoiado por infraestrutura de nuvem que combina Internet dos Serviços e Internet dos Dados \cite{PISCHING2017,LASI_INDUSTRY_40}.
-
-\par A Figura~\ref{fig:venn_iot_iiot_cps_i40} sintetiza graficamente as relações entre os quatro conceitos discutidos até aqui. A IoT figura como o universo mais amplo, abrangendo objetos conectados em contextos de consumo e industriais; a IIoT corresponde à interseção da IoT com o domínio industrial; os CPS situam-se como categoria parcialmente distinta, caracterizada pelo forte acoplamento computação-físico em tempo real; e a Indústria 4.0 emerge na interseção entre IIoT e CPS, materializando o conceito de fábrica inteligente sob infraestrutura de nuvem.
-
-\begin{figure}[H]
-    \centering
-    \caption{Interseções de IoT, CPS, IIoT e Indústria 4.0}
-    \centering
-    \includegraphics[width=0.6\textwidth]{Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps_i40-034.png}
-    \centering
-    \vspace{0.2cm} \\
-    Fonte: \textcite[p.~27]{BIGHETI2020}.
-    \label{fig:venn_iot_iiot_cps_i40}
-\end{figure}
-
-\par No nível de princípios de projeto, a Indústria 4.0 é frequentemente descrita por seis pilares, segundo \textcite{PISCHING2017}: \textbf{interoperabilidade}, capacidade de máquinas, dispositivos, sensores e pessoas se comunicarem por meio da IoT; \textbf{virtualização}, criação de cópias digitais do mundo físico que permitem simulação e supervisão; \textbf{descentralização}, distribuição da capacidade de decisão pelos diversos pontos do sistema; \textbf{operação em tempo real}, com coleta e análise contínuas de dados; \textbf{orientação a serviços}, em que funcionalidades são expostas e compostas via redes; e \textbf{modularidade}, permitindo adaptação flexível a mudanças de demanda e a novos cenários. Esses princípios materializam-se nos três aspectos centrais identificados por Bangemann et al. (2016): uma nova forma de organizar e controlar a cadeia de valor ao longo de todo o ciclo de vida dos produtos; a disponibilidade de informações relevantes em tempo real, em todas as instâncias envolvidas; e a constituição de redes de valor entre empresas, dinâmicas e auto-organizáveis, suportadas pela interconexão de pessoas, ``coisas'' e sistemas \cite{PISCHING2017}.
-
-\par Para organizar e padronizar a transição em torno desses princípios, foi apresentado em 2015, também na Feira de Hannover, o \emph{Reference Architectural Model for Industry 4.0} (RAMI 4.0). Trata-se de um modelo tridimensional que compatibiliza, em um único arcabouço, normas vigentes do setor produtivo, como a ISO/IEC 62264 (integração entre sistemas corporativos e de controle), a IEC 62541 (OPC-UA), a IEC 61512 (controle em batelada) e a IEC 62890 (ciclo de vida), com a perspectiva de integração vertical (entre níveis hierárquicos), horizontal (entre empresas em uma cadeia de valor) e fim a fim (entre fases de engenharia) \cite{PISCHING2017,BIGHETI2020}. A Figura~\ref{fig:rami40} ilustra a estrutura tridimensional do modelo.
-
-\begin{figure}[H]
-    \centering
-    \caption{Modelo de Arquitetura de Referência para a Indústria 4.0 (RAMI 4.0)}
-    \centering
-    \includegraphics[width=0.7\textwidth]{Imagens/Desenvolvimento/Cap1/rami40-077.png}
-    \centering
-    \vspace{0.2cm} \\
-    Fonte: \textcite[p.~76]{PISCHING2017}.
-    \label{fig:rami40}
-\end{figure}
-
-\par Por fim, a Indústria 4.0 amplia o escopo dos sistemas SCADA tradicionais discutidos na Subseção anterior. Se historicamente o SCADA atuava como um sistema fechado de supervisão e aquisição de dados, ligado a CLPs por barramentos proprietários e a uma sala de controle local, a perspectiva da Indústria 4.0 o reposiciona como um nó de uma rede de serviços muito mais ampla, que integra produção, manutenção, logística, vendas e clientes em uma cadeia de valor digital \cite{BIGHETI2020,COLOMBO2014_STATE_ART_AUTOMATION}. Esse reposicionamento é o pano de fundo conceitual para a proposta de sistema supervisório baseado em nuvem e orientado a serviços apresentada no restante deste trabalho.
 
 \subsection{Computação em Nuvem}
 \label{sec:computacao_nuvem}
@@ -589,19 +571,6 @@
 
 \par No sistema supervisório, o Next.js é a base do \textit{frontend} de supervisão, composto por telas de visualização de pontos em tempo real, dashboards de tendências históricas, tela de cadastro de equipamentos e \emph{tags}, painéis de alarmes e formulários administrativos. As telas mais sensíveis a desempenho (visualização ao vivo) usam renderização no cliente com atualização incremental por WebSocket; as telas de cadastro e relatórios usam SSR, beneficiando-se do pré-processamento e da autenticação no servidor; e a documentação e as páginas públicas usam SSG.
 
-\subsection{Fastify}
-\label{sec:fastify}
-
-\par O Fastify é um \textit{framework} web para Node.js, projetado com foco em desempenho, baixa sobrecarga e ergonomia para construir APIs HTTP. Posiciona-se como uma alternativa moderna ao Express.js (durante muitos anos o \textit{de facto} para Node.js), com benchmarks consistentes de duas a três vezes mais requisições por segundo no mesmo \textit{hardware}, graças a um sistema de roteamento otimizado, serialização de respostas baseada em JSON Schema e um ciclo de processamento de requisições estritamente desacoplado.
-
-\par A unidade fundamental de organização do código no Fastify é o \textbf{plugin}. Cada plugin encapsula um conjunto de rotas, validações, decoradores e hooks que podem ser carregados isoladamente, com escopo próprio. Essa arquitetura favorece o desenvolvimento modular: um plugin de autenticação, outro de \emph{logging}, outro de conexão com o banco de dados e outro com as rotas de domínio podem ser compostos em uma única aplicação sem acoplamento direto, e podem ser testados em isolamento. A inicialização da aplicação é declarativa, com a ordem de carregamento explicitada por meio de chamadas \texttt{fastify.register(...)}.
-
-\par O Fastify também adota o \textbf{JSON Schema} como mecanismo padrão para validação de entrada e definição de contratos. A cada rota é possível associar um esquema que descreve o formato esperado de \emph{params}, \emph{query string}, \emph{body} e resposta. Esse esquema é compilado em tempo de inicialização para funções altamente otimizadas, oferecendo ganho duplo: validação rápida das requisições e serialização rápida das respostas, evitando a sobrecarga do \texttt{JSON.stringify} genérico do Node.js. Adicionalmente, o esquema serve como fonte única para geração automática de documentação OpenAPI (Swagger), reduzindo a divergência típica entre código e documentação.
-
-\par Outros recursos relevantes do Fastify para o cenário deste trabalho incluem: \emph{logging} estruturado por padrão (com Pino, biblioteca de \emph{logging} de altíssimo desempenho); suporte nativo a \emph{lifecycle hooks} (\texttt{onRequest}, \texttt{preHandler}, \texttt{onSend}, \texttt{onResponse}) que permitem interceptar a requisição em pontos bem definidos do ciclo; suporte a TypeScript com inferência de tipos a partir do esquema JSON; e integração natural com filas (Bull, BullMQ) e cache (Redis) por meio de plugins maduros do ecossistema.
-
-\par No sistema supervisório, o Fastify é a fundação dos serviços HTTP do \textit{backend}: cada microsserviço (aquisição, configuração, alarmes, históricos, autenticação) expõe sua API REST por meio de uma instância de Fastify, com rotas, esquemas e \emph{hooks} próprios. A comunicação entre os microsserviços, quando síncrona, ocorre via Fastify; quando assíncrona, ocorre via barramento de mensagens do Moleculer (Subseção~\ref{sec:moleculer}).
-
 \subsection{Amazon Web Services (AWS)}
 \label{sec:aws}
 
@@ -801,7 +770,6 @@
 \par A arquitetura \emph{multi-tenant} é o mecanismo técnico que viabiliza o modelo SaaS economicamente. Em uma instalação tradicional, cada cliente teria uma cópia separada do \textit{software} executando em sua infraestrutura. No SaaS, uma única instância da aplicação atende a vários clientes simultaneamente, com isolamento lógico dos dados por meio de identificadores de \emph{tenant} em todas as consultas ao banco, criptografia separada por cliente e políticas de controle de acesso que impedem qualquer vazamento entre inquilinos. Esse desenho exige cuidado redobrado com segurança, mas oferece vantagens operacionais expressivas: atualizações são aplicadas uma única vez para todos os clientes, métricas e \emph{logs} são unificados, e a infraestrutura é dimensionada de forma agregada.
 
 \par O sistema supervisório proposto neste trabalho é, por desenho, uma solução SaaS para o setor de saneamento e processos industriais correlatos. Cada cliente contratante (uma concessionária de água, por exemplo) é um \emph{tenant} dentro da mesma infraestrutura, com seus equipamentos, \emph{tags}, históricos, usuários e configurações isolados logicamente dos demais. A operação cotidiana, a manutenção evolutiva, as atualizações de funcionalidades, as correções de segurança e o monitoramento da infraestrutura são responsabilidades centralizadas do fornecedor, e o cliente acessa o sistema exclusivamente por meio do navegador web e de credenciais individuais. Esse posicionamento alinha-se diretamente com a tendência mais ampla descrita por \textcite{BIGHETI2020} de migração da automação industrial para modelos orientados a serviços, e materializa, na prática, a visão de fábrica inteligente conectada à nuvem associada à Indústria 4.0 \cite{PISCHING2017}.
-
 
 \subsection{Protocolo Modbus TCP e Modbus RTU}
 \label{sec:modbus_tcp_rtu}

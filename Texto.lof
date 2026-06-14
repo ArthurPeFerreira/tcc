@@ -1,29 +1,34 @@
 \babel@toc {brazil}{}\relax 
-\contentsline {figure}{\numberline {1}{\ignorespaces Linha do Tempo das Revoluções Industriais}}{11}{figure.caption.5}%
-\contentsline {figure}{\numberline {2}{\ignorespaces Pirâmide de Automação}}{12}{figure.caption.6}%
-\contentsline {figure}{\numberline {3}{\ignorespaces Arquitetura típica de um sistema SCADA}}{13}{figure.caption.7}%
-\contentsline {figure}{\numberline {4}{\ignorespaces Convergência entre Tecnologia da Automação (TA) e Tecnologia da Informação (TI) na automação industrial moderna}}{16}{figure.caption.8}%
-\contentsline {figure}{\numberline {5}{\ignorespaces Linearização de um sensor analógico: mapeamento da unidade bruta para a unidade de engenharia, com $x_\text {min} = 4000$, $x_\text {max} = 20000$, $y_\text {min} = 0$\,bar e $y_\text {max} = 10$\,bar}}{21}{figure.caption.9}%
-\contentsline {figure}{\numberline {6}{\ignorespaces Arquitetura em quatro camadas da IoT}}{23}{figure.caption.10}%
-\contentsline {figure}{\numberline {7}{\ignorespaces Decomposição da hierarquia de automação com serviços distribuídos}}{25}{figure.caption.12}%
-\contentsline {figure}{\numberline {8}{\ignorespaces Comunicação M2M em telemetria industrial: do dispositivo de campo aos serviços em nuvem}}{25}{figure.caption.13}%
-\contentsline {figure}{\numberline {9}{\ignorespaces Estrutura e componentes básicos de um CPS}}{27}{figure.caption.14}%
-\contentsline {figure}{\numberline {10}{\ignorespaces Interseções de IoT, CPS, IIoT e Indústria 4.0}}{29}{figure.caption.15}%
-\contentsline {figure}{\numberline {11}{\ignorespaces Modelo de Arquitetura de Referência para a Indústria 4.0 (RAMI 4.0)}}{30}{figure.caption.16}%
-\contentsline {figure}{\numberline {12}{\ignorespaces Modelos de serviço em computação em nuvem (pirâmide IaaS, PaaS, SaaS)}}{31}{figure.caption.17}%
-\contentsline {figure}{\numberline {13}{\ignorespaces Trecho simplificado do esquema relacional do sistema supervisório}}{33}{figure.caption.18}%
-\contentsline {figure}{\numberline {14}{\ignorespaces Papéis do Redis no sistema supervisório: cache de leituras quentes e barramento de eventos}}{34}{figure.caption.19}%
-\contentsline {figure}{\numberline {15}{\ignorespaces Arquitetura comparada: máquinas virtuais (esquerda) e contêineres Docker (direita)}}{35}{figure.caption.20}%
-\contentsline {figure}{\numberline {16}{\ignorespaces Estratégias de renderização do Next.js: CSR, SSR e SSG}}{36}{figure.caption.21}%
-\contentsline {figure}{\numberline {17}{\ignorespaces Serviços AWS empregados no sistema supervisório (RDS, ECS, Lambda)}}{38}{figure.caption.22}%
-\contentsline {figure}{\numberline {18}{\ignorespaces Ciclo requisição-resposta HTTP em uma API REST}}{40}{figure.caption.23}%
-\contentsline {figure}{\numberline {19}{\ignorespaces Aplicação monolítica (esquerda) versus arquitetura de microsserviços (direita)}}{41}{figure.caption.24}%
-\contentsline {figure}{\numberline {20}{\ignorespaces Arquitetura de microsserviços baseada em barramento de eventos (broker Moleculer)}}{42}{figure.caption.25}%
-\contentsline {figure}{\numberline {21}{\ignorespaces Composição lógica do Modbus TCP: cabeçalho MBAP seguido da PDU (código de função, dados ou exceção)}}{45}{figure.caption.26}%
-\contentsline {figure}{\numberline {22}{\ignorespaces Estrutura simplificada do quadro Modbus RTU (delimitação temporal entre quadros)}}{45}{figure.caption.27}%
-\contentsline {figure}{\numberline {23}{\ignorespaces Arquitetura do Sistema}}{47}{figure.caption.28}%
-\contentsline {figure}{\numberline {24}{\ignorespaces Gateway ABS}}{52}{figure.caption.29}%
-\contentsline {figure}{\numberline {25}{\ignorespaces Modem GPRS ABS Cel X}}{53}{figure.caption.30}%
+\contentsline {figure}{\numberline {1}{\ignorespaces Linha do Tempo das Revoluções Industriais}}{12}{figure.caption.6}%
+\contentsline {figure}{\numberline {2}{\ignorespaces Pirâmide de Automação}}{13}{figure.caption.7}%
+\contentsline {figure}{\numberline {3}{\ignorespaces Convergência entre Tecnologia da Automação (TA) e Tecnologia da Informação (TI) na automação industrial moderna}}{19}{figure.caption.8}%
+\contentsline {figure}{\numberline {4}{\ignorespaces Arquitetura em quatro camadas da IoT}}{21}{figure.caption.9}%
+\contentsline {figure}{\numberline {5}{\ignorespaces Comunicação M2M em telemetria industrial: do dispositivo de campo aos serviços em nuvem}}{23}{figure.caption.11}%
+\contentsline {figure}{\numberline {6}{\ignorespaces Estrutura e componentes básicos de um CPS}}{25}{figure.caption.12}%
+\contentsline {figure}{\numberline {7}{\ignorespaces Interseções de IoT, CPS, IIoT e Indústria 4.0}}{27}{figure.caption.13}%
+\contentsline {figure}{\numberline {8}{\ignorespaces Linearização de um sensor analógico: mapeamento da unidade bruta para a unidade de engenharia, com $x_\text {min} = 4000$, $x_\text {max} = 20000$, $y_\text {min} = 0$\,bar e $y_\text {max} = 10$\,bar}}{30}{figure.caption.14}%
+\contentsline {figure}{\numberline {9}{\ignorespaces Modelos de serviço em computação em nuvem (pirâmide IaaS, PaaS, SaaS)}}{31}{figure.caption.15}%
+\contentsline {figure}{\numberline {10}{\ignorespaces Trecho simplificado do esquema relacional do sistema supervisório}}{33}{figure.caption.16}%
+\contentsline {figure}{\numberline {11}{\ignorespaces Papéis do Redis no sistema supervisório: cache de leituras quentes e barramento de eventos}}{34}{figure.caption.17}%
+\contentsline {figure}{\numberline {12}{\ignorespaces Arquitetura comparada: máquinas virtuais (esquerda) e contêineres Docker (direita)}}{36}{figure.caption.18}%
+\contentsline {figure}{\numberline {13}{\ignorespaces Estratégias de renderização do Next.js: CSR, SSR e SSG}}{37}{figure.caption.19}%
+\contentsline {figure}{\numberline {14}{\ignorespaces Serviços AWS empregados no sistema supervisório (RDS, ECS, Lambda)}}{38}{figure.caption.20}%
+\contentsline {figure}{\numberline {15}{\ignorespaces Ciclo requisição-resposta HTTP em uma API REST}}{39}{figure.caption.21}%
+\contentsline {figure}{\numberline {16}{\ignorespaces Aplicação monolítica (esquerda) versus arquitetura de microsserviços (direita)}}{41}{figure.caption.22}%
+\contentsline {figure}{\numberline {17}{\ignorespaces Arquitetura de microsserviços baseada em barramento de eventos (broker Moleculer)}}{42}{figure.caption.23}%
+\contentsline {figure}{\numberline {18}{\ignorespaces Composição lógica do Modbus TCP: cabeçalho MBAP seguido da PDU (código de função, dados ou exceção)}}{44}{figure.caption.24}%
+\contentsline {figure}{\numberline {19}{\ignorespaces Estrutura simplificada do quadro Modbus RTU (delimitação temporal entre quadros)}}{45}{figure.caption.25}%
+\contentsline {figure}{\numberline {20}{\ignorespaces Arquitetura do Sistema}}{47}{figure.caption.26}%
+\contentsline {figure}{\numberline {21}{\ignorespaces Gateway ABS}}{52}{figure.caption.27}%
+\contentsline {figure}{\numberline {22}{\ignorespaces Modem GPRS ABS Cel X}}{53}{figure.caption.28}%
+\babel@toc {brazil}{}\relax 
+\babel@toc {brazil}{}\relax 
+\babel@toc {brazil}{}\relax 
+\babel@toc {brazil}{}\relax 
+\babel@toc {brazil}{}\relax 
+\babel@toc {brazil}{}\relax 
+\babel@toc {brazil}{}\relax 
+\babel@toc {brazil}{}\relax 
 \babel@toc {brazil}{}\relax 
 \babel@toc {brazil}{}\relax 
 \babel@toc {brazil}{}\relax 

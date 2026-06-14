@@ -6,9 +6,6 @@
 \usepackage[brazil]{babel} % Configura o idioma do documento para português do Brasil
 \usepackage[T1]{fontenc} % Codificação T1: hifenização correta de acentos e menos avisos de overfull
 \usepackage{amsmath} % Pacote para fórmulas matemáticas avançadas
-\usepackage{multicol} % Permite criar múltiplas colunas de texto
-\usepackage{color} % Permite o uso de cores no texto
-\usepackage{comment} % Permite comentar partes do texto
 \usepackage{amssymb} % Pacote adicional para símbolos matemáticos
 \usepackage{graphicx} % Permite a inclusão de imagens
 \graphicspath{{./Images/}} % Define o diretório para imagens
@@ -18,13 +15,10 @@
 \usepackage{multirow} % Permite mesclar células ao longo de múltiplas linhas em tabelas
 \usepackage{indentfirst} % Indenta o primeiro parágrafo de cada seção
 \usepackage{textcomp} % Inclui o símbolo de "por mil" e outros símbolos
-\usepackage{gensymb} % Adiciona símbolos
 \usepackage{subfig} % Permite a criação de subfiguras (figuras compostas)
-\usepackage{enumerate} % Cria listas numeradas com estilos personalizados
 \usepackage[normalem]{ulem} % Adiciona estilos como sublinhado e riscado, preservando o comportamento padrão de \emph
 \usepackage{caption} % Personaliza legendas de figuras e tabelas
 \usepackage{csquotes} % Permite citações tipográficas adequadas
-\usepackage[useregional]{datetime2} % Formatação de datas de acordo com a configuração regional
 \usepackage{ragged2e} % Permite controle de alinhamento do texto, como 'RaggedRight'
 \usepackage{circuitikz} % Pacote para desenhar circuitos elétricos
 \usepackage{listings} % Pacote para inclusão de códigos-fonte
@@ -47,7 +41,7 @@
 Serviços para a Indústria 4.0} % Associa valor à variável \Titulo
 \newcommand{\Subtitulo}{} % Associa valor à variável \Subtitulo
 \newcommand{\Cidade}{Blumenau} % Associa valor à variável \Cidade
-\newcommand{\Data}{2025} % Define o comando \Data que insere o ano atual
+\newcommand{\Data}{\the\year} % Define o comando \Data que insere o ano atual
 
 % ==================================================
 % Início do Documento
@@ -61,6 +55,7 @@ Serviços para a Indústria 4.0} % Associa valor à variável \Titulo
 % \include{Capitulos/04_Agradecimentos} % Agradecimentos
 \include{Capitulos/05_Epigrafe} % Epígrafe
 \include{Capitulos/06_Resumo} % Resumo
+\include{Capitulos/06_Abstract} % Abstract (resumo em inglês)
 \include{Capitulos/07_Lista_Imagens} % Lista de Imagens
 \include{Capitulos/08_Lista Siglas} % Lista de Siglas
 \include{Capitulos/09_Lista de Simbolos} % Lista de Símbolos

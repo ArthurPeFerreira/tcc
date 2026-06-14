@@ -108,6 +108,31 @@ TCC/
 - `Equação~\ref{eq:nome}` ou `Equações~\ref{eq:a} e~\ref{eq:b}`
 - `Subseção~\ref{sec:nome}`
 
+### 4.7 Padrões de redação consolidados (observados no texto atual)
+
+Estes padrões emergiram naturalmente do texto já escrito e devem ser mantidos em qualquer novo conteúdo.
+
+**Abertura de capítulo principal.** Todo capítulo abre com um parágrafo de orientação que retoma a estrutura do trabalho e antecipa as subseções. Exemplo do Cap. 2: "Conforme a estrutura apresentada na introdução, este capítulo aborda os conceitos e as tecnologias que sustentam o trabalho...".
+
+**Subseção de conceito/tecnologia (padrão do Cap. 2).** Cada subseção 2.X segue a sequência:
+
+1. **Origem histórica** com citação ao autor que cunhou ou consolidou o termo (ex.: "O termo *Cloud Computing* surgiu em 2006...").
+2. **Definição formal** baseada em fonte.
+3. **Características técnicas e classificações** (variantes, camadas, modelos).
+4. **Parágrafo de fechamento obrigatório** no formato "No sistema supervisório proposto neste trabalho, [tecnologia] [papel/escolha]..." — ancora o conceito ao projeto.
+
+**Introdução de termo técnico.** A primeira ocorrência de um termo central usa `\textbf{...}`. Exemplo: "A **automação industrial** é o conjunto de tecnologias...". Após a primeira menção, o termo entra em uso normal sem destaque.
+
+**Sigla estrangeira em primeira ocorrência.** Padrão "Tradução em português (*Termo Original em itálico*, SIGLA)". Exemplos: "Internet das Coisas (*Internet of Things*, IoT)", "Computação na borda (*edge computing*)", "Serviços Web (*Web Services* - WS)".
+
+**Estrangeirismos.** Termos em inglês em uso corrente vão em `\emph{}` ou `\textit{}`: *time stamp*, *gateway*, *worker*, *broker*, *polling*, *bounded contexts*, *self-service sob demanda*, *circuit breaker*.
+
+**Citação de consenso.** Para conceitos centrais, usar pares ou trios de autores entre parênteses reforçando a mesma ideia: "(Bigheti, 2020; Pisching, 2017)", "(Pisching, 2017; Bigheti, 2020)". Sinaliza convergência da literatura.
+
+**Menção a figura.** Forma narrativa "A Figura~\ref{fig:nome} ilustra/resume/sintetiza..." ou parentética inline "...(Figura~\ref{fig:nome})". Nunca "Fig.", sempre "Figura".
+
+**Transição entre subseções.** Fechar a subseção apontando para outra: "discutido na Subseção~\ref{sec:nome}", "como será visto na Subseção~\ref{sec:nome}". Mantém o fio condutor do texto.
+
 ---
 
 ## 5. Padrões de figuras
@@ -324,7 +349,17 @@ Convenção do projeto: usar `\,unidade` inline (`4\,mA`, `0\,bar`) como padrão
 6. **Indústria 4.0** — Lasi 2014, Pisching, Bigheti, Colombo 2014
 
 ### Capítulo 14_2 (Funcionamento)
-- Arquitetura do sistema, aquisição via Modbus, Modbus TCP, Modbus RTU
+
+1. **Arquitetura do sistema** — diagrama em camadas (frontend, backend, banco, cache, APScheduler, Molecular, workers, gateway).
+2. **Validações dos Requisitos do SCADA** — uma subseção por requisito clássico (Aquisição e Registro, Sincronismo, Níveis, Comando, Escalabilidade, Redundância), espelhando a estrutura do Cap. 14_1.
+3. **Servidores** — descrição componente por componente (Frontend, Backend, Banco, Cache, APScheduler, Molecular, Workers).
+4. **Aquisição de Dados** — Modbus, Modbus TCP, Modbus RTU, gateway, modem.
+
+**Padrão das subseções de validação (3.1.X).** Cada subseção segue o gabarito:
+
+> "No quesito X discutido na Subseção~\ref{sec:scada_X}, o sistema atende a todos os requisitos descritos por \textcite{ZANGHI2019}. [Mapeamento componente → função SCADA]"
+
+O parágrafo amarra cada requisito do Zanghi a um componente concreto da arquitetura, fechando a ponte entre teoria (Cap. 14_1) e implementação (Cap. 14_2).
 
 ---
 

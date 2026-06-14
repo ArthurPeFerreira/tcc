@@ -1,26 +1,8 @@
 Comentários gerais:
-- adaptar referências para padrão ABNT
 - quanto sugestões fazem referência a frases muito longas, a ideia é separar em mais sentenças
 
-*** SUGESTÕES ***
-Seção 1.1 Contextualização:
->>> Segundo parágrafo: 
-- "distribuir" referências
-- frase "Foi nessa fase que... ...para o aumento da produtividade", muito longa
-
-- parágrafo/frase "Atualmente, vive-se... ...inclusive a Internet", muito longo
-- página 10, último parágrafo: citar referência [2] no final da primeira frase, retira do final do parágrafo
-- página 10, última linha: "processo físico. No nível 1"
-- página 11, substituir palavra "peso" por algo como "notoriedade" ou "atenção"
-- página 11, última linha/frase: transformar em um parágrafo, escrevendo um pouco mais sobre a proposta do trabalho
-
-
-*** *** *** *** *** 21/05/2026 *** *** *** *** ***
->>> Justificativa
-- senti falta de um "por que", da forma como está escrita é uma contextualização. Seria interessante um complemento descrevendo o "problema" observado, que justifica a tua proposta de trabalho (por que o teu trabalho é interessante? por que você quer desenvolver um sistema supervisório..?)
 
 >>> Conceitos e Tecnologias Utilizadas
-- Retirar, na primeira linha, "Conforme a estrutura apresentada na introdução". Começar diretamente com "Este capítulo..."
 - retirar "da quarta revolução discutida na Subseção 2.8"
 - primeiro parágrafo: referência?
 - segundo parágrafo, última frase: afinal, qual a referência? (três citadas)
@@ -39,8 +21,3 @@ Seção 1.1 Contextualização:
 - os termos utilizados em inglês, são utilizados persistentemente em todo documento? por exemplo: coils de CLP, openess, polling, application-pull, technology-push, smart factory ...
 - Nesse sentido, parte dos textos podem ser simplificados, apresentando conceitos importantes e relevantes para o trabalho, sem se tornar cansativo demais (foco); e ressaltando aquilo que você domina
 
->>> LaTeX
-- sugiro editar tabelas com pacote booktabs
-
-to be continue...
-2.14
