@@ -290,6 +290,56 @@
       \field{year}{2010}
       \field{dateera}{ce}
     \endentry
+    \entry{KHALID2024_IOT_SCADA_PHOTOVOLTAIC}{article}{}
+      \name{author}{4}{}{%
+        {{un=0,uniquepart=base,hash=00baa45cd5a092e3c34beea86a8e975f}{%
+           family={Khalid},
+           familyi={K\bibinitperiod},
+           given={Wajahat},
+           giveni={W\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=4f6b665f2e53b2d089654408a1dd3cbd}{%
+           family={Jamil},
+           familyi={J\bibinitperiod},
+           given={Mohsin},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=20dc189ba556c07e9cbb311bb0df526a}{%
+           family={Khan},
+           familyi={K\bibinitperiod},
+           given={Ashraf\bibnamedelima Ali},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=fd173d406f57bea63ae6d1cfd0b6bda0}{%
+           family={Awais},
+           familyi={A\bibinitperiod},
+           given={Qasim},
+           giveni={Q\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{c1aa042beda42db18ef0dcabbd218bf6}
+      \strng{fullhash}{600bc10a5f0fc9aacc3ca2a63893c6b0}
+      \strng{bibnamehash}{c1aa042beda42db18ef0dcabbd218bf6}
+      \strng{authorbibnamehash}{c1aa042beda42db18ef0dcabbd218bf6}
+      \strng{authornamehash}{c1aa042beda42db18ef0dcabbd218bf6}
+      \strng{authorfullhash}{600bc10a5f0fc9aacc3ca2a63893c6b0}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Energies}
+      \field{number}{16}
+      \field{title}{Open-Source Internet of Things-Based Supervisory Control and Data Acquisition System for Photovoltaic Monitoring and Control Using {HTTP} and {TCP/IP} Protocols}
+      \field{volume}{17}
+      \field{year}{2024}
+      \field{pages}{4083}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/en17164083
+      \endverb
+    \endentry
     \entry{LASI_INDUSTRY_40}{article}{}
       \name{author}{5}{}{%
         {{un=0,uniquepart=base,hash=bbbfc2e139b4fbf801d5d4ea03048311}{%
@@ -344,46 +394,6 @@
       \range{pages}{4}
       \verb{doi}
       \verb 10.1007/s12599-014-0334-4
-      \endverb
-    \endentry
-    \entry{LIMA2026_EPM_PROCESSOR}{online}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=aaa4ea4ea8e90d46eb408c2115c3d704}{%
-           family={Lima},
-           familyi={L\bibinitperiod},
-           given={Samir},
-           giveni={S\bibinitperiod},
-           givenun=0}}%
-      }
-      \list{organization}{1}{%
-        {Elipse Software}%
-      }
-      \strng{namehash}{aaa4ea4ea8e90d46eb408c2115c3d704}
-      \strng{fullhash}{aaa4ea4ea8e90d46eb408c2115c3d704}
-      \strng{bibnamehash}{aaa4ea4ea8e90d46eb408c2115c3d704}
-      \strng{authorbibnamehash}{aaa4ea4ea8e90d46eb408c2115c3d704}
-      \strng{authornamehash}{aaa4ea4ea8e90d46eb408c2115c3d704}
-      \strng{authorfullhash}{aaa4ea4ea8e90d46eb408c2115c3d704}
-      \field{sortinit}{L}
-      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{day}{9}
-      \field{month}{2}
-      \field{title}{A Ponte entre a Intuição Humana e a Autonomia Industrial: O Papel Estratégico do {EPM Processor} na Transformação Digital}
-      \field{urlday}{20}
-      \field{urlmonth}{5}
-      \field{urlyear}{2026}
-      \field{year}{2026}
-      \field{dateera}{ce}
-      \field{urldateera}{ce}
-      \verb{urlraw}
-      \verb https://kb.elipse.com.br/a-ponte-entre-a-intuicao-humana-e-a-autonomia-industrial-o-papel-estrategico-do-epm-processor-na-transformacao-digital/
-      \endverb
-      \verb{url}
-      \verb https://kb.elipse.com.br/a-ponte-entre-a-intuicao-humana-e-a-autonomia-industrial-o-papel-estrategico-do-epm-processor-na-transformacao-digital/
       \endverb
     \endentry
     \entry{MODBUS_TCP_IMPLEMENTATION_GUIDE}{manual}{}
@@ -896,6 +906,44 @@
       \endverb
       \verb{url}
       \verb https://nvlpubs.nist.gov/nistpubs/specialpublications/nist.sp.800-82r2.pdf
+      \endverb
+    \endentry
+    \entry{WALI2024_CLOUD_SCADA_SECURITY}{article}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=7d246c7c387e496e822ab770fa12c20c}{%
+           family={Wali},
+           familyi={W\bibinitperiod},
+           given={Arwa},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=38121b62f0516b89ace414bdae6e7700}{%
+           family={Alshehry},
+           familyi={A\bibinitperiod},
+           given={Fatimah},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{75ff82ad28c13446e67947e89f9b360c}
+      \strng{fullhash}{75ff82ad28c13446e67947e89f9b360c}
+      \strng{bibnamehash}{75ff82ad28c13446e67947e89f9b360c}
+      \strng{authorbibnamehash}{75ff82ad28c13446e67947e89f9b360c}
+      \strng{authornamehash}{75ff82ad28c13446e67947e89f9b360c}
+      \strng{authorfullhash}{75ff82ad28c13446e67947e89f9b360c}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computers}
+      \field{number}{4}
+      \field{title}{A Survey of Security Challenges in Cloud-Based {SCADA} Systems}
+      \field{volume}{13}
+      \field{year}{2024}
+      \field{pages}{97}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/computers13040097
       \endverb
     \endentry
     \entry{YADAV2020_SCADA_ARCHITECTURE_REVIEW}{online}{}

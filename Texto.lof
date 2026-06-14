@@ -1,7 +1,7 @@
 \babel@toc {brazil}{}\relax 
 \contentsline {figure}{\numberline {1}{\ignorespaces Linha do Tempo das Revoluções Industriais}}{12}{figure.caption.6}%
 \contentsline {figure}{\numberline {2}{\ignorespaces Pirâmide de Automação}}{13}{figure.caption.7}%
-\contentsline {figure}{\numberline {3}{\ignorespaces Convergência entre Tecnologia da Automação (TA) e Tecnologia da Informação (TI) na automação industrial moderna}}{19}{figure.caption.8}%
+\contentsline {figure}{\numberline {3}{\ignorespaces Convergência entre Tecnologia da Automação (TA) e Tecnologia da Informação (TI) na automação industrial moderna}}{18}{figure.caption.8}%
 \contentsline {figure}{\numberline {4}{\ignorespaces Arquitetura em quatro camadas da IoT}}{21}{figure.caption.9}%
 \contentsline {figure}{\numberline {5}{\ignorespaces Comunicação M2M em telemetria industrial: do dispositivo de campo aos serviços em nuvem}}{23}{figure.caption.11}%
 \contentsline {figure}{\numberline {6}{\ignorespaces Estrutura e componentes básicos de um CPS}}{25}{figure.caption.12}%
@@ -16,15 +16,11 @@
 \contentsline {figure}{\numberline {15}{\ignorespaces Ciclo requisição-resposta HTTP em uma API REST}}{39}{figure.caption.21}%
 \contentsline {figure}{\numberline {16}{\ignorespaces Aplicação monolítica (esquerda) versus arquitetura de microsserviços (direita)}}{41}{figure.caption.22}%
 \contentsline {figure}{\numberline {17}{\ignorespaces Arquitetura de microsserviços baseada em barramento de eventos (broker Moleculer)}}{42}{figure.caption.23}%
-\contentsline {figure}{\numberline {18}{\ignorespaces Composição lógica do Modbus TCP: cabeçalho MBAP seguido da PDU (código de função, dados ou exceção)}}{44}{figure.caption.24}%
-\contentsline {figure}{\numberline {19}{\ignorespaces Estrutura simplificada do quadro Modbus RTU (delimitação temporal entre quadros)}}{45}{figure.caption.25}%
-\contentsline {figure}{\numberline {20}{\ignorespaces Arquitetura do Sistema}}{47}{figure.caption.26}%
-\contentsline {figure}{\numberline {21}{\ignorespaces Gateway ABS}}{52}{figure.caption.27}%
-\contentsline {figure}{\numberline {22}{\ignorespaces Modem GPRS ABS Cel X}}{53}{figure.caption.28}%
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
+\contentsline {figure}{\numberline {18}{\ignorespaces Composição lógica do Modbus TCP: cabeçalho MBAP seguido da PDU (código de função, dados ou exceção)}}{43}{figure.caption.24}%
+\contentsline {figure}{\numberline {19}{\ignorespaces Estrutura simplificada do quadro Modbus RTU (delimitação temporal entre quadros)}}{44}{figure.caption.25}%
+\contentsline {figure}{\numberline {20}{\ignorespaces Arquitetura do Sistema}}{46}{figure.caption.26}%
+\contentsline {figure}{\numberline {21}{\ignorespaces Gateway ABS}}{51}{figure.caption.27}%
+\contentsline {figure}{\numberline {22}{\ignorespaces Modem GPRS ABS Cel X}}{52}{figure.caption.28}%
 \babel@toc {brazil}{}\relax 
 \babel@toc {brazil}{}\relax 
 \babel@toc {brazil}{}\relax 

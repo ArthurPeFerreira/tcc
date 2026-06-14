@@ -5,45 +5,43 @@
 \subsection{Sistema SCADA}
 \label{sec:scada}
 
-\par A indústria evoluiu muito na busca por mais monitoramento e controle dos processos. Com o tempo, os custos de processadores, memória e discos rígidos caíram bastante, o que reduziu também o preço de equipamentos como computadores, hubs e conversores de rede, ao passo que o software ganhava peso crescente nesse cenário. Junto a isso, cresceu a necessidade de acompanhar operações em locais remotos. As empresas de software industrial passaram a oferecer soluções com uma ampla gama de protocolos de comunicação e bem personalizadas para cada tipo de processo e indústria, a esse tipo de sistema deu-se o nome de SCADA, sigla em inglês para \emph{Supervisory Control and Data Acquisition} \cite{ZANGHI2019_SCADA_CONCEITOS}. De forma geral, um sistema SCADA pode ser entendido como a integração de componentes de hardware e software que viabiliza a supervisão e o controle de processos industriais de forma local ou remota \cite{PHUYAL2020_COST_EFFICIENT_SCADA, AHMED2011_EFFICIENT_WEB_SCADA}.
+\par A indústria evoluiu muito na busca por mais monitoramento e controle dos processos. Com o tempo, os custos de computadores, hubs e conversores de rede caíram bastante, ao passo que o desenvolvimento de software ganhava relevância. Nesse contexto, as empresas de software industrial passaram a oferecer soluções personalizadas para cada tipo de processo e indústria, com ampla gama de protocolos de comunicação. A esse tipo de sistema deu-se o nome de SCADA, sigla em inglês para \emph{Supervisory Control and Data Acquisition} \cite{ZANGHI2019_SCADA_CONCEITOS}. De forma geral, define-se o SCADA como um pacote de software posicionado sobre o hardware ao qual se interliga, que viabiliza a supervisão e o controle de processos industriais de forma local ou remota \cite{PHUYAL2020_COST_EFFICIENT_SCADA, AHMED2011_EFFICIENT_WEB_SCADA}.
 
 \par Para \textcite{ZANGHI2019_SCADA_CONCEITOS}, um sistema SCADA deve conter os seguintes itens:
 
 \subsubsection{Aquisição e Registro de Dados}
 
-\par A aquisição das informações de campo é o primeiro grande desafio em um sistema SCADA. Ao longo das décadas, diferentes abordagens foram empregadas para trazer dados do processo até a sala de controle, evoluindo de longos cabeamentos diretos para soluções baseadas em dispositivos inteligentes próximos ao processo. Atualmente, predominam os painéis com Dispositivos Eletrônicos Inteligentes (\emph{Intelligent Electronic Devices} - IEDs) e as Unidades Terminais Remotas (UTRs), que aquisitam grandezas analógicas e digitais (medidas de processo, estados de equipamentos, alarmes) e as disponibilizam ao supervisório em formato binário por meio de uma rede de dados, tipicamente Ethernet \cite{ZANGHI2019_SCADA_CONCEITOS, YADAV2020_SCADA_ARCHITECTURE_REVIEW, STOUFFER2015_NIST_ICS_SECURITY}.
+\par A aquisição das informações de campo é o primeiro grande desafio em um sistema SCADA \cite{ZANGHI2019_SCADA_CONCEITOS}. Atualmente, predominam dispositivos genéricos inteligentes que disponibilizam algum protocolo de comunicação, responsáveis por adquirir grandezas analógicas e digitais e disponibilizá-las ao supervisório em formato binário por meio de uma rede de dados \cite{YADAV2020_SCADA_ARCHITECTURE_REVIEW}. O meio de comunicação varia conforme a distância e a infraestrutura disponível, indo das redes locais cabeadas, tipicamente Ethernet, a enlaces sem fio como rádio frequência (RF) e telefonia móvel (4G) \cite{STOUFFER2015_NIST_ICS_SECURITY}, até soluções orientadas à Internet das Coisas, que trafegam os dados pela internet \cite{KHALID2024_IOT_SCADA_PHOTOVOLTAIC}.
 
-\par Os pontos aquisitados em um sistema SCADA são denominados \emph{tags} e armazenados no banco de dados do supervisório. Podem ser \textbf{digitais} (de entrada, DI; de saída, DO; ou de memória, DM, calculados internamente), usados para representar estados binários como liga/desliga de motores, abertura/fechamento de válvulas e disjuntores, alarmes e eventos; ou \textbf{analógicos} (de entrada, AI; de saída, AO; ou de memória, AM), usados para grandezas multibit, como medições de pressão, vazão, nível, temperatura, tensão e corrente, comumente representadas em até 16 bits. O registro contínuo dessas informações pelo supervisório permite análises posteriores na forma de gráficos históricos de tendência e de sequenciais de eventos digitais \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\par Os pontos aquisitados em um sistema SCADA são denominados \emph{tags} e armazenados no banco de dados do supervisório. Cada \emph{tag} assume um tipo de dado conforme a natureza da grandeza que representa, podendo ser booleano, inteiro, real ou texto. O registro contínuo desses valores pelo supervisório permite análises posteriores, na forma de gráficos históricos de tendência e de sequenciais de eventos \cite{ZANGHI2019_SCADA_CONCEITOS}.
 
 \subsubsection{Sincronismo de Tempo}
 
-\par Outro requisito fundamental dos sistemas SCADA é o sincronismo de tempo. Todo dado coletado deve possuir um registro de tempo de origem, a chamada estampa de tempo (\emph{time stamp}): cada variação de um sinal digital, seja para ``0'' ou ``1'', precisa ser registrada com o instante exato em que ocorreu. Essa exigência decorre da necessidade de análises \emph{a posteriori} de ocorrências e faltas, que dependem da cronologia precisa dos acontecimentos para permitir a identificação das causas, sobretudo em processos com dinâmica rápida \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\par Outro requisito fundamental dos sistemas SCADA é o sincronismo de tempo. Todo dado coletado deve possuir um registro de tempo de origem, a chamada estampa de tempo (\emph{time stamp}), de modo que cada variação de estado fique associada a um instante de referência. Essa exigência decorre da necessidade de análises posteriores de ocorrências e faltas, que dependem da cronologia precisa dos acontecimentos para permitir a identificação das causas \cite{ZANGHI2019_SCADA_CONCEITOS}.
 
-\par Para garantir essa sincronização, é comum o uso de equipamentos receptores de sinal de GPS conectados aos IEDs e ao próprio supervisório, ajustando seus relógios internos com precisão de pelo menos 1\,ms. Assim, alarmes e eventos digitais captados em diferentes pontos do sistema recebem estampas de tempo coerentes, sendo essa informação transportada ao supervisório pelo protocolo de comunicação empregado entre os dispositivos \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\par Na prática, a aquisição é realizada de forma cíclica: o supervisório consulta periodicamente os dispositivos de campo, processo conhecido como \emph{polling} \cite{STOUFFER2015_NIST_ICS_SECURITY}, em ciclos de leitura sucessivos cuja frequência é definida conforme a dinâmica do processo \cite{YADAV2020_SCADA_ARCHITECTURE_REVIEW}. Como consequência, a estampa de tempo atribuída a cada ponto corresponde ao ciclo em que o valor foi lido, e não ao instante físico exato da transição, de modo que a resolução temporal do registro fica limitada ao período do ciclo de aquisição.
 
-\subsubsection{Níveis de Operação}
+\subsubsection{Níveis de Acesso}
 
-\par Os sistemas SCADA são tipicamente organizados em diferentes níveis de operação, cada um atendendo a necessidades distintas e operando sobre um subconjunto dos pontos disponíveis nos níveis inferiores. No \textbf{Nível 0} estão os equipamentos de campo e seus sensores, fonte primária dos dados. O \textbf{Nível 1} corresponde à supervisão local, próxima aos painéis dos IEDs, normalmente implementada em uma Interface Homem-Máquina (IHM) simples, voltada à operação no próprio local da planta e sem necessidade de arquitetura redundante \cite{ZANGHI2019_SCADA_CONCEITOS}.
-
-\par O \textbf{Nível 2} representa a supervisão da instalação como um todo, agregando os pontos relevantes dos IEDs em estações de trabalho robustas, geralmente redundantes, com telas mais elaboradas que permitem supervisão e controle completos da unidade. Por fim, o \textbf{Nível 3} é o centro de operação remoto, que consolida dados provenientes de múltiplas instalações distribuídas geograficamente; nele apenas os pontos estritamente necessários à operação sistêmica são disponibilizados, exigindo otimização do volume de dados e alta robustez para funcionamento contínuo. À medida que se sobe na hierarquia, a quantidade de pontos é filtrada e o foco passa do controle local detalhado para a gestão integrada da operação \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\par Os níveis de acesso de um sistema SCADA definem a separação das permissões de supervisão e controle entre os usuários. Classicamente organizada em níveis por instalação \cite{ZANGHI2019_SCADA_CONCEITOS}, essa separação materializa-se como acessos definidos por planta, em que cada usuário recebe permissões apenas sobre os pontos e comandos da instalação à qual está vinculado, segundo o controle de acesso baseado em cargos e o princípio do menor privilégio, apoiado em mecanismos adequados de autenticação e autorização \cite{STOUFFER2015_NIST_ICS_SECURITY}.
 
 \subsubsection{Comando e Controle}
 
-\par As ações de operação executadas remotamente pelo supervisório são denominadas telecomando e telecontrole. O software SCADA deve prever três tipos básicos: o \textbf{telecomando instantâneo}, voltado à mudança rápida de estados de equipamentos com acionamento remoto (e.g., partida de uma bomba, abertura de uma válvula, comando a um disjuntor); o \textbf{telecontrole}, destinado a regular no tempo a resposta de um processo a partir de um valor desejado (\emph{set point}); e o \textbf{telecomando ou telecontrole programado}, que permite o agendamento de ações conforme condições ou cenários previamente definidos, registrando o instante de execução \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\par As ações executadas remotamente pelo supervisório consistem no envio de comandos aos dispositivos de campo, isto é, na escrita de uma informação no dispositivo \cite{YADAV2020_SCADA_ARCHITECTURE_REVIEW}. Quanto ao momento de execução, o comando pode ser instantâneo, escrevendo de imediato o valor desejado ou agendado, programado para ações conforme cenários previamente definidos, com o instante de execução registrado \cite{ZANGHI2019_SCADA_CONCEITOS}.
 
-\par O processamento de um telecomando segue quatro fases distintas: \textbf{seleção}, em que o operador escolhe na interface o equipamento a ser comandado; \textbf{verificação} dos elementos envolvidos, como intertravamentos e condições de segurança; \textbf{confirmação} pela ação explícita do operador; e \textbf{execução}, com o envio efetivo da ordem ao dispositivo responsável pelo elemento final de controle. Após a execução, é boa prática que o supervisório realize a verificação de confirmação, garantindo que a solicitação foi aceita e processada pelo dispositivo de campo; em caso de falha, um alarme correspondente deve ser gerado para sinalizar a inconsistência ao operador \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\par O processamento de um comando segue quatro fases: seleção, em que o operador escolhe na interface o equipamento; verificação de intertravamentos e condições de segurança; confirmação explícita pelo operador; e execução, com o envio efetivo da ordem ao elemento final de controle \cite{ZANGHI2019_SCADA_CONCEITOS}. Após a execução, o supervisório verifica a confirmação para garantir que a solicitação foi aceita pelo dispositivo e, em caso de falha, gera um alarme, pois comandos indevidos podem danificar equipamentos ou comprometer a segurança do processo \cite{STOUFFER2015_NIST_ICS_SECURITY}.
 
 \subsubsection{Escalabilidade}
 
-\par A expansão das instalações é uma realidade frequente em ambientes industriais, com inclusão de novos equipamentos, pontos de medição e circuitos. Para acompanhar essas mudanças, o software SCADA deve ser escalável, permitindo o acréscimo de pontos em sua base de dados e a criação de novas telas de operação sem comprometer o que já está em produção. A maioria dos supervisórios comerciais oferece essa capacidade, contudo as licenças associadas precisam contemplar a expansão prevista. Licenças com número ilimitado de pontos e telas existem, mas têm custo elevado, o que torna a análise correta da escalabilidade fundamental para o adequado dimensionamento e orçamento da solução \cite{ZANGHI2019_SCADA_CONCEITOS, PHUYAL2020_COST_EFFICIENT_SCADA}.
+\par A expansão das instalações é frequente em ambientes industriais, com a inclusão de novos equipamentos, pontos de medição e circuitos. Para acompanhá-la, o software SCADA deve ser escalável, permitindo acrescentar pontos à base de dados e criar novas telas de operação sem comprometer o que já está em produção \cite{ZANGHI2019_SCADA_CONCEITOS}.
 
-\par Quando se considera o sistema SCADA como um todo, a análise da escalabilidade deve abranger não apenas o supervisório, mas também os elementos de aquisição, controle e rede. Os \emph{hardwares} envolvidos devem se manter íntegros em suas funções e permitir o acréscimo de novos dispositivos ao barramento de comunicação, o que torna essencial que essa integração seja prevista já na fase inicial do projeto de automação \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\par A análise da escalabilidade deve abranger não apenas o supervisório, mas também os elementos de aquisição, controle e rede, que precisam permitir o acréscimo de novos dispositivos ao barramento de comunicação, integração a ser prevista já na fase inicial do projeto \cite{ZANGHI2019_SCADA_CONCEITOS}.
 
 \subsubsection{Redundância}
 
-\par A redundância consiste no acréscimo de um elemento idêntico ao original, de modo que, em caso de falha do primeiro, o segundo assuma as funções da maneira mais transparente possível para a operação. Essa prática se aplica a diversos componentes do sistema SCADA, como softwares supervisórios, dispositivos de aquisição e controle, e elementos de rede (por exemplo, \emph{switches}); apesar do custo adicional, permite alcançar graus elevados de confiabilidade, compatíveis com a criticidade exigida em aplicações industriais sensíveis \cite{ZANGHI2019_SCADA_CONCEITOS, SALVADOR2019_AQUISICAO_REDUNDANCIA}.
+\par A redundância consiste no acréscimo de um elemento idêntico ao original, de modo que, em caso de falha do primeiro, o segundo assuma suas funções da forma mais transparente possível para a operação \cite{ZANGHI2019_SCADA_CONCEITOS}. A prática aplica-se a diversos componentes do sistema, como softwares supervisórios, dispositivos de aquisição e controle e elementos de rede, apesar do custo adicional, eleva a confiabilidade a graus compatíveis com a criticidade de aplicações industriais sensíveis \cite{SALVADOR2019_AQUISICAO_REDUNDANCIA}.
 
-\par Em uma arquitetura redundante típica, múltiplas estações de operação comunicam-se simultaneamente com os dispositivos de campo, garantindo que a perda de uma delas não impacte a atualização das informações; \emph{switches} interligados em topologia em anel, com portas redundantes, asseguram resiliência a falhas de cabeamento e de portas individuais; e as unidades de aquisição e controle podem operar em pares espelhados, mantendo comunicação duplicada com os \emph{switches} e com os dispositivos finais. Esse conjunto de medidas garante a continuidade da supervisão e do controle mesmo diante de falhas pontuais em equipamentos ou enlaces de rede \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\par Em uma arquitetura redundante típica, múltiplas estações de operação comunicam-se simultaneamente com os dispositivos de campo e as unidades de aquisição e controle operam em pares espelhados \cite{ZANGHI2019_SCADA_CONCEITOS}. De modo geral, recomenda-se que cada componente crítico tenha um par redundante, sobre redes igualmente redundantes, e que o sistema seja projetado para degradação suave, preservando a supervisão e o controle mesmo diante de falhas pontuais \cite{STOUFFER2015_NIST_ICS_SECURITY}.
 
 \subsection{Automação e Informática Industrial}
 \label{sec:automacao_industrial}
@@ -57,18 +55,7 @@
     \caption{Convergência entre Tecnologia da Automação (TA) e Tecnologia da Informação (TI) na automação industrial moderna}
     \label{fig:ta_ti_convergencia}
     \vspace{0.4cm}
-    \begin{tikzpicture}[
-            font=\footnotesize\sffamily,
-            ta/.style={rectangle, draw=black!70, thick, minimum width=42mm, minimum height=20mm, align=left, inner sep=4pt, rounded corners=3pt, fill=blue!12},
-            ti/.style={rectangle, draw=black!70, thick, minimum width=42mm, minimum height=20mm, align=left, inner sep=4pt, rounded corners=3pt, fill=orange!15},
-            mid/.style={rectangle, draw=black!70, thick, minimum width=34mm, minimum height=20mm, align=left, inner sep=4pt, rounded corners=3pt, fill=green!12}
-        ]
-        \node[ta]  (ta)  at (0, 0)  {\textbf{TA}\\\scriptsize tempo real determinístico\\\scriptsize \textit{safety}\\\scriptsize CLPs, IHMs, SCADA\\\scriptsize Modbus, OPC};
-        \node[mid] (mid) at (5, 0)  {\textbf{Informática}\\\textbf{Industrial}\\\scriptsize CPS, IIoT, SOA\\\scriptsize Indústria 4.0\\\scriptsize OPC-UA, REST};
-        \node[ti]  (ti)  at (10, 0) {\textbf{TI}\\\scriptsize interoperabilidade\\\scriptsize \textit{security}\\\scriptsize servidores, nuvem, web\\\scriptsize HTTP, microsserviços};
-        \draw[->, very thick, black!60] (ta) -- (mid);
-        \draw[->, very thick, black!60] (ti) -- (mid);
-    \end{tikzpicture}
+    \includegraphics[width=14.32cm]{Imagens/Desenvolvimento/Cap1/ta_ti_convergencia-nova.png}
     \vspace{0.2cm} \\
     Fonte: Elaborado pelo autor com base em \textcite{COLOMBO2014_STATE_ART_AUTOMATION} e \textcite{BIGHETI2020}.
 \end{figure}
@@ -97,7 +84,7 @@
     \centering
     \caption{Arquitetura em quatro camadas da IoT}
     \centering
-    \includegraphics[width=0.9\textwidth]{Imagens/Desenvolvimento/Cap1/iot_camadas-073.png}
+    \includegraphics[width=0.9\textwidth]{Imagens/Desenvolvimento/Cap1/iot_camadas-073-nova.png}
     \centering
     \vspace{0.2cm} \\
     Fonte: \textcite[p.~72]{PISCHING2017}.
@@ -149,27 +136,7 @@
     \caption{Comunicação M2M em telemetria industrial: do dispositivo de campo aos serviços em nuvem}
     \label{fig:m2m_telemetria}
     \vspace{0.4cm}
-    \begin{tikzpicture}[
-            font=\footnotesize\sffamily,
-            dev/.style={rectangle, draw=black!70, thick, minimum width=22mm, minimum height=12mm, align=center, inner sep=3pt, rounded corners=2pt, fill=blue!10},
-            mid/.style={rectangle, draw=black!70, thick, minimum width=22mm, minimum height=12mm, align=center, inner sep=3pt, rounded corners=2pt, fill=orange!12},
-            nuvem/.style={rectangle, draw=black!70, thick, minimum width=22mm, minimum height=12mm, align=center, inner sep=3pt, rounded corners=8pt, fill=green!12},
-            arr/.style={->, thick, black!60}
-        ]
-        \node[dev]   (sens) at (0, 0)   {Sensor /\\CLP};
-        \node[mid]   (mod)  at (3.5, 0) {Modem\\GPRS/4G};
-        \node[mid]   (gw)   at (7, 0)   {Gateway};
-        \node[nuvem] (svc)  at (10.5, 0) {Serviços\\em nuvem};
-
-        \draw[arr] (sens) -- node[above, font=\scriptsize] {Modbus} (mod);
-        \draw[arr] (mod)  -- node[above, font=\scriptsize] {TCP/IP} (gw);
-        \draw[arr] (gw)   -- node[above, font=\scriptsize] {TCP/IP} (svc);
-
-        \node[font=\scriptsize, anchor=north] at (0, -0.9)    {\textit{campo}};
-        \node[font=\scriptsize, anchor=north] at (3.5, -0.9)  {\textit{borda}};
-        \node[font=\scriptsize, anchor=north] at (7, -0.9)    {\textit{concentrador}};
-        \node[font=\scriptsize, anchor=north] at (10.5, -0.9) {\textit{nuvem}};
-    \end{tikzpicture}
+    \includegraphics[width=12.82cm]{Imagens/Desenvolvimento/Cap1/m2m_telemetria-nova.png}
     \vspace{0.2cm} \\
     Fonte: Elaborado pelo autor com base em \textcite{BIGHETI2020} e \textcite{PISCHING2017}.
 \end{figure}
@@ -193,7 +160,7 @@
     \centering
     \caption{Estrutura e componentes básicos de um CPS}
     \centering
-    \includegraphics[width=0.9\textwidth]{Imagens/Desenvolvimento/Cap1/cps_estrutura-045.png}
+    \includegraphics[width=0.9\textwidth]{Imagens/Desenvolvimento/Cap1/cps_estrutura-045-nova.png}
     \centering
     \vspace{0.2cm} \\
     Fonte: \textcite[p.~44]{PISCHING2017}.
@@ -218,7 +185,7 @@
     \centering
     \caption{Interseções de IoT, CPS, IIoT e Indústria 4.0}
     \centering
-    \includegraphics[width=0.9\textwidth]{Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps_i40-034.png}
+    \includegraphics[width=0.9\textwidth]{Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps_i40-034-nova.png}
     \centering
     \vspace{0.2cm} \\
     Fonte: \textcite[p.~27]{BIGHETI2020}.
@@ -277,47 +244,7 @@
     \caption{Linearização de um sensor analógico: mapeamento da unidade bruta para a unidade de engenharia, com $x_\text{min} = 4000$, $x_\text{max} = 20000$, $y_\text{min} = 0$\,bar e $y_\text{max} = 10$\,bar}
     \label{fig:linearizacao_sensor}
     \vspace{0.4cm}
-    \begin{tikzpicture}
-        \begin{axis}[
-                width=0.85\textwidth,
-                height=7.5cm,
-                xlabel={Unidade bruta ($x$)},
-                ylabel={Unidade de engenharia ($y$) [bar]},
-                xmin=2000, xmax=22000,
-                ymin=-2, ymax=12,
-                xtick={4000,8000,12000,16000,20000},
-                ytick={0,2,4,6,8,10},
-                xticklabel={\pgfmathprintnumber[fixed, 1000 sep={}]{\tick}},
-                grid=both,
-                major grid style={black!15},
-                minor grid style={black!8},
-                axis lines=left,
-                tick label style={font=\footnotesize},
-                label style={font=\footnotesize},
-                legend style={font=\footnotesize, at={(0.98,0.05)}, anchor=south east, draw=black!50, fill=white},
-            ]
-            % Extensões tracejadas além da faixa válida
-            \addplot[domain=2000:4000, samples=2, thick, dashed, blue!50!black] {6.25e-4*x - 2.5};
-            \addplot[domain=20000:22000, samples=2, thick, dashed, blue!50!black] {6.25e-4*x - 2.5};
-            % Reta válida (faixa de operação)
-            \addplot[domain=4000:20000, samples=2, very thick, blue!70!black] {6.25e-4*x - 2.5};
-            \addlegendentry{$y = a\,x + b$ (faixa válida)}
-
-            % Pontos extremos
-            \addplot[only marks, mark=*, mark size=2.5pt, red] coordinates {(4000,0) (20000,10)};
-            \addlegendentry{$(x_\text{min},\,y_\text{min})$ e $(x_\text{max},\,y_\text{max})$}
-
-            % Linhas guia tracejadas dos extremos
-            \draw[dashed, black!50] (axis cs:4000,-2)  -- (axis cs:4000,0);
-            \draw[dashed, black!50] (axis cs:20000,-2) -- (axis cs:20000,10);
-            \draw[dashed, black!50] (axis cs:2000,0)   -- (axis cs:4000,0);
-            \draw[dashed, black!50] (axis cs:2000,10)  -- (axis cs:20000,10);
-
-            % Rótulos dos pontos extremos
-            \node[anchor=south west, font=\scriptsize, text=red!70!black] at (axis cs:4200, 0.2)  {$(4000,\ 0)$};
-            \node[anchor=north east, font=\scriptsize, text=red!70!black] at (axis cs:19800, 9.8) {$(20000,\ 10)$};
-        \end{axis}
-    \end{tikzpicture}
+    \includegraphics[width=14.3cm]{Imagens/Desenvolvimento/Cap1/linearizacao_sensor-nova.png}
     \vspace{0.2cm} \\
     Fonte: Autor.
 \end{figure}
@@ -346,34 +273,7 @@
     \caption{Modelos de serviço em computação em nuvem (pirâmide IaaS, PaaS, SaaS)}
     \label{fig:cloud_modelos_servico}
     \vspace{0.4cm}
-    \begin{tikzpicture}[
-            font=\footnotesize\sffamily,
-            edge/.style={black!70, thick}
-        ]
-        \fill[red!15]    (-0.7, 4.0) -- (0.7, 4.0) -- (0.3, 5.0) -- (-0.3, 5.0) -- cycle;
-        \draw[edge]      (-0.7, 4.0) -- (0.7, 4.0) -- (0.3, 5.0) -- (-0.3, 5.0) -- cycle;
-        \node at (0, 4.5) {\textbf{SaaS}};
-
-        \fill[orange!18] (-1.5, 3.0) -- (1.5, 3.0) -- (0.7, 4.0) -- (-0.7, 4.0) -- cycle;
-        \draw[edge]      (-1.5, 3.0) -- (1.5, 3.0) -- (0.7, 4.0) -- (-0.7, 4.0) -- cycle;
-        \node at (0, 3.5) {\textbf{PaaS}};
-
-        \fill[blue!12]   (-2.3, 2.0) -- (2.3, 2.0) -- (1.5, 3.0) -- (-1.5, 3.0) -- cycle;
-        \draw[edge]      (-2.3, 2.0) -- (2.3, 2.0) -- (1.5, 3.0) -- (-1.5, 3.0) -- cycle;
-        \node at (0, 2.5) {\textbf{IaaS}};
-
-        \node[anchor=west, font=\scriptsize] at (1.8, 4.7) {Software como Serviço};
-        \node[anchor=west, font=\scriptsize] at (1.8, 4.4) {aplicações completas};
-        \node[anchor=west, font=\scriptsize] at (1.8, 4.1) {(ex.: Google Apps, Salesforce)};
-
-        \node[anchor=west, font=\scriptsize] at (2.0, 3.6) {Plataforma como Serviço};
-        \node[anchor=west, font=\scriptsize] at (2.0, 3.3) {ambientes de desenvolvimento};
-        \node[anchor=west, font=\scriptsize] at (2.0, 3.0) {(ex.: Google App Engine)};
-
-        \node[anchor=west, font=\scriptsize] at (2.6, 2.6) {Infraestrutura como Serviço};
-        \node[anchor=west, font=\scriptsize] at (2.6, 2.3) {VMs, armazenamento, rede};
-        \node[anchor=west, font=\scriptsize] at (2.6, 2.0) {(ex.: AWS EC2, RDS, ECS)};
-    \end{tikzpicture}
+    \includegraphics[width=9.02cm]{Imagens/Desenvolvimento/Cap1/cloud_modelos_servico-nova.png}
     \vspace{0.2cm} \\
     Fonte: Elaborado pelo autor com base em \textcite{HENRIQUES2010_CLOUD_COMPUTING_TCC} e \textcite{PEDROSA2011_COMPUTACAO_NUVEM}.
 \end{figure}
@@ -400,22 +300,7 @@
     \caption{Trecho simplificado do esquema relacional do sistema supervisório}
     \label{fig:esquema_relacional_exemplo}
     \vspace{0.4cm}
-    \begin{tikzpicture}[
-            font=\footnotesize\sffamily,
-            entity/.style={rectangle, draw=black!70, thick, minimum width=32mm, align=left, inner sep=4pt, rounded corners=2pt},
-            rel/.style={->, thick, black!55}
-        ]
-        \node[entity, fill=blue!8]   (cli) at (0,5) {\textbf{Cliente}\\id (PK)\\nome\\cnpj};
-        \node[entity, fill=orange!12] (uni) at (5,5) {\textbf{Unidade Operacional}\\id (PK)\\cliente\_id (FK)\\nome};
-        \node[entity, fill=green!12] (equ) at (10,5) {\textbf{Equipamento}\\id (PK)\\unidade\_id (FK)\\modelo, ip};
-        \node[entity, fill=yellow!18] (tag) at (5,1.5) {\textbf{Tag}\\id (PK)\\equipamento\_id (FK)\\\textit{Unit ID}, endereço\\$a$, $b$, unidade};
-        \node[entity, fill=red!10]   (lei) at (10,1.5) {\textbf{Leitura}\\id (PK)\\tag\_id (FK)\\timestamp, valor};
-
-        \draw[rel] (cli) -- node[above, font=\scriptsize] {1:N} (uni);
-        \draw[rel] (uni) -- node[above, font=\scriptsize] {1:N} (equ);
-        \draw[rel] (equ) -- node[right, font=\scriptsize] {1:N} (tag);
-        \draw[rel] (tag) -- node[above, font=\scriptsize] {1:N} (lei);
-    \end{tikzpicture}
+    \includegraphics[width=13.32cm]{Imagens/Desenvolvimento/Cap1/esquema_relacional_exemplo-nova.png}
     \vspace{0.2cm} \\
     Fonte: Autor.
 \end{figure}
@@ -438,26 +323,7 @@
     \caption{Papéis do Redis no sistema supervisório: cache de leituras quentes e barramento de eventos}
     \label{fig:redis_papeis}
     \vspace{0.4cm}
-    \begin{tikzpicture}[
-            font=\footnotesize\sffamily,
-            ms/.style={rectangle, draw=black!70, thick, minimum width=22mm, minimum height=10mm, align=center, inner sep=2pt, rounded corners=2pt, fill=blue!10},
-            redis/.style={rectangle, draw=black!70, thick, minimum width=42mm, minimum height=14mm, align=center, inner sep=3pt, rounded corners=5pt, fill=red!15},
-            db/.style={rectangle, draw=black!70, thick, minimum width=30mm, minimum height=10mm, align=center, inner sep=2pt, rounded corners=2pt, fill=yellow!18},
-            arr/.style={->, thick, black!60},
-            ev/.style={->, thick, orange!70!black, dashed}
-        ]
-        \node[ms]    (s1)  at (-3.8, 2.2) {Aquisição};
-        \node[ms]    (s2)  at (0, 2.2)    {Alarmes};
-        \node[ms]    (s3)  at (3.8, 2.2)  {Históricos};
-        \node[redis] (r)   at (0, 0)      {\textbf{Redis}\\\scriptsize cache + Pub/Sub + sessões};
-        \node[db]    (rds) at (0, -2)     {RDS / PostgreSQL};
-
-        \draw[arr] (s1) -- node[right, font=\scriptsize] {get/set} (r);
-        \draw[arr] (s2) -- node[right, font=\scriptsize] {subscribe} (r);
-        \draw[arr] (s3) -- node[right, font=\scriptsize] {get/set} (r);
-        \draw[arr] (r)  -- node[right, font=\scriptsize] {fallback (\emph{cache miss})} (rds);
-        \draw[ev]  (s1.south) to[bend right=30] node[below, font=\scriptsize] {publica eventos} (r.west);
-    \end{tikzpicture}
+    \includegraphics[width=9.93cm]{Imagens/Desenvolvimento/Cap1/redis_papeis-nova.png}
     \vspace{0.2cm} \\
     Fonte: Autor.
 \end{figure}
@@ -482,29 +348,7 @@
     \caption{Arquitetura comparada: máquinas virtuais (esquerda) e contêineres Docker (direita)}
     \label{fig:vm_vs_container}
     \vspace{0.4cm}
-    \begin{tikzpicture}[
-            font=\footnotesize\sffamily,
-            box/.style={rectangle, draw=black!70, thick, align=center, inner sep=3pt},
-            label/.style={font=\scriptsize\sffamily}
-        ]
-        % VM (left)
-        \node[box, fill=blue!8,   minimum width=55mm, minimum height=7mm] (hw1)  at (0, 0)   {\textbf{Hardware}};
-        \node[box, fill=blue!10,  minimum width=55mm, minimum height=7mm] (so1)  at (0, 0.9) {\textbf{Sistema Operacional Hospedeiro}};
-        \node[box, fill=blue!12,  minimum width=55mm, minimum height=7mm] (hyp)  at (0, 1.8) {\textbf{Hipervisor}};
-        \node[box, fill=orange!12, minimum width=17mm, minimum height=8mm] (vm1) at (-1.8, 2.95) {SO\\hóspede\\App A};
-        \node[box, fill=orange!12, minimum width=17mm, minimum height=8mm] (vm2) at (0, 2.95)    {SO\\hóspede\\App B};
-        \node[box, fill=orange!12, minimum width=17mm, minimum height=8mm] (vm3) at (1.8, 2.95)  {SO\\hóspede\\App C};
-        \node[font=\small\sffamily\bfseries] at (0, 4.2) {Máquinas Virtuais};
-
-        % Container (right)
-        \node[box, fill=blue!8,   minimum width=55mm, minimum height=7mm] (hw2)  at (8, 0)   {\textbf{Hardware}};
-        \node[box, fill=blue!10,  minimum width=55mm, minimum height=7mm] (so2)  at (8, 0.9) {\textbf{Sistema Operacional Hospedeiro}};
-        \node[box, fill=green!12, minimum width=55mm, minimum height=7mm] (eng)  at (8, 1.8) {\textbf{Docker Engine}};
-        \node[box, fill=red!10,   minimum width=17mm, minimum height=8mm] (c1)   at (6.2, 2.95) {Contêiner\\App A\\libs};
-        \node[box, fill=red!10,   minimum width=17mm, minimum height=8mm] (c2)   at (8, 2.95)   {Contêiner\\App B\\libs};
-        \node[box, fill=red!10,   minimum width=17mm, minimum height=8mm] (c3)   at (9.8, 2.95) {Contêiner\\App C\\libs};
-        \node[font=\small\sffamily\bfseries] at (8, 4.2) {Contêineres Docker};
-    \end{tikzpicture}
+    \includegraphics[width=13.62cm]{Imagens/Desenvolvimento/Cap1/vm_vs_container-nova.png}
     \vspace{0.2cm} \\
     Fonte: Elaborado pelo autor com base em \textcite{SALVADOR2019_VIRTUALIZACAO}.
 \end{figure}
@@ -527,40 +371,7 @@
     \caption{Estratégias de renderização do Next.js: CSR, SSR e SSG}
     \label{fig:nextjs_rendering}
     \vspace{0.4cm}
-    \begin{tikzpicture}[
-            font=\footnotesize\sffamily,
-            box/.style={rectangle, draw=black!70, thick, minimum height=10mm, align=center, inner sep=3pt, rounded corners=2pt},
-            cli/.style={box, fill=blue!10, minimum width=24mm},
-            srv/.style={box, fill=orange!15, minimum width=24mm},
-            db/.style={box, fill=green!12, minimum width=24mm},
-            arr/.style={->, thick, black!60}
-        ]
-        % CSR row
-        \node[cli] (c1) at (0, 3) {Navegador};
-        \node[srv] (s1) at (4, 3) {Servidor};
-        \node[db]  (d1) at (8, 3) {Banco / API};
-        \draw[arr] (c1) -- node[above, font=\scriptsize] {1. HTML vazio} (s1);
-        \draw[arr] (c1) to[bend right=20] node[below, font=\scriptsize] {2. JS busca dados} (d1);
-        \node[font=\footnotesize\sffamily\bfseries, anchor=east] at (-0.5, 3) {CSR};
-
-        % SSR row
-        \node[cli] (c2) at (0, 1.5) {Navegador};
-        \node[srv] (s2) at (4, 1.5) {Servidor};
-        \node[db]  (d2) at (8, 1.5) {Banco / API};
-        \draw[arr] (c2) -- node[above, font=\scriptsize] {1. Requisição} (s2);
-        \draw[arr] (s2) -- node[above, font=\scriptsize] {2. Busca dados} (d2);
-        \draw[arr, dashed] (s2) to[bend right=30] node[below, font=\scriptsize] {3. HTML pronto} (c2);
-        \node[font=\footnotesize\sffamily\bfseries, anchor=east] at (-0.5, 1.5) {SSR};
-
-        % SSG row
-        \node[cli] (c3) at (0, 0) {Navegador};
-        \node[srv] (s3) at (4, 0) {CDN};
-        \node[db]  (d3) at (8, 0) {Build};
-        \draw[arr] (c3) -- node[above, font=\scriptsize] {1. Requisição} (s3);
-        \draw[arr, dashed] (s3) to[bend right=30] node[below, font=\scriptsize] {2. HTML cache} (c3);
-        \draw[arr, dotted] (d3) -- node[above, font=\scriptsize] {(prévio)} (s3);
-        \node[font=\footnotesize\sffamily\bfseries, anchor=east] at (-0.5, 0) {SSG};
-    \end{tikzpicture}
+    \includegraphics[width=10.8cm]{Imagens/Desenvolvimento/Cap1/nextjs_rendering-nova.png}
     \vspace{0.2cm} \\
     Fonte: Autor.
 \end{figure}
@@ -583,22 +394,7 @@
     \caption{Serviços AWS empregados no sistema supervisório (RDS, ECS, Lambda)}
     \label{fig:aws_servicos}
     \vspace{0.4cm}
-    \begin{tikzpicture}[
-            font=\footnotesize\sffamily,
-            aws/.style={rectangle, draw=black!60, thick, fill=blue!5, rounded corners=8pt, minimum width=110mm, minimum height=42mm},
-            svc/.style={rectangle, draw=black!70, thick, minimum width=28mm, minimum height=14mm, align=center, inner sep=3pt, rounded corners=2pt}
-        ]
-        \node[aws] (cl) at (0, 0) {};
-        \node[font=\small\sffamily\bfseries, anchor=north] at (0, 1.6) {AWS};
-
-        \node[svc, fill=green!15]  (rds)   at (-3.5, 0)  {\textbf{RDS}\\\scriptsize PostgreSQL\\\scriptsize gerenciado};
-        \node[svc, fill=orange!15] (ecs)   at (0, 0)     {\textbf{ECS}\\\scriptsize Contêineres\\\scriptsize Docker};
-        \node[svc, fill=red!12]    (lamb)  at (3.5, 0)   {\textbf{Lambda}\\\scriptsize Funções sob\\\scriptsize demanda};
-
-        \node[font=\scriptsize, anchor=north] at (-3.5, -1.0) {persistência};
-        \node[font=\scriptsize, anchor=north] at (0, -1.0)    {microsserviços};
-        \node[font=\scriptsize, anchor=north] at (3.5, -1.0)  {eventos pontuais};
-    \end{tikzpicture}
+    \includegraphics[width=11.13cm]{Imagens/Desenvolvimento/Cap1/aws_servicos-nova.png}
     \vspace{0.2cm} \\
     Fonte: Autor.
 \end{figure}
@@ -623,27 +419,12 @@
     \caption{Ciclo requisição-resposta HTTP em uma API REST}
     \label{fig:http_rest_ciclo}
     \vspace{0.4cm}
-    \begin{tikzpicture}[
-            font=\footnotesize\sffamily,
-            box/.style={rectangle, draw=black!70, thick, minimum height=14mm, minimum width=30mm, align=center, inner sep=3pt, rounded corners=2pt},
-            req/.style={->, thick, blue!70!black},
-            res/.style={->, thick, orange!70!black}
-        ]
-        \node[box, fill=blue!10]   (cli) at (0, 0)  {Cliente\\(navegador,\\app, serviço)};
-        \node[box, fill=green!12]  (api) at (8, 0)  {API REST\\(Fastify)};
-        \node[box, fill=yellow!18] (db)  at (14, 0) {Banco\\PostgreSQL};
-
-        \draw[req] ([yshift=4mm]cli.east) -- node[above, font=\scriptsize, align=center] {GET /tags/42\\Authorization: Bearer ...} ([yshift=4mm]api.west);
-        \draw[res] ([yshift=-4mm]api.west) -- node[below, font=\scriptsize, align=center] {200 OK\\\{ "id": 42, "valor": 5.0 \}} ([yshift=-4mm]cli.east);
-
-        \draw[req] ([yshift=4mm]api.east) -- node[above, font=\scriptsize] {SELECT} ([yshift=4mm]db.west);
-        \draw[res] ([yshift=-4mm]db.west) -- node[below, font=\scriptsize] {linha} ([yshift=-4mm]api.east);
-    \end{tikzpicture}
+    \includegraphics[width=\linewidth]{Imagens/Desenvolvimento/Cap1/http_rest_ciclo-nova.png}
     \vspace{0.2cm} \\
     Fonte: Autor.
 \end{figure}
 
-\par O formato \textbf{JSON} (\emph{JavaScript Object Notation}) é a representação de dados padrão de fato para APIs REST modernas. Trata-se de uma sintaxe textual derivada do JavaScript, simples de ler e escrever para humanos e fácil de gerar e parsear para máquinas. Suporta tipos primitivos (\emph{string}, número, booleano, nulo) e estruturas compostas (objeto e \emph{array}), o que se mostrou suficiente para a grande maioria dos cenários de troca de dados. JSON substituiu, em larga medida, o XML em comunicações web devido à sua menor verbosidade e ao acoplamento natural com o JavaScript dos navegadores. Adicionalmente, esquemas JSON (\emph{JSON Schema}) permitem descrever formalmente o formato esperado de mensagens, oferecendo validação e geração de documentação automaticamente, como discutido na Subseção~\ref{sec:fastify}.
+\par O formato \textbf{JSON} (\emph{JavaScript Object Notation}) é a representação de dados padrão de fato para APIs REST modernas. Trata-se de uma sintaxe textual derivada do JavaScript, simples de ler e escrever para humanos e fácil de gerar e parsear para máquinas. Suporta tipos primitivos (\emph{string}, número, booleano, nulo) e estruturas compostas (objeto e \emph{array}), o que se mostrou suficiente para a grande maioria dos cenários de troca de dados. JSON substituiu, em larga medida, o XML em comunicações web devido à sua menor verbosidade e ao acoplamento natural com o JavaScript dos navegadores. Adicionalmente, esquemas JSON (\emph{JSON Schema}) permitem descrever formalmente o formato esperado de mensagens, oferecendo validação e geração de documentação automaticamente.
 
 \par Em sistemas industriais conectados, a comunicação por API REST sobre HTTP é hoje uma alternativa cada vez mais comum ao acoplamento direto ao protocolo Modbus. Como observa \textcite{COLOMBO2014_STATE_ART_AUTOMATION}, a exposição de funcionalidades de dispositivos de campo como serviços web (\emph{Web Services}) é um dos vetores que viabilizam o achatamento da pirâmide ISA-95 discutido na Subseção~\ref{sec:iiot}. No sistema proposto neste trabalho, os \emph{gateways} de campo continuam usando Modbus para falar com os CLPs (por questões de compatibilidade e desempenho na rede industrial), mas todos os serviços de nuvem comunicam-se entre si e com o \textit{frontend} via REST/JSON, em uma arquitetura tipicamente moderna.
 
@@ -661,38 +442,7 @@
     \caption{Aplicação monolítica (esquerda) versus arquitetura de microsserviços (direita)}
     \label{fig:monolito_vs_microservicos}
     \vspace{0.4cm}
-    \begin{tikzpicture}[
-            font=\footnotesize\sffamily,
-            mono/.style={rectangle, draw=black!70, thick, minimum width=42mm, align=center, inner sep=3pt, rounded corners=2pt},
-            ms/.style={rectangle, draw=black!70, thick, minimum width=18mm, minimum height=10mm, align=center, inner sep=2pt, rounded corners=2pt},
-            db/.style={rectangle, draw=black!70, thick, minimum width=22mm, minimum height=8mm, align=center, inner sep=2pt, rounded corners=2pt, fill=yellow!18}
-        ]
-        % Monolito (esquerda)
-        \node[mono, fill=blue!10, minimum height=12mm] (m1)  at (0, 3)    {Interface};
-        \node[mono, fill=blue!10, minimum height=12mm] (m2)  at (0, 2)    {Lógica de negócio};
-        \node[mono, fill=blue!10, minimum height=12mm] (m3)  at (0, 1)    {Persistência};
-        \node[db]                                       (mdb) at (0, -0.5) {Banco único};
-        \draw[->, thick, black!60] (m3) -- (mdb);
-        \node[font=\small\sffamily\bfseries] at (0, 4.0) {Monolito};
-
-        % Microsserviços (direita)
-        \node[ms, fill=blue!10]   (s1) at (6.5, 3)    {Aquisição};
-        \node[ms, fill=orange!12] (s2) at (8.7, 3)    {Cadastro};
-        \node[ms, fill=green!12]  (s3) at (10.9, 3)   {Alarmes};
-        \node[ms, fill=red!10]    (s4) at (6.5, 1.5)  {Históricos};
-        \node[ms, fill=yellow!15] (s5) at (8.7, 1.5)  {Auth};
-        \node[ms, fill=blue!8]    (s6) at (10.9, 1.5) {Relatórios};
-        \node[db, fill=yellow!18, minimum width=12mm] (d1) at (6.5, -0.2)  {DB 1};
-        \node[db, fill=yellow!18, minimum width=12mm] (d2) at (8.7, -0.2)  {DB 2};
-        \node[db, fill=yellow!18, minimum width=12mm] (d3) at (10.9, -0.2) {DB 3};
-        \draw[->, thick, black!60] (s1) -- (d1);
-        \draw[->, thick, black!60] (s4) -- (d1);
-        \draw[->, thick, black!60] (s2) -- (d2);
-        \draw[->, thick, black!60] (s5) -- (d2);
-        \draw[->, thick, black!60] (s3) -- (d3);
-        \draw[->, thick, black!60] (s6) -- (d3);
-        \node[font=\small\sffamily\bfseries] at (8.7, 4.0) {Microsserviços};
-    \end{tikzpicture}
+    \includegraphics[width=14.02cm]{Imagens/Desenvolvimento/Cap1/monolito_vs_microservicos-nova.png}
     \vspace{0.2cm} \\
     Fonte: Elaborado pelo autor com base em \textcite{BIGHETI2020}.
 \end{figure}
@@ -717,37 +467,7 @@
     \caption{Arquitetura de microsserviços baseada em barramento de eventos (broker Moleculer)}
     \label{fig:moleculer_broker}
     \vspace{0.4cm}
-    \begin{tikzpicture}[
-            font=\footnotesize\sffamily,
-            svc/.style={rectangle, draw=black!70, thick, minimum width=22mm, minimum height=10mm, align=center, inner sep=3pt, rounded corners=2pt, fill=blue!10},
-            broker/.style={rectangle, draw=black!70, thick, minimum width=80mm, minimum height=14mm, fill=orange!15, rounded corners=7mm},
-            ext/.style={rectangle, draw=black!70, thick, minimum width=18mm, minimum height=9mm, align=center, inner sep=2pt, fill=green!12},
-            edge/.style={->, thick, black!55}
-        ]
-        % Services on top
-        \node[svc] (s1) at (-4, 2.5) {Aquisição};
-        \node[svc] (s2) at (-1.3, 2.5) {Configuração};
-        \node[svc] (s3) at (1.3, 2.5) {Alarmes};
-        \node[svc] (s4) at (4, 2.5) {Históricos};
-
-        % Broker in middle
-        \node[broker] (br) at (0, 0.5) {\textbf{Broker / Service Registry / Transporter}};
-
-        % External below
-        \node[ext] (db)  at (-3, -1.5) {RDS};
-        \node[ext] (cli) at (0, -1.5) {Frontend};
-        \node[ext] (lam) at (3, -1.5) {Lambda};
-
-        % Edges
-        \draw[edge, <->] (s1.south) -- (br.north -| s1.south);
-        \draw[edge, <->] (s2.south) -- (br.north -| s2.south);
-        \draw[edge, <->] (s3.south) -- (br.north -| s3.south);
-        \draw[edge, <->] (s4.south) -- (br.north -| s4.south);
-
-        \draw[edge, <->] (br.south -| db.north)  -- (db.north);
-        \draw[edge, <->] (br.south -| cli.north) -- (cli.north);
-        \draw[edge, <->] (br.south -| lam.north) -- (lam.north);
-    \end{tikzpicture}
+    \includegraphics[width=10.33cm]{Imagens/Desenvolvimento/Cap1/moleculer_broker-nova.png}
     \vspace{0.2cm} \\
     Fonte: Elaborado pelo autor com base em \textcite{BIGHETI2020}.
 \end{figure}
@@ -757,19 +477,6 @@
 \par O Moleculer suporta múltiplos transportes para a comunicação entre nós. Em ambiente de desenvolvimento local, frequentemente usa-se TCP direto. Em produção, recomenda-se barramentos resilientes como NATS, Redis Pub/Sub ou MQTT, que oferecem persistência opcional de mensagens, entrega garantida e tolerância a falhas no próprio barramento. O sistema supervisório proposto usa NATS pela combinação de latência baixa, simplicidade operacional e suporte nativo a streams persistentes, valiosos para reprocessar eventos de alarme ou de aquisição quando um serviço se recupera de uma falha.
 
 \par A divisão do sistema em microsserviços feita neste trabalho segue o princípio de \emph{bounded contexts} do \emph{Domain-Driven Design}: cada serviço tem responsabilidade clara sobre um domínio do problema. O serviço de \textbf{aquisição} é o orquestrador dos ciclos Modbus, traduz leituras brutas para unidades de engenharia (Subseção~\ref{sec:escala_engenharia}) e publica eventos com os valores adquiridos. O serviço de \textbf{configuração} mantém o cadastro de equipamentos, \emph{tags} e parâmetros. O serviço de \textbf{alarmes} consome os eventos de aquisição, compara com limites configurados e emite eventos de alarme quando aplicável. O serviço de \textbf{históricos} consome todos os eventos relevantes e persiste no banco para consulta posterior. O serviço de \textbf{autenticação} cuida da identidade e dos direitos de acesso de usuários e sistemas integrados.
-
-\subsection{Software como Serviço (SaaS)}
-\label{sec:saas}
-
-\par O Software como Serviço, ou \emph{Software as a Service} (SaaS), é a camada mais alta da pirâmide de serviços em nuvem descrita na Subseção~\ref{sec:computacao_nuvem}. Diferentemente de IaaS, que entrega \textit{hardware} virtualizado, e de PaaS, que entrega plataformas de desenvolvimento, o SaaS entrega ao usuário final aplicações completas, executando integralmente na nuvem do provedor e acessadas por meio de portais web ou clientes leves \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC}. O usuário não precisa instalar nem manter \textit{software} localmente; basta um terminal conectado à internet, conforme a metáfora do ``terminal burro'' originalmente associada à computação nas nuvens \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC}.
-
-\par O modelo de cobrança típico do SaaS é por assinatura, em ciclos mensais ou anuais, frequentemente escalonado por número de usuários, número de funcionalidades habilitadas ou volume de dados processados, o que se alinha à característica de \emph{serviço medido} definida nas características essenciais da computação em nuvem \cite{PEDROSA2011_COMPUTACAO_NUVEM}. Como o \textit{software} é instalado uma única vez na infraestrutura do provedor e atende a múltiplos clientes simultaneamente em arquitetura \emph{multi-tenant}, o ganho de escala permite que o custo unitário por cliente seja substancialmente inferior ao da venda tradicional de licenças \emph{on-premises}, o que viabiliza adoção por organizações de menor porte que antes não tinham acesso a esse tipo de tecnologia.
-
-\par Exemplos consagrados de SaaS incluem suítes de produtividade (Google Workspace, Microsoft 365), gestão de relacionamento com clientes (Salesforce), comunicação corporativa (Slack, Microsoft Teams), edição de imagens online (Photoshop on the web) e armazenamento e sincronização de arquivos (Dropbox, Google Drive) \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC,PEDROSA2011_COMPUTACAO_NUVEM}. No segmento industrial, soluções de supervisão remota, manutenção preditiva, telemetria de frota e gestão de manufatura têm migrado progressivamente para o modelo SaaS, aproveitando as vantagens de elasticidade, manutenção centralizada e atualização contínua, conforme defendido por \textcite{LIMA2026_EPM_PROCESSOR} no contexto da transformação digital industrial.
-
-\par A arquitetura \emph{multi-tenant} é o mecanismo técnico que viabiliza o modelo SaaS economicamente. Em uma instalação tradicional, cada cliente teria uma cópia separada do \textit{software} executando em sua infraestrutura. No SaaS, uma única instância da aplicação atende a vários clientes simultaneamente, com isolamento lógico dos dados por meio de identificadores de \emph{tenant} em todas as consultas ao banco, criptografia separada por cliente e políticas de controle de acesso que impedem qualquer vazamento entre inquilinos. Esse desenho exige cuidado redobrado com segurança, mas oferece vantagens operacionais expressivas: atualizações são aplicadas uma única vez para todos os clientes, métricas e \emph{logs} são unificados, e a infraestrutura é dimensionada de forma agregada.
-
-\par O sistema supervisório proposto neste trabalho é, por desenho, uma solução SaaS para o setor de saneamento e processos industriais correlatos. Cada cliente contratante (uma concessionária de água, por exemplo) é um \emph{tenant} dentro da mesma infraestrutura, com seus equipamentos, \emph{tags}, históricos, usuários e configurações isolados logicamente dos demais. A operação cotidiana, a manutenção evolutiva, as atualizações de funcionalidades, as correções de segurança e o monitoramento da infraestrutura são responsabilidades centralizadas do fornecedor, e o cliente acessa o sistema exclusivamente por meio do navegador web e de credenciais individuais. Esse posicionamento alinha-se diretamente com a tendência mais ampla descrita por \textcite{BIGHETI2020} de migração da automação industrial para modelos orientados a serviços, e materializa, na prática, a visão de fábrica inteligente conectada à nuvem associada à Indústria 4.0 \cite{PISCHING2017}.
 
 \subsection{Protocolo Modbus TCP e Modbus RTU}
 \label{sec:modbus_tcp_rtu}
@@ -783,32 +490,7 @@
     \caption{Composição lógica do Modbus TCP: cabeçalho MBAP seguido da PDU (código de função, dados ou exceção)}
     \label{fig:modbus_tcp_mbap}
     \vspace{0.4cm}
-    \begin{tikzpicture}[
-            font=\footnotesize\sffamily,
-            box/.style={rectangle, draw=black!70, thick, minimum height=11mm, align=center, inner sep=2pt},
-            hdr/.style={box, fill=blue!8},
-            pdu/.style={box, fill=orange!15},
-            bytes/.style={font=\scriptsize\sffamily, text=black!60}
-        ]
-        \node[hdr, minimum width=15mm] (tid) at (0,0) {Trans.\\ID};
-        \node[hdr, minimum width=15mm, anchor=west] (pid) at (tid.east) {Prot.\\ID};
-        \node[hdr, minimum width=15mm, anchor=west] (len) at (pid.east) {Compr.};
-        \node[hdr, minimum width=13mm, anchor=west] (uid) at (len.east) {Unit\\ID};
-        \node[pdu, minimum width=45mm, anchor=west] (pdu) at (uid.east) {PDU Modbus\\(FC + dados ou exceção)};
-
-        \node[bytes, below=1pt of tid] {2 bytes};
-        \node[bytes, below=1pt of pid] {2 bytes};
-        \node[bytes, below=1pt of len] {2 bytes};
-        \node[bytes, below=1pt of uid] {1 byte};
-        \node[bytes, below=1pt of pdu] {variável};
-
-        \draw[decorate, decoration={brace, raise=2mm, amplitude=4pt}, thick]
-        (tid.north west) -- (uid.north east)
-        node[midway, above=5mm, font=\small\sffamily\bfseries] {MBAP (7 bytes)};
-        \draw[decorate, decoration={brace, raise=2mm, amplitude=4pt}, thick]
-        (pdu.north west) -- (pdu.north east)
-        node[midway, above=5mm, font=\small\sffamily\bfseries] {PDU};
-    \end{tikzpicture}
+    \includegraphics[width=10.57cm]{Imagens/Desenvolvimento/Cap1/modbus_tcp_mbap-nova.png}
     \vspace{0.2cm} \\
     Fonte: Elaborado pelo autor com base em \textcite{MODBUS_TCP_IMPLEMENTATION_GUIDE}.
 \end{figure}
@@ -820,34 +502,7 @@
     \caption{Estrutura simplificada do quadro Modbus RTU (delimitação temporal entre quadros)}
     \label{fig:modbus_rtu_frame}
     \vspace{0.4cm}
-    \begin{tikzpicture}[
-            font=\footnotesize\sffamily,
-            box/.style={rectangle, draw=black!70, thick, minimum height=11mm, align=center, inner sep=2pt},
-            addr/.style={box, fill=orange!15},
-            pdu/.style={box, fill=blue!8},
-            crc/.style={box, fill=green!15},
-            bytes/.style={font=\scriptsize\sffamily, text=black!60},
-            silence/.style={font=\scriptsize\sffamily\itshape, text=black!70, align=center}
-        ]
-        \node[addr, minimum width=14mm] (adr) at (0,0) {End.\\escravo};
-        \node[pdu, minimum width=14mm, anchor=west] (fc) at (adr.east) {Cód.\\função};
-        \node[pdu, minimum width=42mm, anchor=west] (data) at (fc.east) {Dados};
-        \node[crc, minimum width=14mm, anchor=west] (crcb) at (data.east) {CRC-16};
-
-        \node[bytes, below=1pt of adr] {1 byte};
-        \node[bytes, below=1pt of fc] {1 byte};
-        \node[bytes, below=1pt of data] {0 a 252 bytes};
-        \node[bytes, below=1pt of crcb] {2 bytes};
-
-        \draw[decorate, decoration={brace, raise=2mm, amplitude=4pt}, thick]
-        (fc.north west) -- (data.north east)
-        node[midway, above=5mm, font=\small\sffamily\bfseries] {PDU};
-
-        \node[silence, left=6mm of adr] (s1) {silêncio\\$\geq 3{,}5$ car.};
-        \node[silence, right=6mm of crcb] (s2) {silêncio\\$\geq 3{,}5$ car.};
-        \draw[->, thick, black!55] (s1.east) -- (adr.west);
-        \draw[->, thick, black!55] (crcb.east) -- (s2.west);
-    \end{tikzpicture}
+    \includegraphics[width=12.87cm]{Imagens/Desenvolvimento/Cap1/modbus_rtu_frame-nova.png}
     \vspace{0.2cm} \\
     Fonte: Elaborado pelo autor com base em \textcite{MODBUS_SERIAL_SPEC}.
 \end{figure}

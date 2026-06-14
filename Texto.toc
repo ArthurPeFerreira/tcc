@@ -10,13 +10,13 @@
 \contentsline {subsection}{\numberline {2.1}Sistema SCADA}{16}{subsection.2.1}%
 \contentsline {subsubsection}{\numberline {2.1.1}Aquisição e Registro de Dados}{16}{subsubsection.2.1.1}%
 \contentsline {subsubsection}{\numberline {2.1.2}Sincronismo de Tempo}{16}{subsubsection.2.1.2}%
-\contentsline {subsubsection}{\numberline {2.1.3}Níveis de Operação}{17}{subsubsection.2.1.3}%
+\contentsline {subsubsection}{\numberline {2.1.3}Níveis de Acesso}{17}{subsubsection.2.1.3}%
 \contentsline {subsubsection}{\numberline {2.1.4}Comando e Controle}{17}{subsubsection.2.1.4}%
 \contentsline {subsubsection}{\numberline {2.1.5}Escalabilidade}{17}{subsubsection.2.1.5}%
-\contentsline {subsubsection}{\numberline {2.1.6}Redundância}{18}{subsubsection.2.1.6}%
+\contentsline {subsubsection}{\numberline {2.1.6}Redundância}{17}{subsubsection.2.1.6}%
 \contentsline {subsection}{\numberline {2.2}Automação e Informática Industrial}{18}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Indústria 4.0 e Tecnologias Habilitadoras}{20}{subsection.2.3}%
-\contentsline {subsubsection}{\numberline {2.3.1}Internet das Coisas (IoT)}{20}{subsubsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3}Indústria 4.0 e Tecnologias Habilitadoras}{19}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Internet das Coisas (IoT)}{19}{subsubsection.2.3.1}%
 \contentsline {subsubsection}{\numberline {2.3.2}Internet Industrial das Coisas (IIoT)}{22}{subsubsection.2.3.2}%
 \contentsline {subsubsection}{\numberline {2.3.3}Comunicação Máquina a Máquina (M2M)}{23}{subsubsection.2.3.3}%
 \contentsline {subsubsection}{\numberline {2.3.4}Sistemas Ciber-Físicos (CPS)}{24}{subsubsection.2.3.4}%
@@ -32,31 +32,26 @@
 \contentsline {subsection}{\numberline {2.11}HTTP, API REST e JSON}{39}{subsection.2.11}%
 \contentsline {subsection}{\numberline {2.12}Microsserviços}{40}{subsection.2.12}%
 \contentsline {subsection}{\numberline {2.13}Moleculer}{42}{subsection.2.13}%
-\contentsline {subsection}{\numberline {2.14}Software como Serviço (SaaS)}{43}{subsection.2.14}%
-\contentsline {subsection}{\numberline {2.15}Protocolo Modbus TCP e Modbus RTU}{44}{subsection.2.15}%
-\contentsline {subsection}{\numberline {2.16}Modelagem, serviço de leitura e agendamento}{45}{subsection.2.16}%
-\contentsline {section}{\numberline {3}Funcionamento}{47}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Validações dos Requisitos do SCADA}{47}{subsection.3.1}%
-\contentsline {subsubsection}{\numberline {3.1.1}Aquisição e Registro de Dados}{48}{subsubsection.3.1.1}%
-\contentsline {subsubsection}{\numberline {3.1.2}Sincronismo de Tempo}{48}{subsubsection.3.1.2}%
-\contentsline {subsubsection}{\numberline {3.1.3}Níveis de Operação}{48}{subsubsection.3.1.3}%
-\contentsline {subsubsection}{\numberline {3.1.4}Comando e Controle}{48}{subsubsection.3.1.4}%
-\contentsline {subsubsection}{\numberline {3.1.5}Escalabilidade}{49}{subsubsection.3.1.5}%
-\contentsline {subsubsection}{\numberline {3.1.6}Redundância}{49}{subsubsection.3.1.6}%
-\contentsline {subsection}{\numberline {3.2}Servidores}{49}{subsection.3.2}%
-\contentsline {subsubsection}{\numberline {3.2.1}Frontend}{50}{subsubsection.3.2.1}%
-\contentsline {subsubsection}{\numberline {3.2.2}Backend}{50}{subsubsection.3.2.2}%
-\contentsline {subsubsection}{\numberline {3.2.3}Banco de Dados}{50}{subsubsection.3.2.3}%
-\contentsline {subsubsection}{\numberline {3.2.4}Cache}{50}{subsubsection.3.2.4}%
-\contentsline {subsubsection}{\numberline {3.2.5}APScheduler}{51}{subsubsection.3.2.5}%
-\contentsline {subsubsection}{\numberline {3.2.6}Barramento Moleculer}{51}{subsubsection.3.2.6}%
-\contentsline {subsubsection}{\numberline {3.2.7}Workers de Aquisição}{51}{subsubsection.3.2.7}%
-\contentsline {subsection}{\numberline {3.3}Aquisição de Dados}{51}{subsection.3.3}%
-\contentsline {section}{\numberline {4}Cronograma}{55}{section.4}%
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
+\contentsline {subsection}{\numberline {2.14}Protocolo Modbus TCP e Modbus RTU}{43}{subsection.2.14}%
+\contentsline {subsection}{\numberline {2.15}Modelagem, serviço de leitura e agendamento}{44}{subsection.2.15}%
+\contentsline {section}{\numberline {3}Funcionamento}{46}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Validações dos Requisitos do SCADA}{46}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Aquisição e Registro de Dados}{47}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Sincronismo de Tempo}{47}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}Níveis de Acesso}{47}{subsubsection.3.1.3}%
+\contentsline {subsubsection}{\numberline {3.1.4}Comando e Controle}{47}{subsubsection.3.1.4}%
+\contentsline {subsubsection}{\numberline {3.1.5}Escalabilidade}{48}{subsubsection.3.1.5}%
+\contentsline {subsubsection}{\numberline {3.1.6}Redundância}{48}{subsubsection.3.1.6}%
+\contentsline {subsection}{\numberline {3.2}Servidores}{48}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Frontend}{49}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Backend}{49}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}Banco de Dados}{49}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}Cache}{49}{subsubsection.3.2.4}%
+\contentsline {subsubsection}{\numberline {3.2.5}APScheduler}{50}{subsubsection.3.2.5}%
+\contentsline {subsubsection}{\numberline {3.2.6}Barramento Moleculer}{50}{subsubsection.3.2.6}%
+\contentsline {subsubsection}{\numberline {3.2.7}Workers de Aquisição}{50}{subsubsection.3.2.7}%
+\contentsline {subsection}{\numberline {3.3}Aquisição de Dados}{50}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Cronograma}{54}{section.4}%
 \babel@toc {brazil}{}\relax 
 \babel@toc {brazil}{}\relax 
 \babel@toc {brazil}{}\relax 

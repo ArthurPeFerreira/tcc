@@ -18,7 +18,7 @@
 \subsection{Validações dos Requisitos do SCADA}
 \label{sec:validacoes}
 
-\par As subseções a seguir validam, item por item, o atendimento do sistema aos requisitos clássicos do SCADA descritos por \textcite{ZANGHI2019_SCADA_CONCEITOS} e revisados na Subseção~\ref{sec:scada}. Cada validação mostra como a arquitetura ilustrada na Figura~\ref{fig:arquitetura_sistema} e descrita acima atende aos seis pilares definidos: aquisição e registro de dados, sincronismo de tempo, níveis de operação, comando e controle, escalabilidade e redundância.
+\par As subseções a seguir validam, item por item, o atendimento do sistema aos requisitos clássicos do SCADA descritos por \textcite{ZANGHI2019_SCADA_CONCEITOS} e revisados na Subseção~\ref{sec:scada}. Cada validação mostra como a arquitetura ilustrada na Figura~\ref{fig:arquitetura_sistema} e descrita acima atende aos seis pilares definidos: aquisição e registro de dados, sincronismo de tempo, níveis de acesso, comando e controle, escalabilidade e redundância.
 
 \subsubsection{Aquisição e Registro de Dados}
 \label{sec:req_aquisicao}
@@ -30,10 +30,10 @@
 
 \par O sincronismo de tempo exigido pelo SCADA é garantido pela combinação entre o relógio do APScheduler, sincronizado por NTP com a infraestrutura da AWS, e o carimbo de tempo aplicado pelos workers no instante exato em que a resposta Modbus é recebida do dispositivo de campo. Cada mensagem que trafega pelo barramento Moleculer carrega esse carimbo de tempo, que se preserva inalterado ao longo de toda a cadeia: do worker para o canal \texttt{update}, do canal para o banco e para o cache, do banco para o backend e do backend para o frontend. Assim, alarmes e eventos digitais captados em diferentes pontos do sistema recebem estampas de tempo coerentes na escala de milissegundos, atendendo à exigência de cronologia precisa para análises \emph{a posteriori} de ocorrências e faltas, sobretudo em processos com dinâmica rápida.
 
-\subsubsection{Níveis de Operação}
+\subsubsection{Níveis de Acesso}
 \label{sec:req_niveis}
 
-\par Os níveis de operação clássicos do SCADA mapeiam-se naturalmente sobre a arquitetura. O Nível 0, dos equipamentos de campo e seus sensores, corresponde aos transmissores, medidores e demais dispositivos físicos instalados nas unidades operacionais dos clientes. O Nível 1, da supervisão local junto aos IEDs, é representado pelos CLPs e modems no campo, que executam a comunicação Modbus com os instrumentos e, quando há, oferecem uma IHM simples para operação no próprio ponto. O Nível 2, da supervisão da instalação como um todo, é materializado pelos workers de aquisição, pelo Moleculer e pelos serviços de domínio na nuvem (cadastro, alarmes, históricos), que agregam os pontos relevantes de cada cliente em estações redundantes com telas elaboradas para supervisão completa da unidade. O Nível 3, do centro de operação remota, é o frontend Next.js acessado via navegador, que consolida pontos provenientes de múltiplas instalações geograficamente distribuídas, disponibilizando apenas o que é estritamente necessário para a gestão sistêmica.
+\par No quesito de níveis de acesso discutido na Subseção~\ref{sec:scada}, o sistema substitui a hierarquia fixa de subestação por níveis de acesso definidos por planta. Cada usuário autentica-se no frontend Next.js e recebe uma sessão vinculada às instalações sob sua responsabilidade; o backend Fastify atua como ponto de autorização, validando, a cada requisição aos \textit{endpoints} REST, se o perfil do usuário permite consultar dados, configurar \emph{tags} ou disparar comandos da planta em questão. Dessa forma, a supervisão e o controle ficam segmentados conforme o cargo de cada operador, em consonância com o controle de acesso baseado em cargos e o princípio do menor privilégio \cite{STOUFFER2015_NIST_ICS_SECURITY}. Como a solução é multiplanta e compartilha a mesma infraestrutura na nuvem, esse isolamento de permissões por instalação é também uma medida de segurança, evitando que usuários de um cliente acessem ou comandem pontos de outro \cite{WALI2024_CLOUD_SCADA_SECURITY}.
 
 \subsubsection{Comando e Controle}
 \label{sec:req_comando}
