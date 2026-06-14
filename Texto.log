@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.25)  14 JUN 2026 00:31
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.9.25)  14 JUN 2026 02:57
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1133,7 +1133,7 @@ Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
 Package csquotes Info: Redefining alias 'default' -> 'brazil'.
- (./Texto.aux (./Capitulos/01_Capa.aux) (./Capitulos/02_Contra-Capa.aux) (./Capitulos/05_Epigrafe.aux) (./Capitulos/06_Resumo.aux) (./Capitulos/06_Abstract.aux) (./Capitulos/07_Lista_Imagens.aux) (./Capitulos/08_Lista Siglas.aux) (./Capitulos/09_Lista de Simbolos.aux) (./Capitulos/10_Lista de Equações.aux) (./Capitulos/11_Lista de Tabelas.aux) (./Capitulos/12_Sumário.aux) (./Capitulos/13_Introducao/13_1_Contextualizacao.aux) (./Capitulos/14_Desenvolvimento/14_1_Cap.aux) (./Capitulos/00_Referencias.aux))
+ (./Texto.aux (./Capitulos/01_Capa.aux) (./Capitulos/02_Contra-Capa.aux) (./Capitulos/05_Epigrafe.aux) (./Capitulos/06_Resumo.aux) (./Capitulos/06_Abstract.aux) (./Capitulos/07_Lista_Imagens.aux) (./Capitulos/08_Lista Siglas.aux) (./Capitulos/09_Lista de Simbolos.aux) (./Capitulos/10_Lista de Equações.aux) (./Capitulos/11_Lista de Tabelas.aux) (./Capitulos/12_Sumário.aux) (./Capitulos/00_Referencias.aux))
 \openout1 = `Texto.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 49.
@@ -1301,7 +1301,7 @@ Package biblatex Info: Reference segment=0 on input line 49.
 \openout2 = `Capitulos/01_Capa.aux'.
 
  (./Capitulos/01_Capa.tex
-<Imagens/Capa/01_Instituto.png, id=220, 429.605pt x 118.4425pt>
+<Imagens/Capa/01_Instituto.png, id=175, 429.605pt x 118.4425pt>
 File: Imagens/Capa/01_Instituto.png Graphic file (type png)
 <use Imagens/Capa/01_Instituto.png>
 Package pdftex.def Info: Imagens/Capa/01_Instituto.png  used on input line 8.
@@ -1434,192 +1434,70 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ])
 \openout2 = `Capitulos/12_Sumário.aux'.
 
- (./Capitulos/12_Sumário.tex (./Texto.toc [10
-
-
-
-
-
-])
+ (./Capitulos/12_Sumário.tex (./Texto.toc)
 \tf@toc=\write10
 \openout10 = `Texto.toc'.
 
- [11])
-\openout2 = `Capitulos/13_Introducao/13_1_Contextualizacao.aux'.
+ [10
 
- (./Capitulos/13_Introducao/13_1_Contextualizacao.tex
-<Imagens/Introducao/Contextualizacao/evolucoes-industriais-nova.png, id=415, 2790.425pt x 1033.8625pt>
+
+
+
+
+]) (./Capitulos/13_Introducao/13_1_Contextualizacao.tex
+<Imagens/Introducao/Contextualizacao/evolucoes-industriais-nova.png, id=301, 2790.425pt x 1033.8625pt>
 File: Imagens/Introducao/Contextualizacao/evolucoes-industriais-nova.png Graphic file (type png)
 <use Imagens/Introducao/Contextualizacao/evolucoes-industriais-nova.png>
-Package pdftex.def Info: Imagens/Introducao/Contextualizacao/evolucoes-industriais-nova.png  used on input line 13.
+Package pdftex.def Info: Imagens/Introducao/Contextualizacao/evolucoes-industriais-nova.png  used on input line 14.
 (pdftex.def)             Requested size: 435.32422pt x 161.28821pt.
- [12
-
+ [11
 
 
 
  <./Imagens/Introducao/Contextualizacao/evolucoes-industriais-nova.png (PNG copy)>]
-<Imagens/Introducao/Contextualizacao/piramide-automacao-nova.png, id=437, 1866.975pt x 1048.91875pt>
+<Imagens/Introducao/Contextualizacao/piramide-automacao-nova.png, id=322, 1866.975pt x 1048.91875pt>
 File: Imagens/Introducao/Contextualizacao/piramide-automacao-nova.png Graphic file (type png)
 <use Imagens/Introducao/Contextualizacao/piramide-automacao-nova.png>
-Package pdftex.def Info: Imagens/Introducao/Contextualizacao/piramide-automacao-nova.png  used on input line 28.
+Package pdftex.def Info: Imagens/Introducao/Contextualizacao/piramide-automacao-nova.png  used on input line 29.
 (pdftex.def)             Requested size: 435.32422pt x 244.57532pt.
-) [13 <./Imagens/Introducao/Contextualizacao/piramide-automacao-nova.png>] (./Capitulos/13_Introducao/13_2_Justificativa.tex) (./Capitulos/13_Introducao/13_3_Objetivos.tex [14
-
-
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]) (./Capitulos/13_Introducao/13_4_Estrutura.tex) [15]
-\openout2 = `Capitulos/14_Desenvolvimento/14_1_Cap.aux'.
-
- (./Capitulos/14_Desenvolvimento/14_1_Cap.tex [16
-
-] [17]
-<Imagens/Desenvolvimento/Cap1/ta_ti_convergencia-nova.png, id=561, 409.0482pt x 69.1383pt>
-File: Imagens/Desenvolvimento/Cap1/ta_ti_convergencia-nova.png Graphic file (type png)
-<use Imagens/Desenvolvimento/Cap1/ta_ti_convergencia-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/ta_ti_convergencia-nova.png  used on input line 58.
-(pdftex.def)             Requested size: 407.44366pt x 68.8691pt.
- [18 <./Imagens/Desenvolvimento/Cap1/ta_ti_convergencia-nova.png (PNG copy)>] [19]
-<Imagens/Desenvolvimento/Cap1/iot_camadas-073-nova.png, id=607, 308.15125pt x 359.3425pt>
-File: Imagens/Desenvolvimento/Cap1/iot_camadas-073-nova.png Graphic file (type png)
-<use Imagens/Desenvolvimento/Cap1/iot_camadas-073-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/iot_camadas-073-nova.png  used on input line 87.
-(pdftex.def)             Requested size: 435.32422pt x 507.68188pt.
- [20] [21 <./Imagens/Desenvolvimento/Cap1/iot_camadas-073-nova.png>]
-Underfull \hbox (badness 2990) in paragraph at lines 118--118
-[]|\T1/cmr/m/n/12 Novos dis-po-si-ti-vos e pa-dr�es
- []
-
-
-Underfull \hbox (badness 1701) in paragraph at lines 118--118
-\T1/cmr/m/n/12 ge-ren-ci-a-mento cen-tra-li-zado de
- []
-
-[22]
-<Imagens/Desenvolvimento/Cap1/m2m_telemetria-nova.png, id=646, 366.168pt x 60.7068pt>
-File: Imagens/Desenvolvimento/Cap1/m2m_telemetria-nova.png Graphic file (type png)
-<use Imagens/Desenvolvimento/Cap1/m2m_telemetria-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/m2m_telemetria-nova.png  used on input line 139.
-(pdftex.def)             Requested size: 364.76453pt x 60.47505pt.
- [23 <./Imagens/Desenvolvimento/Cap1/m2m_telemetria-nova.png (PNG copy)>]
-<Imagens/Desenvolvimento/Cap1/cps_estrutura-045-nova.png, id=673, 637.38126pt x 548.0475pt>
-File: Imagens/Desenvolvimento/Cap1/cps_estrutura-045-nova.png Graphic file (type png)
-<use Imagens/Desenvolvimento/Cap1/cps_estrutura-045-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/cps_estrutura-045-nova.png  used on input line 163.
-(pdftex.def)             Requested size: 435.32422pt x 374.30643pt.
- [24] [25 <./Imagens/Desenvolvimento/Cap1/cps_estrutura-045-nova.png>]
-<Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps_i40-034-nova.png, id=713, 433.62pt x 280.04625pt>
-File: Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps_i40-034-nova.png Graphic file (type png)
-<use Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps_i40-034-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps_i40-034-nova.png  used on input line 188.
+) (./Capitulos/13_Introducao/13_2_Justificativa.tex [12 <./Imagens/Introducao/Contextualizacao/piramide-automacao-nova.png>]) (./Capitulos/13_Introducao/13_3_Objetivos.tex [13{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]) (./Capitulos/13_Introducao/13_4_Estrutura.tex) (./Capitulos/14_Desenvolvimento/14_1_Cap.tex [14] [15] [16] [17]
+<Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps_i40-034.png, id=499, 433.62pt x 280.04625pt>
+File: Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps_i40-034.png Graphic file (type png)
+<use Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps_i40-034.png>
+Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps_i40-034.png  used on input line 64.
 (pdftex.def)             Requested size: 435.32422pt x 281.16083pt.
- [26] [27 <./Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps_i40-034-nova.png>] [28]
-<Imagens/Desenvolvimento/Cap1/linearizacao_sensor-nova.png, id=753, 408.5664pt x 207.4149pt>
-File: Imagens/Desenvolvimento/Cap1/linearizacao_sensor-nova.png Graphic file (type png)
-<use Imagens/Desenvolvimento/Cap1/linearizacao_sensor-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/linearizacao_sensor-nova.png  used on input line 247.
-(pdftex.def)             Requested size: 406.87448pt x 206.55669pt.
- [29] [30 <./Imagens/Desenvolvimento/Cap1/linearizacao_sensor-nova.png (PNG copy)>]
-
-LaTeX Warning: Reference `sec:saas' on page 31 undefined on input line 269.
-
-<Imagens/Desenvolvimento/Cap1/cloud_modelos_servico-nova.png, id=779, 257.763pt x 97.8054pt>
-File: Imagens/Desenvolvimento/Cap1/cloud_modelos_servico-nova.png Graphic file (type png)
-<use Imagens/Desenvolvimento/Cap1/cloud_modelos_servico-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/cloud_modelos_servico-nova.png  used on input line 276.
-(pdftex.def)             Requested size: 256.64397pt x 97.38428pt.
-[31 <./Imagens/Desenvolvimento/Cap1/cloud_modelos_servico-nova.png (PNG copy)>]
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 294.
- (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
-File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-) [32]
-<Imagens/Desenvolvimento/Cap1/esquema_relacional_exemplo-nova.png, id=821, 380.3811pt x 163.0893pt>
-File: Imagens/Desenvolvimento/Cap1/esquema_relacional_exemplo-nova.png Graphic file (type png)
-<use Imagens/Desenvolvimento/Cap1/esquema_relacional_exemplo-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/esquema_relacional_exemplo-nova.png  used on input line 303.
-(pdftex.def)             Requested size: 378.9909pt x 162.49411pt.
- [33 <./Imagens/Desenvolvimento/Cap1/esquema_relacional_exemplo-nova.png (PNG copy)>]
-<Imagens/Desenvolvimento/Cap1/redis_papeis-nova.png, id=836, 283.7802pt x 152.9715pt>
-File: Imagens/Desenvolvimento/Cap1/redis_papeis-nova.png Graphic file (type png)
-<use Imagens/Desenvolvimento/Cap1/redis_papeis-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/redis_papeis-nova.png  used on input line 326.
-(pdftex.def)             Requested size: 282.53564pt x 152.3152pt.
- [34 <./Imagens/Desenvolvimento/Cap1/redis_papeis-nova.png (PNG copy)>]
-<Imagens/Desenvolvimento/Cap1/vm_vs_container-nova.png, id=848, 389.0535pt x 142.8537pt>
+ [18] [19 <./Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps_i40-034.png>]
+<Imagens/Desenvolvimento/Cap1/vm_vs_container-nova.png, id=532, 389.0535pt x 142.8537pt>
 File: Imagens/Desenvolvimento/Cap1/vm_vs_container-nova.png Graphic file (type png)
 <use Imagens/Desenvolvimento/Cap1/vm_vs_container-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/vm_vs_container-nova.png  used on input line 351.
+Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/vm_vs_container-nova.png  used on input line 95.
 (pdftex.def)             Requested size: 387.52638pt x 142.29967pt.
- [35] [36 <./Imagens/Desenvolvimento/Cap1/vm_vs_container-nova.png (PNG copy)>]
-<Imagens/Desenvolvimento/Cap1/nextjs_rendering-nova.png, id=864, 308.5929pt x 118.7637pt>
-File: Imagens/Desenvolvimento/Cap1/nextjs_rendering-nova.png Graphic file (type png)
-<use Imagens/Desenvolvimento/Cap1/nextjs_rendering-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/nextjs_rendering-nova.png  used on input line 374.
-(pdftex.def)             Requested size: 307.28984pt x 118.2723pt.
- [37 <./Imagens/Desenvolvimento/Cap1/nextjs_rendering-nova.png (PNG copy)>]
-<Imagens/Desenvolvimento/Cap1/aws_servicos-nova.png, id=875, 317.988pt x 124.3044pt>
-File: Imagens/Desenvolvimento/Cap1/aws_servicos-nova.png Graphic file (type png)
-<use Imagens/Desenvolvimento/Cap1/aws_servicos-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/aws_servicos-nova.png  used on input line 397.
-(pdftex.def)             Requested size: 316.6793pt x 123.79955pt.
- [38 <./Imagens/Desenvolvimento/Cap1/aws_servicos-nova.png (PNG copy)>]
-<Imagens/Desenvolvimento/Cap1/http_rest_ciclo-nova.png, id=885, 488.5452pt x 75.8835pt>
-File: Imagens/Desenvolvimento/Cap1/http_rest_ciclo-nova.png Graphic file (type png)
-<use Imagens/Desenvolvimento/Cap1/http_rest_ciclo-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/http_rest_ciclo-nova.png  used on input line 422.
-(pdftex.def)             Requested size: 483.69687pt x 75.13182pt.
- [39 <./Imagens/Desenvolvimento/Cap1/http_rest_ciclo-nova.png (PNG copy)>]
-<Imagens/Desenvolvimento/Cap1/monolito_vs_microservicos-nova.png, id=896, 400.3758pt x 152.7306pt>
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 100.
+ (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
+) [20 <./Imagens/Desenvolvimento/Cap1/vm_vs_container-nova.png (PNG copy)>]
+
+LaTeX Warning: Reference `fig:cloud_modelos_servico' on page 21 undefined on input line 108.
+
+[21] [22]
+<Imagens/Desenvolvimento/Cap1/monolito_vs_microservicos-nova.png, id=592, 400.3758pt x 152.7306pt>
 File: Imagens/Desenvolvimento/Cap1/monolito_vs_microservicos-nova.png Graphic file (type png)
 <use Imagens/Desenvolvimento/Cap1/monolito_vs_microservicos-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/monolito_vs_microservicos-nova.png  used on input line 445.
+Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/monolito_vs_microservicos-nova.png  used on input line 141.
 (pdftex.def)             Requested size: 398.90775pt x 152.18022pt.
- [40] [41 <./Imagens/Desenvolvimento/Cap1/monolito_vs_microservicos-nova.png (PNG copy)>]
-<Imagens/Desenvolvimento/Cap1/moleculer_broker-nova.png, id=923, 295.1025pt x 145.7445pt>
+ [23 <./Imagens/Desenvolvimento/Cap1/monolito_vs_microservicos-nova.png (PNG copy)>]
+<Imagens/Desenvolvimento/Cap1/moleculer_broker-nova.png, id=609, 295.1025pt x 145.7445pt>
 File: Imagens/Desenvolvimento/Cap1/moleculer_broker-nova.png Graphic file (type png)
 <use Imagens/Desenvolvimento/Cap1/moleculer_broker-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/moleculer_broker-nova.png  used on input line 470.
+Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/moleculer_broker-nova.png  used on input line 159.
 (pdftex.def)             Requested size: 293.917pt x 145.16148pt.
- [42 <./Imagens/Desenvolvimento/Cap1/moleculer_broker-nova.png (PNG copy)>]
-<Imagens/Desenvolvimento/Cap1/modbus_tcp_mbap-nova.png, id=933, 302.0886pt x 86.0013pt>
-File: Imagens/Desenvolvimento/Cap1/modbus_tcp_mbap-nova.png Graphic file (type png)
-<use Imagens/Desenvolvimento/Cap1/modbus_tcp_mbap-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/modbus_tcp_mbap-nova.png  used on input line 493.
-(pdftex.def)             Requested size: 300.74583pt x 85.62575pt.
- [43 <./Imagens/Desenvolvimento/Cap1/modbus_tcp_mbap-nova.png (PNG copy)>]
-<Imagens/Desenvolvimento/Cap1/modbus_rtu_frame-nova.png, id=942, 367.6134pt x 82.6287pt>
-File: Imagens/Desenvolvimento/Cap1/modbus_rtu_frame-nova.png Graphic file (type png)
-<use Imagens/Desenvolvimento/Cap1/modbus_rtu_frame-nova.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/modbus_rtu_frame-nova.png  used on input line 505.
-(pdftex.def)             Requested size: 366.18683pt x 82.312pt.
- [44 <./Imagens/Desenvolvimento/Cap1/modbus_rtu_frame-nova.png (PNG copy)>]) [45] (./Capitulos/14_Desenvolvimento/14_2_Cap.tex
-<Imagens/Desenvolvimento/Cap2/diagrama_servidores.png, id=955, 1217.54875pt x 551.05875pt>
+ [24 <./Imagens/Desenvolvimento/Cap1/moleculer_broker-nova.png (PNG copy)>]) (./Capitulos/14_Desenvolvimento/14_2_Cap.tex [25]
+<Imagens/Desenvolvimento/Cap2/diagrama_servidores.png, id=632, 1217.54875pt x 551.05875pt>
 File: Imagens/Desenvolvimento/Cap2/diagrama_servidores.png Graphic file (type png)
 <use Imagens/Desenvolvimento/Cap2/diagrama_servidores.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap2/diagrama_servidores.png  used on input line 9.
+Package pdftex.def Info: Imagens/Desenvolvimento/Cap2/diagrama_servidores.png  used on input line 10.
 (pdftex.def)             Requested size: 435.32422pt x 197.02722pt.
-
-
-LaTeX Warning: Reference `sec:fastify' on page 46 undefined on input line 16.
-
-[46
-
-
- <./Imagens/Desenvolvimento/Cap2/diagrama_servidores.png>] [47] [48]
-
-LaTeX Warning: Reference `sec:fastify' on page 49 undefined on input line 66.
-
-[49] [50]
-<Imagens/Desenvolvimento/Cap2/gateway_abs.jpeg, id=1026, 977.6525pt x 510.90875pt>
-File: Imagens/Desenvolvimento/Cap2/gateway_abs.jpeg Graphic file (type jpg)
-<use Imagens/Desenvolvimento/Cap2/gateway_abs.jpeg>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap2/gateway_abs.jpeg  used on input line 105.
-(pdftex.def)             Requested size: 435.32422pt x 227.4979pt.
-<Imagens/Desenvolvimento/Cap2/cel_x.png, id=1027, 225.84375pt x 301.125pt>
-File: Imagens/Desenvolvimento/Cap2/cel_x.png Graphic file (type png)
-<use Imagens/Desenvolvimento/Cap2/cel_x.png>
-Package pdftex.def Info: Imagens/Desenvolvimento/Cap2/cel_x.png  used on input line 116.
-(pdftex.def)             Requested size: 435.32422pt x 580.51054pt.
- [51 <./Imagens/Desenvolvimento/Cap2/gateway_abs.jpeg>] [52 <./Imagens/Desenvolvimento/Cap2/cel_x.png>]) (./Capitulos/14_Desenvolvimento/14_3_Cap.tex) (./Capitulos/14_Desenvolvimento/14_4_Cap.tex) (./Capitulos/14_Desenvolvimento/14_5_Cap.tex) (./Capitulos/14_Desenvolvimento/14_6_Cap.tex) (./Capitulos/16_Cronograma.tex [53]
+ [26 <./Imagens/Desenvolvimento/Cap2/diagrama_servidores.png>] [27] [28] [29] [30]) (./Capitulos/14_Desenvolvimento/14_3_Cap.tex) (./Capitulos/14_Desenvolvimento/14_4_Cap.tex) (./Capitulos/14_Desenvolvimento/14_5_Cap.tex) (./Capitulos/14_Desenvolvimento/14_6_Cap.tex) (./Capitulos/16_Cronograma.tex [31]
 Underfull \hbox (badness 1259) in paragraph at lines 27--27
 []|\T1/cmr/m/n/12 Apresenta��o do Pro-jeto de
  []
@@ -1629,15 +1507,15 @@ Underfull \hbox (badness 2556) in paragraph at lines 29--29
 []|\T1/cmr/m/n/12 Elabora��o do Tra-ba-lho de
  []
 
-) [54
+) [32
 
 ]
 \openout2 = `Capitulos/00_Referencias.aux'.
 
- (./Capitulos/00_Referencias.tex [55
+ (./Capitulos/00_Referencias.tex [33
 
 
-]) [56] (./Texto.aux (./Capitulos/01_Capa.aux) (./Capitulos/02_Contra-Capa.aux) (./Capitulos/05_Epigrafe.aux) (./Capitulos/06_Resumo.aux) (./Capitulos/06_Abstract.aux) (./Capitulos/07_Lista_Imagens.aux) (./Capitulos/08_Lista Siglas.aux) (./Capitulos/09_Lista de Simbolos.aux) (./Capitulos/10_Lista de Equações.aux) (./Capitulos/11_Lista de Tabelas.aux) (./Capitulos/12_Sumário.aux) (./Capitulos/13_Introducao/13_1_Contextualizacao.aux) (./Capitulos/14_Desenvolvimento/14_1_Cap.aux) (./Capitulos/00_Referencias.aux))
+] [34]) [35] (./Texto.aux (./Capitulos/01_Capa.aux) (./Capitulos/02_Contra-Capa.aux) (./Capitulos/05_Epigrafe.aux) (./Capitulos/06_Resumo.aux) (./Capitulos/06_Abstract.aux) (./Capitulos/07_Lista_Imagens.aux) (./Capitulos/08_Lista Siglas.aux) (./Capitulos/09_Lista de Simbolos.aux) (./Capitulos/10_Lista de Equações.aux) (./Capitulos/11_Lista de Tabelas.aux) (./Capitulos/12_Sumário.aux) (./Capitulos/00_Referencias.aux))
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2020/03/25>
@@ -1647,24 +1525,24 @@ L3 programming layer <2020/03/25>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `Texto.out' has not changed.
-(rerunfilecheck)             Checksum: AA957ACB0933986944CB349A007E9209;9178.
+(rerunfilecheck)             Checksum: B5944B1D472F37E382F4A40596F13C91;6402.
 Package logreq Info: Writing requests to 'Texto.run.xml'.
 \openout1 = `Texto.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 67588 strings out of 474222
- 1667130 string characters out of 5748733
- 2847755 words of memory out of 5000000
- 88741 multiletter control sequences out of 15000+600000
- 571858 words of font info for 68 fonts, out of 8000000 for 9000
+ 67331 strings out of 474222
+ 1657363 string characters out of 5748733
+ 2837961 words of memory out of 5000000
+ 88544 multiletter control sequences out of 15000+600000
+ 570328 words of font info for 66 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,11n,133p,1974b,4447s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on Texto.pdf (57 pages, 2181314 bytes).
+ 99i,11n,133p,1945b,4447s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on Texto.pdf (36 pages, 976562 bytes).
 PDF statistics:
- 1174 PDF objects out of 1200 (max. 8388607)
- 1048 compressed objects within 11 object streams
- 166 named destinations out of 1000 (max. 500000)
- 552 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 786 PDF objects out of 1000 (max. 8388607)
+ 714 compressed objects within 8 object streams
+ 116 named destinations out of 1000 (max. 500000)
+ 389 words of extra memory for PDF output out of 10000 (max. 10000000)
 

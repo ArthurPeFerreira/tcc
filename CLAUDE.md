@@ -73,13 +73,15 @@ TCC/
 - Cada parágrafo começa com `\par`.
 - `\emph{...}` para termos estrangeiros (inglês) em itálico.
 - `\textit{...}` também usado para termos técnicos estrangeiros (intercambiável com `\emph` nesse projeto).
-- `\textbf{...}` para definições e termos sendo introduzidos.
+- **Não usar negrito (`\textbf`) no texto corrido.** Para destacar a primeira ocorrência de um termo central, usar `\emph{}`, nunca `\textbf`.
 
 ### 4.2 Citações
 
 - Parentética: `\cite{KEY}` ou `\cite{KEY1,KEY2}`
 - Narrativa: `\textcite{KEY}` (ex.: "Para Pisching, ...")
 - Com página: `\textcite[p.~N]{KEY}` (usar `~` para non-break space)
+- **Distribuir as citações ao longo do parágrafo**, ancorando cada `\cite` à afirmação que ele sustenta, em vez de agrupar todas as referências no fim do parágrafo.
+- **Diversificar as fontes:** evitar sustentar uma subseção inteira em um único autor; buscar nas referências disponíveis (Seção 10) outras que corroborem cada ponto.
 
 ### 4.3 Aspas
 
@@ -119,9 +121,11 @@ Estes padrões emergiram naturalmente do texto já escrito e devem ser mantidos 
 1. **Origem histórica** com citação ao autor que cunhou ou consolidou o termo (ex.: "O termo *Cloud Computing* surgiu em 2006...").
 2. **Definição formal** baseada em fonte.
 3. **Características técnicas e classificações** (variantes, camadas, modelos).
-4. **Parágrafo de fechamento obrigatório** no formato "No sistema supervisório proposto neste trabalho, [tecnologia] [papel/escolha]..." — ancora o conceito ao projeto.
+4. **Fechamento.** Todas as subseções conceituais do Cap. 2 (2.x) são definitórias e genéricas: **NÃO** incluem enquadramento da proposta ("no sistema proposto", "neste trabalho") nem figuras do sistema do autor. Todo o mapeamento com a implementação (escolhas de tecnologia, componentes, figuras do sistema) fica no Cap. 14_2 (Funcionamento: arquitetura, validações e servidores).
 
-**Introdução de termo técnico.** A primeira ocorrência de um termo central usa `\textbf{...}`. Exemplo: "A **automação industrial** é o conjunto de tecnologias...". Após a primeira menção, o termo entra em uso normal sem destaque.
+**Introdução de termo técnico.** A primeira ocorrência de um termo central pode usar `\emph{}` (nunca negrito). Após a primeira menção, o termo entra em uso normal sem destaque.
+
+**Definições genéricas, sem exemplos.** Em definições conceituais (sobretudo na 2.1), manter o texto genérico, sem exemplos concretos: não nomear dispositivos específicos (evitar IEDs/UTRs; usar "dispositivos genéricos inteligentes") nem ações concretas (evitar "bomba/válvula/disjuntor").
 
 **Sigla estrangeira em primeira ocorrência.** Padrão "Tradução em português (*Termo Original em itálico*, SIGLA)". Exemplos: "Internet das Coisas (*Internet of Things*, IoT)", "Computação na borda (*edge computing*)", "Serviços Web (*Web Services* - WS)".
 
@@ -340,26 +344,26 @@ Convenção do projeto: usar `\,unidade` inline (`4\,mA`, `0\,bar`) como padrão
 ## 9. Estrutura semântica dos capítulos
 
 ### Capítulo 14_1 (Conceitos)
-1. **Sistema SCADA** (com Zanghi 2019)
-   - Aquisição e Registro, Sincronismo, Níveis, Comando, Escalabilidade, Redundância
+1. **Sistema SCADA** (Zanghi 2019 como base, referências diversificadas e distribuídas)
+   - Aquisição e Registro de Dados (dispositivos genéricos inteligentes; meios de comunicação: RF, 4G, internet, rede local; tags por tipo de dado, booleano/int/real/texto)
+   - Sincronismo de Tempo (estampa de tempo ligada ao ciclo de leitura/`polling`, não ao instante exato da transição)
+   - **Níveis de Acesso** (controle de acesso por planta e por **cargo**, menor privilégio; **não** é a hierarquia de operação 0-3)
+   - **Comando** (conceito unificado: escrita de uma informação no dispositivo; dois tipos, instantâneo e agendado)
+   - Escalabilidade
+   - Redundância
 2. **Ajuste para Escala de Engenharia e Linearização de Sensores** (autoral, com equações)
-3. **Internet das Coisas (IoT)** — Stankovic 2014, Pisching, Bigheti
-4. **Internet Industrial das Coisas (IIoT)** — Bigheti, Pisching
-5. **Sistemas Ciber-Físicos (CPS)** — Monostori 2016, Pisching, Bigheti
-6. **Indústria 4.0** — Lasi 2014, Pisching, Bigheti, Colombo 2014
+3. **Automação e Tecnologias da Indústria 4.0** (fusão de Automação/Informática Industrial + IoT, IIoT, M2M, CPS, Indústria 4.0; prosa corrida; Colombo, Stankovic, Pisching, Bigheti, Monostori, Lasi)
+4. **Computação em Nuvem** (conceito + AWS como provedor adotado; Henriques, Pedrosa)
+5. Demais tecnologias: Banco de Dados, Redis, Docker, Next.js, HTTP/API REST/JSON, Microsserviços, Moleculer, Protocolo Modbus TCP e RTU, Modelagem/serviço de leitura e agendamento
 
 ### Capítulo 14_2 (Funcionamento)
 
-1. **Arquitetura do sistema** — diagrama em camadas (frontend, backend, banco, cache, APScheduler, Molecular, workers, gateway).
-2. **Validações dos Requisitos do SCADA** — uma subseção por requisito clássico (Aquisição e Registro, Sincronismo, Níveis, Comando, Escalabilidade, Redundância), espelhando a estrutura do Cap. 14_1.
-3. **Servidores** — descrição componente por componente (Frontend, Backend, Banco, Cache, APScheduler, Molecular, Workers).
+1. **Arquitetura do sistema** — diagrama em camadas (frontend, backend, banco, cache, APScheduler, Moleculer, workers, gateway).
+2. **Validações dos Requisitos do SCADA** — uma subseção por requisito (Aquisição e Registro, Sincronismo, **Níveis de Acesso**, **Comando** e Controle, Escalabilidade, Redundância), espelhando a estrutura do Cap. 14_1.
+3. **Servidores** — descrição componente por componente (Frontend, Backend, Banco, Cache, APScheduler, Moleculer, Workers).
 4. **Aquisição de Dados** — Modbus, Modbus TCP, Modbus RTU, gateway, modem.
 
-**Padrão das subseções de validação (3.1.X).** Cada subseção segue o gabarito:
-
-> "No quesito X discutido na Subseção~\ref{sec:scada_X}, o sistema atende a todos os requisitos descritos por \textcite{ZANGHI2019}. [Mapeamento componente → função SCADA]"
-
-O parágrafo amarra cada requisito do Zanghi a um componente concreto da arquitetura, fechando a ponte entre teoria (Cap. 14_1) e implementação (Cap. 14_2).
+**Padrão das subseções de validação.** Cada subseção mapeia o requisito conceitual a componentes concretos da arquitetura, fechando a ponte entre teoria (Cap. 14_1) e implementação (Cap. 14_2). É aqui (não no Cap. 2) que entra o enquadramento da proposta.
 
 ---
 
@@ -396,6 +400,10 @@ A lista completa de referências está em `Referencias.bib` (chaves prontas para
 - Aprecia gráficos em pgfplots para ilustrar relações matemáticas.
 - Vai recompilar manualmente após cada mudança (compartilha o log no chat).
 - **Não** quer travessões (`---`).
+- **Não** quer negrito (`\textbf`) no texto corrido.
+- Prefere citações distribuídas ao longo do parágrafo e fontes diversificadas (não sustentar tudo em um único autor).
+- Em definições conceituais (2.1), quer texto genérico e sem exemplos concretos.
+- Prefere "cargos" a "papéis" em controle de acesso baseado em cargos.
 - **Não** quer reprodução de figuras dos PDFs originais — usa TikZ ou extrações próprias.
 - Quando a fonte é dele, prefere `Fonte: Autor.` (curto), não `Fonte: Elaborado pelo autor.`.
 
