@@ -1,6 +1,82 @@
 \newpage
 \section{Funcionamento}
 
+\par Este capítulo especifica os requisitos da solução e demonstra como a arquitetura proposta os atende. A Subseção~\ref{sec:requisitos} reúne os requisitos funcionais e não funcionais, derivados dos seis pilares de um sistema \sigla{scada} apresentados no Capítulo~2 e das demais funcionalidades da aplicação. A Subseção~\ref{sec:validacoes} valida cada requisito frente à arquitetura em camadas adotada, pilar a pilar. Por fim, a Subseção~\ref{sec:servidores} detalha os serviços que compõem o sistema e a divisão de responsabilidades entre eles.
+
+\subsection{Requisitos}
+\label{sec:requisitos}
+
+\par Os requisitos do sistema foram organizados em funcionais, que descrevem o que a aplicação deve fazer, e não funcionais, que estabelecem as qualidades e as restrições sob as quais essas funções devem operar. Boa parte deles deriva diretamente dos seis pilares de um sistema \sigla{scada} discutidos no Capítulo~2: aquisição e registro de dados, sincronismo de tempo, níveis de acesso, comando e controle, escalabilidade e redundância. A esses somam-se requisitos próprios da solução web orientada a serviços, como o cadastro hierárquico das instalações, a visualização das informações e a sinalização de alarmes.
+
+\subsubsection{Requisitos Funcionais}
+
+\par A Tabela~\ref{tab:requisitos_funcionais} apresenta os requisitos funcionais (RF) do sistema, com a indicação do pilar do \sigla{scada} ou da funcionalidade complementar que os origina.
+
+\begin{table}[H]
+    \centering
+    \caption{Requisitos Funcionais}
+    \label{tab:requisitos_funcionais}
+    \vspace{0.2cm}
+    \small
+    \begin{tabularx}{\textwidth}{c X l}
+        \hline
+        ID & Requisito & Origem \\
+        \hline
+        RF01 & Adquirir periodicamente, por \emph{polling}, grandezas analógicas e digitais dos dispositivos de campo via Modbus TCP e RTU & Aquisição \\
+        RF02 & Permitir a leitura sob demanda de um ponto, disparada pela interface & Aquisição \\
+        RF03 & Registrar continuamente as leituras no histórico, conforme o tipo de dado da tag (booleano, inteiro, real ou texto) & Aquisição \\
+        RF04 & Manter o valor atual de cada tag disponível para as telas com baixa latência & Aquisição \\
+        RF05 & Associar a cada leitura uma estampa de tempo referente ao ciclo de aquisição & Sincronismo \\
+        RF06 & Autenticar os usuários e gerir suas sessões & Níveis de acesso \\
+        RF07 & Controlar o acesso por planta e por cargo, segundo o princípio do menor privilégio & Níveis de acesso \\
+        RF08 & Executar comando instantâneo como escrita Modbus imediata no dispositivo & Comando \\
+        RF09 & Executar comando agendado conforme cenários definidos, registrando o instante de execução & Comando \\
+        RF10 & Conduzir o comando pelas quatro fases e verificar a confirmação do dispositivo, gerando alarme em caso de falha & Comando \\
+        RF11 & Incluir novos pontos, equipamentos e telas com o sistema em produção, sem alterar o código & Escalabilidade \\
+        RF12 & Manter o cadastro hierárquico (cliente, unidade, equipamento e tag) com o mapeamento Modbus de cada ponto & Cadastro \\
+        RF13 & Exibir telas de supervisão em tempo real e \emph{dashboards} de tendência histórica & Visualização \\
+        RF14 & Gerar e sinalizar alarmes de processo e de comunicação & Alarmes \\
+        RF15 & Disponibilizar consultas ao histórico com filtros e sequenciais de eventos & Visualização \\
+        \hline
+    \end{tabularx}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{table}
+
+\subsubsection{Requisitos Não Funcionais}
+
+\par A Tabela~\ref{tab:requisitos_nao_funcionais} apresenta os requisitos não funcionais (RNF), agrupados por categoria de atributo de qualidade: desempenho, escalabilidade, disponibilidade, segurança, interoperabilidade, manutenibilidade, usabilidade e custo.
+
+\begin{table}[H]
+    \centering
+    \caption{Requisitos Não Funcionais}
+    \label{tab:requisitos_nao_funcionais}
+    \vspace{0.2cm}
+    \small
+    \begin{tabularx}{\textwidth}{c X l}
+        \hline
+        ID & Requisito & Categoria \\
+        \hline
+        RNF01 & As telas de tempo real refletem as leituras com baixa latência, por atualização incremental e valor corrente em cache & Desempenho \\
+        RNF02 & Os \emph{workers} de aquisição são replicáveis na horizontal, com balanceamento automático de carga & Escalabilidade \\
+        RNF03 & A infraestrutura de dados cresce sob demanda, sem licenciamento por número de pontos & Escalabilidade \\
+        RNF04 & Os componentes críticos possuem redundância com \emph{failover} automático entre zonas, com degradação suave & Disponibilidade \\
+        RNF05 & O acesso é autenticado por \emph{token} e autorizado por cargo, com isolamento entre plantas & Segurança \\
+        RNF06 & O sistema limita as requisições por usuário, protege comandos críticos com travas distribuídas e mantém registro de auditoria & Segurança \\
+        RNF07 & A comunicação com medidores e CLPs de fabricantes distintos se dá apenas por configuração Modbus & Interoperabilidade \\
+        RNF08 & A comunicação entre os componentes e a interface usa padrões abertos (REST/JSON e WebSocket) & Interoperabilidade \\
+        RNF09 & A solução adota microsserviços com implantação independente e baixo acoplamento & Manutenibilidade \\
+        RNF10 & O acesso ocorre por navegador, de qualquer lugar, sem instalação local & Usabilidade \\
+        RNF11 & O fornecimento segue o modelo de assinatura sob demanda em nuvem, sem investimento inicial em licenças e hardware & Custo \\
+        \hline
+    \end{tabularx}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{table}
+
+\subsection{Validações dos Requisitos}
+\label{sec:validacoes}
+
 \par O funcionamento do sistema organiza-se em camadas, conforme ilustrado na Figura~\ref{fig:arquitetura_sistema}. Essa divisão separa as responsabilidades entre a interface de supervisão, os serviços que rodam na nuvem, o armazenamento das informações e a comunicação com os equipamentos instalados em campo.
 
 \begin{figure}[H]
@@ -16,50 +92,47 @@
 
 \par A Figura~\ref{fig:arquitetura_sistema} detalha a arquitetura completa do sistema. A aplicação web é feita em Next.js e reúne, em um único projeto, a interface de supervisão usada pelos operadores e a camada de backend, formada pelas rotas de \sigla{api} (\textit{API routes}) que tratam do cadastro de equipamentos, da configuração de tags, da consulta de históricos e do envio de comandos. A camada de dados junta o banco relacional PostgreSQL, gerenciado pelo Amazon \sigla{rds}, e o cache Redis, no Amazon ElastiCache; juntos, eles guardam o histórico de longo prazo e mantêm o valor atual de cada tag sempre acessível e com baixa latência. O agendamento fica por conta do BullMQ, uma biblioteca de filas que se apoia no próprio Redis: ao iniciar, ele carrega do banco todos os pontos cadastrados com seus tempos de polling e cria, para cada ponto, um \emph{job} que se repete no intervalo definido; a cada disparo, envia uma mensagem com o identificador do ponto, avisando que chegou a hora de atualizar aquele dado. A troca de mensagens entre os serviços é feita pelo Moleculer, que usa o Redis como meio de transporte (\textit{transporter}): ele recebe os pedidos de leitura no canal \texttt{processing} e os repassa aos \emph{workers} de aquisição (M1, M2, \ldots, Mn). Esses \emph{workers} consomem o canal \texttt{processing\_point}, abrem a conexão com o dispositivo de campo, fazem a leitura Modbus correspondente e devolvem o resultado ao barramento; o Moleculer, então, publica no canal \texttt{update} a leitura já tratada, para que o banco grave o histórico e o cache atualize o valor corrente.
 
-\subsection{Validações dos Requisitos do SCADA}
-\label{sec:validacoes}
-
-\par As subseções a seguir mostram, item por item, como o sistema atende aos requisitos clássicos do \sigla{scada} descritos por \textcite{ZANGHI2019_SCADA_CONCEITOS}. Cada validação aponta de que forma a arquitetura da Figura~\ref{fig:arquitetura_sistema}, descrita acima, cumpre os seis pilares definidos pelo autor: aquisição e registro de dados, sincronismo de tempo, níveis de acesso, comando e controle, escalabilidade e redundância.
+\par As subseções a seguir mostram, item por item, como o sistema atende aos requisitos definidos na Subseção~\ref{sec:requisitos}, derivados dos pilares clássicos de um sistema \sigla{scada} \cite{ZANGHI2019_SCADA_CONCEITOS}. Cada validação aponta de que forma a arquitetura da Figura~\ref{fig:arquitetura_sistema} cumpre os seis pilares: aquisição e registro de dados, sincronismo de tempo, níveis de acesso, comando e controle, escalabilidade e redundância.
 
 \subsubsection{Aquisição e Registro de Dados}
 \label{sec:req_aquisicao}
 
-\par Na aquisição e no registro de dados, o sistema atende a tudo o que \textcite{ZANGHI2019_SCADA_CONCEITOS} descreve. A leitura é feita pelos workers, que conversam diretamente com os dispositivos de campo por Modbus e entregam os valores em formato digital ao supervisório. Cada ponto é cadastrado como tag no banco de dados e classificado como digital (entrada DI, saída DO, memória DM), para representar estados de liga/desliga, como o de motores e a abertura/fechamento de válvulas, ou como analógico (entrada AI, saída AO, memória AM), para grandezas de vários bits, como pressão, vazão, nível e corrente. O registro contínuo das leituras no PostgreSQL alimenta as análises posteriores, em gráficos de tendência e em relatórios de eventos digitais, enquanto o cache Redis mantém o valor atual de cada ponto pronto para desenhar as telas de supervisão, sem sobrecarregar o banco principal a cada atualização.
+\par Na aquisição e no registro de dados (RF01 a RF04), o sistema atende ao previsto na literatura \cite{ZANGHI2019_SCADA_CONCEITOS}. A leitura é feita pelos workers, que conversam diretamente com os dispositivos de campo por Modbus e entregam os valores em formato digital ao supervisório. Cada ponto é cadastrado como tag no banco de dados e classificado como digital (entrada DI, saída DO, memória DM), para representar estados de liga/desliga, como o de motores e a abertura/fechamento de válvulas, ou como analógico (entrada AI, saída AO, memória AM), para grandezas de vários bits, como pressão, vazão, nível e corrente. O registro contínuo das leituras no PostgreSQL alimenta as análises posteriores, em gráficos de tendência e em relatórios de eventos digitais, enquanto o cache Redis mantém o valor atual de cada ponto pronto para desenhar as telas de supervisão, sem sobrecarregar o banco principal a cada atualização.
 
 \subsubsection{Sincronismo de Tempo}
 \label{sec:req_sincronismo}
 
-\par O sincronismo de tempo exigido pelo \sigla{scada} vem da combinação entre o relógio do BullMQ, ajustado por \sigla{ntp} com a infraestrutura da \sigla{aws}, e o carimbo de tempo que os workers aplicam no instante exato em que recebem a resposta Modbus do dispositivo de campo. Cada mensagem que passa pelo barramento Moleculer leva esse carimbo, que segue inalterado por toda a cadeia: do worker para o canal \texttt{update}, do canal para o banco e para o cache, do banco para o backend e do backend para a tela do operador. Assim, alarmes e eventos digitais captados em pontos diferentes do sistema recebem marcações de tempo coerentes na casa dos milissegundos, o que atende à exigência de uma cronologia precisa para a análise \emph{a posteriori} de ocorrências e faltas, sobretudo em processos rápidos. Cada valor adquirido fica, portanto, ligado ao carimbo de tempo do servidor e, quando o equipamento oferece, a referências de tempo adicionais, e segue para o histórico e para a atualização das telas; desse modo, a aquisição fecha o laço entre o processo físico e a sua representação digital, preservando a rastreabilidade e as condições de auditoria da operação.
+\par O sincronismo de tempo (RF05) exigido pelo \sigla{scada} vem da combinação entre o relógio do BullMQ, ajustado por \sigla{ntp} com a infraestrutura da \sigla{aws}, e o carimbo de tempo que os workers aplicam no instante exato em que recebem a resposta Modbus do dispositivo de campo. Cada mensagem que passa pelo barramento Moleculer leva esse carimbo, que segue inalterado por toda a cadeia: do worker para o canal \texttt{update}, do canal para o banco e para o cache, do banco para o backend e do backend para a tela do operador. Assim, alarmes e eventos digitais captados em pontos diferentes do sistema recebem marcações de tempo coerentes na casa dos milissegundos, o que atende à exigência de uma cronologia precisa para a análise \emph{a posteriori} de ocorrências e faltas, sobretudo em processos rápidos. Cada valor adquirido fica, portanto, ligado ao carimbo de tempo do servidor e, quando o equipamento oferece, a referências de tempo adicionais, e segue para o histórico e para a atualização das telas; desse modo, a aquisição fecha o laço entre o processo físico e a sua representação digital, preservando a rastreabilidade e as condições de auditoria da operação.
 
 \subsubsection{Níveis de Acesso}
 \label{sec:req_niveis}
 
-\par Nos níveis de acesso, o sistema troca a hierarquia fixa de subestação por níveis definidos por planta. Cada usuário faz login no frontend, em Next.js, e recebe uma sessão ligada às instalações sob sua responsabilidade; a camada de backend da própria aplicação Next.js funciona como ponto de autorização e verifica, a cada chamada às rotas de \sigla{api}, se o cargo daquele usuário permite consultar dados, configurar tags ou enviar comandos para a planta em questão. Dessa forma, a supervisão e o controle ficam separados conforme o cargo de cada operador, em linha com o controle de acesso baseado em cargos e com o princípio do menor privilégio \cite{STOUFFER2015_NIST_ICS_SECURITY}. Como a solução é multiplanta e compartilha a mesma infraestrutura na nuvem, esse isolamento de permissões por instalação também é uma medida de segurança, pois impede que usuários de um cliente acessem ou comandem pontos de outro \cite{WALI2024_CLOUD_SCADA_SECURITY}.
+\par Nos níveis de acesso (RF06 e RF07), o sistema troca a hierarquia fixa de subestação por níveis definidos por planta. Cada usuário faz login no frontend, em Next.js, e recebe uma sessão ligada às instalações sob sua responsabilidade; a camada de backend da própria aplicação Next.js funciona como ponto de autorização e verifica, a cada chamada às rotas de \sigla{api}, se o cargo daquele usuário permite consultar dados, configurar tags ou enviar comandos para a planta em questão. Dessa forma, a supervisão e o controle ficam separados conforme o cargo de cada operador, em linha com o controle de acesso baseado em cargos e com o princípio do menor privilégio \cite{STOUFFER2015_NIST_ICS_SECURITY}. Como a solução é multiplanta e compartilha a mesma infraestrutura na nuvem, esse isolamento de permissões por instalação também é uma medida de segurança, pois impede que usuários de um cliente acessem ou comandem pontos de outro \cite{WALI2024_CLOUD_SCADA_SECURITY}.
 
 \subsubsection{Comando e Controle}
 \label{sec:req_comando}
 
-\par O comando e o controle previstos pelo \sigla{scada} são implementados nas três variantes descritas por \textcite{ZANGHI2019_SCADA_CONCEITOS}. O telecomando instantâneo, em que o operador, pela tela, muda na hora o estado de um equipamento (liga uma bomba, abre uma válvula, aciona um disjuntor), vira uma escrita Modbus feita pelo worker correspondente. O telecontrole, em que o operador define um \emph{set point} para regular ao longo do tempo a resposta de um processo, segue o mesmo caminho, mas atualiza um holding register específico. Já o telecomando ou telecontrole programado, em que as ações são agendadas conforme cenários definidos antes, fica guardado como configuração no banco e é disparado pelo BullMQ na hora marcada, com o instante de execução registrado. As quatro fases do processo (seleção, verificação, confirmação e execução) ficam divididas entre a tela (seleção e confirmação explícita por uma janela de aviso), o backend da aplicação Next.js (verificação de intertravamentos e condições de segurança) e o worker (execução da escrita Modbus); após executar, o próprio worker faz uma leitura de verificação para confirmar que o dispositivo de campo aceitou o pedido e, se algo falhar, gera o alarme correspondente para avisar o operador da inconsistência.
+\par O comando e o controle (RF08 a RF10) previstos pelo \sigla{scada} são implementados nas três variantes da literatura \cite{ZANGHI2019_SCADA_CONCEITOS}. O telecomando instantâneo, em que o operador, pela tela, muda na hora o estado de um equipamento (liga uma bomba, abre uma válvula, aciona um disjuntor), vira uma escrita Modbus feita pelo worker correspondente. O telecontrole, em que o operador define um \emph{set point} para regular ao longo do tempo a resposta de um processo, segue o mesmo caminho, mas atualiza um holding register específico. Já o telecomando ou telecontrole programado, em que as ações são agendadas conforme cenários definidos antes, fica guardado como configuração no banco e é disparado pelo BullMQ na hora marcada, com o instante de execução registrado. As quatro fases do processo (seleção, verificação, confirmação e execução) ficam divididas entre a tela (seleção e confirmação explícita por uma janela de aviso), o backend da aplicação Next.js (verificação de intertravamentos e condições de segurança) e o worker (execução da escrita Modbus); após executar, o próprio worker faz uma leitura de verificação para confirmar que o dispositivo de campo aceitou o pedido e, se algo falhar, gera o alarme correspondente para avisar o operador da inconsistência.
 
 \subsubsection{Escalabilidade}
 \label{sec:req_escalabilidade}
 
-\par A escalabilidade é atendida em três frentes que se complementam. Na expansão do cadastro, é possível incluir novos pontos e novas telas com o sistema em produção, sem mexer no código: o worker é parametrizado pelo banco e o frontend monta as telas de forma dinâmica conforme a configuração; o BullMQ percebe a inclusão, recarrega a lista de pontos e ajusta seus jobs. Na capacidade de processamento, os workers (M1, M2, \ldots, Mn) podem ser replicados na horizontal para dividir a carga: o Moleculer faz o balanceamento automático entre as instâncias que consomem o canal \texttt{processing\_point}, e novas réplicas dos workers são criadas conforme o uso. Na infraestrutura de dados, os serviços gerenciados Amazon \sigla{rds} e ElastiCache crescem na vertical sob demanda. Esse desenho elimina o gargalo de licenciamento por número de pontos, comum nos supervisórios comerciais, e permite acompanhar o crescimento das instalações sem refazer o orçamento da solução, ainda que a capacidade dos elementos de rede e do barramento Moleculer precise ser pensada desde o projeto.
+\par A escalabilidade (RF11, RNF02 e RNF03) é atendida em três frentes que se complementam. Na expansão do cadastro, é possível incluir novos pontos e novas telas com o sistema em produção, sem mexer no código: o worker é parametrizado pelo banco e o frontend monta as telas de forma dinâmica conforme a configuração; o BullMQ percebe a inclusão, recarrega a lista de pontos e ajusta seus jobs. Na capacidade de processamento, os workers (M1, M2, \ldots, Mn) podem ser replicados na horizontal para dividir a carga: o Moleculer faz o balanceamento automático entre as instâncias que consomem o canal \texttt{processing\_point}, e novas réplicas dos workers são criadas conforme o uso. Na infraestrutura de dados, os serviços gerenciados Amazon \sigla{rds} e ElastiCache crescem na vertical sob demanda. Esse desenho elimina o gargalo de licenciamento por número de pontos, comum nos supervisórios comerciais, e permite acompanhar o crescimento das instalações sem refazer o orçamento da solução, ainda que a capacidade dos elementos de rede e do barramento Moleculer precise ser pensada desde o projeto.
 
 \subsubsection{Redundância}
 \label{sec:req_redundancia}
 
-\par A redundância acompanha a arquitetura em todas as camadas críticas, seguindo as recomendações de \textcite{ZANGHI2019_SCADA_CONCEITOS}. Os workers de aquisição funcionam como uma frota em que cada instância pega trabalho de uma mesma fila, gerenciada pelo Moleculer, de modo que a perda de um worker é absorvida pelos demais, sem perder leituras pendentes. O banco em \sigla{rds} é configurado com uma réplica em outra zona de disponibilidade, com troca automática (failover) caso o nó principal falhe e com snapshots programados para recuperação ponto a ponto. O cache Redis opera em modo \emph{cluster}, com réplicas espelhadas; como ele também sustenta o transporte do Moleculer e as filas do BullMQ, essa redundância protege, de uma só vez, o cache, o barramento e o agendamento. A aplicação Next.js (frontend e backend) roda em várias instâncias atrás de um balanceador de carga, e o próprio barramento Moleculer pode ser configurado em cluster para tolerar falhas no transporte. Esse conjunto de medidas alcança níveis de confiabilidade compatíveis com a criticidade das aplicações industriais mais sensíveis.
+\par A redundância (RNF04) acompanha a arquitetura em todas as camadas críticas, seguindo as recomendações da literatura \cite{ZANGHI2019_SCADA_CONCEITOS}. Os workers de aquisição funcionam como uma frota em que cada instância pega trabalho de uma mesma fila, gerenciada pelo Moleculer, de modo que a perda de um worker é absorvida pelos demais, sem perder leituras pendentes. O banco em \sigla{rds} é configurado com uma réplica em outra zona de disponibilidade, com troca automática (failover) caso o nó principal falhe e com snapshots programados para recuperação ponto a ponto. O cache Redis opera em modo \emph{cluster}, com réplicas espelhadas; como ele também sustenta o transporte do Moleculer e as filas do BullMQ, essa redundância protege, de uma só vez, o cache, o barramento e o agendamento. A aplicação Next.js (frontend e backend) roda em várias instâncias atrás de um balanceador de carga, e o próprio barramento Moleculer pode ser configurado em cluster para tolerar falhas no transporte. Esse conjunto de medidas alcança níveis de confiabilidade compatíveis com a criticidade das aplicações industriais mais sensíveis.
 
-\subsection{Servidores}
+\subsection{Serviços}
 \label{sec:servidores}
 
-\par O sistema se divide em seis componentes lógicos de servidor, cada um com uma responsabilidade bem delimitada e um ciclo de vida próprio, em linha com o paradigma de microsserviços defendido por \textcite{BIGHETI2020} para sistemas industriais orientados a serviços. Cada componente é implantado de forma independente, o que permite escalar de modo granular e isolar dependências. Cada um dos seis servidores é descrito nas subseções a seguir quanto à tecnologia escolhida, à sua responsabilidade no sistema e às interfaces que mantém com os demais.
+\par O sistema se divide em seis componentes lógicos de servidor, cada um com uma responsabilidade bem delimitada e um ciclo de vida próprio, em linha com o paradigma de microsserviços para sistemas industriais orientados a serviços \cite{BIGHETI2020}. Cada componente é implantado de forma independente, o que permite escalar de modo granular e isolar dependências. Cada um dos seis servidores é descrito nas subseções a seguir quanto à tecnologia escolhida, à sua responsabilidade no sistema e às interfaces que mantém com os demais.
 
 \subsubsection{Aplicação Next.js (Frontend e Backend)}
 \label{sec:srv_aplicacao}
 
-\par A aplicação web é desenvolvida em Next.js e concentra, em um único projeto, tanto a interface de supervisão quanto o backend de dados, este último na forma de rotas de \sigla{api} (\textit{API routes}). Do lado da interface, as telas incluem a visualização de pontos ao vivo, os \emph{dashboards} de tendência histórica, o cadastro de equipamentos e tags, os painéis de alarmes ativos e os formulários administrativos. As telas de operação em tempo real são desenhadas no próprio navegador (renderização no cliente) e atualizadas aos poucos por WebSocket, o que garante pouca demora entre a leitura no campo e a apresentação ao operador; já as telas de cadastro e os relatórios são gerados no servidor (\sigla{ssr}), aproveitando o pré-processamento e a checagem de credenciais.
+\par A aplicação web é desenvolvida em Next.js e concentra, em um único projeto, tanto a interface de supervisão quanto o backend de dados, este último na forma de rotas de \sigla{api} (\textit{API routes}). Do lado da interface, as telas incluem a visualização de pontos ao vivo, os \emph{dashboards} de tendência histórica, o cadastro de equipamentos e tags, os painéis de alarmes ativos e os formulários administrativos. As telas de operação em tempo real são desenhadas no próprio navegador (renderização no cliente) e atualizadas aos poucos por WebSocket, o que garante pouca demora entre a leitura no campo e a apresentação ao operador; já as telas de cadastro e os relatórios são gerados no servidor, aproveitando o pré-processamento e a checagem de credenciais.
 
 \par Do lado do backend, as rotas de \sigla{api} expõem as operações consumidas pela interface: criação, leitura, atualização e remoção do cadastro de clientes, unidades, equipamentos e tags; consultas ao histórico com filtros de tempo, equipamento e ponto; gestão de usuários, cargos e permissões; e o envio de comandos pelo operador. Cada requisição é conferida contra um esquema declarativo (\sigla{json} Schema), autenticada por um \emph{token} \sigla{jwt} guardado no Redis e registrada em \textit{log} estruturado. Quando uma operação precisa interagir com o campo, como em uma escrita Modbus, o backend não fala direto com os workers: ele publica um comando no barramento Moleculer, mantendo a camada de aplicação desacoplada da camada de aquisição. Toda a comunicação entre o navegador e a aplicação acontece por \sigla{rest}/\sigla{json} e por WebSocket; o acesso ao banco, ao cache e ao barramento de eventos fica restrito à camada de backend, nunca partindo diretamente do cliente.
 
