@@ -4,7 +4,6 @@
 \par Este capítulo especifica os requisitos da solução e demonstra como a arquitetura proposta os atende. Primeiro, são apresentados os requisitos funcionais e não funcionais, derivados dos seis pilares de um sistema \sigla{scada} discutidos anteriormente e das demais funcionalidades da aplicação. Em seguida, valida-se cada requisito frente à arquitetura adotada, pilar a pilar. Por fim, detalham-se os serviços que compõem o sistema e a divisão de responsabilidades entre eles.
 
 \subsection{Requisitos}
-\label{sec:requisitos}
 
 \par Os requisitos do sistema foram organizados em funcionais, que descrevem o que a aplicação deve fazer, e não funcionais, que estabelecem as qualidades e as restrições sob as quais essas funções devem operar. Boa parte deles deriva diretamente dos seis pilares de um sistema \sigla{scada}: aquisição e registro de dados, sincronismo de tempo, níveis de acesso, comando e controle, escalabilidade e redundância. A esses somam-se requisitos próprios da solução web orientada a serviços, como o cadastro hierárquico das instalações, a visualização das informações e a sinalização de alarmes e eventos.
 
@@ -95,7 +94,6 @@
 \end{table}
 
 \subsection{Validações dos Requisitos}
-\label{sec:validacoes}
 
 \par O funcionamento do sistema organiza-se em serviços hospedados na nuvem, conforme ilustrado na Figura~\ref{fig:arquitetura_sistema}. Essa divisão separa as responsabilidades entre a interface de supervisão, os serviços que rodam na nuvem, o armazenamento das informações e a comunicação com os equipamentos instalados em campo.
 
@@ -115,70 +113,57 @@
 \par As subseções a seguir mostram, item por item, como o sistema atende aos requisitos apresentados, derivados dos pilares clássicos de um sistema \sigla{scada} \cite{ZANGHI2019_SCADA_CONCEITOS}. Cada validação aponta de que forma a arquitetura da Figura~\ref{fig:arquitetura_sistema} cumpre os seis pilares: aquisição e registro de dados, sincronismo de tempo, níveis de acesso, comando e controle, escalabilidade e redundância.
 
 \subsubsection{Aquisição e Registro de Dados}
-\label{sec:req_aquisicao}
 
 \par Na aquisição e no registro de dados (RF01 a RF03), as leituras são feitas pelo serviço de aquisição, que conversa diretamente com os dispositivos de campo por Modbus e entrega os valores em formato digital. Cada ponto é cadastrado como tag e classificado como digital, para estados de liga e desliga, como o de motores e a abertura de válvulas, ou como analógico, para grandezas de vários bits, como pressão, vazão, nível e corrente. O PostgreSQL guarda o histórico contínuo, que alimenta os gráficos de tendência e os relatórios de eventos, enquanto o Redis mantém o valor atual de cada ponto pronto para as telas, sem sobrecarregar o banco a cada atualização \cite{ZANGHI2019_SCADA_CONCEITOS}.
 
 \subsubsection{Sincronismo de Tempo}
-\label{sec:req_sincronismo}
 
 \par O sincronismo de tempo (RF04) vem do carimbo de tempo que o serviço de aquisição aplica no instante em que recebe a resposta do dispositivo. Esse carimbo acompanha o valor por toda a cadeia, do serviço de aquisição ao banco, ao cache e à tela do operador, sem ser alterado. Assim, leituras, alarmes e eventos de pontos diferentes recebem marcações coerentes, o que garante a cronologia precisa exigida para a análise posterior de ocorrências e faltas \cite{ZANGHI2019_SCADA_CONCEITOS}. Como o relógio dos serviços é mantido sincronizado pela própria infraestrutura da \sigla{aws}, a referência de tempo é comum a todos os componentes.
 
 \subsubsection{Níveis de Acesso}
-\label{sec:req_niveis}
 
 \par Nos níveis de acesso (RF05 e RF06), a hierarquia fixa de subestação dá lugar a níveis definidos por planta. Cada usuário autentica-se na aplicação e recebe uma sessão ligada às instalações sob sua responsabilidade. O backend do Next.js atua como ponto de autorização e verifica, a cada requisição, se o cargo do usuário permite consultar dados, configurar tags ou enviar comandos àquela planta. Supervisão e controle ficam, assim, separados por cargo, segundo o controle de acesso baseado em cargos e o princípio do menor privilégio \cite{STOUFFER2015_NIST_ICS_SECURITY}. Como a solução é multiplanta e compartilha a mesma infraestrutura na nuvem, esse isolamento por instalação também é uma medida de segurança, pois impede que usuários de um cliente acessem ou comandem pontos de outro \cite{WALI2024_CLOUD_SCADA_SECURITY}.
 
 \subsubsection{Comando e Controle}
-\label{sec:req_comando}
 
 \par O comando e o controle (RF07 a RF09) seguem as três variantes previstas na literatura \cite{ZANGHI2019_SCADA_CONCEITOS}. O comando instantâneo, em que o operador muda na hora o estado de um equipamento, e o controle por valor de referência, em que define um alvo a ser mantido, tornam-se uma escrita Modbus executada pelo serviço de aquisição. O comando programado, agendado para cenários definidos, fica guardado no banco e é disparado pelo agendador na hora marcada, com o instante de execução registrado. As quatro fases, seleção, verificação, confirmação e execução, dividem-se entre a tela, na seleção e na confirmação pelo operador, o backend do Next.js, na verificação de intertravamentos e condições de segurança, e o serviço de aquisição, na escrita em si. Após a escrita, o serviço de aquisição relê o ponto para confirmar que o dispositivo aceitou a ordem e, em caso de falha, gera o alarme correspondente \cite{STOUFFER2015_NIST_ICS_SECURITY}.
 
 \subsubsection{Escalabilidade}
-\label{sec:req_escalabilidade}
 
 \par A escalabilidade (RF10, RNF02 e RNF03) é atendida em três frentes. Na expansão do cadastro, novos pontos e telas entram com o sistema em produção, sem mexer no código: o serviço de aquisição é parametrizado pelo banco, as telas montam-se conforme a configuração e o agendador recarrega a lista de pontos. Na capacidade de processamento, o serviço de aquisição é replicado na horizontal, e o Moleculer distribui automaticamente as leituras entre as instâncias disponíveis. Na infraestrutura de dados, o PostgreSQL e o Redis, gerenciados pela \sigla{aws}, crescem na vertical sob demanda. Hospedados em contêineres no Amazon \sigla{ecs}, os serviços ganham e perdem réplicas conforme a carga, o que elimina o gargalo de licenciamento por número de pontos comum nos supervisórios comerciais e acompanha o crescimento das instalações sem refazer o orçamento.
 
 \subsubsection{Redundância}
-\label{sec:req_redundancia}
 
 \par A redundância (RNF04) apoia-se nos recursos gerenciados da nuvem e acompanha as camadas críticas \cite{ZANGHI2019_SCADA_CONCEITOS}. O serviço de aquisição funciona como uma frota: cada instância retira trabalho da mesma fila, de modo que a perda de uma é absorvida pelas demais, sem leituras perdidas. O PostgreSQL, no Amazon \sigla{rds}, mantém uma réplica em outra zona de disponibilidade, com comutação automática (\emph{failover}) e cópias de segurança programadas. O Redis, no Amazon ElastiCache, opera em \emph{cluster} com réplicas espelhadas e, por sustentar também o transporte do Moleculer e as filas do agendador, protege de uma só vez o cache, a comunicação e o agendamento. A aplicação Next.js roda em várias instâncias atrás de um balanceador de carga. Esse conjunto, somado à distribuição entre zonas oferecida pela \sigla{aws}, alcança níveis de confiabilidade compatíveis com a criticidade das aplicações industriais sensíveis \cite{STOUFFER2015_NIST_ICS_SECURITY}.
 
 \subsection{Serviços}
-\label{sec:servidores}
 
 \par O sistema divide-se em três serviços de aplicação, com responsabilidades bem delimitadas e ciclos de vida próprios, apoiados por uma infraestrutura gerenciada na nuvem da \sigla{aws}. Essa separação segue o paradigma de microsserviços para sistemas industriais orientados a serviços \cite{BIGHETI2020}: cada serviço é implantado de forma independente, o que permite escalar de modo granular e isolar falhas. A comunicação entre eles é coordenada pelo Moleculer, descrito ao final, junto da hospedagem. As subseções a seguir tratam de cada serviço de aplicação e, depois, da infraestrutura que os sustenta.
 
 \subsubsection{Aplicação Next.js}
-\label{sec:srv_aplicacao}
 
 \par A aplicação web é desenvolvida em Next.js e reúne, em um único projeto, a interface de supervisão e todo o backend. Do lado da interface, as telas oferecem a visualização de pontos ao vivo, os painéis de tendência histórica, o cadastro de equipamentos e tags, os painéis de alarmes ativos e os formulários administrativos. As telas de operação em tempo real são desenhadas no navegador, e o valor de cada tag é mantido no cache com um tempo de expiração: quando esse tempo vence, o frontend faz uma nova requisição ao backend para obter o valor atualizado, o que mantém a tela próxima do estado corrente do processo. Já as telas de cadastro e os relatórios são gerados no servidor, aproveitando o pré-processamento e a checagem de credenciais.
 
 \par No backend, concentrado na mesma aplicação, ficam todas as operações de negócio: a criação, a consulta, a atualização e a remoção do cadastro hierárquico de clientes, unidades, equipamentos e tags, as consultas ao histórico com filtros, a gestão de usuários, cargos e permissões e o disparo dos comandos do operador. É também o backend que recebe, pela comunicação do Moleculer, cada leitura concluída pelo serviço de aquisição: ele grava o valor no histórico do PostgreSQL, atualiza o valor corrente no Redis e o compara com os limites configurados para gerar alarmes e registrar eventos. Cada requisição é validada contra um esquema declarativo, autenticada por uma credencial guardada no Redis e registrada para auditoria. Quando uma operação precisa agir no campo, o backend não fala direto com o serviço de aquisição: publica a ordem na comunicação do Moleculer, mantendo a aplicação desacoplada da camada que conversa com os dispositivos.
 
 \subsubsection{Agendador}
-\label{sec:srv_agendador}
 
 \par O agendador é um serviço dedicado, construído sobre a biblioteca BullMQ, e tem a função de decidir o instante em que cada ponto deve ser lido. Ao iniciar, consulta o banco, carrega todos os pontos cadastrados com seus tempos de varredura, o intervalo entre uma leitura e a próxima, e cria, para cada um, uma tarefa repetível com base nesse tempo. As cadências variam conforme a grandeza, de minutos para variáveis lentas a segundos para indicadores críticos, e o agendador evita sobrepor ciclos de um mesmo equipamento quando a leitura anterior ainda não terminou. A cada disparo, publica na comunicação do Moleculer o identificador do ponto, avisando que chegou a hora de atualizá-lo. Mudanças no cadastro, como inclusão, remoção ou troca de periodicidade, fazem o serviço recarregar apenas as tarefas afetadas, sem reiniciar. As filas do agendador ficam guardadas no Redis, que serve de memória ao serviço.
 
 \subsubsection{Serviço de Aquisição}
-\label{sec:srv_aquisicao}
 
 \par O serviço de aquisição é a fronteira do sistema com o campo e o único componente que conversa em Modbus com os dispositivos. Ele recebe, já pronta, a configuração de cada ponto, com o endereço da unidade, a área e o endereço dos registradores, o tipo de dado bruto e a ordem de bytes, de modo que não precisa conhecer o cadastro nem o banco: apenas monta a requisição, comunica-se com o dispositivo e devolve o resultado. Ao receber um pedido pela comunicação do Moleculer, monta o quadro Modbus, envia-o ao dispositivo e valida a resposta, conferindo o tamanho, os códigos de erro do protocolo e os tempos de resposta. Em seguida, decodifica o valor bruto, combinando registradores e aplicando os fatores de escala e o deslocamento cadastrados, o que recompõe a grandeza na unidade de engenharia usual da operação, e publica o valor pronto de volta na comunicação.
 
 \par O mesmo serviço executa as escritas de comando: quando o operador aciona um equipamento ou define um valor de referência, a ordem chega pela comunicação e vira uma escrita Modbus no dispositivo, seguida de uma releitura de verificação. Quando uma leitura falha, por estouro de tempo, perda de enlace ou recusa do dispositivo, o serviço registra a ocorrência, mantém o último valor válido marcado como desatualizado e alimenta os alarmes de comunicação da supervisão, pois, em um \sigla{scada}, a ausência de um dado precisa ser tão visível quanto um limite de processo ultrapassado. O serviço não guarda estado próprio, o que permite criar ou remover instâncias sem perda de informação, e os tempos de espera, o número de tentativas e os intervalos entre elas são parametrizados por equipamento, equilibrando robustez e carga na rede.
 
 \subsubsection{Banco de Dados}
-\label{sec:srv_banco_dados}
 
 \par O banco de dados é uma instância PostgreSQL gerenciada pelo Amazon \sigla{rds} e guarda, por longo prazo, todo o estado relevante do sistema: o cadastro hierárquico, o histórico de leituras com carimbo de tempo, os alarmes e eventos, os registros de auditoria, a configuração de usuários e os parâmetros de comunicação. O PostgreSQL é um banco relacional de código aberto com bom suporte a tipos complexos, consultas em janelas de tempo e extensões para séries temporais \cite{POSTGRESQL_DOCS}. Para cada ponto, o cadastro guarda o mapeamento Modbus necessário: o endereço da unidade, a área e o endereço dos registradores, o tipo de dado bruto, a ordem de bytes, os fatores de escala e o deslocamento, os limites de engenharia e a forma de uso do ponto. Com esse modelo, o mesmo serviço de aquisição atende processos diferentes apenas por configuração, sem alterar o código a cada novo medidor ou \sigla{clp}. As tabelas de histórico são particionadas por intervalo de tempo, para não crescerem de forma desordenada, e índices nos campos mais consultados aceleram as consultas. Em produção, o banco mantém uma réplica em outra zona de disponibilidade, com comutação automática em caso de falha e cópias de segurança programadas.
 
 \subsubsection{Cache e Mensageria}
-\label{sec:srv_cache}
 
 \par O Redis, fornecido pelo Amazon ElastiCache, acumula três papéis ao mesmo tempo. Como cache, mantém em memória o valor atual de cada tag ativa, lido pelas telas de tempo real sem onerar o banco a cada atualização. Como memória do agendador, guarda as filas de tarefas do BullMQ. Como meio de transporte, sustenta a comunicação do Moleculer entre os serviços. Além disso, armazena dados temporários, como as credenciais de autenticação, os contadores que limitam o número de requisições por usuário e as travas que evitam a execução duplicada de comandos críticos. O conjunto opera em \emph{cluster}, com réplicas espelhadas em zonas distintas e expiração automática das chaves temporárias.
 
 \subsubsection{Comunicação e Hospedagem}
-\label{sec:srv_infra}
 
 \par A comunicação entre os três serviços é coordenada pelo Moleculer, que se apoia no Redis como meio de transporte e funciona como orquestrador da solução. É por ele que o agendador avisa o serviço de aquisição de que um ponto deve ser lido, que o resultado da leitura volta ao backend e que os comandos do operador chegam ao campo. O Moleculer oferece descoberta automática dos serviços, distribui as chamadas entre instâncias replicadas, isola falhas para que não se propaguem e permite acompanhar uma requisição de ponta a ponta, recursos que o tornam adequado a uma solução distribuída como esta. Os três serviços executam em contêineres no Amazon \sigla{ecs}, que cuida de mantê-los no ar e de criar ou remover réplicas conforme a carga, enquanto o banco e o cache ficam nos serviços gerenciados \sigla{rds} e ElastiCache. Essa combinação, com escala horizontal dos serviços e vertical da infraestrutura de dados, somada às vantagens da computação em nuvem, como o pagamento conforme o uso e a distribuição entre zonas, é o que viabiliza cumprir os requisitos sem o investimento inicial dos supervisórios tradicionais.
