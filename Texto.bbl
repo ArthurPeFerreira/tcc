@@ -323,6 +323,35 @@
       \field{year}{2010}
       \field{dateera}{ce}
     \endentry
+    \entry{ISA95_2000_ENTERPRISE_CONTROL}{manual}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=840feb1e75c083510bdb5d501eb62ebe}{%
+           family={{International Society of Automation}},
+           familyi={I\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Research Triangle Park, NC}%
+      }
+      \list{organization}{1}{%
+        {ANSI/ISA-95.00.01-2000}%
+      }
+      \strng{namehash}{840feb1e75c083510bdb5d501eb62ebe}
+      \strng{fullhash}{840feb1e75c083510bdb5d501eb62ebe}
+      \strng{bibnamehash}{840feb1e75c083510bdb5d501eb62ebe}
+      \strng{authorbibnamehash}{840feb1e75c083510bdb5d501eb62ebe}
+      \strng{authornamehash}{840feb1e75c083510bdb5d501eb62ebe}
+      \strng{authorfullhash}{840feb1e75c083510bdb5d501eb62ebe}
+      \field{sortinit}{I}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{1-55617-727-5}
+      \field{title}{Enterprise-Control System Integration. Part 1: Models and Terminology}
+      \field{year}{2000}
+      \field{dateera}{ce}
+    \endentry
     \entry{KHALID2024_IOT_SCADA_PHOTOVOLTAIC}{article}{}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=00baa45cd5a092e3c34beea86a8e975f}{%
@@ -510,6 +539,47 @@
       \verb{url}
       \verb https://www.modbus.org/docs/Modbus_over_serial_line_V1_02.pdf
       \endverb
+    \endentry
+    \entry{MOHAMED2014_RELATIONAL_VS_NOSQL}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=bc22539d3bd95ca927b4a3feddd4ddc4}{%
+           family={Mohamed},
+           familyi={M\bibinitperiod},
+           given={Mohamed\bibnamedelima A.},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=d2ba8ccc729e811be5cec7314c8a483c}{%
+           family={Altrafi},
+           familyi={A\bibinitperiod},
+           given={Obay\bibnamedelima G.},
+           giveni={O\bibinitperiod\bibinitdelim G\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1d672f2a32dd8faa5b3bd4210a4d0478}{%
+           family={Ismail},
+           familyi={I\bibinitperiod},
+           given={Mohammed\bibnamedelima O.},
+           giveni={M\bibinitperiod\bibinitdelim O\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{56bf2e719734c0143001ca41427e56a8}
+      \strng{fullhash}{56bf2e719734c0143001ca41427e56a8}
+      \strng{bibnamehash}{56bf2e719734c0143001ca41427e56a8}
+      \strng{authorbibnamehash}{56bf2e719734c0143001ca41427e56a8}
+      \strng{authornamehash}{56bf2e719734c0143001ca41427e56a8}
+      \strng{authorfullhash}{56bf2e719734c0143001ca41427e56a8}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{International Journal of Computer and Information Technology}
+      \field{number}{3}
+      \field{title}{Relational vs. {NoSQL} Databases: A Survey}
+      \field{volume}{3}
+      \field{year}{2014}
+      \field{pages}{598\bibrangedash 601}
+      \range{pages}{4}
     \endentry
     \entry{MOLECULER_DOCS}{online}{}
       \name{author}{1}{}{%

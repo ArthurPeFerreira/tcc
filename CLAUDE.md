@@ -77,9 +77,9 @@ TCC/
 
 ### 4.2 Citações
 
-- Parentética: `\cite{KEY}` ou `\cite{KEY1,KEY2}`
-- Narrativa: `\textcite{KEY}` (ex.: "Para Pisching, ...")
-- Com página: `\textcite[p.~N]{KEY}` (usar `~` para non-break space)
+- **Citação parentética no texto corrido (padrão):** `\cite{KEY}` ou `\cite{KEY1,KEY2}`. Apresentar a definição/afirmação com palavras próprias (reformulando o conteúdo do autor, sem copiar a redação dele) e ancorar a referência ao final da frase ou da oração que ela sustenta.
+- **NÃO usar citação narrativa em prosa.** Evitar construções como "\textcite{KEY} aponta/define/destaca", "Para \textcite{KEY}, ...", "Como observa \textcite{KEY}, ...", "Segundo \textcite{KEY}, ...", "De acordo com ...". Em todos esses casos, reescrever a afirmação e colocar `\cite{KEY}` no fim.
+- `\textcite` fica reservado à **atribuição de fonte de figuras e tabelas** (ver Seção 5.3), por exemplo `Fonte: \textcite[p.~N]{KEY}.` (usar `~` para non-break space).
 - **Distribuir as citações ao longo do parágrafo**, ancorando cada `\cite` à afirmação que ele sustenta, em vez de agrupar todas as referências no fim do parágrafo.
 - **Diversificar as fontes:** evitar sustentar uma subseção inteira em um único autor; buscar nas referências disponíveis (Seção 10) outras que corroborem cada ponto.
 
@@ -96,6 +96,7 @@ TCC/
 - Substituir parênteticos com vírgula: `texto, inserção, continuação` em vez de `texto --- inserção --- continuação`.
 - Usar `-` (hífen) só para palavras compostas e formas conjugadas pronominais (`auto-organização`, `expandiu-se`).
 - `~` para non-break space (em "p.~N", "Figura~\ref{...}", unidades em títulos).
+- **NÃO usar ponto e vírgula (`;`) no meio do texto corrido.** O usuário não quer `;`. Em vez de unir orações com `;`, dividir em duas frases (`...afirmação A. Afirmação B...`). Para listas que antes usavam `;` entre itens, reescrever como frases separadas, uma por característica/item, em vez de `item A; item B; e item C`.
 
 ### 4.5 Decimais e unidades
 
@@ -400,8 +401,10 @@ A lista completa de referências está em `Referencias.bib` (chaves prontas para
 - Aprecia gráficos em pgfplots para ilustrar relações matemáticas.
 - Vai recompilar manualmente após cada mudança (compartilha o log no chat).
 - **Não** quer travessões (`---`).
+- **Não** quer ponto e vírgula (`;`) no meio do texto corrido (ver Seção 4.4).
 - **Não** quer negrito (`\textbf`) no texto corrido.
 - Prefere citações distribuídas ao longo do parágrafo e fontes diversificadas (não sustentar tudo em um único autor).
+- **Não** quer citação narrativa em prosa ("Para X", "Como observa X", "Segundo X", "De acordo com X"); prefere a afirmação reformulada com palavras próprias e a referência parentética ao final (ver Seção 4.2).
 - Em definições conceituais (2.1), quer texto genérico e sem exemplos concretos.
 - Prefere "cargos" a "papéis" em controle de acesso baseado em cargos.
 - **Não** quer reprodução de figuras dos PDFs originais — usa TikZ ou extrações próprias.

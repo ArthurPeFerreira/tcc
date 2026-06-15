@@ -64,3 +64,173 @@
   detect-weight = true,               % Adapta a espessura da fonte às unidades
   detect-family = true                % Adapta a família da fonte (serif/sans-serif)
 }
+
+% ==================================================
+% Sistema de Siglas
+% --------------------------------------------------
+% Fonte única: cada sigla é registrada uma vez com \newsigla e alimenta
+% tanto o uso no texto (\sigla{chave}) quanto a Lista de Siglas
+% (gerada por \printlistasiglas), evitando duplicação.
+%
+%   \newsigla{chave}{SIGLA}{Termo em inglês}{Tradução em português}
+%       Auto-expande na PRIMEIRA ocorrência no formato
+%       "tradução (\emph{inglês}, SIGLA)"; nas demais, mostra só a sigla.
+%       Campos de inglês e/ou português podem ficar vazios {}.
+%
+%   \newsigla*{chave}{SIGLA}{Termo em inglês}{Tradução em português}
+%       Nunca expande no texto (mostra sempre só a sigla), mas ainda
+%       aparece na Lista de Siglas com o significado. Use para siglas de
+%       protocolo/produto que não precisam de expansão no corpo do texto.
+%
+%   \sigla{chave}
+%       Insere a sigla. Em qualquer ocorrência, a sigla é um hyperlink
+%       que leva ao topo da Lista de Siglas (\hyperlink{lista-siglas}).
+% ==================================================
+\makeatletter
+
+% Acumuladores (fonte única para a lista e para o reset)
+\newcommand{\sigla@rows}{}   % linhas da tabela da Lista de Siglas
+\newcommand{\sigla@keys}{}   % chaves registradas (para \siglaresetall)
+
+% Link de uma sigla para o topo da Lista de Siglas
+\newcommand{\sigla@link}[1]{\hyperlink{lista-siglas}{#1}}
+
+% Maiúscula só na primeira letra de uma palavra
+\def\sigla@ucfirst#1{\sigla@@ucfirst#1\@nil}
+\def\sigla@@ucfirst#1#2\@nil{\uppercase{#1}#2}
+
+% Title Case com stoplist (usado na coluna Significado da Lista de Siglas):
+% capitaliza a 1a letra de cada palavra principal; conectivos (de, do, a, e...)
+% ficam minúsculos, exceto se forem a primeira palavra. Não altera o corpo.
+\newif\ifsigla@tc@first
+\@namedef{sigla@stop@de}{}\@namedef{sigla@stop@do}{}\@namedef{sigla@stop@da}{}
+\@namedef{sigla@stop@dos}{}\@namedef{sigla@stop@das}{}\@namedef{sigla@stop@e}{}
+\@namedef{sigla@stop@o}{}\@namedef{sigla@stop@a}{}\@namedef{sigla@stop@os}{}
+\@namedef{sigla@stop@as}{}\@namedef{sigla@stop@em}{}\@namedef{sigla@stop@no}{}
+\@namedef{sigla@stop@na}{}\@namedef{sigla@stop@nos}{}\@namedef{sigla@stop@nas}{}
+\@namedef{sigla@stop@ao}{}\@namedef{sigla@stop@aos}{}\@namedef{sigla@stop@com}{}
+\@namedef{sigla@stop@para}{}\@namedef{sigla@stop@por}{}
+\def\sigla@titlecase#1{%
+  \let\sigla@tc@sep\@empty
+  \sigla@tc@firsttrue
+  \sigla@tc@scan#1 \@nil}
+\def\sigla@tc@scan#1 #2\@nil{%
+  \sigla@tc@sep
+  \ifsigla@tc@first
+    \sigla@ucfirst{#1}\sigla@tc@firstfalse
+  \else
+    \@ifundefined{sigla@stop@#1}{\sigla@ucfirst{#1}}{#1}%
+  \fi
+  \def\sigla@tc@tmp{#2}%
+  \def\sigla@tc@sep{ }%
+  \ifx\sigla@tc@tmp\@empty\else\sigla@tc@scan#2\@nil\fi}
+
+% Núcleo do registro: define macros e acrescenta a linha à lista
+\newcommand{\newsigla@core}[4]{%
+  % #1 chave | #2 sigla | #3 inglês (ou vazio) | #4 português (ou vazio)
+  \expandafter\newif\csname ifsigla@used@#1\endcsname
+  \expandafter\def\csname sigla@short@#1\endcsname{\sigla@link{#2}}%
+  \g@addto@macro\sigla@keys{\sigla@do{#1}}%
+  \def\sigla@tmpen{#3}\def\sigla@tmppt{#4}%
+  \ifx\sigla@tmppt\@empty
+    \ifx\sigla@tmpen\@empty
+      \expandafter\def\csname sigla@long@#1\endcsname{\sigla@link{#2}}%
+      \g@addto@macro\sigla@rows{#2 & \\}%
+    \else
+      \expandafter\def\csname sigla@long@#1\endcsname{\emph{#3}~(\sigla@link{#2})}%
+      \g@addto@macro\sigla@rows{#2 & \emph{#3} \\}%
+    \fi
+  \else
+    \ifx\sigla@tmpen\@empty
+      \expandafter\def\csname sigla@long@#1\endcsname{#4~(\sigla@link{#2})}%
+      \g@addto@macro\sigla@rows{#2 & \sigla@titlecase{#4} \\}%
+    \else
+      \expandafter\def\csname sigla@long@#1\endcsname{#4~(\emph{#3}, \sigla@link{#2})}%
+      \g@addto@macro\sigla@rows{#2 & \sigla@titlecase{#4} (\emph{#3}) \\}%
+    \fi
+  \fi
+}
+
+% Variante com estrela (sem auto-expansão): pré-marca a sigla como já usada
+\newcommand{\newsigla}{\@ifstar\newsigla@star\newsigla@auto}
+\newcommand{\newsigla@auto}[4]{\newsigla@core{#1}{#2}{#3}{#4}}
+\newcommand{\newsigla@star}[4]{\newsigla@core{#1}{#2}{#3}{#4}%
+  \csname sigla@used@#1true\endcsname}
+
+% Uso da sigla no texto
+\newcommand{\sigla}[1]{%
+  \@ifundefined{sigla@short@#1}%
+    {\textbf{??SIGLA:#1??}}%
+    {\csname ifsigla@used@#1\endcsname
+       \csname sigla@short@#1\endcsname
+     \else
+       \csname sigla@used@#1true\endcsname
+       \csname sigla@long@#1\endcsname
+     \fi}%
+}
+
+% Reseta o estado de "já usada" de todas as siglas (útil após Resumo/Abstract,
+% para que a primeira expansão valha no corpo do trabalho)
+\newcommand{\sigla@resetone}[1]{\csname sigla@used@#1false\endcsname}
+\newcommand{\sigla@do}[1]{}
+\newcommand{\siglaresetall}{\let\sigla@do\sigla@resetone \sigla@keys
+  \let\sigla@do\@gobble}
+
+% Gera a tabela da Lista de Siglas a partir do registro
+\newcommand{\printlistasiglas}{%
+  \hypertarget{lista-siglas}{}%
+  \noindent
+  \begin{tabularx}{\textwidth}{@{}l X@{}}
+    \textbf{Sigla} & \textbf{Significado} \\[0.35em]
+    \sigla@rows
+  \end{tabularx}%
+}
+
+\makeatother
+
+% --------------------------------------------------
+% Registro das siglas (ordem alfabética = ordem na Lista de Siglas)
+% Conceituais -> \newsigla (auto-expande 1x). Protocolo/produto -> \newsigla*.
+% --------------------------------------------------
+% Conceituais (auto-expandem na 1a ocorrencia): cps, csr, erp, iiot, iot, m2m,
+%   mes, soa, ssg, ssr, ta, ti, ttl.
+% Link-only (\newsigla*): siglas de protocolo/produto e as cujo termo no texto
+%   usa variante (plural/minuscula/prosa propria) que nao casa com a expansao.
+\newsigla*{api}{API}{Application Programming Interface}{}
+\newsigla*{aws}{AWS}{Amazon Web Services}{}
+\newsigla*{clp}{CLP}{}{Controlador Lógico Programável}
+\newsigla*{cnc}{CNC}{}{Controlador Numérico Computadorizado}
+\newsigla{cps}{CPS}{Cyber-Physical Systems}{sistemas ciber-físicos}
+\newsigla*{crc}{CRC}{Cyclic Redundancy Check}{}
+\newsigla{csr}{CSR}{client-side rendering}{renderização no cliente}
+\newsigla*{ecr}{ECR}{Elastic Container Registry}{}
+\newsigla*{ecs}{ECS}{Elastic Container Service}{}
+\newsigla{erp}{ERP}{Enterprise Resource Planning}{sistemas de gestão empresarial}
+\newsigla*{http}{HTTP}{Hypertext Transfer Protocol}{}
+\newsigla*{ihm}{IHM}{}{Interface Homem-Máquina}
+\newsigla{iiot}{IIoT}{Industrial Internet of Things}{Internet Industrial das Coisas}
+\newsigla*{io}{I/O}{Input/Output}{Entrada/Saída}
+\newsigla{iot}{IoT}{Internet of Things}{Internet das Coisas}
+\newsigla*{ip}{IP}{Internet Protocol}{}
+\newsigla*{json}{JSON}{JavaScript Object Notation}{}
+\newsigla*{jwt}{JWT}{JSON Web Token}{}
+\newsigla{m2m}{M2M}{Machine-to-Machine}{comunicação Máquina a Máquina}
+\newsigla{mes}{MES}{Manufacturing Execution Systems}{sistemas de execução da manufatura}
+\newsigla*{ntp}{NTP}{Network Time Protocol}{}
+\newsigla*{pdu}{PDU}{Protocol Data Unit}{}
+\newsigla*{ram}{RAM}{Random Access Memory}{}
+\newsigla*{rds}{RDS}{Relational Database Service}{}
+\newsigla*{rest}{REST}{Representational State Transfer}{}
+\newsigla*{rf}{RF}{}{radiofrequência}
+\newsigla*{rtu}{RTU}{Remote Terminal Unit}{}
+\newsigla*{scada}{SCADA}{Supervisory Control and Data Acquisition}{Supervisão, Controle e Aquisição de Dados}
+\newsigla{soa}{SOA}{Service-Oriented Architecture}{arquitetura orientada a serviços}
+\newsigla*{sql}{SQL}{Structured Query Language}{}
+\newsigla{ssg}{SSG}{static site generation}{geração estática}
+\newsigla{ssr}{SSR}{server-side rendering}{renderização no servidor}
+\newsigla{ta}{TA}{}{Tecnologia da Automação}
+\newsigla*{tcp}{TCP}{Transmission Control Protocol}{}
+\newsigla{ti}{TI}{}{Tecnologia da Informação}
+\newsigla{ttl}{TTL}{time-to-live}{}
+\newsigla*{url}{URL}{Uniform Resource Locator}{}
+\newsigla*{xml}{XML}{eXtensible Markup Language}{}
