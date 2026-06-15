@@ -33,16 +33,15 @@
 \contentsline {subsubsection}{\numberline {3.2.3}Níveis de Acesso}{27}{subsubsection.3.2.3}%
 \contentsline {subsubsection}{\numberline {3.2.4}Comando e Controle}{27}{subsubsection.3.2.4}%
 \contentsline {subsubsection}{\numberline {3.2.5}Escalabilidade}{27}{subsubsection.3.2.5}%
-\contentsline {subsubsection}{\numberline {3.2.6}Redundância}{28}{subsubsection.3.2.6}%
+\contentsline {subsubsection}{\numberline {3.2.6}Redundância}{27}{subsubsection.3.2.6}%
 \contentsline {subsection}{\numberline {3.3}Serviços}{28}{subsection.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.1}Aplicação Next.js (Frontend e Backend)}{28}{subsubsection.3.3.1}%
-\contentsline {subsubsection}{\numberline {3.3.2}Banco de Dados}{29}{subsubsection.3.3.2}%
-\contentsline {subsubsection}{\numberline {3.3.3}Cache}{29}{subsubsection.3.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.4}BullMQ}{29}{subsubsection.3.3.4}%
-\contentsline {subsubsection}{\numberline {3.3.5}Barramento Moleculer}{30}{subsubsection.3.3.5}%
-\contentsline {subsubsection}{\numberline {3.3.6}Workers de Aquisição}{30}{subsubsection.3.3.6}%
-\contentsline {subsection}{\numberline {3.4}Aquisição de Dados}{30}{subsection.3.4}%
-\contentsline {section}{\numberline {4}Cronograma}{32}{section.4}%
+\contentsline {subsubsection}{\numberline {3.3.1}Aplicação Next.js}{28}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}Agendador}{28}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}Serviço de Aquisição}{29}{subsubsection.3.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.4}Banco de Dados}{29}{subsubsection.3.3.4}%
+\contentsline {subsubsection}{\numberline {3.3.5}Cache e Mensageria}{30}{subsubsection.3.3.5}%
+\contentsline {subsubsection}{\numberline {3.3.6}Comunicação e Hospedagem}{30}{subsubsection.3.3.6}%
+\contentsline {section}{\numberline {4}Cronograma}{31}{section.4}%
 \babel@toc {brazil}{}\relax 
 \babel@toc {brazil}{}\relax 
 \babel@toc {brazil}{}\relax 

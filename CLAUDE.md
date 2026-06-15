@@ -109,7 +109,7 @@ TCC/
 - `Figura~\ref{fig:nome}` (não "Fig." nem só "\ref")
 - `Tabela~\ref{tab:nome}`
 - `Equação~\ref{eq:nome}` ou `Equações~\ref{eq:a} e~\ref{eq:b}`
-- `Subseção~\ref{sec:nome}`
+- **NÃO referenciar subseções no texto corrido.** O usuário não quer construções como "definidos na Subseção~\ref{sec:nome}", "discutido na Subseção~\ref{sec:nome}" ou "como será visto na Subseção~\ref{sec:nome}". Em vez de apontar para a subseção com `\ref`, reescrever de forma autocontida (ex.: "os requisitos apresentados", "conforme discutido anteriormente", "como será visto a seguir"). Referências a Figura, Tabela e Equação continuam normais.
 
 ### 4.7 Padrões de redação consolidados (observados no texto atual)
 
@@ -136,7 +136,7 @@ Estes padrões emergiram naturalmente do texto já escrito e devem ser mantidos 
 
 **Menção a figura.** Forma narrativa "A Figura~\ref{fig:nome} ilustra/resume/sintetiza..." ou parentética inline "...(Figura~\ref{fig:nome})". Nunca "Fig.", sempre "Figura".
 
-**Transição entre subseções.** Fechar a subseção apontando para outra: "discutido na Subseção~\ref{sec:nome}", "como será visto na Subseção~\ref{sec:nome}". Mantém o fio condutor do texto.
+**Transição entre subseções.** Fechar a subseção apontando para o assunto da próxima sem `\ref` de subseção: "discutido a seguir", "como será visto adiante", "conforme apresentado anteriormente". Mantém o fio condutor do texto sem referenciar a subseção (ver Seção 4.6).
 
 ---
 
@@ -405,6 +405,7 @@ A lista completa de referências está em `Referencias.bib` (chaves prontas para
 - **Não** quer negrito (`\textbf`) no texto corrido.
 - Prefere citações distribuídas ao longo do parágrafo e fontes diversificadas (não sustentar tudo em um único autor).
 - **Não** quer citação narrativa em prosa ("Para X", "Como observa X", "Segundo X", "De acordo com X"); prefere a afirmação reformulada com palavras próprias e a referência parentética ao final (ver Seção 4.2).
+- **Não** quer referência a subseções no texto corrido (nada de "definidos na Subseção~\ref{sec:nome}" ou "discutido na Subseção~\ref{sec:nome}"); reescrever de forma autocontida. Referências a Figura, Tabela e Equação seguem normais (ver Seção 4.6).
 - Em definições conceituais (2.1), quer texto genérico e sem exemplos concretos.
 - Prefere "cargos" a "papéis" em controle de acesso baseado em cargos.
 - **Não** quer reprodução de figuras dos PDFs originais — usa TikZ ou extrações próprias.
