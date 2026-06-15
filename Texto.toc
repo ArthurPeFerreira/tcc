@@ -17,46 +17,29 @@
 \contentsline {subsection}{\numberline {2.2}Automação e Tecnologias da Indústria 4.0}{15}{subsection.2.2}%
 \contentsline {subsection}{\numberline {2.3}Banco de Dados}{17}{subsection.2.3}%
 \contentsline {subsection}{\numberline {2.4}Redis}{17}{subsection.2.4}%
-\contentsline {subsection}{\numberline {2.5}Docker}{18}{subsection.2.5}%
-\contentsline {subsection}{\numberline {2.6}Computação em Nuvem}{19}{subsection.2.6}%
-\contentsline {subsection}{\numberline {2.7}Next.js}{19}{subsection.2.7}%
-\contentsline {subsection}{\numberline {2.8}HTTP, API REST e JSON}{20}{subsection.2.8}%
-\contentsline {subsection}{\numberline {2.9}Microsserviços}{21}{subsection.2.9}%
-\contentsline {subsection}{\numberline {2.10}Moleculer}{21}{subsection.2.10}%
-\contentsline {subsection}{\numberline {2.11}Protocolo Modbus TCP e Modbus RTU}{22}{subsection.2.11}%
-\contentsline {section}{\numberline {3}Funcionamento}{24}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Validações dos Requisitos do SCADA}{24}{subsection.3.1}%
-\contentsline {subsubsection}{\numberline {3.1.1}Aquisição e Registro de Dados}{25}{subsubsection.3.1.1}%
-\contentsline {subsubsection}{\numberline {3.1.2}Sincronismo de Tempo}{25}{subsubsection.3.1.2}%
-\contentsline {subsubsection}{\numberline {3.1.3}Níveis de Acesso}{25}{subsubsection.3.1.3}%
-\contentsline {subsubsection}{\numberline {3.1.4}Comando e Controle}{25}{subsubsection.3.1.4}%
-\contentsline {subsubsection}{\numberline {3.1.5}Escalabilidade}{26}{subsubsection.3.1.5}%
-\contentsline {subsubsection}{\numberline {3.1.6}Redundância}{26}{subsubsection.3.1.6}%
-\contentsline {subsection}{\numberline {3.2}Servidores}{26}{subsection.3.2}%
-\contentsline {subsubsection}{\numberline {3.2.1}Aplicação Next.js (Frontend e Backend)}{27}{subsubsection.3.2.1}%
-\contentsline {subsubsection}{\numberline {3.2.2}Banco de Dados}{27}{subsubsection.3.2.2}%
-\contentsline {subsubsection}{\numberline {3.2.3}Cache}{28}{subsubsection.3.2.3}%
-\contentsline {subsubsection}{\numberline {3.2.4}BullMQ}{28}{subsubsection.3.2.4}%
-\contentsline {subsubsection}{\numberline {3.2.5}Barramento Moleculer}{28}{subsubsection.3.2.5}%
-\contentsline {subsubsection}{\numberline {3.2.6}Workers de Aquisição}{28}{subsubsection.3.2.6}%
-\contentsline {subsection}{\numberline {3.3}Aquisição de Dados}{29}{subsection.3.3}%
-\contentsline {section}{\numberline {4}Cronograma}{30}{section.4}%
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
-\babel@toc {brazil}{}\relax 
+\contentsline {subsection}{\numberline {2.5}Computação em Nuvem}{18}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Next.js}{18}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}HTTP, API REST e JSON}{19}{subsection.2.7}%
+\contentsline {subsection}{\numberline {2.8}Microsserviços}{20}{subsection.2.8}%
+\contentsline {subsection}{\numberline {2.9}Moleculer}{20}{subsection.2.9}%
+\contentsline {subsection}{\numberline {2.10}Protocolo Modbus TCP e Modbus RTU}{21}{subsection.2.10}%
+\contentsline {section}{\numberline {3}Funcionamento}{23}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Validações dos Requisitos do SCADA}{23}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Aquisição e Registro de Dados}{24}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Sincronismo de Tempo}{24}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}Níveis de Acesso}{24}{subsubsection.3.1.3}%
+\contentsline {subsubsection}{\numberline {3.1.4}Comando e Controle}{24}{subsubsection.3.1.4}%
+\contentsline {subsubsection}{\numberline {3.1.5}Escalabilidade}{25}{subsubsection.3.1.5}%
+\contentsline {subsubsection}{\numberline {3.1.6}Redundância}{25}{subsubsection.3.1.6}%
+\contentsline {subsection}{\numberline {3.2}Servidores}{25}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Aplicação Next.js (Frontend e Backend)}{26}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Banco de Dados}{26}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}Cache}{27}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}BullMQ}{27}{subsubsection.3.2.4}%
+\contentsline {subsubsection}{\numberline {3.2.5}Barramento Moleculer}{27}{subsubsection.3.2.5}%
+\contentsline {subsubsection}{\numberline {3.2.6}Workers de Aquisição}{27}{subsubsection.3.2.6}%
+\contentsline {subsection}{\numberline {3.3}Aquisição de Dados}{28}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Cronograma}{29}{section.4}%
 \babel@toc {brazil}{}\relax 
 \babel@toc {brazil}{}\relax 
 \babel@toc {brazil}{}\relax 

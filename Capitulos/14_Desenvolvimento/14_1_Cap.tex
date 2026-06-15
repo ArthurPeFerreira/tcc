@@ -39,7 +39,7 @@
 
 \subsubsection{Redundância}
 
-\par A redundância consiste no acréscimo de um elemento idêntico ao original, de modo que, em caso de falha do primeiro, o segundo assuma suas funções da forma mais transparente possível para a operação \cite{ZANGHI2019_SCADA_CONCEITOS}. A prática aplica-se a diversos componentes do sistema, como softwares supervisórios, dispositivos de aquisição e controle e elementos de rede, apesar do custo adicional, eleva a confiabilidade a graus compatíveis com a criticidade de aplicações industriais sensíveis \cite{SALVADOR2019_AQUISICAO_REDUNDANCIA}.
+\par A redundância consiste no acréscimo de um elemento idêntico ao original, de modo que, em caso de falha do primeiro, o segundo assuma suas funções da forma mais transparente possível para a operação \cite{ZANGHI2019_SCADA_CONCEITOS}. A prática aplica-se a diversos componentes do sistema, como softwares supervisórios, dispositivos de aquisição e controle e elementos de rede, apesar do custo adicional, eleva a confiabilidade a graus compatíveis com a criticidade de aplicações industriais sensíveis.
 
 \par Em uma arquitetura redundante típica, múltiplas estações de operação comunicam-se simultaneamente com os dispositivos de campo e as unidades de aquisição e controle operam em pares espelhados \cite{ZANGHI2019_SCADA_CONCEITOS}. De modo geral, recomenda-se que cada componente crítico tenha um par redundante, sobre redes igualmente redundantes, e que o sistema seja projetado para degradação suave, preservando a supervisão e o controle mesmo diante de falhas pontuais \cite{STOUFFER2015_NIST_ICS_SECURITY}.
 
@@ -85,7 +85,7 @@
 
 \par O modelo relacional, materializado em bancos como PostgreSQL, MySQL e Oracle, organiza os dados em tabelas de linhas e colunas, cada uma definida por um esquema, uma chave primária que identifica unicamente cada registro e, opcionalmente, chaves estrangeiras que estabelecem relações entre tabelas, garantindo integridade referencial \cite{MOHAMED2014_RELATIONAL_VS_NOSQL}. A linguagem de consulta padrão é o \sigla{sql} (\emph{Structured Query Language}), com operações de seleção, inserção, atualização e remoção, além de junções, agregações, transações e índices.
 
-\par Em ambientes de produção, boas práticas incluem indexar os campos mais consultados, particionar as tabelas históricas por intervalo de tempo para evitar tabelas monolíticas e empregar réplicas com \emph{failover} automático e \emph{snapshots} para alta disponibilidade \cite{DAMIN2022_MELHORES_PRATICAS_E3, SALVADOR2019_AQUISICAO_REDUNDANCIA}.
+\par Em ambientes de produção, boas práticas incluem indexar os campos mais consultados, particionar as tabelas históricas por intervalo de tempo para evitar tabelas monolíticas e empregar réplicas com \emph{failover} automático e \emph{snapshots} para alta disponibilidade.
 
 \subsection{Redis}
 
@@ -95,31 +95,11 @@
 
 \par Como o Redis guarda os dados em memória, ele usa cópias e recuperação automática para não parar diante de falhas. A replicação mantém uma ou mais réplicas sempre atualizadas da instância principal. Sobre isso, o \emph{Redis Sentinel} cuida da disponibilidade: vigia a instância principal e, se ela cai, promove sozinho uma réplica ao seu lugar, sem intervenção manual. Já o \emph{Redis Cluster} cuida do crescimento: reparte as chaves entre vários nós, de modo que basta acrescentar nós para aumentar a capacidade, e cada nó pode ter réplicas para o serviço continuar mesmo se um deles falhar \cite{REDIS_DOCS}.
 
-\subsection{Docker}
-
-\par O Docker é uma plataforma de virtualização baseada em contêineres, unidades de empacotamento que reúnem código, bibliotecas e dependências em um artefato portável \cite{DOCKER_DOCS}. Diferentemente das máquinas virtuais \cite{SALVADOR2019_VIRTUALIZACAO}, que emulam uma máquina inteira com seu sistema operacional, os contêineres compartilham o \emph{kernel} do hospedeiro e isolam apenas o espaço de processos e o sistema de arquivos da aplicação (Figura~\ref{fig:vm_vs_container}). Por isso são ordens de magnitude mais leves: enquanto uma máquina virtual pode levar minutos para iniciar e ocupar gigabytes, um contêiner inicia em segundos e consome dezenas a centenas de megabytes.
-
-\begin{figure}[H]
-    \centering
-    \caption{Arquitetura comparada: máquinas virtuais (esquerda) e contêineres Docker (direita)}
-    \label{fig:vm_vs_container}
-    \vspace{0.4cm}
-    \includegraphics[width=0.75\textwidth]{Imagens/Desenvolvimento/Cap1/vm_vs_container-nova.png}
-    \vspace{0.2cm} \\
-    Fonte: Elaborado pelo autor com base em \textcite{SALVADOR2019_VIRTUALIZACAO}.
-\end{figure}
-
-\par O modelo apoia-se em três artefatos \cite{DOCKER_DOCS}: o \emph{Dockerfile}, arquivo de texto que descreve como construir a imagem (base, dependências, código, inicialização); a imagem, resultado somente leitura organizado em camadas, versionável e armazenável em registros como o Docker Hub ou o Amazon \sigla{ecr}; e o contêiner, instância em execução de uma imagem, com seu próprio espaço de processos, rede e armazenamento volátil. A composição de múltiplos contêineres costuma ser descrita em \texttt{docker-compose.yml}, e, em produção, orquestradores como o Kubernetes ou serviços gerenciados como o Amazon \sigla{ecs} provisionam, monitoram, reiniciam e escalam as instâncias.
-
-\par As vantagens são diretas para sistemas baseados em microsserviços: reprodutibilidade do ambiente (o mesmo Dockerfile gera a mesma imagem em desenvolvimento e em produção), isolamento de dependências (serviços com versões diferentes de uma biblioteca convivem sem conflito) e portabilidade (a imagem roda em qualquer ambiente com Docker Engine). Por essas razões, os contêineres tornaram-se a base de implantação das arquiteturas orientadas a microsserviços para a Indústria 4.0 \cite{BIGHETI2020}.
-
 \subsection{Computação em Nuvem}
 
-\par O termo \emph{Cloud Computing}, ou Computação em Nuvem, surgiu em 2006 e consolidou-se como um paradigma em que dados e aplicações são movidos para grandes centros de armazenamento e a infraestrutura é distribuída como serviços acessíveis pela internet \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC}. A ``nuvem'' esconde os recursos físicos sob uma interface padronizada, em parentesco com a \emph{Utility Computing}: a capacidade computacional torna-se uma utilidade tarifada pelo consumo \cite{PEDROSA2011_COMPUTACAO_NUVEM}. Para ser considerada nuvem, uma plataforma deve reunir cinco características: \emph{self-service} sob demanda, amplo acesso à rede, \emph{pooling} de recursos multi-inquilino, elasticidade rápida e serviço medido \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC,PEDROSA2011_COMPUTACAO_NUVEM}.
+\par A Computação em Nuvem surgiu em 2006 e tornou-se um modelo em que os dados e os programas deixam de ficar no computador local e passam a rodar em grandes centros de armazenamento, acessados pela internet \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC}. A ideia da ``nuvem'' é esconder os equipamentos físicos por trás de uma interface simples, de modo que o poder de computação vira um serviço pago conforme o uso, tratado como uma utilidade pública, a exemplo da água e da energia elétrica \cite{PEDROSA2011_COMPUTACAO_NUVEM}. Para uma plataforma ser de fato uma nuvem, ela precisa reunir cinco características: contratar recursos sozinho e na hora em que precisa, acessar tudo pela rede de qualquer lugar, compartilhar os mesmos recursos entre vários clientes, aumentar ou reduzir a capacidade com rapidez e medir o consumo para a cobrança \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC,PEDROSA2011_COMPUTACAO_NUVEM}. Quanto à forma de implantação, a nuvem pode ser pública, privada, comunitária ou híbrida, sendo esta última capaz de recorrer a recursos públicos para absorver picos de demanda \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC}.
 
-\par A arquitetura organiza-se em três camadas de serviço (Figura~\ref{fig:cloud_modelos_servico}): Infraestrutura como Serviço (IaaS), com recursos virtualizados de hardware; Plataforma como Serviço (PaaS), com ambientes prontos de desenvolvimento; e Software como Serviço (SaaS), com aplicações completas entregues por portais web \cite{PEDROSA2011_COMPUTACAO_NUVEM}. Quanto à implantação, há as nuvens pública, privada, comunitária e híbrida, esta última capaz de absorver picos de demanda com recursos públicos \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC}.
-
-\par Entre as vantagens estão a mobilidade, o pagamento por uso, a escalabilidade e a confiabilidade dos grandes provedores; entre os desafios, a segurança, a interoperabilidade entre provedores e a disponibilidade \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC,PEDROSA2011_COMPUTACAO_NUVEM}. No contexto da Indústria 4.0, a nuvem é a infraestrutura que viabiliza a integração de produtos, máquinas, sensores e serviços, reposicionando o \sigla{scada}, antes confinado a salas de controle locais, como nó de uma rede distribuída de serviços \cite{BIGHETI2020,PISCHING2017}. Entre os provedores comerciais, a Amazon Web Services (\sigla{aws}) é atualmente o maior, oferecendo serviços em todas as camadas do modelo sob precificação \emph{pay-per-use}.
+\par Esse modelo traz como principais vantagens a mobilidade de acesso, o pagamento apenas pelo que se usa, a facilidade de aumentar ou reduzir a capacidade e a confiabilidade dos grandes provedores. Em contrapartida, ainda apresenta desafios, como a segurança dos dados, a dificuldade de migrar entre provedores diferentes e a garantia de disponibilidade \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC,PEDROSA2011_COMPUTACAO_NUVEM}. No contexto da Indústria 4.0, a nuvem funciona como a infraestrutura que conecta produtos, máquinas, sensores e serviços, e passa a tratar o \sigla{scada}, antes restrito a salas de controle locais, como mais um ponto de uma rede distribuída de serviços \cite{BIGHETI2020,PISCHING2017}.
 
 \subsection{Next.js}
 
