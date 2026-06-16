@@ -1,4 +1,0 @@
->>> Geral
-- os termos utilizados em inglês, são utilizados persistentemente em todo documento? por exemplo: coils de CLP, openess, polling, application-pull, technology-push, smart factory ...
-- Nesse sentido, parte dos textos podem ser simplificados, apresentando conceitos importantes e relevantes para o trabalho, sem se tornar cansativo demais (foco); e ressaltando aquilo que você domina
-

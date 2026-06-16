@@ -216,6 +216,39 @@
       \field{year}{2020}
       \field{dateera}{ce}
     \endentry
+    \entry{ELIPSE_IHM_ALTA_PERFORMANCE}{online}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=7be936631e0fbdfdac5cd8a754a3c982}{%
+           family={{Elipse Software}},
+           familyi={E\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Elipse Software}%
+      }
+      \strng{namehash}{7be936631e0fbdfdac5cd8a754a3c982}
+      \strng{fullhash}{7be936631e0fbdfdac5cd8a754a3c982}
+      \strng{bibnamehash}{7be936631e0fbdfdac5cd8a754a3c982}
+      \strng{authorbibnamehash}{7be936631e0fbdfdac5cd8a754a3c982}
+      \strng{authornamehash}{7be936631e0fbdfdac5cd8a754a3c982}
+      \strng{authorfullhash}{7be936631e0fbdfdac5cd8a754a3c982}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{url}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Metodologia para Desenvolvimento de IHMs de Alta Performance Visual}
+      \field{urlday}{15}
+      \field{urlmonth}{6}
+      \field{urlyear}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://kb.elipse.com.br/metodologia-para-desenvolvimento-de-ihms-de-alta-performance-visual/
+      \endverb
+      \verb{url}
+      \verb https://kb.elipse.com.br/metodologia-para-desenvolvimento-de-ihms-de-alta-performance-visual/
+      \endverb
+    \endentry
     \entry{HENRIQUES2010_CLOUD_COMPUTING_TCC}{thesis}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=7cca313af4dc55ffe721eb958fc6ffa8}{%

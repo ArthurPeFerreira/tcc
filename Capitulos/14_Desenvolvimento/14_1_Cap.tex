@@ -5,7 +5,20 @@
 
 \subsection{Sistema SCADA}
 
-\par A indústria evoluiu muito na busca por mais monitoramento e controle dos processos. Com o tempo, os custos de computadores, hubs e conversores de rede caíram bastante, ao passo que o desenvolvimento de software ganhava relevância. Nesse contexto, as empresas de software industrial passaram a oferecer soluções personalizadas para cada tipo de processo e indústria, com ampla gama de protocolos de comunicação. A esse tipo de sistema deu-se o nome de \sigla{scada}, sigla em inglês para \emph{Supervisory Control and Data Acquisition} \cite{ZANGHI2019_SCADA_CONCEITOS}. De forma geral, define-se o \sigla{scada} como um pacote de software posicionado sobre o hardware ao qual se interliga, que viabiliza a supervisão e o controle de processos industriais de forma local ou remota \cite{PHUYAL2020_COST_EFFICIENT_SCADA, AHMED2011_EFFICIENT_WEB_SCADA}.
+\par A indústria evoluiu muito na busca por mais monitoramento e controle dos processos. Com o tempo, os custos de computadores, hubs e conversores de rede caíram bastante, ao passo que o desenvolvimento de software ganhava relevância. \cite{AHMED2011_EFFICIENT_WEB_SCADA} Nesse contexto, as empresas de software industrial passaram a oferecer soluções personalizadas para cada tipo de processo e indústria, com ampla gama de protocolos de comunicação. A esse tipo de sistema deu-se o nome de \sigla{scada}, sigla em inglês para \emph{Supervisory Control and Data Acquisition} \cite{ZANGHI2019_SCADA_CONCEITOS}. De forma geral, define-se o \sigla{scada} como um pacote de software posicionado sobre o hardware ao qual se interliga, que viabiliza a supervisão e o controle de processos industriais de forma local ou remota \cite{PHUYAL2020_COST_EFFICIENT_SCADA}.
+
+\par A aplicação dos sistemas \sigla{scada} estende-se a praticamente todos os segmentos que operam processos distribuídos e de funcionamento contínuo, muitos deles classificados como infraestruturas críticas, cuja interrupção compromete serviços essenciais \cite{YADAV2020_SCADA_ARCHITECTURE_REVIEW}. Entre os usos típicos estão a geração, a transmissão e a distribuição de energia elétrica, o tratamento e a distribuição de água e o saneamento, a produção e o transporte de óleo e gás por dutos, os sistemas de transporte, as indústrias química e farmacêutica, a produção de papel e celulose, o setor de alimentos e bebidas e a manufatura discreta, como a automotiva e a aeroespacial \cite{STOUFFER2015_NIST_ICS_SECURITY}. A Figura~\ref{fig:ihm_scada} ilustra uma tela de supervisão.
+
+\begin{figure}[H]
+    \centering
+    \caption{Tela de Supervisão}
+    \centering
+    \includegraphics[width=0.85\textwidth]{Imagens/Desenvolvimento/Cap1/scada.png}
+    \centering
+    \vspace{0.2cm} \\
+    Fonte: \textcite{ELIPSE_IHM_ALTA_PERFORMANCE}.
+    \label{fig:ihm_scada}
+\end{figure}
 
 \par Para \textcite{ZANGHI2019_SCADA_CONCEITOS}, um sistema \sigla{scada} deve contemplar seis módulos, descritos nas subseções a seguir: aquisição e registro de dados, sincronismo de tempo, níveis de acesso, comando e controle, escalabilidade e redundância.
 
@@ -13,7 +26,7 @@
 
 \par A aquisição das informações de campo é o primeiro grande desafio em um sistema \sigla{scada} \cite{ZANGHI2019_SCADA_CONCEITOS}. Atualmente, predominam dispositivos genéricos inteligentes que disponibilizam algum protocolo de comunicação, responsáveis por adquirir grandezas analógicas e digitais e disponibilizá-las ao supervisório em formato binário por meio de uma rede de dados \cite{YADAV2020_SCADA_ARCHITECTURE_REVIEW}. O meio de comunicação varia conforme a distância e a infraestrutura disponível, indo das redes locais cabeadas, tipicamente Ethernet, a enlaces sem fio como rádio frequência (\sigla{rf}) e telefonia móvel (4G) \cite{STOUFFER2015_NIST_ICS_SECURITY}, até soluções orientadas à Internet das Coisas, que trafegam os dados pela internet \cite{KHALID2024_IOT_SCADA_PHOTOVOLTAIC}.
 
-\par Os pontos aquisitados em um sistema \sigla{scada} são denominados \emph{tags} e armazenados no banco de dados do supervisório. Cada tag assume um tipo de dado conforme a natureza da grandeza que representa, podendo ser booleano, inteiro, real ou texto. O registro contínuo desses valores pelo supervisório permite análises posteriores, na forma de gráficos históricos de tendência e de sequenciais de eventos \cite{ZANGHI2019_SCADA_CONCEITOS}.
+\par Os pontos adquiridos em um sistema \sigla{scada} são denominados \emph{tags} e armazenados no banco de dados do supervisório. Cada tag assume um tipo de dado conforme a natureza da grandeza que representa, podendo ser booleano, inteiro, real ou texto. O registro contínuo desses valores pelo supervisório permite análises posteriores, na forma de gráficos históricos de tendência e de sequenciais de eventos \cite{ZANGHI2019_SCADA_CONCEITOS}.
 
 \subsubsection{Sincronismo de Tempo}
 
@@ -59,7 +72,7 @@
     \centering
     \caption{Estrutura de um Sistema Ciber-Físico}
     \centering
-    \includegraphics[width=0.75\textwidth]{Imagens/Desenvolvimento/Cap1/cps.png}
+    \includegraphics[width=0.85\textwidth]{Imagens/Desenvolvimento/Cap1/cps.png}
     \centering
     \vspace{0.2cm} \\
     Fonte: \textcite{BIGHETI2020}.
@@ -72,7 +85,7 @@
     \centering
     \caption{Interseções de IoT, CPS, IIoT e Indústria 4.0}
     \centering
-    \includegraphics[width=0.75\textwidth]{Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps.png}
+    \includegraphics[width=0.65\textwidth]{Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps.png}
     \centering
     \vspace{0.2cm} \\
     Fonte: \textcite[p.~27]{BIGHETI2020}.
@@ -85,7 +98,7 @@
 
 \par O modelo relacional, materializado em bancos como PostgreSQL, MySQL e Oracle, organiza os dados em tabelas de linhas e colunas, cada uma definida por um esquema, uma chave primária que identifica unicamente cada registro e, opcionalmente, chaves estrangeiras que estabelecem relações entre tabelas, garantindo integridade referencial \cite{MOHAMED2014_RELATIONAL_VS_NOSQL}. A linguagem de consulta padrão é o \sigla{sql} (\emph{Structured Query Language}), com operações de seleção, inserção, atualização e remoção, além de junções, agregações, transações e índices.
 
-\par Em ambientes de produção, boas práticas incluem indexar os campos mais consultados, particionar as tabelas históricas por intervalo de tempo para evitar tabelas monolíticas e empregar réplicas com \emph{failover} automático e \emph{snapshots} para alta disponibilidade.
+\par Em ambientes de produção, boas práticas incluem indexar os campos mais consultados, particionar as tabelas históricas por intervalo de tempo para evitar tabelas monolíticas e empregar réplicas que assumem o serviço automaticamente quando o nó principal falha e cópias do estado do banco em pontos definidos no tempo para alta disponibilidade.
 
 \subsection{Redis}
 
@@ -97,9 +110,9 @@
 
 \subsection{Computação em Nuvem}
 
-\par A Computação em Nuvem é um modelo no qual os dados e as aplicações deixam de residir no computador do usuário e passam a ser executados em grandes centros de processamento e armazenamento, disponibilizados na forma de serviços acessados pela internet \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC}. Em vez de adquirir e manter a própria infraestrutura, o usuário contrata de um provedor a capacidade de processamento, o armazenamento e os programas de que necessita, bastando um dispositivo conectado à rede para utilizá-los \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC}. A ``nuvem'' é a camada conceitual que oculta os equipamentos físicos e os recursos por trás de uma interface padronizada, de modo que a capacidade computacional se apresenta ao usuário como praticamente ilimitada e é cobrada conforme o uso \cite{PEDROSA2011_COMPUTACAO_NUVEM,HENRIQUES2010_CLOUD_COMPUTING_TCC}. Para uma plataforma ser de fato uma nuvem, ela precisa reunir cinco características: contratar recursos sozinho e na hora em que precisa, acessar tudo pela rede de qualquer lugar, compartilhar os mesmos recursos entre vários clientes, aumentar ou reduzir a capacidade com rapidez e medir o consumo para a cobrança \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC,PEDROSA2011_COMPUTACAO_NUVEM}. Quanto à forma de implantação, a nuvem pode ser pública, privada, comunitária ou híbrida, sendo esta última capaz de recorrer a recursos públicos para absorver picos de demanda \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC}.
+\par A Computação em Nuvem é um modelo no qual os dados e as aplicações deixam de residir no computador do usuário e passam a ser executados em grandes centros de processamento e armazenamento, disponibilizados na forma de serviços acessados pela internet \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC}. Em vez de adquirir e manter a própria infraestrutura, o usuário contrata de um provedor a capacidade de processamento, o armazenamento e os programas de que necessita, bastando um dispositivo conectado à rede para utilizá-los \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC}. A ``nuvem'' é a camada conceitual que oculta os equipamentos físicos e os recursos por trás de uma interface padronizada, de modo que a capacidade computacional se apresenta ao usuário como praticamente ilimitada e é provisionada conforme a necessidade \cite{PEDROSA2011_COMPUTACAO_NUVEM,HENRIQUES2010_CLOUD_COMPUTING_TCC}. Para uma plataforma ser de fato uma nuvem, ela precisa reunir cinco características: contratar recursos sozinho e na hora em que precisa, acessar tudo pela rede de qualquer lugar, compartilhar os mesmos recursos entre vários clientes, aumentar ou reduzir a capacidade com rapidez e medir o consumo dos recursos \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC,PEDROSA2011_COMPUTACAO_NUVEM}. Quanto à forma de implantação, a nuvem pode ser pública, privada, comunitária ou híbrida, sendo esta última capaz de recorrer a recursos públicos para absorver picos de demanda \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC}.
 
-\par Esse modelo traz como principais vantagens a mobilidade de acesso, o pagamento apenas pelo que se usa, a facilidade de aumentar ou reduzir a capacidade e a confiabilidade dos grandes provedores. Em contrapartida, ainda apresenta desafios, como a segurança dos dados, a dificuldade de migrar entre provedores diferentes e a garantia de disponibilidade \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC,PEDROSA2011_COMPUTACAO_NUVEM}. No contexto da Indústria 4.0, a nuvem funciona como a infraestrutura que conecta produtos, máquinas, sensores e serviços, e passa a tratar o \sigla{scada}, antes restrito a salas de controle locais, como mais um ponto de uma rede distribuída de serviços \cite{BIGHETI2020,PISCHING2017}.
+\par Esse modelo traz como principais vantagens a mobilidade de acesso, a dispensa de manter infraestrutura própria, a facilidade de aumentar ou reduzir a capacidade e a confiabilidade dos grandes provedores. Em contrapartida, ainda apresenta desafios, como a segurança dos dados, a dificuldade de migrar entre provedores diferentes e a garantia de disponibilidade \cite{HENRIQUES2010_CLOUD_COMPUTING_TCC,PEDROSA2011_COMPUTACAO_NUVEM}. No contexto da Indústria 4.0, a nuvem funciona como a infraestrutura que conecta produtos, máquinas, sensores e serviços, e passa a tratar o \sigla{scada}, antes restrito a salas de controle locais, como mais um ponto de uma rede distribuída de serviços \cite{BIGHETI2020,PISCHING2017}.
 
 \subsection{Next.js}
 
@@ -111,49 +124,21 @@
 
 \subsection{HTTP, API REST e JSON}
 
-\par O protocolo \sigla{http} (\emph{Hypertext Transfer Protocol}) é a base da comunicação na web e, por extensão, a base da comunicação entre os serviços de qualquer sistema distribuído moderno. Trata-se de um protocolo cliente-servidor sem estado, em que cada requisição contém todas as informações necessárias para ser processada, sem dependência de requisições anteriores. Em essência, o cliente envia uma requisição indicando a ação que deseja realizar sobre um recurso identificado por um endereço (\sigla{url}), acompanhada de cabeçalhos e, quando necessário, de um corpo com os dados. Em resposta, o servidor devolve um código que sinaliza o resultado da operação, indicando se ela foi bem-sucedida ou que tipo de erro ocorreu, junto com os dados solicitados.
+\par O protocolo \sigla{http} (\emph{Hypertext Transfer Protocol}) é a forma como os programas trocam informações na web. Funciona no modelo cliente-servidor: o cliente faz um pedido a um endereço (\sigla{url}) e o servidor devolve uma resposta com os dados e um código que indica se a operação deu certo. Sobre o \sigla{http} apoia-se o padrão \sigla{rest} (\emph{Representational State Transfer}), um conjunto de regras para organizar APIs web de forma simples e previsível, em que cada operação usa um método do próprio \sigla{http}, como GET para consultar, POST para criar, PUT para atualizar e DELETE para remover. O \sigla{rest} é uma das maneiras de implementar serviços web, recomendados para concretizar a \sigla{soa} por integrarem sistemas de modo independente de plataforma \cite{PISCHING2017}.
 
-\par Sobre o \sigla{http}, o padrão \sigla{rest} (\emph{Representational State Transfer}), estabelece um conjunto de restrições arquiteturais para projetar APIs web bem comportadas. O \sigla{rest} é uma das duas formas de implementar serviços web (\emph{Web Services}, \sigla{ws}), tecnologia recomendada para concretizar a \sigla{soa} por permitir a integração de serviços de modo independente de plataforma \cite{PISCHING2017}. Em contraste com os serviços baseados em \sigla{soap} (\emph{Simple Object Access Protocol}), que preservam o estado operacional e exigem mais recursos computacionais, os serviços \sigla{rest} interagem por uma interface uniforme apoiada no conjunto fixo de operações do \sigla{http} e, por não manterem o estado das transações, são mais leves do ponto de vista de carga computacional \cite{PISCHING2017}. Seus princípios centrais reúnem cinco diretrizes. A identificação dos recursos se dá de forma clara por \sigla{url}, como em \texttt{/equipamentos/42/tags}. Os métodos \sigla{http} são empregados de forma semântica, com GET para consulta, POST para criação, PUT para atualização completa, PATCH para atualização parcial e DELETE para remoção. A representação dos dados é independente da forma interna, frequentemente em \sigla{json} na comunicação cliente-servidor moderna. O servidor não retém estado de sessão entre requisições. A estrutura de recursos é hierárquica e reflete o domínio do problema. APIs \sigla{rest} bem desenhadas tornam-se previsíveis, navegáveis e composíveis, propriedades que as alinham às arquiteturas industriais orientadas a serviços \cite{COLOMBO2014_STATE_ART_AUTOMATION}.
-
-\par O formato \sigla{json} (\emph{JavaScript Object Notation}) é a representação de dados padrão de fato para APIs \sigla{rest} modernas. Trata-se de uma sintaxe textual derivada do JavaScript, simples de ler e escrever para humanos e fácil de gerar e parsear para máquinas. Suporta tipos primitivos (\emph{string}, número, booleano, nulo) e estruturas compostas (objeto e \emph{array}), o que se mostrou suficiente para a grande maioria dos cenários de troca de dados. \sigla{json} substituiu, em larga medida, o \sigla{xml} em comunicações web devido à sua menor verbosidade e ao acoplamento natural com o JavaScript dos navegadores. Adicionalmente, esquemas \sigla{json} (\emph{JSON Schema}) permitem descrever formalmente o formato esperado de mensagens, oferecendo validação e geração de documentação automaticamente.
-
-\par Em sistemas industriais conectados, a comunicação por \sigla{api} \sigla{rest} sobre \sigla{http} é hoje uma alternativa cada vez mais comum ao acoplamento direto ao protocolo Modbus. A exposição das funcionalidades dos dispositivos de campo como serviços em nuvem é um dos vetores que viabilizam o achatamento da pirâmide ISA-95 \cite{COLOMBO2014_STATE_ART_AUTOMATION}.
+\par Os dados trocados nessas APIs costumam vir no formato \sigla{json} (\emph{JavaScript Object Notation}), um texto leve e fácil de ler, tanto por pessoas quanto por máquinas. Em sistemas industriais, expor os dispositivos de campo por meio de APIs \sigla{rest} em nuvem é uma alternativa cada vez mais comum ao uso direto do Modbus e ajuda a aproximar o chão de fábrica dos sistemas de gestão \cite{COLOMBO2014_STATE_ART_AUTOMATION}.
 
 \subsection{Microsserviços}
 
-\par O paradigma de microsserviços é um estilo arquitetural em que a aplicação é estruturada como um conjunto de serviços pequenos, autônomos e independentemente implantáveis, cada um responsável por um domínio bem delimitado e comunicando-se por protocolos leves, tipicamente APIs \sigla{http}/\sigla{rest} ou mensageria assíncrona. O estilo é herdeiro da \sigla{soa}, arquitetura que organiza as funcionalidades como serviços passíveis de serem publicados, descobertos e consumidos por outras aplicações ou serviços, de modo a interligar recursos sob demanda \cite{PISCHING2017}. Popularizado a partir de 2014, distingue-se da \sigla{soa} clássica pela granularidade e pela autonomia. Em vez de serviços grandes orquestrados por um barramento central, adotam-se serviços pequenos, com bancos próprios e ciclos de vida independentes \cite{COLOMBO2014_STATE_ART_AUTOMATION}.
+\par O paradigma de microsserviços é um estilo arquitetural em que a aplicação é estruturada como um conjunto de serviços pequenos, autônomos e independentemente implantáveis, cada um responsável por um domínio bem delimitado e comunicando-se por protocolos leves, tipicamente APIs \sigla{http}/\sigla{rest} ou mensageria assíncrona. O estilo é herdeiro da \sigla{soa}, que organiza as funcionalidades como serviços passíveis de serem publicados, descobertos e consumidos sob demanda \cite{PISCHING2017}, mas distingue-se da \sigla{soa} clássica pela granularidade e pela autonomia, ao adotar serviços pequenos, com bancos próprios e ciclos de vida independentes, em vez de serviços grandes orquestrados por um barramento central \cite{COLOMBO2014_STATE_ART_AUTOMATION}.
 
-\par A motivação vem das limitações do monolito, em que todas as responsabilidades vivem em um único processo, versionado e implantado em conjunto e escalado como um todo: à medida que cresce, a base de código fica difícil de evoluir, o tempo de implantação aumenta, uma falha pode comprometer o sistema inteiro e a escalabilidade aplica-se ao todo, não à parte realmente sobrecarregada (Figura~\ref{fig:monolito_vs_microservicos}).
-
-\begin{figure}[H]
-    \centering
-    \caption{Aplicação monolítica (esquerda) versus arquitetura de microsserviços (direita)}
-    \label{fig:monolito_vs_microservicos}
-    \vspace{0.4cm}
-    \includegraphics[width=0.75\textwidth]{Imagens/Desenvolvimento/Cap1/monolito_vs_microservicos-nova.png}
-    \vspace{0.2cm} \\
-    Fonte: Elaborado pelo autor com base em \textcite{BIGHETI2020}.
-\end{figure}
-
-\par As vantagens centrais são a implantação independente (cada serviço evolui sem afetar os demais), a escalabilidade granular (replica-se apenas o gargalo) e a heterogeneidade tecnológica (cada serviço usa a linguagem e o banco mais adequados) \cite{BIGHETI2020}. No contexto da Indústria 4.0, esses serviços alinham-se aos princípios de modularidade, descentralização e orientação a serviços da própria I4.0 \cite{PISCHING2017,BIGHETI2020}. Há, porém, custos. A complexidade migra para o ecossistema operacional (dezenas de serviços, réplicas, observabilidade), a consistência passa a depender de mecanismos eventuais, e padrões como \emph{API Gateway}, \emph{Service Registry}, disjuntor de circuito e rastreamento distribuído tornam-se essenciais. Uma diretriz comum de decomposição é o princípio de \emph{bounded contexts} do \emph{Domain-Driven Design}, em que cada serviço corresponde a um domínio bem delimitado do problema, aproximando-se da noção de composição de serviços atômicos e compostos da própria \sigla{soa} \cite{PISCHING2017}.
+\par Esse modelo supera limitações do monolito, em que todas as responsabilidades vivem em um único processo e a escalabilidade aplica-se ao todo, não à parte realmente sobrecarregada. Suas vantagens centrais são a implantação independente, a escalabilidade granular, na qual se replica apenas o gargalo, e a heterogeneidade tecnológica, em que cada serviço usa a linguagem e o banco mais adequados \cite{BIGHETI2020}. No contexto da Indústria 4.0, esses serviços alinham-se aos princípios de modularidade, descentralização e orientação a serviços \cite{PISCHING2017,BIGHETI2020}, ainda que ao custo de maior complexidade operacional, que torna essenciais padrões como \emph{API Gateway}, \emph{Service Registry}, disjuntor de circuito e rastreamento distribuído.
 
 \subsection{Moleculer}
 
-\par O Moleculer é um framework de microsserviços para Node.js, voltado a sistemas distribuídos compostos por serviços pequenos e independentemente implantáveis \cite{MOLECULER_DOCS}. Posiciona-se como alternativa pragmática a soluções mais pesadas, como o Spring Cloud no ecossistema Java, reunindo descoberta de serviços, balanceamento de carga, tolerância a falhas e diversos transportes (\sigla{tcp}, NATS, Redis, MQTT, Kafka) em uma única biblioteca leve.
+\par O Moleculer é um framework de microsserviços para Node.js, voltado a sistemas distribuídos compostos por serviços pequenos e independentemente implantáveis \cite{MOLECULER_DOCS}. Reúne em uma única biblioteca leve a descoberta de serviços, o balanceamento de carga, a tolerância a falhas e diversos transportes, como \sigla{tcp}, NATS, Redis, MQTT e Kafka, posicionando-se como alternativa pragmática a soluções mais pesadas, como o Spring Cloud no ecossistema Java.
 
-\par No modelo do Moleculer, cada serviço define \emph{actions} (ações invocáveis remotamente, como métodos de uma \sigla{api}) e \emph{events} (mensagens publicadas para outros serviços), e registra-se em um \emph{broker} que faz a descoberta automática dos nós e roteia chamadas e eventos para a instância adequada, com balanceamento entre réplicas (Figura~\ref{fig:moleculer_broker}). Diante de falhas, o broker redireciona a chamada para outra instância, aplica disjuntores de circuito contra cascatas de falha ou retorna respostas \emph{fallback} \cite{MOLECULER_DOCS}.
-
-\begin{figure}[H]
-    \centering
-    \caption{Arquitetura de microsserviços baseada em barramento de eventos (broker Moleculer)}
-    \label{fig:moleculer_broker}
-    \vspace{0.4cm}
-    \includegraphics[width=0.75\textwidth]{Imagens/Desenvolvimento/Cap1/moleculer_broker-nova.png}
-    \vspace{0.2cm} \\
-    Fonte: Elaborado pelo autor com base em \textcite{BIGHETI2020}.
-\end{figure}
-
-\par O framework suporta múltiplos transportes: em desenvolvimento, \sigla{tcp} direto; em produção, barramentos resilientes como NATS, Redis Pub/Sub ou MQTT, com persistência opcional e entrega garantida. Transportes como o NATS oferecem ainda \emph{streams} persistentes, úteis para reprocessar eventos quando um serviço se recupera de falha, recurso alinhado às arquiteturas de microsserviços para a Indústria 4.0 \cite{BIGHETI2020}.
+\par Cada serviço define \emph{actions}, ações invocáveis remotamente como métodos de uma \sigla{api}, e \emph{events}, mensagens publicadas para outros serviços, e registra-se em um \emph{broker} que descobre os nós automaticamente e roteia chamadas e eventos para a instância adequada, com balanceamento entre réplicas \cite{MOLECULER_DOCS}. Diante de falhas, o broker redireciona a chamada para outra instância, aplica disjuntores de circuito contra cascatas de falha ou retorna respostas \emph{fallback}. Em produção, transportes resilientes como NATS oferecem ainda \emph{streams} persistentes, úteis para reprocessar eventos quando um serviço se recupera de falha, recurso alinhado às arquiteturas de microsserviços para a Indústria 4.0 \cite{BIGHETI2020}.
 
 \subsection{Protocolo Modbus TCP e Modbus RTU}
 

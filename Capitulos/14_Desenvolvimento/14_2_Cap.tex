@@ -11,16 +11,21 @@
 
 \par A Tabela~\ref{tab:requisitos_funcionais} apresenta os requisitos funcionais do sistema, com a indicação do pilar do \sigla{scada} ou da funcionalidade complementar que os origina.
 
-\begin{table}[H]
-    \centering
-    \caption{Requisitos Funcionais.}
-    \label{tab:requisitos_funcionais}
-    \renewcommand{\arraystretch}{1.3}
-    \small
-    \begin{tabularx}{\textwidth}{|c|>{\centering\arraybackslash}X|c|}
+{\renewcommand{\arraystretch}{1.3}\small
+\begin{xltabular}{\textwidth}{c>{\centering\arraybackslash}Xc}
+        \caption{Requisitos Funcionais.}
+        \label{tab:requisitos_funcionais}\\
         \hline
-        \textbf{Id} & \textbf{Requisito}                                                                                                          & \textbf{Origem}  \\
+        \textbf{Id} & \textbf{Requisito} & \textbf{Origem} \\
         \hline
+        \endfirsthead
+        \hline
+        \textbf{Id} & \textbf{Requisito} & \textbf{Origem} \\
+        \hline
+        \endhead
+        \endfoot
+        \multicolumn{3}{c}{Fonte: Autor.} \\
+        \endlastfoot
         RF01        & Adquirir periodicamente, por \emph{polling}, grandezas analógicas e digitais dos dispositivos de campo via Modbus TCP e RTU & Aquisição        \\
         \hline
         RF02        & Registrar continuamente as leituras no histórico, conforme o tipo de dado da tag (booleano, inteiro, real ou texto)         & Aquisição        \\
@@ -49,29 +54,32 @@
         \hline
         RF14        & Disponibilizar consultas ao histórico com filtros e sequenciais de eventos                                                  & Visualização     \\
         \hline
-    \end{tabularx}
-    \caption*{Fonte: Autor.}
-\end{table}
+\end{xltabular}}
 
 \subsubsection{Requisitos Não Funcionais}
 
 \par A Tabela~\ref{tab:requisitos_nao_funcionais} apresenta os requisitos não funcionais, agrupados por categoria de atributo de qualidade: desempenho, escalabilidade, disponibilidade, segurança, interoperabilidade, manutenibilidade, usabilidade e custo.
 
-\begin{table}[H]
-    \centering
-    \caption{Requisitos Não Funcionais.}
-    \label{tab:requisitos_nao_funcionais}
-    \renewcommand{\arraystretch}{1.3}
-    \small
-    \begin{tabularx}{\textwidth}{|c|>{\centering\arraybackslash}X|c|}
+{\renewcommand{\arraystretch}{1.3}\small
+\begin{xltabular}{\textwidth}{c>{\centering\arraybackslash}Xc}
+        \caption{Requisitos Não Funcionais.}
+        \label{tab:requisitos_nao_funcionais}\\
         \hline
-        \textbf{Id} & \textbf{Requisito}                                                                                                            & \textbf{Categoria} \\
+        \textbf{Id} & \textbf{Requisito} & \textbf{Categoria} \\
         \hline
+        \endfirsthead
+        \hline
+        \textbf{Id} & \textbf{Requisito} & \textbf{Categoria} \\
+        \hline
+        \endhead
+        \endfoot
+        \multicolumn{3}{c}{Fonte: Autor.} \\
+        \endlastfoot
         RNF01       & As telas de tempo real refletem as leituras com baixa latência, buscando o valor corrente mantido em cache                    & Desempenho         \\
         \hline
         RNF02       & As instâncias do serviço de aquisição são replicáveis na horizontal, com balanceamento automático de carga                    & Escalabilidade     \\
         \hline
-        RNF03       & A infraestrutura de dados cresce sob demanda, sem licenciamento por número de pontos                                          & Escalabilidade     \\
+        RNF03       & A infraestrutura de dados cresce sob demanda, sem limite imposto pelo número de pontos                                        & Escalabilidade     \\
         \hline
         RNF04       & Os componentes críticos possuem redundância com \emph{failover} automático entre zonas, com degradação suave                  & Disponibilidade    \\
         \hline
@@ -87,11 +95,7 @@
         \hline
         RNF10       & O acesso ocorre por navegador, de qualquer lugar, sem instalação local                                                        & Usabilidade        \\
         \hline
-        RNF11       & O fornecimento segue o modelo de assinatura sob demanda em nuvem, sem investimento inicial em licenças e hardware             & Custo              \\
-        \hline
-    \end{tabularx}
-    \caption*{Fonte: Autor.}
-\end{table}
+\end{xltabular}}
 
 \subsection{Validações dos Requisitos}
 
@@ -130,7 +134,7 @@
 
 \subsubsection{Escalabilidade}
 
-\par A escalabilidade (RF10, RNF02 e RNF03) é atendida em três frentes. Na expansão do cadastro, novos pontos e telas entram com o sistema em produção, sem mexer no código: o serviço de aquisição é parametrizado pelo banco, as telas montam-se conforme a configuração e o agendador recarrega a lista de pontos. Na capacidade de processamento, o serviço de aquisição é replicado na horizontal, e o Moleculer distribui automaticamente as leituras entre as instâncias disponíveis. Na infraestrutura de dados, o PostgreSQL e o Redis, gerenciados pela \sigla{aws}, crescem na vertical sob demanda. Hospedados em contêineres no Amazon \sigla{ecs}, os serviços ganham e perdem réplicas conforme a carga, o que elimina o gargalo de licenciamento por número de pontos comum nos supervisórios comerciais e acompanha o crescimento das instalações sem refazer o orçamento.
+\par A escalabilidade (RF10, RNF02 e RNF03) é atendida em três frentes. Na expansão do cadastro, novos pontos e telas entram com o sistema em produção, sem mexer no código: o serviço de aquisição é parametrizado pelo banco, as telas montam-se conforme a configuração e o agendador recarrega a lista de pontos. Na capacidade de processamento, o serviço de aquisição é replicado na horizontal, e o Moleculer distribui automaticamente as leituras entre as instâncias disponíveis. Na infraestrutura de dados, o PostgreSQL e o Redis, gerenciados pela \sigla{aws}, crescem na vertical sob demanda. Hospedados em contêineres no Amazon \sigla{ecs}, os serviços ganham e perdem réplicas conforme a carga, o que remove o limite de pontos comum nos supervisórios comerciais e acompanha o crescimento das instalações sem reconfigurar a arquitetura.
 
 \subsubsection{Redundância}
 
@@ -166,4 +170,4 @@
 
 \subsubsection{Comunicação e Hospedagem}
 
-\par A comunicação entre os três serviços é coordenada pelo Moleculer, que se apoia no Redis como meio de transporte e funciona como orquestrador da solução. É por ele que o agendador avisa o serviço de aquisição de que um ponto deve ser lido, que o resultado da leitura volta ao backend e que os comandos do operador chegam ao campo. O Moleculer oferece descoberta automática dos serviços, distribui as chamadas entre instâncias replicadas, isola falhas para que não se propaguem e permite acompanhar uma requisição de ponta a ponta, recursos que o tornam adequado a uma solução distribuída como esta. Os três serviços executam em contêineres no Amazon \sigla{ecs}, que cuida de mantê-los no ar e de criar ou remover réplicas conforme a carga, enquanto o banco e o cache ficam nos serviços gerenciados \sigla{rds} e ElastiCache. Essa combinação, com escala horizontal dos serviços e vertical da infraestrutura de dados, somada às vantagens da computação em nuvem, como o pagamento conforme o uso e a distribuição entre zonas, é o que viabiliza cumprir os requisitos sem o investimento inicial dos supervisórios tradicionais.
+\par A comunicação entre os três serviços é coordenada pelo Moleculer, que se apoia no Redis como meio de transporte e funciona como orquestrador da solução. É por ele que o agendador avisa o serviço de aquisição de que um ponto deve ser lido, que o resultado da leitura volta ao backend e que os comandos do operador chegam ao campo. O Moleculer oferece descoberta automática dos serviços, distribui as chamadas entre instâncias replicadas, isola falhas para que não se propaguem e permite acompanhar uma requisição de ponta a ponta, recursos que o tornam adequado a uma solução distribuída como esta. Os três serviços executam em contêineres no Amazon \sigla{ecs}, que cuida de mantê-los no ar e de criar ou remover réplicas conforme a carga, enquanto o banco e o cache ficam nos serviços gerenciados \sigla{rds} e ElastiCache. Essa combinação, com escala horizontal dos serviços e vertical da infraestrutura de dados, somada às vantagens da computação em nuvem, como a elasticidade e a distribuição entre zonas, é o que viabiliza cumprir os requisitos da solução.
