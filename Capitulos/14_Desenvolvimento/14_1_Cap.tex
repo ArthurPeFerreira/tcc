@@ -75,7 +75,7 @@
     \includegraphics[width=0.85\textwidth]{Imagens/Desenvolvimento/Cap1/cps.png}
     \centering
     \vspace{0.2cm} \\
-    Fonte: \textcite{BIGHETI2020}.
+    Fonte: Adaptado de \textcite{BIGHETI2020}.
     \label{fig:cps}
 \end{figure}
 
@@ -132,13 +132,13 @@
 
 \par O paradigma de microsserviços é um estilo arquitetural em que a aplicação é estruturada como um conjunto de serviços pequenos, autônomos e independentemente implantáveis, cada um responsável por um domínio bem delimitado e comunicando-se por protocolos leves, tipicamente APIs \sigla{http}/\sigla{rest} ou mensageria assíncrona. O estilo é herdeiro da \sigla{soa}, que organiza as funcionalidades como serviços passíveis de serem publicados, descobertos e consumidos sob demanda \cite{PISCHING2017}, mas distingue-se da \sigla{soa} clássica pela granularidade e pela autonomia, ao adotar serviços pequenos, com bancos próprios e ciclos de vida independentes, em vez de serviços grandes orquestrados por um barramento central \cite{COLOMBO2014_STATE_ART_AUTOMATION}.
 
-\par Esse modelo supera limitações do monolito, em que todas as responsabilidades vivem em um único processo e a escalabilidade aplica-se ao todo, não à parte realmente sobrecarregada. Suas vantagens centrais são a implantação independente, a escalabilidade granular, na qual se replica apenas o gargalo, e a heterogeneidade tecnológica, em que cada serviço usa a linguagem e o banco mais adequados \cite{BIGHETI2020}. No contexto da Indústria 4.0, esses serviços alinham-se aos princípios de modularidade, descentralização e orientação a serviços \cite{PISCHING2017,BIGHETI2020}, ainda que ao custo de maior complexidade operacional, que torna essenciais padrões como \emph{API Gateway}, \emph{Service Registry}, disjuntor de circuito e rastreamento distribuído.
+\par Esse modelo supera limitações do monolito, em que todas as responsabilidades vivem em um único processo e a escalabilidade aplica-se ao todo, não à parte realmente sobrecarregada. Suas vantagens centrais são a implantação independente, a escalabilidade granular, na qual se replica apenas o gargalo, e a heterogeneidade tecnológica, em que cada serviço usa a linguagem e o banco mais adequados \cite{BIGHETI2020}. No contexto da Indústria 4.0, esses serviços alinham-se aos princípios de modularidade, descentralização e orientação a serviços \cite{PISCHING2017,BIGHETI2020}.
 
 \subsection{Moleculer}
 
-\par O Moleculer é um framework de microsserviços para Node.js, voltado a sistemas distribuídos compostos por serviços pequenos e independentemente implantáveis \cite{MOLECULER_DOCS}. Reúne em uma única biblioteca leve a descoberta de serviços, o balanceamento de carga, a tolerância a falhas e diversos transportes, como \sigla{tcp}, NATS, Redis, MQTT e Kafka, posicionando-se como alternativa pragmática a soluções mais pesadas, como o Spring Cloud no ecossistema Java.
+\par O Moleculer é uma ferramenta para a construção de microsserviços na plataforma Node.js, voltada a sistemas distribuídos formados por serviços pequenos e independentes \cite{MOLECULER_DOCS}. Em uma única biblioteca leve, reúne os recursos necessários para que esses serviços se localizem na rede, dividam a carga de trabalho entre si e continuem operando diante de falhas, o que a torna uma alternativa mais simples a soluções mais complexas \cite{MOLECULER_DOCS}.
 
-\par Cada serviço define \emph{actions}, ações invocáveis remotamente como métodos de uma \sigla{api}, e \emph{events}, mensagens publicadas para outros serviços, e registra-se em um \emph{broker} que descobre os nós automaticamente e roteia chamadas e eventos para a instância adequada, com balanceamento entre réplicas \cite{MOLECULER_DOCS}. Diante de falhas, o broker redireciona a chamada para outra instância, aplica disjuntores de circuito contra cascatas de falha ou retorna respostas \emph{fallback}. Em produção, transportes resilientes como NATS oferecem ainda \emph{streams} persistentes, úteis para reprocessar eventos quando um serviço se recupera de falha, recurso alinhado às arquiteturas de microsserviços para a Indústria 4.0 \cite{BIGHETI2020}.
+\par Cada serviço expõe um conjunto de operações que podem ser chamadas remotamente por outros serviços, e também envia avisos quando algo relevante acontece, para que os demais serviços reajam. Cada serviço registra-se em um componente central de coordenação, responsável por localizar automaticamente os serviços disponíveis e encaminhar cada chamada à cópia mais adequada, distribuindo o trabalho entre as cópias em execução \cite{MOLECULER_DOCS}. Quando uma dessas cópias falha, esse coordenador redireciona a chamada para outra ou devolve uma resposta alternativa, evitando que a falha de um único serviço se propague pelo restante do sistema. Essa capacidade de manter o funcionamento mesmo diante de falhas alinha-se às arquiteturas de microsserviços empregadas na Indústria 4.0 \cite{BIGHETI2020}.
 
 \subsection{Protocolo Modbus TCP e Modbus RTU}
 

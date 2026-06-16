@@ -2566,21 +2566,22 @@
     <bcf:citekey order="95" intorder="2">BIGHETI2020</bcf:citekey>
     <bcf:citekey order="96" intorder="1">MOLECULER_DOCS</bcf:citekey>
     <bcf:citekey order="97" intorder="1">MOLECULER_DOCS</bcf:citekey>
-    <bcf:citekey order="98" intorder="1">BIGHETI2020</bcf:citekey>
-    <bcf:citekey order="99" intorder="1">MODBUS_TCP_IMPLEMENTATION_GUIDE</bcf:citekey>
+    <bcf:citekey order="98" intorder="1">MOLECULER_DOCS</bcf:citekey>
+    <bcf:citekey order="99" intorder="1">BIGHETI2020</bcf:citekey>
     <bcf:citekey order="100" intorder="1">MODBUS_TCP_IMPLEMENTATION_GUIDE</bcf:citekey>
-    <bcf:citekey order="101" intorder="1">MODBUS_SERIAL_SPEC</bcf:citekey>
-    <bcf:citekey order="102" intorder="1">ZANGHI2019_SCADA_CONCEITOS</bcf:citekey>
+    <bcf:citekey order="101" intorder="1">MODBUS_TCP_IMPLEMENTATION_GUIDE</bcf:citekey>
+    <bcf:citekey order="102" intorder="1">MODBUS_SERIAL_SPEC</bcf:citekey>
     <bcf:citekey order="103" intorder="1">ZANGHI2019_SCADA_CONCEITOS</bcf:citekey>
     <bcf:citekey order="104" intorder="1">ZANGHI2019_SCADA_CONCEITOS</bcf:citekey>
-    <bcf:citekey order="105" intorder="1">STOUFFER2015_NIST_ICS_SECURITY</bcf:citekey>
-    <bcf:citekey order="106" intorder="1">WALI2024_CLOUD_SCADA_SECURITY</bcf:citekey>
-    <bcf:citekey order="107" intorder="1">ZANGHI2019_SCADA_CONCEITOS</bcf:citekey>
-    <bcf:citekey order="108" intorder="1">STOUFFER2015_NIST_ICS_SECURITY</bcf:citekey>
-    <bcf:citekey order="109" intorder="1">ZANGHI2019_SCADA_CONCEITOS</bcf:citekey>
-    <bcf:citekey order="110" intorder="1">STOUFFER2015_NIST_ICS_SECURITY</bcf:citekey>
-    <bcf:citekey order="111" intorder="1">BIGHETI2020</bcf:citekey>
-    <bcf:citekey order="112" intorder="1">POSTGRESQL_DOCS</bcf:citekey>
+    <bcf:citekey order="105" intorder="1">ZANGHI2019_SCADA_CONCEITOS</bcf:citekey>
+    <bcf:citekey order="106" intorder="1">STOUFFER2015_NIST_ICS_SECURITY</bcf:citekey>
+    <bcf:citekey order="107" intorder="1">WALI2024_CLOUD_SCADA_SECURITY</bcf:citekey>
+    <bcf:citekey order="108" intorder="1">ZANGHI2019_SCADA_CONCEITOS</bcf:citekey>
+    <bcf:citekey order="109" intorder="1">STOUFFER2015_NIST_ICS_SECURITY</bcf:citekey>
+    <bcf:citekey order="110" intorder="1">ZANGHI2019_SCADA_CONCEITOS</bcf:citekey>
+    <bcf:citekey order="111" intorder="1">STOUFFER2015_NIST_ICS_SECURITY</bcf:citekey>
+    <bcf:citekey order="112" intorder="1">BIGHETI2020</bcf:citekey>
+    <bcf:citekey order="113" intorder="1">POSTGRESQL_DOCS</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">
