@@ -1200,4 +1200,357 @@ LaTeX Font Info:    ... okay on input line 50.
 * \headheight=12.0pt
 * \headsep=25.0pt
 * \topskip=12.0pt
-* \footskip=30
+* \footskip=30.0pt
+* \marginparwidth=56.9055pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count536
+\scratchdimen=\dimen340
+\scratchbox=\box89
+\nofMPsegments=\count537
+\nofMParguments=\count538
+\everyMPshowfont=\toks74
+\MPscratchCnt=\count539
+\MPscratchDim=\dimen341
+\MPnumerator=\count540
+\makeMPintoPDFobject=\count541
+\everyMPtoPDFconversion=\toks75
+) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
+ (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
+))
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: subfig package v1.3 is loaded.
+Package caption Info: float package is loaded.
+Package caption Info: hyperref package is loaded.
+Package caption Info: listings package is loaded.
+Package caption Info: End \AtBeginDocument code.
+\c@lstlisting=\count542
+Package hyperref Info: Link coloring OFF on input line 50.
+ (./Texto.out) (./Texto.out)
+\@outlinefile=\write6
+\openout6 = `Texto.out'.
+
+
+Package pgfplots notification 'compat/show suggested version=true': document has been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
+
+(/usr/share/texlive/texmf-dist/tex/latex/translations/translations-basic-dictionary-brazil.trsl
+File: translations-basic-dictionary-brazil.trsl (brazil translation file `translations-basic-dictionary')
+)
+Package translations Info: loading dictionary `translations-basic-dictionary' for `brazil'. on input line 50.
+Package biblatex Info: Trying to load language 'brazil' -> 'brazil-abnt'...
+Package biblatex Info: ... file 'brazil-abnt.lbx' found.
+ (/home/arthur-ferreira/texmf/tex/latex/biblatex-abnt/brazil-abnt.lbx
+File: brazil-abnt.lbx 2018-11-17 v3.4 ABNT BibLaTeX citation style
+Package biblatex Info: Trying to load language 'brazilian-abnt'...
+Package biblatex Info: ... file 'brazilian-abnt.lbx' found.
+ (/home/arthur-ferreira/texmf/tex/latex/biblatex-abnt/brazilian-abnt.lbx
+File: brazilian-abnt.lbx 2018-11-17 v3.4 ABNT BibLaTeX citation style
+Package biblatex Info: Trying to load language 'brazilian' -> 'brazilian-abnt'...
+Package biblatex Info: ... file 'brazilian-abnt.lbx' found.
+ (/home/arthur-ferreira/texmf/tex/latex/biblatex-abnt/brazilian-abnt.lbx
+File: brazilian-abnt.lbx 2018-11-17 v3.4 ABNT BibLaTeX citation style
+Package biblatex Info: Trying to load language 'brazilian'...
+Package biblatex Info: ... file 'brazilian.lbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/brazilian.lbx
+File: brazilian.lbx 2023/03/05 v3.19 biblatex localization (PK/MW)
+)))
+Package biblatex Info: Trying to load language 'brazilian-abnt'...
+Package biblatex Info: ... file 'brazilian-abnt.lbx' found.
+ (/home/arthur-ferreira/texmf/tex/latex/biblatex-abnt/brazilian-abnt.lbx
+File: brazilian-abnt.lbx 2018-11-17 v3.4 ABNT BibLaTeX citation style
+Package biblatex Info: Trying to load language 'brazilian' -> 'brazilian-abnt'...
+Package biblatex Info: ... file 'brazilian-abnt.lbx' found.
+ (/home/arthur-ferreira/texmf/tex/latex/biblatex-abnt/brazilian-abnt.lbx
+File: brazilian-abnt.lbx 2018-11-17 v3.4 ABNT BibLaTeX citation style
+Package biblatex Info: Trying to load language 'brazilian'...
+Package biblatex Info: ... file 'brazilian.lbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/brazilian.lbx
+File: brazilian.lbx 2023/03/05 v3.19 biblatex localization (PK/MW)
+)
+Package biblatex Info: Trying to load language 'brazil'...
+Package biblatex Info: ... file 'brazil.lbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/brazil.lbx
+File: brazil.lbx 2023/03/05 v3.19 biblatex localization (PK/MW)
+Package biblatex Info: Trying to load language 'brazilian'...
+Package biblatex Info: ... file 'brazilian.lbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/brazilian.lbx
+File: brazilian.lbx 2023/03/05 v3.19 biblatex localization (PK/MW)
+)))
+Package biblatex Info: Trying to load language 'brazil'...
+Package biblatex Info: ... file 'brazil.lbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/brazil.lbx
+File: brazil.lbx 2023/03/05 v3.19 biblatex localization (PK/MW)
+Package biblatex Info: Trying to load language 'brazilian' -> 'brazilian-abnt'...
+Package biblatex Info: ... file 'brazilian-abnt.lbx' found.
+ (/home/arthur-ferreira/texmf/tex/latex/biblatex-abnt/brazilian-abnt.lbx
+File: brazilian-abnt.lbx 2018-11-17 v3.4 ABNT BibLaTeX citation style
+Package biblatex Info: Trying to load language 'brazilian'...
+Package biblatex Info: ... file 'brazilian.lbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/brazilian.lbx
+File: brazilian.lbx 2023/03/05 v3.19 biblatex localization (PK/MW)
+)
+Package biblatex Info: Trying to load language 'brazil'...
+Package biblatex Info: ... file 'brazil.lbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/brazil.lbx
+File: brazil.lbx 2023/03/05 v3.19 biblatex localization (PK/MW)
+Package biblatex Info: Trying to load language 'brazilian'...
+Package biblatex Info: ... file 'brazilian.lbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/brazilian.lbx
+File: brazilian.lbx 2023/03/05 v3.19 biblatex localization (PK/MW)
+))))))
+Package biblatex Info: Input encoding 'utf8' detected.
+Package biblatex Info: Automatic encoding selection.
+(biblatex)             Assuming data encoding 'utf8'.
+\openout5 = `Texto.bcf'.
+
+Package biblatex Info: Trying to load bibliographic data...
+Package biblatex Info: ... file 'Texto.bbl' found.
+ (./Texto.bbl)
+Package biblatex Info: Reference section=0 on input line 50.
+Package biblatex Info: Reference segment=0 on input line 50.
+\openout2 = `Capitulos/01_Capa.aux'.
+
+ (./Capitulos/01_Capa.tex
+<Imagens/Capa/01_Instituto.png, id=179, 1204.5pt x 1033.8625pt>
+File: Imagens/Capa/01_Instituto.png Graphic file (type png)
+<use Imagens/Capa/01_Instituto.png>
+Package pdftex.def Info: Imagens/Capa/01_Instituto.png  used on input line 8.
+(pdftex.def)             Requested size: 120.92421pt x 103.78668pt.
+ [1
+
+
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc} <./Imagens/Capa/01_Instituto.png>])
+\openout2 = `Capitulos/02_Contra-Capa.aux'.
+
+ (./Capitulos/02_Contra-Capa.tex
+Underfull \hbox (badness 3907) in paragraph at lines 20--25
+\T1/cmr/m/n/12 ao Curso Su-pe-rior de Ba-cha-re-lado em
+ []
+
+
+Underfull \hbox (badness 1472) in paragraph at lines 20--25
+\T1/cmr/m/n/12 En-ge-nha-ria ElÈ-trica do Ins-ti-tuto Fe-de-ral
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 20--25
+
+ []
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.37 \clearpage
+                % Nova p√°gina ap√≥s a lista de figuras [1
+
+
+
+
+
+])
+\openout2 = `Capitulos/05_Epigrafe.aux'.
+
+ (./Capitulos/05_Epigrafe.tex [2
+
+
+
+
+
+])
+\openout2 = `Capitulos/06_Resumo.aux'.
+
+ (./Capitulos/06_Resumo.tex
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+
+ []
+
+[3
+
+
+
+
+
+])
+\openout2 = `Capitulos/06_Abstract.aux'.
+
+ (./Capitulos/06_Abstract.tex
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
+
+ []
+
+[4
+
+
+
+
+
+])
+\openout2 = `Capitulos/07_Lista_Imagens.aux'.
+
+ (./Capitulos/07_Lista_Imagens.tex (./Texto.lof
+LaTeX Font Info:    Trying to load font information for U+msa on input line 2.
+ (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 2.
+ (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+))
+\tf@lof=\write7
+\openout7 = `Texto.lof'.
+
+ [5
+
+
+
+
+
+])
+\openout2 = `"Capitulos/08_Lista Siglas.aux"'.
+
+ (./Capitulos/08_Lista Siglas.tex [6
+
+
+
+
+
+])
+\openout2 = `"Capitulos/11_Lista de Tabelas.aux"'.
+
+ (./Capitulos/11_Lista de Tabelas.tex (./Texto.lot)
+\tf@lot=\write8
+\openout8 = `Texto.lot'.
+
+ [7
+
+
+
+
+
+])
+\openout2 = `Capitulos/12_Sum√°rio.aux'.
+
+ (./Capitulos/12_Sum√°rio.tex (./Texto.toc)
+\tf@toc=\write9
+\openout9 = `Texto.toc'.
+
+ [8
+
+
+
+
+
+]) (./Capitulos/13_Introducao/13_1_Contextualizacao.tex
+<Imagens/Introducao/Contextualizacao/evolucoes-industriais-nova.png, id=299, 2790.425pt x 1033.8625pt>
+File: Imagens/Introducao/Contextualizacao/evolucoes-industriais-nova.png Graphic file (type png)
+<use Imagens/Introducao/Contextualizacao/evolucoes-industriais-nova.png>
+Package pdftex.def Info: Imagens/Introducao/Contextualizacao/evolucoes-industriais-nova.png  used on input line 13.
+(pdftex.def)             Requested size: 411.14528pt x 152.32776pt.
+<Imagens/Introducao/Contextualizacao/piramide-automacao-nova.png, id=318, 1866.975pt x 1048.91875pt>
+File: Imagens/Introducao/Contextualizacao/piramide-automacao-nova.png Graphic file (type png)
+<use Imagens/Introducao/Contextualizacao/piramide-automacao-nova.png>
+Package pdftex.def Info: Imagens/Introducao/Contextualizacao/piramide-automacao-nova.png  used on input line 28.
+(pdftex.def)             Requested size: 411.14528pt x 230.98691pt.
+ [9
+
+
+
+ <./Imagens/Introducao/Contextualizacao/evolucoes-industriais-nova.png (PNG copy)>]) (./Capitulos/13_Introducao/13_2_Justificativa.tex [10 <./Imagens/Introducao/Contextualizacao/piramide-automacao-nova.png>]) (./Capitulos/13_Introducao/13_3_Objetivos.tex [11{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]) (./Capitulos/13_Introducao/13_4_Estrutura.tex) (./Capitulos/14_Desenvolvimento/14_1_Cap.tex [12]
+<Imagens/Desenvolvimento/Cap1/scada.png, id=409, 876.27374pt x 627.34375pt>
+File: Imagens/Desenvolvimento/Cap1/scada.png Graphic file (type png)
+<use Imagens/Desenvolvimento/Cap1/scada.png>
+Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/scada.png  used on input line 16.
+(pdftex.def)             Requested size: 411.14528pt x 294.35382pt.
+ [13] [14 <./Imagens/Desenvolvimento/Cap1/scada.png>] [15] [16]
+<Imagens/Desenvolvimento/Cap1/cps.png, id=545, 1079.03125pt x 544.0325pt>
+File: Imagens/Desenvolvimento/Cap1/cps.png Graphic file (type png)
+<use Imagens/Desenvolvimento/Cap1/cps.png>
+Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/cps.png  used on input line 75.
+(pdftex.def)             Requested size: 411.14528pt x 207.29898pt.
+<Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps.png, id=571, 433.62pt x 280.04625pt>
+File: Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps.png Graphic file (type png)
+<use Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps.png>
+Package pdftex.def Info: Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps.png  used on input line 88.
+(pdftex.def)             Requested size: 314.40001pt x 203.06036pt.
+ [17 <./Imagens/Desenvolvimento/Cap1/cps.png>] [18 <./Imagens/Desenvolvimento/Cap1/venn_iot_iiot_cps.png (PNG copy)>] [19] [20] [21]) (./Capitulos/14_Desenvolvimento/14_2_Cap.tex [22] [23
+pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.57 \end{xltabular}
+                    }]
+<Imagens/Desenvolvimento/Cap2/diagrama_servidores.png, id=710, 1046.2725pt x 511.803pt>
+File: Imagens/Desenvolvimento/Cap2/diagrama_servidores.png Graphic file (type png)
+<use Imagens/Desenvolvimento/Cap2/diagrama_servidores.png>
+Package pdftex.def Info: Imagens/Desenvolvimento/Cap2/diagrama_servidores.png  used on input line 108.
+(pdftex.def)             Requested size: 362.77264pt x 177.45468pt.
+ [24
+pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.113 \end{figure}
+                  ] [25 <./Imagens/Desenvolvimento/Cap2/diagrama_servidores.png>] [26] [27] [28]) (./Capitulos/14_Desenvolvimento/14_3_Cap.tex) (./Capitulos/14_Desenvolvimento/14_4_Cap.tex) (./Capitulos/14_Desenvolvimento/14_5_Cap.tex) (./Capitulos/14_Desenvolvimento/14_6_Cap.tex) (./Capitulos/16_Cronograma.tex [29]
+Underfull \hbox (badness 1259) in paragraph at lines 27--27
+[]|\T1/cmr/m/n/12 ApresentaÁ„o do Pro-jeto de
+ []
+
+
+Underfull \hbox (badness 2556) in paragraph at lines 29--29
+[]|\T1/cmr/m/n/12 ElaboraÁ„o do Tra-ba-lho de
+ []
+
+) [30
+
+]
+\openout2 = `Capitulos/00_Referencias.aux'.
+
+ (./Capitulos/00_Referencias.tex
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 8.
+ (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
+) [31
+
+
+]) [32] (./Texto.aux (./Capitulos/01_Capa.aux) (./Capitulos/02_Contra-Capa.aux) (./Capitulos/05_Epigrafe.aux) (./Capitulos/06_Resumo.aux) (./Capitulos/06_Abstract.aux) (./Capitulos/07_Lista_Imagens.aux) (./Capitulos/08_Lista Siglas.aux) (./Capitulos/11_Lista de Tabelas.aux) (./Capitulos/12_Sum√°rio.aux) (./Capitulos/00_Referencias.aux))
+ ***********
+LaTeX2e <2023-11-01> patch level 1
+L3 programming layer <2020/03/25>
+ ***********
+Package rerunfilecheck Info: File `Texto.out' has not changed.
+(rerunfilecheck)             Checksum: 8E61D19759F4DD89888F384817BE0DA3;6579.
+Package logreq Info: Writing requests to 'Texto.run.xml'.
+\openout1 = `Texto.run.xml'.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 67678 strings out of 474222
+ 1661168 string characters out of 5748733
+ 2841192 words of memory out of 5000000
+ 88895 multiletter control sequences out of 15000+600000
+ 572571 words of font info for 73 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 99i,11n,133p,2881b,4447s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texmf/fonts/type1/public/cm-super/sfbx1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on Texto.pdf (33 pages, 1313830 bytes).
+PDF statistics:
+ 883 PDF objects out of 1000 (max. 8388607)
+ 809 compressed objects within 9 object streams
+ 114 named destinations out of 1000 (max. 500000)
+ 392 words of extra memory for PDF output out of 10000 (max. 10000000)
+
