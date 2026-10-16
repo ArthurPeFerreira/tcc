@@ -183,10 +183,11 @@
 \newcommand{\printlistasiglas}{%
   \hypertarget{lista-siglas}{}%
   \noindent
+  \begingroup\small\renewcommand{\arraystretch}{0.95}%
   \begin{tabularx}{\textwidth}{@{}l X@{}}
     \textbf{Sigla} & \textbf{Significado} \\[0.35em]
     \sigla@rows
-  \end{tabularx}%
+  \end{tabularx}\endgroup%
 }
 
 \makeatother
