@@ -1,15 +1,15 @@
-[0] Config.pm:307> INFO - This is Biber 2.19
-[0] Config.pm:310> INFO - Logfile is 'Texto.blg'
-[33] biber:340> INFO - === Tue Jun 16, 2026, 10:02:01
-[41] Biber.pm:419> INFO - Reading 'Texto.bcf'
-[76] Biber.pm:979> INFO - Found 24 citekeys in bib section 0
-[82] Biber.pm:4419> INFO - Processing section 0
-[88] Biber.pm:4610> INFO - Looking for bibtex file 'Referencias.bib' for section 0
-[89] bibtex.pm:1713> INFO - LaTeX decoding ...
-[100] bibtex.pm:1519> INFO - Found BibTeX data source 'Referencias.bib'
-[209] UCollate.pm:68> INFO - Overriding locale 'pt-BR' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[209] UCollate.pm:68> INFO - Overriding locale 'pt-BR' defaults 'variable = shifted' with 'variable = non-ignorable'
-[209] Biber.pm:4239> INFO - Sorting list 'nty/global//global/global' of type 'entry' with template 'nty' and locale 'pt-BR'
-[209] Biber.pm:4245> INFO - No sort tailoring available for locale 'pt-BR'
-[222] bbl.pm:660> INFO - Writing 'Texto.bbl' with encoding 'UTF-8'
-[228] bbl.pm:763> INFO - Output to Texto.bbl
+[0] Config.pm:308> INFO - This is Biber 2.20
+[41] Config.pm:311> INFO - Logfile is 'Texto.blg'
+[614] biber:340> INFO - === Thu Oct 15, 2026, 17:38:22
+[2092] Biber.pm:420> INFO - Reading 'Texto.bcf'
+[3541] Biber.pm:994> INFO - Found 24 citekeys in bib section 0
+[3685] Biber.pm:4463> INFO - Processing section 0
+[3807] Biber.pm:4654> INFO - Looking for bibtex file 'Referencias.bib' for section 0
+[4210] bibtex.pm:1713> INFO - LaTeX decoding ...
+[4370] bibtex.pm:1519> INFO - Found BibTeX data source 'Referencias.bib'
+[5839] UCollate.pm:68> INFO - Overriding locale 'pt-BR' defaults 'variable = shifted' with 'variable = non-ignorable'
+[5847] UCollate.pm:68> INFO - Overriding locale 'pt-BR' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[5848] Biber.pm:4283> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'pt-BR'
+[5866] Biber.pm:4289> INFO - No sort tailoring available for locale 'pt-BR'
+[5953] bbl.pm:676> INFO - Writing 'Texto.bbl' with encoding 'UTF-8'
+[6545] bbl.pm:779> INFO - Output to Texto.bbl

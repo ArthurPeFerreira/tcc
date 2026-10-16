@@ -1,5 +1,5 @@
 % $ biblatex auxiliary file $
-% $ biblatex bbl format version 3.2 $
+% $ biblatex bbl format version 3.3 $
 % Do not modify the above lines!
 %
 % This is an auxiliary file used by the 'biblatex' package.
@@ -18,8 +18,8 @@
 
 
 \refsection{0}
-  \datalist[entry]{nty/global//global/global}
-    \entry{AHMED2011_EFFICIENT_WEB_SCADA}{thesis}{}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{AHMED2011_EFFICIENT_WEB_SCADA}{thesis}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=08910ae547ffb7b957286b3b52447b38}{%
            family={Abbas},
@@ -36,10 +36,12 @@
       }
       \strng{namehash}{08910ae547ffb7b957286b3b52447b38}
       \strng{fullhash}{08910ae547ffb7b957286b3b52447b38}
+      \strng{fullhashraw}{08910ae547ffb7b957286b3b52447b38}
       \strng{bibnamehash}{08910ae547ffb7b957286b3b52447b38}
       \strng{authorbibnamehash}{08910ae547ffb7b957286b3b52447b38}
       \strng{authornamehash}{08910ae547ffb7b957286b3b52447b38}
       \strng{authorfullhash}{08910ae547ffb7b957286b3b52447b38}
+      \strng{authorfullhashraw}{08910ae547ffb7b957286b3b52447b38}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{extradatescope}{labelyear}
@@ -52,7 +54,7 @@
       \field{year}{2011}
       \field{dateera}{ce}
     \endentry
-    \entry{COLOMBO2014_STATE_ART_AUTOMATION}{incollection}{}
+    \entry{COLOMBO2014_STATE_ART_AUTOMATION}{incollection}{}{}
       \name{author}{9}{}{%
         {{un=0,uniquepart=base,hash=dd615c9b539260a0d70842fd28a48113}{%
            family={Bangemann},
@@ -159,13 +161,16 @@
       }
       \strng{namehash}{c09fc3f97fd63d50cf98bbadc6a53cc3}
       \strng{fullhash}{853150c08aa5a542e6ed4fc6ee8731a5}
+      \strng{fullhashraw}{853150c08aa5a542e6ed4fc6ee8731a5}
       \strng{bibnamehash}{c09fc3f97fd63d50cf98bbadc6a53cc3}
       \strng{authorbibnamehash}{c09fc3f97fd63d50cf98bbadc6a53cc3}
       \strng{authornamehash}{c09fc3f97fd63d50cf98bbadc6a53cc3}
       \strng{authorfullhash}{853150c08aa5a542e6ed4fc6ee8731a5}
+      \strng{authorfullhashraw}{853150c08aa5a542e6ed4fc6ee8731a5}
       \strng{editorbibnamehash}{1f0c5002b8d0b7d3325723d17aab416b}
       \strng{editornamehash}{1f0c5002b8d0b7d3325723d17aab416b}
       \strng{editorfullhash}{7889ac46b7728269948a14dec76cfd59}
+      \strng{editorfullhashraw}{7889ac46b7728269948a14dec76cfd59}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
@@ -183,7 +188,7 @@
       \verb 10.1007/978-3-319-05624-1_2
       \endverb
     \endentry
-    \entry{BIGHETI2020}{thesis}{}
+    \entry{BIGHETI2020}{thesis}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=e5ded9e370e30ea25474d4852d4fdeef}{%
            family={Bigheti},
@@ -200,10 +205,12 @@
       }
       \strng{namehash}{e5ded9e370e30ea25474d4852d4fdeef}
       \strng{fullhash}{e5ded9e370e30ea25474d4852d4fdeef}
+      \strng{fullhashraw}{e5ded9e370e30ea25474d4852d4fdeef}
       \strng{bibnamehash}{e5ded9e370e30ea25474d4852d4fdeef}
       \strng{authorbibnamehash}{e5ded9e370e30ea25474d4852d4fdeef}
       \strng{authornamehash}{e5ded9e370e30ea25474d4852d4fdeef}
       \strng{authorfullhash}{e5ded9e370e30ea25474d4852d4fdeef}
+      \strng{authorfullhashraw}{e5ded9e370e30ea25474d4852d4fdeef}
       \field{sortinit}{B}
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{extradatescope}{labelyear}
@@ -216,7 +223,7 @@
       \field{year}{2020}
       \field{dateera}{ce}
     \endentry
-    \entry{ELIPSE_IHM_ALTA_PERFORMANCE}{online}{}
+    \entry{ELIPSE_IHM_ALTA_PERFORMANCE}{online}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=7be936631e0fbdfdac5cd8a754a3c982}{%
            family={{Elipse Software}},
@@ -227,10 +234,12 @@
       }
       \strng{namehash}{7be936631e0fbdfdac5cd8a754a3c982}
       \strng{fullhash}{7be936631e0fbdfdac5cd8a754a3c982}
+      \strng{fullhashraw}{7be936631e0fbdfdac5cd8a754a3c982}
       \strng{bibnamehash}{7be936631e0fbdfdac5cd8a754a3c982}
       \strng{authorbibnamehash}{7be936631e0fbdfdac5cd8a754a3c982}
       \strng{authornamehash}{7be936631e0fbdfdac5cd8a754a3c982}
       \strng{authorfullhash}{7be936631e0fbdfdac5cd8a754a3c982}
+      \strng{authorfullhashraw}{7be936631e0fbdfdac5cd8a754a3c982}
       \field{sortinit}{E}
       \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
       \field{extradatescope}{labelyear}
@@ -249,7 +258,7 @@
       \verb https://kb.elipse.com.br/metodologia-para-desenvolvimento-de-ihms-de-alta-performance-visual/
       \endverb
     \endentry
-    \entry{HENRIQUES2010_CLOUD_COMPUTING_TCC}{thesis}{}
+    \entry{HENRIQUES2010_CLOUD_COMPUTING_TCC}{thesis}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=7cca313af4dc55ffe721eb958fc6ffa8}{%
            family={Henriques\bibnamedelimb da\bibnamedelima Silva},
@@ -266,10 +275,12 @@
       }
       \strng{namehash}{7cca313af4dc55ffe721eb958fc6ffa8}
       \strng{fullhash}{7cca313af4dc55ffe721eb958fc6ffa8}
+      \strng{fullhashraw}{7cca313af4dc55ffe721eb958fc6ffa8}
       \strng{bibnamehash}{7cca313af4dc55ffe721eb958fc6ffa8}
       \strng{authorbibnamehash}{7cca313af4dc55ffe721eb958fc6ffa8}
       \strng{authornamehash}{7cca313af4dc55ffe721eb958fc6ffa8}
       \strng{authorfullhash}{7cca313af4dc55ffe721eb958fc6ffa8}
+      \strng{authorfullhashraw}{7cca313af4dc55ffe721eb958fc6ffa8}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{extradatescope}{labelyear}
@@ -282,7 +293,7 @@
       \field{year}{2010}
       \field{dateera}{ce}
     \endentry
-    \entry{ISA95_2000_ENTERPRISE_CONTROL}{manual}{}
+    \entry{ISA95_2000_ENTERPRISE_CONTROL}{manual}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=840feb1e75c083510bdb5d501eb62ebe}{%
            family={{International Society of Automation}},
@@ -296,10 +307,12 @@
       }
       \strng{namehash}{840feb1e75c083510bdb5d501eb62ebe}
       \strng{fullhash}{840feb1e75c083510bdb5d501eb62ebe}
+      \strng{fullhashraw}{840feb1e75c083510bdb5d501eb62ebe}
       \strng{bibnamehash}{840feb1e75c083510bdb5d501eb62ebe}
       \strng{authorbibnamehash}{840feb1e75c083510bdb5d501eb62ebe}
       \strng{authornamehash}{840feb1e75c083510bdb5d501eb62ebe}
       \strng{authorfullhash}{840feb1e75c083510bdb5d501eb62ebe}
+      \strng{authorfullhashraw}{840feb1e75c083510bdb5d501eb62ebe}
       \field{sortinit}{I}
       \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
       \field{extradatescope}{labelyear}
@@ -311,7 +324,7 @@
       \field{year}{2000}
       \field{dateera}{ce}
     \endentry
-    \entry{KHALID2024_IOT_SCADA_PHOTOVOLTAIC}{article}{}
+    \entry{KHALID2024_IOT_SCADA_PHOTOVOLTAIC}{article}{}{}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=00baa45cd5a092e3c34beea86a8e975f}{%
            family={Khalid},
@@ -340,10 +353,12 @@
       }
       \strng{namehash}{c1aa042beda42db18ef0dcabbd218bf6}
       \strng{fullhash}{600bc10a5f0fc9aacc3ca2a63893c6b0}
+      \strng{fullhashraw}{600bc10a5f0fc9aacc3ca2a63893c6b0}
       \strng{bibnamehash}{c1aa042beda42db18ef0dcabbd218bf6}
       \strng{authorbibnamehash}{c1aa042beda42db18ef0dcabbd218bf6}
       \strng{authornamehash}{c1aa042beda42db18ef0dcabbd218bf6}
       \strng{authorfullhash}{600bc10a5f0fc9aacc3ca2a63893c6b0}
+      \strng{authorfullhashraw}{600bc10a5f0fc9aacc3ca2a63893c6b0}
       \field{sortinit}{K}
       \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{extradatescope}{labelyear}
@@ -361,7 +376,7 @@
       \verb 10.3390/en17164083
       \endverb
     \endentry
-    \entry{LASI_INDUSTRY_40}{article}{}
+    \entry{LASI_INDUSTRY_40}{article}{}{}
       \name{author}{5}{}{%
         {{un=0,uniquepart=base,hash=bbbfc2e139b4fbf801d5d4ea03048311}{%
            family={Lasi},
@@ -396,10 +411,12 @@
       }
       \strng{namehash}{db60fe2123f7df597a9f6b51093060c2}
       \strng{fullhash}{19799c67d0dbf629073f2f2d2d5fd4c0}
+      \strng{fullhashraw}{19799c67d0dbf629073f2f2d2d5fd4c0}
       \strng{bibnamehash}{db60fe2123f7df597a9f6b51093060c2}
       \strng{authorbibnamehash}{db60fe2123f7df597a9f6b51093060c2}
       \strng{authornamehash}{db60fe2123f7df597a9f6b51093060c2}
       \strng{authorfullhash}{19799c67d0dbf629073f2f2d2d5fd4c0}
+      \strng{authorfullhashraw}{19799c67d0dbf629073f2f2d2d5fd4c0}
       \field{sortinit}{L}
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{extradatescope}{labelyear}
@@ -417,7 +434,7 @@
       \verb 10.1007/s12599-014-0334-4
       \endverb
     \endentry
-    \entry{MODBUS_TCP_IMPLEMENTATION_GUIDE}{manual}{}
+    \entry{MODBUS_TCP_IMPLEMENTATION_GUIDE}{manual}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=d549d030b44e2ac21c00bfa3a5a09d5f}{%
            family={{Modbus Organization}},
@@ -431,10 +448,12 @@
       }
       \strng{namehash}{d549d030b44e2ac21c00bfa3a5a09d5f}
       \strng{fullhash}{d549d030b44e2ac21c00bfa3a5a09d5f}
+      \strng{fullhashraw}{d549d030b44e2ac21c00bfa3a5a09d5f}
       \strng{bibnamehash}{d549d030b44e2ac21c00bfa3a5a09d5f}
       \strng{authorbibnamehash}{d549d030b44e2ac21c00bfa3a5a09d5f}
       \strng{authornamehash}{d549d030b44e2ac21c00bfa3a5a09d5f}
       \strng{authorfullhash}{d549d030b44e2ac21c00bfa3a5a09d5f}
+      \strng{authorfullhashraw}{d549d030b44e2ac21c00bfa3a5a09d5f}
       \field{extraname}{1}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
@@ -458,7 +477,7 @@
       \verb https://www.modbus.org/docs/Modbus_Messaging_Implementation_Guide_V1_0b.pdf
       \endverb
     \endentry
-    \entry{MODBUS_SERIAL_SPEC}{manual}{}
+    \entry{MODBUS_SERIAL_SPEC}{manual}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=d549d030b44e2ac21c00bfa3a5a09d5f}{%
            family={{Modbus Organization}},
@@ -472,10 +491,12 @@
       }
       \strng{namehash}{d549d030b44e2ac21c00bfa3a5a09d5f}
       \strng{fullhash}{d549d030b44e2ac21c00bfa3a5a09d5f}
+      \strng{fullhashraw}{d549d030b44e2ac21c00bfa3a5a09d5f}
       \strng{bibnamehash}{d549d030b44e2ac21c00bfa3a5a09d5f}
       \strng{authorbibnamehash}{d549d030b44e2ac21c00bfa3a5a09d5f}
       \strng{authornamehash}{d549d030b44e2ac21c00bfa3a5a09d5f}
       \strng{authorfullhash}{d549d030b44e2ac21c00bfa3a5a09d5f}
+      \strng{authorfullhashraw}{d549d030b44e2ac21c00bfa3a5a09d5f}
       \field{extraname}{2}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
@@ -499,7 +520,7 @@
       \verb https://www.modbus.org/docs/Modbus_over_serial_line_V1_02.pdf
       \endverb
     \endentry
-    \entry{MOHAMED2014_RELATIONAL_VS_NOSQL}{article}{}
+    \entry{MOHAMED2014_RELATIONAL_VS_NOSQL}{article}{}{}
       \name{author}{3}{}{%
         {{un=0,uniquepart=base,hash=bc22539d3bd95ca927b4a3feddd4ddc4}{%
            family={Mohamed},
@@ -522,10 +543,12 @@
       }
       \strng{namehash}{56bf2e719734c0143001ca41427e56a8}
       \strng{fullhash}{56bf2e719734c0143001ca41427e56a8}
+      \strng{fullhashraw}{56bf2e719734c0143001ca41427e56a8}
       \strng{bibnamehash}{56bf2e719734c0143001ca41427e56a8}
       \strng{authorbibnamehash}{56bf2e719734c0143001ca41427e56a8}
       \strng{authornamehash}{56bf2e719734c0143001ca41427e56a8}
       \strng{authorfullhash}{56bf2e719734c0143001ca41427e56a8}
+      \strng{authorfullhashraw}{56bf2e719734c0143001ca41427e56a8}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{extradatescope}{labelyear}
@@ -540,7 +563,7 @@
       \field{pages}{598\bibrangedash 601}
       \range{pages}{4}
     \endentry
-    \entry{MOLECULER_DOCS}{online}{}
+    \entry{MOLECULER_DOCS}{online}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=41100b93376a58822e98166a88571847}{%
            family={{MoleculerJS}},
@@ -551,10 +574,12 @@
       }
       \strng{namehash}{41100b93376a58822e98166a88571847}
       \strng{fullhash}{41100b93376a58822e98166a88571847}
+      \strng{fullhashraw}{41100b93376a58822e98166a88571847}
       \strng{bibnamehash}{41100b93376a58822e98166a88571847}
       \strng{authorbibnamehash}{41100b93376a58822e98166a88571847}
       \strng{authornamehash}{41100b93376a58822e98166a88571847}
       \strng{authorfullhash}{41100b93376a58822e98166a88571847}
+      \strng{authorfullhashraw}{41100b93376a58822e98166a88571847}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{extradatescope}{labelyear}
@@ -573,7 +598,7 @@
       \verb https://moleculer.services/docs/0.14/
       \endverb
     \endentry
-    \entry{MONOSTORI2016_CPS_MANUFACTURING}{article}{}
+    \entry{MONOSTORI2016_CPS_MANUFACTURING}{article}{}{}
       \name{author}{10}{}{%
         {{un=0,uniquepart=base,hash=b2cc0cbfb233d15db8a31e15322a57b0}{%
            family={Monostori},
@@ -638,10 +663,12 @@
       }
       \strng{namehash}{192e3b5776d6a7228a4d7d41fa5f1807}
       \strng{fullhash}{7057cd64b011572fe591b69bc9ef0702}
+      \strng{fullhashraw}{7057cd64b011572fe591b69bc9ef0702}
       \strng{bibnamehash}{192e3b5776d6a7228a4d7d41fa5f1807}
       \strng{authorbibnamehash}{192e3b5776d6a7228a4d7d41fa5f1807}
       \strng{authornamehash}{192e3b5776d6a7228a4d7d41fa5f1807}
       \strng{authorfullhash}{7057cd64b011572fe591b69bc9ef0702}
+      \strng{authorfullhashraw}{7057cd64b011572fe591b69bc9ef0702}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{extradatescope}{labelyear}
@@ -659,7 +686,7 @@
       \verb 10.1016/j.cirp.2016.06.005
       \endverb
     \endentry
-    \entry{PEDROSA2011_COMPUTACAO_NUVEM}{unpublished}{}
+    \entry{PEDROSA2011_COMPUTACAO_NUVEM}{unpublished}{}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=3e538c73b8783cb0f86e5ca80a11727e}{%
            family={Pedrosa},
@@ -676,10 +703,12 @@
       }
       \strng{namehash}{e78c716bf8796a67ea00d957e28208a8}
       \strng{fullhash}{e78c716bf8796a67ea00d957e28208a8}
+      \strng{fullhashraw}{e78c716bf8796a67ea00d957e28208a8}
       \strng{bibnamehash}{e78c716bf8796a67ea00d957e28208a8}
       \strng{authorbibnamehash}{e78c716bf8796a67ea00d957e28208a8}
       \strng{authornamehash}{e78c716bf8796a67ea00d957e28208a8}
       \strng{authorfullhash}{e78c716bf8796a67ea00d957e28208a8}
+      \strng{authorfullhashraw}{e78c716bf8796a67ea00d957e28208a8}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{extradatescope}{labelyear}
@@ -691,7 +720,7 @@
       \field{year}{2011}
       \field{dateera}{ce}
     \endentry
-    \entry{PHUYAL2020_COST_EFFICIENT_SCADA}{article}{}
+    \entry{PHUYAL2020_COST_EFFICIENT_SCADA}{article}{}{}
       \name{author}{4}{}{%
         {{un=0,uniquepart=base,hash=4da905c467d15fe164e31731c62b6ef6}{%
            family={Phuyal},
@@ -720,10 +749,12 @@
       }
       \strng{namehash}{4cbc1e5dbf447c46b10dbb8ef768dd36}
       \strng{fullhash}{8ec732fa2f1fa438f1f5d95416f930d0}
+      \strng{fullhashraw}{8ec732fa2f1fa438f1f5d95416f930d0}
       \strng{bibnamehash}{4cbc1e5dbf447c46b10dbb8ef768dd36}
       \strng{authorbibnamehash}{4cbc1e5dbf447c46b10dbb8ef768dd36}
       \strng{authornamehash}{4cbc1e5dbf447c46b10dbb8ef768dd36}
       \strng{authorfullhash}{8ec732fa2f1fa438f1f5d95416f930d0}
+      \strng{authorfullhashraw}{8ec732fa2f1fa438f1f5d95416f930d0}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{extradatescope}{labelyear}
@@ -741,7 +772,7 @@
       \verb 10.5815/ijem.2020.02.02
       \endverb
     \endentry
-    \entry{PISCHING2017}{thesis}{}
+    \entry{PISCHING2017}{thesis}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=7d544e832148f3c233b47c0abe09973a}{%
            family={Pisching},
@@ -758,10 +789,12 @@
       }
       \strng{namehash}{7d544e832148f3c233b47c0abe09973a}
       \strng{fullhash}{7d544e832148f3c233b47c0abe09973a}
+      \strng{fullhashraw}{7d544e832148f3c233b47c0abe09973a}
       \strng{bibnamehash}{7d544e832148f3c233b47c0abe09973a}
       \strng{authorbibnamehash}{7d544e832148f3c233b47c0abe09973a}
       \strng{authornamehash}{7d544e832148f3c233b47c0abe09973a}
       \strng{authorfullhash}{7d544e832148f3c233b47c0abe09973a}
+      \strng{authorfullhashraw}{7d544e832148f3c233b47c0abe09973a}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{extradatescope}{labelyear}
@@ -774,7 +807,7 @@
       \field{year}{2017}
       \field{dateera}{ce}
     \endentry
-    \entry{POSTGRESQL_DOCS}{online}{}
+    \entry{POSTGRESQL_DOCS}{online}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=36423acfb135ffe286ea438eafcb0bc6}{%
            family={{PostgreSQL Global Development Group}},
@@ -785,10 +818,12 @@
       }
       \strng{namehash}{36423acfb135ffe286ea438eafcb0bc6}
       \strng{fullhash}{36423acfb135ffe286ea438eafcb0bc6}
+      \strng{fullhashraw}{36423acfb135ffe286ea438eafcb0bc6}
       \strng{bibnamehash}{36423acfb135ffe286ea438eafcb0bc6}
       \strng{authorbibnamehash}{36423acfb135ffe286ea438eafcb0bc6}
       \strng{authornamehash}{36423acfb135ffe286ea438eafcb0bc6}
       \strng{authorfullhash}{36423acfb135ffe286ea438eafcb0bc6}
+      \strng{authorfullhashraw}{36423acfb135ffe286ea438eafcb0bc6}
       \field{sortinit}{P}
       \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{extradatescope}{labelyear}
@@ -807,7 +842,7 @@
       \verb https://www.postgresql.org/docs/current/
       \endverb
     \endentry
-    \entry{REDIS_DOCS}{online}{}
+    \entry{REDIS_DOCS}{online}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=5931ee9e163586335d0830f3e4a0df39}{%
            family={{Redis Ltd.}},
@@ -818,10 +853,12 @@
       }
       \strng{namehash}{5931ee9e163586335d0830f3e4a0df39}
       \strng{fullhash}{5931ee9e163586335d0830f3e4a0df39}
+      \strng{fullhashraw}{5931ee9e163586335d0830f3e4a0df39}
       \strng{bibnamehash}{5931ee9e163586335d0830f3e4a0df39}
       \strng{authorbibnamehash}{5931ee9e163586335d0830f3e4a0df39}
       \strng{authornamehash}{5931ee9e163586335d0830f3e4a0df39}
       \strng{authorfullhash}{5931ee9e163586335d0830f3e4a0df39}
+      \strng{authorfullhashraw}{5931ee9e163586335d0830f3e4a0df39}
       \field{sortinit}{R}
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{extradatescope}{labelyear}
@@ -840,7 +877,7 @@
       \verb https://redis.io/docs/latest/
       \endverb
     \endentry
-    \entry{STANKOVIC2014_IOT_RESEARCH_DIRECTIONS}{article}{}
+    \entry{STANKOVIC2014_IOT_RESEARCH_DIRECTIONS}{article}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=4cee4274e72d878fbb49053cad90d4e9}{%
            family={Stankovic},
@@ -851,10 +888,12 @@
       }
       \strng{namehash}{4cee4274e72d878fbb49053cad90d4e9}
       \strng{fullhash}{4cee4274e72d878fbb49053cad90d4e9}
+      \strng{fullhashraw}{4cee4274e72d878fbb49053cad90d4e9}
       \strng{bibnamehash}{4cee4274e72d878fbb49053cad90d4e9}
       \strng{authorbibnamehash}{4cee4274e72d878fbb49053cad90d4e9}
       \strng{authornamehash}{4cee4274e72d878fbb49053cad90d4e9}
       \strng{authorfullhash}{4cee4274e72d878fbb49053cad90d4e9}
+      \strng{authorfullhashraw}{4cee4274e72d878fbb49053cad90d4e9}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{extradatescope}{labelyear}
@@ -872,7 +911,7 @@
       \verb 10.1109/JIOT.2014.2312291
       \endverb
     \endentry
-    \entry{STOUFFER2015_NIST_ICS_SECURITY}{report}{}
+    \entry{STOUFFER2015_NIST_ICS_SECURITY}{report}{}{}
       \name{author}{5}{}{%
         {{un=0,uniquepart=base,hash=5a766e85ecd888c792f65fd4f41c094f}{%
            family={Stouffer},
@@ -914,10 +953,12 @@
       }
       \strng{namehash}{cd4652041c6e5cecda302d6a5d0dc79f}
       \strng{fullhash}{e7ad4a0c0d8706e6a6778af5147ce7c7}
+      \strng{fullhashraw}{e7ad4a0c0d8706e6a6778af5147ce7c7}
       \strng{bibnamehash}{cd4652041c6e5cecda302d6a5d0dc79f}
       \strng{authorbibnamehash}{cd4652041c6e5cecda302d6a5d0dc79f}
       \strng{authornamehash}{cd4652041c6e5cecda302d6a5d0dc79f}
       \strng{authorfullhash}{e7ad4a0c0d8706e6a6778af5147ce7c7}
+      \strng{authorfullhashraw}{e7ad4a0c0d8706e6a6778af5147ce7c7}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{extradatescope}{labelyear}
@@ -943,7 +984,7 @@
       \verb https://nvlpubs.nist.gov/nistpubs/specialpublications/nist.sp.800-82r2.pdf
       \endverb
     \endentry
-    \entry{NEXTJS_DOCS}{online}{}
+    \entry{NEXTJS_DOCS}{online}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=b611823488786b851b24fb05d8ab927d}{%
            family={{Vercel, Inc.}},
@@ -954,10 +995,12 @@
       }
       \strng{namehash}{b611823488786b851b24fb05d8ab927d}
       \strng{fullhash}{b611823488786b851b24fb05d8ab927d}
+      \strng{fullhashraw}{b611823488786b851b24fb05d8ab927d}
       \strng{bibnamehash}{b611823488786b851b24fb05d8ab927d}
       \strng{authorbibnamehash}{b611823488786b851b24fb05d8ab927d}
       \strng{authornamehash}{b611823488786b851b24fb05d8ab927d}
       \strng{authorfullhash}{b611823488786b851b24fb05d8ab927d}
+      \strng{authorfullhashraw}{b611823488786b851b24fb05d8ab927d}
       \field{sortinit}{V}
       \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
       \field{extradatescope}{labelyear}
@@ -976,7 +1019,7 @@
       \verb https://nextjs.org/docs
       \endverb
     \endentry
-    \entry{WALI2024_CLOUD_SCADA_SECURITY}{article}{}
+    \entry{WALI2024_CLOUD_SCADA_SECURITY}{article}{}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=7d246c7c387e496e822ab770fa12c20c}{%
            family={Wali},
@@ -993,10 +1036,12 @@
       }
       \strng{namehash}{75ff82ad28c13446e67947e89f9b360c}
       \strng{fullhash}{75ff82ad28c13446e67947e89f9b360c}
+      \strng{fullhashraw}{75ff82ad28c13446e67947e89f9b360c}
       \strng{bibnamehash}{75ff82ad28c13446e67947e89f9b360c}
       \strng{authorbibnamehash}{75ff82ad28c13446e67947e89f9b360c}
       \strng{authornamehash}{75ff82ad28c13446e67947e89f9b360c}
       \strng{authorfullhash}{75ff82ad28c13446e67947e89f9b360c}
+      \strng{authorfullhashraw}{75ff82ad28c13446e67947e89f9b360c}
       \field{sortinit}{W}
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{extradatescope}{labelyear}
@@ -1014,7 +1059,7 @@
       \verb 10.3390/computers13040097
       \endverb
     \endentry
-    \entry{YADAV2020_SCADA_ARCHITECTURE_REVIEW}{online}{}
+    \entry{YADAV2020_SCADA_ARCHITECTURE_REVIEW}{online}{}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=ab1faa296f3aa9c136362a40fab21556}{%
            family={Yadav},
@@ -1034,10 +1079,12 @@
       }
       \strng{namehash}{be13e7d829249bb471b5bfe5914fd031}
       \strng{fullhash}{be13e7d829249bb471b5bfe5914fd031}
+      \strng{fullhashraw}{be13e7d829249bb471b5bfe5914fd031}
       \strng{bibnamehash}{be13e7d829249bb471b5bfe5914fd031}
       \strng{authorbibnamehash}{be13e7d829249bb471b5bfe5914fd031}
       \strng{authornamehash}{be13e7d829249bb471b5bfe5914fd031}
       \strng{authorfullhash}{be13e7d829249bb471b5bfe5914fd031}
+      \strng{authorfullhashraw}{be13e7d829249bb471b5bfe5914fd031}
       \field{sortinit}{Y}
       \field{sortinithash}{fd67ad5a9ef0f7456bdd9aab10fe1495}
       \field{extradatescope}{labelyear}
@@ -1061,7 +1108,7 @@
       \verb https://arxiv.org/abs/2001.02925
       \endverb
     \endentry
-    \entry{ZANGHI2019_SCADA_CONCEITOS}{report}{}
+    \entry{ZANGHI2019_SCADA_CONCEITOS}{report}{}{}
       \name{author}{1}{}{%
         {{un=0,uniquepart=base,hash=b859a60766f8b28d1651039387461214}{%
            family={Zanghi},
@@ -1078,10 +1125,12 @@
       }
       \strng{namehash}{b859a60766f8b28d1651039387461214}
       \strng{fullhash}{b859a60766f8b28d1651039387461214}
+      \strng{fullhashraw}{b859a60766f8b28d1651039387461214}
       \strng{bibnamehash}{b859a60766f8b28d1651039387461214}
       \strng{authorbibnamehash}{b859a60766f8b28d1651039387461214}
       \strng{authornamehash}{b859a60766f8b28d1651039387461214}
       \strng{authorfullhash}{b859a60766f8b28d1651039387461214}
+      \strng{authorfullhashraw}{b859a60766f8b28d1651039387461214}
       \field{sortinit}{Z}
       \field{sortinithash}{96892c0b0a36bb8557c40c49813d48b3}
       \field{extradatescope}{labelyear}
