@@ -17,7 +17,7 @@
 
 \subsection{Estrutura geral da aplicação}
 
-\par Toda tela depois do acesso é montada dentro de um casco comum, mostrado na Figura~\ref{fig:cap4_casco}. À esquerda fica o menu lateral, que lista apenas os itens que o cargo e as permissões do usuário permitem abrir. Na barra superior ficam o logotipo do cliente, o indicador de alarmes e o menu do usuário, com as opções ``Meu perfil'', ``Sair'' e ``Sair de todas as sessões''. Quando a Movi entra em um cliente para dar suporte, aparece também a opção ``Sair do cliente''. Esse desenho atende ao requisito de acesso por navegador, sem instalação local (RNF10), e ao controle de acesso por cargo e grupo (RF06), pois o menu é filtrado antes mesmo de qualquer tela ser requisitada à \sigla{api}.
+\par Toda tela depois do acesso é montada dentro de um casco comum, mostrado na Figura~\ref{fig:cap4_casco}. À esquerda fica o menu lateral, que lista apenas os itens que o cargo e as permissões do usuário permitem abrir. Na barra superior ficam o logotipo do cliente, o indicador de alarmes e o menu do usuário, com as opções ``Meu perfil'', ``Sair'' e ``Sair de todas as sessões''. Quando a Movi entra em um cliente para dar suporte, aparece também a opção ``Sair do cliente''. Esse desenho atende ao requisito de acesso por navegador, sem instalação local (RNF13), e ao controle de acesso por cargo e grupo (RF06), pois o menu é filtrado antes mesmo de qualquer tela ser requisitada à \sigla{api}.
 
 \begin{figure}[H]
     \centering
@@ -31,7 +31,7 @@
 
 \par O menu lateral segue a ordem da hierarquia de telas. Aparecem primeiro Mapa, Início, Dashboard, Sinótico, Lista de acompanhamento, Comandos, Alarmes e Linha do tempo, que são os itens de supervisão e dependem das permissões de ver telas, ver valores das tags, ver comandos e ver alarmes. Em seguida aparecem os itens de configuração, exclusivos do administrador do cliente: Plantas, Usuários, Grupos, Imagens, Telas, Pastas de telas, Configuração de alarmes, Eventos e Scripts. O item Usuários é visível também ao supervisor, que gere somente operadores. O item Clientes é exclusivo do administrador da Movi. O item ``Meu perfil'' é comum a todos.
 
-\par O indicador de alarmes, no topo, mostra um sino com o nível mais grave entre os alarmes ainda não reconhecidos e o número deles. O sino pulsa apenas quando existe alarme Crítico ou Alto não reconhecido, e esse é praticamente o único elemento animado da tela fora dos desenhos de processo. Ao clicar, abre-se um painel com os alarmes ativos mais graves e um atalho para a tela de Alarmes. Se os dados do indicador estiverem velhos por falha de rede, um relógio é exibido junto ao sino, em vez de manter uma contagem que pareça atual. Esse comportamento cumpre o requisito de sinalização de alarmes (RF13).
+\par O indicador de alarmes, no topo, mostra um sino com o nível mais grave entre os alarmes ainda não reconhecidos e o número deles. O sino pulsa apenas quando existe alarme Crítico ou Alto não reconhecido, e esse é praticamente o único elemento animado da tela fora dos desenhos de processo. Ao clicar, abre-se um painel com os alarmes ativos mais graves e um atalho para a tela de Alarmes. Se os dados do indicador estiverem velhos por falha de rede, um relógio é exibido junto ao sino, em vez de manter uma contagem que pareça atual. Esse comportamento cumpre o requisito de sinalização de alarmes (RF18).
 
 \par Todas as telas que mostram valores ao vivo exibem, acima do conteúdo, uma faixa de estado da conexão. Quando a rede oscila, a faixa informa ``Conexão instável. Os valores podem estar desatualizados.'' e, quando o serviço não responde, informa ``Serviço indisponível. Os valores mostrados estão desatualizados.'' Em ambos os casos o último valor continua na tela, marcado como desatualizado, para que o operador nunca confunda um dado antigo com um dado corrente. Os valores são atualizados por \emph{polling} curto ao valor mantido em memória no servidor, com um período único por cliente, entre 1 e 10 s, o que atende ao requisito de baixa latência na tela (RNF01).
 
@@ -53,7 +53,7 @@
 
 \subsection{Administração da Movi: clientes}
 
-\par O administrador da Movi, cargo que opera a plataforma e não um cliente em particular, enxerga apenas o item Clientes, que lista todos os clientes cadastrados com nome, situação e data de criação, como mostra a Figura~\ref{fig:cap4_clientes}. A busca aceita nome, identificador curto (\emph{slug}) ou CNPJ. Cada linha oferece as ações de ver o cliente, entrar nele e atualizar seu banco. As situações possíveis do cadastro são ``Cadastro incompleto'', ``Criando o banco'', ``Ativo'', ``Desabilitado'' e ``Excluindo'', e a situação do banco vai de ``Atualizado'' a ``Banco desatualizado'' e ``Falha ao atualizar''. Esse conjunto de telas materializa o isolamento por cliente, com banco de dados próprio para cada um (RNF03 e RNF05).
+\par O administrador da Movi, cargo que opera a plataforma e não um cliente em particular, enxerga apenas o item Clientes, que lista todos os clientes cadastrados com nome, situação e data de criação, como mostra a Figura~\ref{fig:cap4_clientes}. A busca aceita nome, identificador curto (\emph{slug}) ou CNPJ. Cada linha oferece as ações de ver o cliente, entrar nele e atualizar seu banco. As situações possíveis do cadastro são ``Cadastro incompleto'', ``Criando o banco'', ``Ativo'', ``Desabilitado'' e ``Excluindo'', e a situação do banco vai de ``Atualizado'' a ``Banco desatualizado'' e ``Falha ao atualizar''. Esse conjunto de telas materializa o isolamento por cliente, com banco de dados próprio para cada um (RF12 e RNF05).
 
 \begin{figure}[H]
     \centering
@@ -111,7 +111,7 @@
 
 \par O cadastro segue a hierarquia cliente, planta, dispositivo de E/S e tag, com uma árvore de pastas separada, apenas de tags, em cada planta (RF11). O administrador do cliente é o único que a edita, e toda alteração vale com o sistema em operação, pois a aquisição recarrega somente o que mudou (RF10). A tela ``Plantas'' lista, para cada instalação, nome, \emph{slug}, coordenadas, quantidade de dispositivos e situação. O formulário de planta pede nome, \emph{slug}, latitude e longitude, e a exclusão exige digitar o \emph{slug} para confirmar, já que apaga tudo o que a planta contém. A planta só organiza os dispositivos e posiciona o pino no mapa, e não controla o acesso.
 
-\par De uma planta chega-se à lista de ``Dispositivos de E/S'', que mostra nome, protocolo (Modbus \sigla{tcp} ou interno), endereço, situação da comunicação e situação de cadastro. O formulário do dispositivo Modbus reúne, em seções, a identificação, a ``Conexão'' (endereço, porta e a opção de encapsulamento, que permite usar o protocolo \sigla{rtu} sobre \sigla{tcp}), os ``Tempos e tentativas'', os ``Limites do pedido'' e a ``Escrita'' \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}. Como o mapeamento é feito por configuração, equipamentos de fabricantes diferentes são incluídos sem alteração de código (RNF07). O dispositivo interno não tem conexão, pois seus valores são gerados pelo próprio sistema.
+\par De uma planta chega-se à lista de ``Dispositivos de E/S'', que mostra nome, protocolo (Modbus \sigla{tcp} ou interno), endereço, situação da comunicação e situação de cadastro. O formulário do dispositivo Modbus reúne, em seções, a identificação, a ``Conexão'' (endereço, porta e a opção de encapsulamento, que permite usar o protocolo \sigla{rtu} sobre \sigla{tcp}), os ``Tempos e tentativas'', os ``Limites do pedido'' e a ``Escrita'' \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}. Como o mapeamento é feito por configuração, equipamentos de fabricantes diferentes são incluídos sem alteração de código (RNF09). O dispositivo interno não tem conexão, pois seus valores são gerados pelo próprio sistema.
 
 \par A tela de uma tag, mostrada na Figura~\ref{fig:cap4_tag}, é dividida em seções que aparecem conforme o protocolo. A seção ``Identificação'' recebe nome, \emph{slug}, descrição, pasta, tipo (analógica, digital, texto ou multiestado), acesso (leitura, escrita ou leitura e escrita) e a chave ``Habilitada''. A seção ``Mapeamento Modbus'' recebe o tipo de registrador (bobina, entrada discreta, registrador de entrada ou registrador de retenção), o endereço, o tipo bruto e a ordem de bytes. A seção ``Escala e unidade'' define a conversão do valor bruto para a grandeza de engenharia, com os limites bruto e de engenharia, a unidade e as casas decimais, que é a linearização apresentada na fundamentação. As seções ``Exibição'', ``Varredura'', ``Histórico'', ``Eventos'' e ``Comando'' definem, respectivamente, o formato mostrado, o tempo de varredura com banda morta, o modo de gravação do histórico e sua retenção, os eventos de alarme da tag e a permissão e os limites do comando. Esse formulário atende às necessidades de aquisição periódica por \emph{polling} (RF01) e de registro do histórico conforme o tipo de dado (RF02).
 
@@ -153,7 +153,7 @@
 \end{figure}
 \todo[inline]{Inserir captura: rota /lista-de-acompanhamento com uma lista ``Bancada'' de 6 a 8 tags (nível, vazão, estados das bombas, uma tag em falha de comunicação), valores reais com unidade, qualidade e o gráfico de tendência das tags marcadas logo abaixo da tabela.}
 
-\par Cada linha mostra a tag, a planta, o valor atual formatado, a qualidade e a idade do dado. Um valor desatualizado aparece em cinza e itálico com o instante desde o qual está velho, e uma falha de comunicação aparece com o último valor conhecido acompanhado de um triângulo de alerta, nunca com um zero fictício. Tags que o usuário pode comandar exibem um botão de comando, que abre o diálogo de quatro fases descrito adiante. Abaixo da tabela, um gráfico mostra a tendência das tags que o administrador marcou, e cada linha oferece ``Ver gráfico'', que abre a tendência daquela tag em um diálogo. A tela atende à exibição de valores em tempo real (RF12 e RNF01) e ao comando a partir da supervisão (RF07).
+\par Cada linha mostra a tag, a planta, o valor atual formatado, a qualidade e a idade do dado. Um valor desatualizado aparece em cinza e itálico com o instante desde o qual está velho, e uma falha de comunicação aparece com o último valor conhecido acompanhado de um triângulo de alerta, nunca com um zero fictício. Tags que o usuário pode comandar exibem um botão de comando, que abre o diálogo de quatro fases descrito adiante. Abaixo da tabela, um gráfico mostra a tendência das tags que o administrador marcou, e cada linha oferece ``Ver gráfico'', que abre a tendência daquela tag em um diálogo. A tela atende à exibição de valores em tempo real (RF15 e RNF01) e ao comando a partir da supervisão (RF07).
 
 \subsection{Dashboard}
 
@@ -175,7 +175,7 @@
 
 \subsection{Sinótico}
 
-\par O Sinótico é a tela de área que representa o processo por meio de um desenho vetorial animado pelos dados em tempo real, e é o equivalente moderno do esquema sinótico das salas de controle. Como o Dashboard, ele tem uma face de execução, usada pelo operador, e uma face de edição, usada pelo administrador do cliente. Ambas atendem ao requisito de exibição das telas de supervisão (RF12).
+\par O Sinótico é a tela de área que representa o processo por meio de um desenho vetorial animado pelos dados em tempo real, e é o equivalente moderno do esquema sinótico das salas de controle. Como o Dashboard, ele tem uma face de execução, usada pelo operador, e uma face de edição, usada pelo administrador do cliente. Ambas atendem ao requisito de exibição das telas de supervisão (RF16).
 
 \par Na edição, aberta pela ação ``Editar tela'' em ``Telas'' (rota \texttt{/telas/editor}), o administrador desenha o processo no navegador, como mostra a Figura~\ref{fig:cap4_editor}. À esquerda está a ``Paleta'' de objetos, agrupados em formas, texto, imagens, tubulações, valores, controles e outros, em um total de dezessete tipos, como retângulos, textos, tubulações com fluxo animado, cartões de valor, barras de nível, indicadores luminosos e botões. Ao centro fica a área de desenho, com grade, ímã, réguas, guias e zoom. À direita está o inspetor do objeto selecionado, com as abas ``Aparência'', ``Dados'' e ``Animações'', e as seções ``Camadas'' e ``Tags'' da lateral. É possível agrupar, alinhar, distribuir, desfazer e refazer, e todas as ações também funcionam só com o teclado. A biblioteca de imagens do cliente, gerida em ``Imagens'', fornece figuras de equipamentos.
 
@@ -217,7 +217,7 @@
 \end{figure}
 \todo[inline]{Inserir captura: rota /mapa com ao menos três plantas de exemplo em locais distintos, uma delas com pino colorido e o nível escrito, o resumo da planta aberto e a lista lateral com uma planta em ``Sem coordenada''.}
 
-\par O mapa de fundo vem do projeto OpenStreetMap, por meio da biblioteca Leaflet \cite{LEAFLET_DOCS,OPENSTREETMAP_DOCS}. Como as imagens do mapa são buscadas de um serviço de terceiros, a tela informa, em uma nota fixa, que a região visível, o endereço de rede do usuário e o endereço do site são enviados a esse serviço, e há uma configuração que abre o mapa sem fundo, sem nenhuma chamada externa. Quem tem permissão de ver o mapa e não a de ver alarmes enxerga pinos neutros e a indicação ``Alarmes indisponíveis'', e a resposta do servidor sequer leva dados de alarme. A tela atende à exibição das telas de supervisão (RF12).
+\par O mapa de fundo vem do projeto OpenStreetMap, por meio da biblioteca Leaflet \cite{LEAFLET_DOCS,OPENSTREETMAP_DOCS}. Como as imagens do mapa são buscadas de um serviço de terceiros, a tela informa, em uma nota fixa, que a região visível, o endereço de rede do usuário e o endereço do site são enviados a esse serviço, e há uma configuração que abre o mapa sem fundo, sem nenhuma chamada externa. Quem tem permissão de ver o mapa e não a de ver alarmes enxerga pinos neutros e a indicação ``Alarmes indisponíveis'', e a resposta do servidor sequer leva dados de alarme. A tela atende à exibição das telas de supervisão (RF17).
 
 \subsection{Alarmes e eventos}
 
@@ -225,7 +225,7 @@
 
 \par Na configuração, o ponto de partida é a tela ``Eventos'' (rota \texttt{/configuracao/eventos}), que lista os eventos do cliente com nome, tipo, situação e atrasos. Um evento é uma condição e pode ser de tag, composto ou agendado. O evento de tag compara a tag com um valor por um operador (maior, maior ou igual, menor, menor ou igual, igual, diferente, dentro ou fora de uma faixa), com banda morta e atrasos de ativação e de retorno de 0 a 3600 s. O evento composto combina outros eventos com E, OU e NÃO, e o evento agendado dispara em horários definidos, com uma prévia das próximas cinco execuções. Cada dispositivo Modbus traz ainda três eventos de sistema, de falha de comunicação, de falha de leitura e de falha de escrita. Um evento, por si só, não gera registro nem aviso. A seção de tratadores permite ligar a um evento um script, descrito adiante.
 
-\par O alarme é um objeto separado, configurado na tela ``Configuração de alarmes'' (rota \texttt{/configuracao/alarmes}), que a Figura~\ref{fig:cap4_alarme_config} apresenta. O formulário tem as seções ``Identificação'', com uma descrição de até 200 caracteres, ``Nível e ícone'', em que se escolhe um dos quatro níveis fixos e um ícone, ``Planta'' e ``Eventos'', em que se ligam de um a vinte eventos que, ao ficarem ativos, abrem o alarme. Essa separação permite que vários eventos acionem o mesmo alarme e que um evento acione vários alarmes. O sistema não cria alarmes sozinho, e quem quiser ver uma falha de comunicação como alarme cria um alarme comum e liga a ele o evento de sistema correspondente (RF13).
+\par O alarme é um objeto separado, configurado na tela ``Configuração de alarmes'' (rota \texttt{/configuracao/alarmes}), que a Figura~\ref{fig:cap4_alarme_config} apresenta. O formulário tem as seções ``Identificação'', com uma descrição de até 200 caracteres, ``Nível e ícone'', em que se escolhe um dos quatro níveis fixos e um ícone, ``Planta'' e ``Eventos'', em que se ligam de um a vinte eventos que, ao ficarem ativos, abrem o alarme. Essa separação permite que vários eventos acionem o mesmo alarme e que um evento acione vários alarmes. O sistema não cria alarmes sozinho, e quem quiser ver uma falha de comunicação como alarme cria um alarme comum e liga a ele o evento de sistema correspondente (RF18).
 
 \begin{figure}[H]
     \centering
@@ -263,7 +263,7 @@
 \end{figure}
 \todo[inline]{Inserir captura: rota /linha-do-tempo com o período de 24 h e linhas de origens distintas (um alarme disparado e reconhecido, um comando ``Executado e confirmado pelo equipamento'' e uma falha de comunicação do dispositivo e a volta ao normal), com o aviso fixo sobre a ordem do registro visível.}
 
-\par Cada origem só aparece para quem tem a permissão correspondente, e a tela avisa o que foi escondido. Um aviso permanente informa que a ordem exibida é a do registro do sistema e não a do relógio do equipamento, pois a linha do tempo é uma sequência cronológica de eventos e não promete a resolução de uma sequência de eventos com carimbo do equipamento. Esse é o recurso de consulta cronológica ao histórico (RF14), e a tela de comandos, descrita a seguir, completa a rastreabilidade das ações do operador (RNF06).
+\par Cada origem só aparece para quem tem a permissão correspondente, e a tela avisa o que foi escondido. Um aviso permanente informa que a ordem exibida é a do registro do sistema e não a do relógio do equipamento, pois a linha do tempo é uma sequência cronológica de eventos e não promete a resolução de uma sequência de eventos com carimbo do equipamento. Esse é o recurso de consulta cronológica ao histórico (RF19), e a tela de comandos, descrita a seguir, completa a rastreabilidade das ações do operador (RNF06).
 
 \subsection{Histórico e tendência}
 
@@ -279,7 +279,7 @@
 \end{figure}
 \todo[inline]{Inserir captura: diálogo ``Gráfico da lista'' (aberto em /lista-de-acompanhamento) com a janela de 7 dias para o nível do tanque, mostrando a curva de média, a faixa de mínimo e máximo e uma lacuna na curva, onde faltou dado.}
 
-\par O detalhe do gráfico é definido pela janela escolhida. Até uma hora, cada ponto é a leitura gravada. Até um dia, usa-se a média por minuto, até sete dias a média de dez minutos, até 31 dias a de trinta minutos e, acima disso, a média de seis horas, sempre acompanhada do mínimo e do máximo do intervalo para que um pico breve não desapareça. A curva cobre exatamente o período pedido e, onde falta dado, a linha é interrompida, de modo que a lacuna do histórico é visível e é, ela própria, a evidência de uma falha de leitura. Como cada tag grava o histórico de um modo (não gravar, gravar tudo ou gravar quando muda mais o registro periódico), o gráfico reflete o que foi realmente guardado (RF02 e RF14). Os valores guardados são sempre os de engenharia, e o que está além da retenção do cliente é tratado como inexistente.
+\par O detalhe do gráfico é definido pela janela escolhida. Até uma hora, cada ponto é a leitura gravada. Até um dia, usa-se a média por minuto, até sete dias a média de dez minutos, até 31 dias a de trinta minutos e, acima disso, a média de seis horas, sempre acompanhada do mínimo e do máximo do intervalo para que um pico breve não desapareça. A curva cobre exatamente o período pedido e, onde falta dado, a linha é interrompida, de modo que a lacuna do histórico é visível e é, ela própria, a evidência de uma falha de leitura. Como cada tag grava o histórico de um modo (não gravar, gravar tudo ou gravar quando muda mais o registro periódico), o gráfico reflete o que foi realmente guardado (RF02 e RF17). Os valores guardados são sempre os de engenharia, e o que está além da retenção do cliente é tratado como inexistente.
 
 \subsection{Variável meta e scripts}
 
@@ -322,7 +322,7 @@
 \par A Tabela~\ref{tab:cap4_telas} reúne as telas descritas neste capítulo, o cargo ou a permissão que dá acesso a cada uma e os requisitos que elas atendem. As permissões das telas de supervisão são concedidas por grupo e, por isso, são indicadas pelo nome da permissão, enquanto as telas de configuração dependem do cargo. O administrador da Movi, ao entrar em um cliente, acessa o que o administrador do cliente acessa.
 
 {\renewcommand{\arraystretch}{1.3}\small
-\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}p{3.1cm}>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}X>{\centering\arraybackslash}p{2.8cm}}
+\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}p{2.9cm}>{\raggedright\arraybackslash}p{4.3cm}>{\raggedright\arraybackslash}X>{\centering\arraybackslash}p{2.4cm}}
         \caption{Telas, cargos que acessam e requisitos atendidos.}
         \label{tab:cap4_telas}\\
         \hline
@@ -340,31 +340,31 @@
         \hline
         Meu perfil & /meu-perfil & Qualquer usuário autenticado & RF05 \\
         \hline
-        Clientes e criação de cliente & /admin/clientes & Administrador da Movi & RF06, RNF03, RNF05 \\
+        Clientes e criação de cliente & /admin/clientes & Administrador da Movi & RF06, RF12, RNF05 \\
         \hline
         Usuários & /configuracao/usuarios & Administrador do cliente e supervisor (apenas operadores) & RF05, RF06 \\
         \hline
         Grupos & /configuracao/grupos & Administrador do cliente & RF06, RNF05 \\
         \hline
-        Plantas, dispositivos, tags e pastas & /cadastro/... & Administrador do cliente & RF01, RF02, RF10, RF11, RNF07 \\
+        Plantas, dispositivos, tags e pastas & /cadastro/... & Administrador do cliente & RF01, RF02, RF10, RF11, RNF09 \\
         \hline
-        Lista de acompanhamento & /lista-de-acompanhamento & Permissão de ver valores das tags & RF03, RF07, RF12, RNF01 \\
+        Lista de acompanhamento & /lista-de-acompanhamento & Permissão de ver valores das tags & RF03, RF07, RF15, RNF01 \\
         \hline
-        Dashboard (execução) & /dashboard & Permissão de ver telas & RF12, RF14, RNF01 \\
+        Dashboard (execução) & /dashboard & Permissão de ver telas & RF15, RNF01 \\
         \hline
-        Montagem de dashboard e do sinótico, telas, pastas de telas e imagens & /telas/..., /configuracao/telas & Administrador do cliente & RF10, RF12 \\
+        Montagem de dashboard e do sinótico, telas, pastas de telas e imagens & /telas/..., /configuracao/telas & Administrador do cliente & RF10, RF15, RF16 \\
         \hline
-        Sinótico (execução) & /sinotico, /telas/ver & Permissão de ver telas & RF03, RF07, RF12, RNF01 \\
+        Sinótico (execução) & /sinotico, /telas/ver & Permissão de ver telas & RF03, RF07, RF16, RNF01 \\
         \hline
-        Mapa & /mapa & Permissão de ver telas & RF12, RF13 \\
+        Mapa & /mapa & Permissão de ver telas & RF17, RF18 \\
         \hline
-        Alarmes (ativos e histórico) & /alarmes & Permissão de ver alarmes (reconhecer exige permissão própria) & RF13, RNF06 \\
+        Alarmes (ativos e histórico) & /alarmes & Permissão de ver alarmes (reconhecer exige permissão própria) & RF18, RNF06 \\
         \hline
-        Configuração de alarmes e eventos & /configuracao/alarmes, /configuracao/eventos & Administrador do cliente & RF13 \\
+        Configuração de alarmes e eventos & /configuracao/alarmes, /configuracao/eventos & Administrador do cliente & RF18 \\
         \hline
-        Linha do tempo & /linha-do-tempo & Permissão de ver alarmes ou comandos & RF14, RNF06 \\
+        Linha do tempo & /linha-do-tempo & Permissão de ver alarmes ou comandos & RF19, RNF06 \\
         \hline
-        Scripts e variável meta & /configuracao/scripts & Administrador do cliente & RF10, RF13 \\
+        Scripts e variável meta & /configuracao/scripts & Administrador do cliente & RF10, RF13, RF14 \\
         \hline
         Comandos (histórico) e diálogo de comando & /comandos & Permissões de ver ou emitir comandos & RF07, RF09, RNF06 \\
 \end{xltabular}}

@@ -20,7 +20,7 @@
     \label{fig:ihm_scada}
 \end{figure}
 
-\par Para \textcite{ZANGHI2019_SCADA_CONCEITOS}, um sistema \sigla{scada} deve contemplar seis módulos, descritos nas subseções a seguir: aquisição e registro de dados, sincronismo de tempo, níveis de acesso, comando e controle, escalabilidade e redundância.
+\par Um sistema \sigla{scada} deve contemplar seis módulos, descritos nas subseções a seguir: aquisição e registro de dados, sincronismo de tempo, níveis de acesso, comando e controle, escalabilidade e redundância \cite{ZANGHI2019_SCADA_CONCEITOS}.
 
 \subsubsection{Aquisição e Registro de Dados}
 
@@ -42,7 +42,7 @@
 
 \par As ações executadas remotamente pelo supervisório consistem no envio de comandos aos dispositivos de campo, isto é, na escrita de uma informação no dispositivo \cite{YADAV2020_SCADA_ARCHITECTURE_REVIEW}. Quanto ao momento de execução, o comando pode ser instantâneo, escrevendo de imediato o valor desejado ou agendado, programado para ações conforme cenários previamente definidos, com o instante de execução registrado \cite{ZANGHI2019_SCADA_CONCEITOS}.
 
-\par O processamento de um comando segue quatro fases: seleção, em que o operador escolhe na interface o equipamento; verificação de intertravamentos e condições de segurança; confirmação explícita pelo operador; e execução, com o envio efetivo da ordem ao elemento final de controle \cite{ZANGHI2019_SCADA_CONCEITOS}. Após a execução, o supervisório verifica a confirmação para garantir que a solicitação foi aceita pelo dispositivo e, em caso de falha, gera um alarme, pois comandos indevidos podem danificar equipamentos ou comprometer a segurança do processo \cite{STOUFFER2015_NIST_ICS_SECURITY}.
+\par O processamento de um comando segue quatro fases. Na seleção, o operador escolhe na interface o equipamento. Na verificação, conferem-se os intertravamentos e as condições de segurança. Na confirmação, o operador autoriza explicitamente a ação. Na execução, a ordem é enviada ao elemento final de controle \cite{ZANGHI2019_SCADA_CONCEITOS}. Após a execução, o supervisório verifica a confirmação para garantir que a solicitação foi aceita pelo dispositivo e, em caso de falha, gera um alarme, pois comandos indevidos podem danificar equipamentos ou comprometer a segurança do processo \cite{STOUFFER2015_NIST_ICS_SECURITY}.
 
 \subsubsection{Escalabilidade}
 
