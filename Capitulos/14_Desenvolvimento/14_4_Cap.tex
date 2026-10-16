@@ -1,0 +1,372 @@
+\newpage
+\section{Interface do Sistema}
+
+\par Conforme a estrutura apresentada na introdução, este capítulo descreve a interface do sistema como o operador e o administrador a utilizam no dia a dia. Primeiro, são apresentados os princípios de projeto da interface homem-máquina (\sigla{ihm}) que orientaram as telas, em especial os da norma \sigla{isa}-101. Em seguida, percorre-se a estrutura geral da aplicação e cada grupo de telas, do acesso e da administração da plataforma ao cadastro das instalações, da supervisão em tempo real à análise de alarmes, comandos e histórico, ligando cada tela ao requisito que ela atende. Por fim, uma tabela resume quais cargos acessam cada tela. Todos os nomes de menu, campos e ações citados são os que aparecem na interface, em português do Brasil.
+
+\subsection{Princípios de interface adotados}
+
+\par A interface foi projetada a partir das recomendações para sistemas de supervisão de alto desempenho, que pedem telas sóbrias, nas quais a atenção do operador seja conduzida ao que está fora do normal e não disputada por ornamentos \cite{ISA101_2015_HMI,ELIPSE_IHM_ALTA_PERFORMANCE}. Três princípios dessa linha foram adotados de forma explícita e se repetem em todas as telas apresentadas neste capítulo.
+
+\par O primeiro princípio é o fundo neutro. O sistema usa um único tema claro, com a barra superior em grafite, o conteúdo sobre cinza claro e os blocos de informação em cartões brancos. Valores normais, equipamentos em operação e rótulos de apoio aparecem em tons de cinza, sem marca de cor, de modo que uma tela em regime normal parece quieta e uma tela com problema chama a atenção por contraste \cite{ISA101_2015_HMI}.
+
+\par O segundo princípio é o uso da cor apenas para a condição anormal. Cor aparece somente em quatro situações: alarme, aviso, dado desatualizado e seleção ou foco do usuário. Os quatro níveis de alarme do sistema (Crítico, Alto, Médio e Baixo) são fixos e cada um tem cor, ícone e nome escrito, de maneira que a cor nunca é o único sinal de uma condição \cite{ISA101_2015_HMI}. Valores com leitura falha ou velha são distinguidos por ícone, texto e itálico, e nunca por substituição silenciosa por zero.
+
+\par O terceiro princípio é a hierarquia de telas, que organiza a navegação do geral para o particular. No primeiro nível está a visão geral, formada pelo Mapa das plantas e pelo indicador de alarmes, sempre visível no topo da aplicação. No segundo nível estão as telas de área, que são o Dashboard e o Sinótico de cada planta. No terceiro nível estão as telas de detalhe, como a Lista de acompanhamento, o diálogo de comando, o gráfico de tendência de uma tag e o detalhe de uma ocorrência de alarme. No quarto nível, reservado a quem configura o sistema, ficam o cadastro, os eventos e os scripts. O operador desce da visão geral ao detalhe em poucos cliques e o caminho inverso é sempre oferecido por um comando de voltar \cite{ISA101_2015_HMI}.
+
+\par Além dos três princípios, a consistência entre telas é garantida por um conjunto único de componentes visuais reutilizáveis, desenvolvidos sobre a biblioteca React e o \emph{framework} Next.js \cite{REACT_DOCS,NEXTJS_DOCS}. Toda tela de lista, formulário ou detalhe nasce do mesmo modelo, com cabeçalho, barra de filtros e estados de carregamento, vazio e erro idênticos. Todas as funções podem ser executadas apenas com o teclado, o foco é sempre visível e o texto da interface segue um vocabulário único, em que, por exemplo, ``Excluir'' apaga um registro, ``Cancelar'' muda um estado e ``Remover'' desfaz um vínculo.
+
+\subsection{Estrutura geral da aplicação}
+
+\par Toda tela depois do acesso é montada dentro de um casco comum, mostrado na Figura~\ref{fig:cap4_casco}. À esquerda fica o menu lateral, que lista apenas os itens que o cargo e as permissões do usuário permitem abrir. Na barra superior ficam o logotipo do cliente, o indicador de alarmes e o menu do usuário, com as opções ``Meu perfil'', ``Sair'' e ``Sair de todas as sessões''. Quando a Movi entra em um cliente para dar suporte, aparece também a opção ``Sair do cliente''. Esse desenho atende ao requisito de acesso por navegador, sem instalação local (RNF10), e ao controle de acesso por cargo e grupo (RF06), pois o menu é filtrado antes mesmo de qualquer tela ser requisitada à \sigla{api}.
+
+\begin{figure}[H]
+    \centering
+    \caption{Casco da aplicação com menu lateral e indicador de alarmes}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura do casco da aplicação com o menu lateral aberto e o popover de alarmes ativos (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_casco}
+\end{figure}
+\todo[inline]{Inserir captura: tela do Mapa (ou Início) logado como administrador do cliente, menu lateral completo visível, popover do indicador de alarmes aberto com ao menos um alarme Alto não reconhecido (por exemplo, nível baixo do tanque da bancada) e o nome do usuário com o cargo no canto superior.}
+
+\par O menu lateral segue a ordem da hierarquia de telas. Aparecem primeiro Mapa, Início, Dashboard, Sinótico, Lista de acompanhamento, Comandos, Alarmes e Linha do tempo, que são os itens de supervisão e dependem das permissões de ver telas, ver valores das tags, ver comandos e ver alarmes. Em seguida aparecem os itens de configuração, exclusivos do administrador do cliente: Plantas, Usuários, Grupos, Imagens, Telas, Pastas de telas, Configuração de alarmes, Eventos e Scripts. O item Usuários é visível também ao supervisor, que gere somente operadores. O item Clientes é exclusivo do administrador da Movi. O item ``Meu perfil'' é comum a todos.
+
+\par O indicador de alarmes, no topo, mostra um sino com o nível mais grave entre os alarmes ainda não reconhecidos e o número deles. O sino pulsa apenas quando existe alarme Crítico ou Alto não reconhecido, e esse é praticamente o único elemento animado da tela fora dos desenhos de processo. Ao clicar, abre-se um painel com os alarmes ativos mais graves e um atalho para a tela de Alarmes. Se os dados do indicador estiverem velhos por falha de rede, um relógio é exibido junto ao sino, em vez de manter uma contagem que pareça atual. Esse comportamento cumpre o requisito de sinalização de alarmes (RF13).
+
+\par Todas as telas que mostram valores ao vivo exibem, acima do conteúdo, uma faixa de estado da conexão. Quando a rede oscila, a faixa informa ``Conexão instável. Os valores podem estar desatualizados.'' e, quando o serviço não responde, informa ``Serviço indisponível. Os valores mostrados estão desatualizados.'' Em ambos os casos o último valor continua na tela, marcado como desatualizado, para que o operador nunca confunda um dado antigo com um dado corrente. Os valores são atualizados por \emph{polling} curto ao valor mantido em memória no servidor, com um período único por cliente, entre 1 e 10 s, o que atende ao requisito de baixa latência na tela (RNF01).
+
+\subsection{Entrar e trocar a senha}
+
+\par A Figura~\ref{fig:cap4_login} apresenta a tela de entrada, a única acessível sem sessão. Ela pede apenas o e-mail e a senha, e o botão ``Entrar'' envia as credenciais. Em caso de erro, a mensagem é a mesma para e-mail inexistente e para senha errada, para não revelar quais e-mails têm conta. Após cinco erros seguidos o acesso é bloqueado por 15 minutos. A sessão resultante usa um token de acesso de curta duração mantido apenas em memória e um \emph{cookie} de renovação protegido, o que atende ao requisito de autenticação e gestão de sessões (RF05) \cite{JWT_RFC7519}.
+
+\begin{figure}[H]
+    \centering
+    \caption{Tela de entrada}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura da tela de entrada com os campos E-mail e Senha (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_login}
+\end{figure}
+\todo[inline]{Inserir captura: rota /login, com o formulário vazio e o título ``Entrar''. Se possível, uma segunda captura com a mensagem de credenciais inválidas.}
+
+\par O sistema não envia e-mail, portanto não há convite nem ``esqueci minha senha''. O administrador do cliente cria o usuário e o sistema gera uma senha de uso único, mostrada uma só vez a quem criou, que vale por 24 horas e serve apenas para entrar. No primeiro acesso, a tela ``Trocar senha'' (rota \texttt{/trocar-senha}), com os campos ``Senha atual'', ``Nova senha'' e ``Confirmar a nova senha'', é a única que o servidor permite abrir até a troca ser concluída. A senha escolhida pela pessoa deve ter no mínimo oito caracteres. A mesma troca está disponível depois, na tela ``Meu perfil'', que também permite alterar os dados pessoais e o e-mail. Alterar a senha ou o e-mail encerra as demais sessões da pessoa.
+
+\subsection{Administração da Movi: clientes}
+
+\par O administrador da Movi, cargo que opera a plataforma e não um cliente em particular, enxerga apenas o item Clientes, que lista todos os clientes cadastrados com nome, situação e data de criação, como mostra a Figura~\ref{fig:cap4_clientes}. A busca aceita nome, identificador curto (\emph{slug}) ou CNPJ. Cada linha oferece as ações de ver o cliente, entrar nele e atualizar seu banco. As situações possíveis do cadastro são ``Cadastro incompleto'', ``Criando o banco'', ``Ativo'', ``Desabilitado'' e ``Excluindo'', e a situação do banco vai de ``Atualizado'' a ``Banco desatualizado'' e ``Falha ao atualizar''. Esse conjunto de telas materializa o isolamento por cliente, com banco de dados próprio para cada um (RNF03 e RNF05).
+
+\begin{figure}[H]
+    \centering
+    \caption{Lista de clientes da administração da Movi}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura da lista de clientes com a situação do cadastro e do banco (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_clientes}
+\end{figure}
+\todo[inline]{Inserir captura: rota /admin/clientes logada como administrador da Movi, com pelo menos dois clientes de exemplo (um Ativo e outro Desabilitado) e a busca visível.}
+
+\par A criação de um cliente, rota \texttt{/admin/clientes/novo} e mostrada na Figura~\ref{fig:cap4_cliente_novo}, é um único formulário dividido em seções. Em ``Dados do cliente'' informam-se nome, \emph{slug} e CNPJ, sendo o \emph{slug} sugerido a partir do nome e imutável depois da criação. Em ``Parâmetros do contrato'' definem-se o período de atualização da tela, o teto de retenção do histórico, o limite de linhas de histórico por dia e a retenção do histórico de alarmes, valores que só a Movi altera. Em ``Primeiro administrador'' informam-se o nome e o e-mail de quem vai administrar o cliente. Em ``Banco de dados'' escolhe-se onde fica o banco, na ``Instância da Movi'' ou no ``Servidor do cliente''. Nesse segundo caso aparecem os campos de conexão (servidor, porta, banco, usuário, senha e segurança da conexão) e o teste de conexão, que verifica o acesso e as permissões antes de gravar. O botão ``Criar cliente'' aciona o provisionamento do banco do cliente em segundo plano, o que é acompanhado pela situação ``Criando o banco'' na lista.
+
+\begin{figure}[H]
+    \centering
+    \caption{Formulário de criação de cliente}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura do formulário de criação de cliente com as quatro seções (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_cliente_novo}
+\end{figure}
+\todo[inline]{Inserir captura: rota /admin/clientes/novo preenchida com um cliente de exemplo (por exemplo, ``Saneamento Demo''), banco na Instância da Movi e o administrador de exemplo.}
+
+\par A tela de detalhe do cliente (rota \texttt{/admin/clientes/ver}) reúne dados, contrato, estado do banco, logotipo e ações. Entre as ações estão ``Entrar no cliente'', ``Desabilitar'' e ``Habilitar'', ``Atualizar bancos pendentes'' e ``Excluir cliente'', esta última protegida por uma confirmação em que se digita o \emph{slug} do cliente. Ao entrar em um cliente, o administrador da Movi passa a ver as telas dele com os poderes de administrador do cliente, e o menu do usuário mostra ``Sair do cliente'' para voltar.
+
+\subsection{Usuários, cargos e grupos}
+
+\par O controle de acesso combina quatro cargos fixos com grupos de permissões criados pelo próprio cliente. Os cargos são o administrador da Movi, o administrador do cliente, o supervisor e o operador. As permissões vêm de um catálogo fixo de dez itens: ver telas, ver valores das tags, ver histórico, ver alarmes, reconhecer alarme, reconhecer todos os alarmes, ver comandos, comandar estado digital, comandar valor de referência e cancelar comandos. Quem pertence a vários grupos soma as permissões, e o administrador do cliente tem todas pelo cargo (RF06 e RNF05).
+
+\par A tela ``Usuários'', na Figura~\ref{fig:cap4_usuarios}, lista nome, e-mail, cargo e situação (``Ativo'', ``Desabilitado'', ``Senha de uso único'' ou ``Senha de uso único vencida''). O administrador cria usuários de qualquer cargo e o supervisor cria, edita, desabilita e exclui apenas operadores. No formulário de usuário informam-se nome, e-mail, telefone, cargo e grupos. Ao salvar um novo usuário, ou ao escolher a ação de gerar nova senha, um diálogo ``Senha de uso único'' mostra a senha uma única vez, com a advertência ``Anote agora: ela não aparece de novo.'' e um botão para copiá-la.
+
+\begin{figure}[H]
+    \centering
+    \caption{Tela de usuários com cargos e situações}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura da lista de usuários e do diálogo Senha de uso único (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_usuarios}
+\end{figure}
+\todo[inline]{Inserir captura: rota /configuracao/usuarios com um administrador, um supervisor e dois operadores, e, sobreposto ou em figura ao lado, o diálogo ``Senha de uso único'' com uma senha de exemplo no formato de três grupos de quatro caracteres.}
+
+\par A tela ``Grupos'', na Figura~\ref{fig:cap4_grupos}, lista os grupos do cliente com nome e identificador. O formulário de grupo pede um nome e apresenta o catálogo de dez permissões como caixas de seleção, cada uma com o rótulo e uma frase explicando o que ela libera, por exemplo ``Ver telas'', que abre o mapa, o dashboard e o sinótico. Como a permissão de um grupo vale para o cliente inteiro, não há filtro por planta ou por área, o que simplifica o modelo e mantém a única fronteira rígida no cliente.
+
+\begin{figure}[H]
+    \centering
+    \caption{Formulário de grupo com o catálogo de permissões}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura do formulário de grupo com as dez permissões e suas descrições (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_grupos}
+\end{figure}
+\todo[inline]{Inserir captura: rota /configuracao/grupos/novo (ou editar) com um grupo de exemplo ``Operação'' que marca Ver telas, Ver valores das tags, Ver alarmes, Reconhecer alarme e Comandar estado digital.}
+
+\subsection{Cadastro: plantas, dispositivos de E/S, tags e pastas}
+
+\par O cadastro segue a hierarquia cliente, planta, dispositivo de E/S e tag, com uma árvore de pastas separada, apenas de tags, em cada planta (RF11). O administrador do cliente é o único que a edita, e toda alteração vale com o sistema em operação, pois a aquisição recarrega somente o que mudou (RF10). A tela ``Plantas'' lista, para cada instalação, nome, \emph{slug}, coordenadas, quantidade de dispositivos e situação. O formulário de planta pede nome, \emph{slug}, latitude e longitude, e a exclusão exige digitar o \emph{slug} para confirmar, já que apaga tudo o que a planta contém. A planta só organiza os dispositivos e posiciona o pino no mapa, e não controla o acesso.
+
+\par De uma planta chega-se à lista de ``Dispositivos de E/S'', que mostra nome, protocolo (Modbus \sigla{tcp} ou interno), endereço, situação da comunicação e situação de cadastro. O formulário do dispositivo Modbus reúne, em seções, a identificação, a ``Conexão'' (endereço, porta e a opção de encapsulamento, que permite usar o protocolo \sigla{rtu} sobre \sigla{tcp}), os ``Tempos e tentativas'', os ``Limites do pedido'' e a ``Escrita'' \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}. Como o mapeamento é feito por configuração, equipamentos de fabricantes diferentes são incluídos sem alteração de código (RNF07). O dispositivo interno não tem conexão, pois seus valores são gerados pelo próprio sistema.
+
+\par A tela de uma tag, mostrada na Figura~\ref{fig:cap4_tag}, é dividida em seções que aparecem conforme o protocolo. A seção ``Identificação'' recebe nome, \emph{slug}, descrição, pasta, tipo (analógica, digital, texto ou multiestado), acesso (leitura, escrita ou leitura e escrita) e a chave ``Habilitada''. A seção ``Mapeamento Modbus'' recebe o tipo de registrador (bobina, entrada discreta, registrador de entrada ou registrador de retenção), o endereço, o tipo bruto e a ordem de bytes. A seção ``Escala e unidade'' define a conversão do valor bruto para a grandeza de engenharia, com os limites bruto e de engenharia, a unidade e as casas decimais, que é a linearização apresentada na fundamentação. As seções ``Exibição'', ``Varredura'', ``Histórico'', ``Eventos'' e ``Comando'' definem, respectivamente, o formato mostrado, o tempo de varredura com banda morta, o modo de gravação do histórico e sua retenção, os eventos de alarme da tag e a permissão e os limites do comando. Esse formulário atende às necessidades de aquisição periódica por \emph{polling} (RF01) e de registro do histórico conforme o tipo de dado (RF02).
+
+\begin{figure}[H]
+    \centering
+    \caption{Formulário de uma tag analógica Modbus}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura do formulário da tag com as seções Identificação, Mapeamento Modbus e Escala e unidade (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_tag}
+\end{figure}
+\todo[inline]{Inserir captura: rota /cadastro/tags/editar de uma tag analógica real da bancada (por exemplo, o nível do tanque), com registrador de retenção, tipo bruto inteiro de 16 bits sem sinal, escala de 0 a 4095 em bruto para 0 a 100 em engenharia e a unidade em porcentagem. Ajustar os números aos da bancada real.}
+
+\par Para cadastrar dezenas ou centenas de pontos de uma vez, a lista de tags de cada dispositivo oferece a ação ``Editar em grade'', ilustrada na Figura~\ref{fig:cap4_grade}. A grade apresenta todas as tags do dispositivo em uma tabela semelhante a uma planilha, ordenadas por tipo de registrador e endereço, e aceita colar blocos copiados do Excel, editar célula a célula, duplicar uma linha com o número do nome e o endereço avançando automaticamente e desfazer com o teclado. Células com erro ficam em vermelho, como endereço fora da faixa ou combinação de registrador impossível, e células com aviso ficam em amarelo, como endereços sobrepostos. O salvamento é tudo ou nada, em uma única gravação seguida de uma única recarga da aquisição. Três colunas finais, somente de leitura, mostram o valor ao vivo já formatado com a unidade, a qualidade (``Bom'', ``Desatualizado'', ``Falha de comunicação'' ou ``Sem dado'') e a idade da leitura, o que permite conferir o mapeamento Modbus enquanto ele é digitado. Quando não há valor, a célula exibe um traço, nunca zero.
+
+\begin{figure}[H]
+    \centering
+    \caption{Grade de tags com valor ao vivo}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura da grade de tags com as colunas Valor, Qualidade e Idade (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_grade}
+\end{figure}
+\todo[inline]{Inserir captura: rota /cadastro/dispositivos/tags/grade do dispositivo da bancada com ao menos 8 tags (nível, vazão, bombas, alarmes), as colunas Valor, Qualidade e Idade visíveis com valores reais e uma célula marcada com erro e outra com aviso, para ilustrar a validação.}
+
+\par A tela ``Pastas'' (rota \texttt{/cadastro/pastas}) mostra a árvore de pastas de tags da planta escolhida. As pastas têm apenas nome, não têm limite de níveis e podem reunir tags de dispositivos diferentes da mesma planta, o que reproduz a organização por equipamento sem criar um objeto de equipamento. As ações ``Nova pasta'', mover e excluir operam diretamente na árvore e a tag aparece na raiz ou em uma pasta apenas. As pastas organizam também a escolha de tags nos seletores de outras telas.
+
+\subsection{Lista de acompanhamento}
+
+\par A Lista de acompanhamento é a tela de detalhe mais usada pelo operador para acompanhar poucos pontos de forma contínua, de maneira semelhante às listas de observação dos sistemas supervisórios clássicos. Uma lista é um conjunto nomeado de até 50 tags, de até 10 plantas, criado e mantido pelo administrador do cliente e liberado a um ou mais grupos. O operador vê apenas as listas dos grupos a que pertence e não pode alterá-las, o que a tela informa com a mensagem ``Só o administrador altera esta lista.'' A Figura~\ref{fig:cap4_lista} mostra a tela.
+
+\begin{figure}[H]
+    \centering
+    \caption{Lista de acompanhamento com valores ao vivo e gráfico}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura da lista de acompanhamento com a tabela de tags e o gráfico de tendência abaixo (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_lista}
+\end{figure}
+\todo[inline]{Inserir captura: rota /lista-de-acompanhamento com uma lista ``Bancada'' de 6 a 8 tags (nível, vazão, estados das bombas, uma tag em falha de comunicação), valores reais com unidade, qualidade e o gráfico de tendência das tags marcadas logo abaixo da tabela.}
+
+\par Cada linha mostra a tag, a planta, o valor atual formatado, a qualidade e a idade do dado. Um valor desatualizado aparece em cinza e itálico com o instante desde o qual está velho, e uma falha de comunicação aparece com o último valor conhecido acompanhado de um triângulo de alerta, nunca com um zero fictício. Tags que o usuário pode comandar exibem um botão de comando, que abre o diálogo de quatro fases descrito adiante. Abaixo da tabela, um gráfico mostra a tendência das tags que o administrador marcou, e cada linha oferece ``Ver gráfico'', que abre a tendência daquela tag em um diálogo. A tela atende à exibição de valores em tempo real (RF12 e RNF01) e ao comando a partir da supervisão (RF07).
+
+\subsection{Dashboard}
+
+\par O Dashboard é a tela de área em que o administrador monta, na própria interface, painéis de tendência e de situação com gráficos, e na qual o operador apenas observa. Os gráficos são desenhados com a biblioteca ECharts \cite{ECHARTS_DOCS}. A Figura~\ref{fig:cap4_dashboard} mostra um dashboard em execução com os três tipos de painel disponíveis.
+
+\begin{figure}[H]
+    \centering
+    \caption{Dashboard em execução com painéis de linha, barra e medidor}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura de um dashboard com um painel de linha, um de barra e um medidor (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_dashboard}
+\end{figure}
+\todo[inline]{Inserir captura: rota /dashboard abrindo o dashboard ``Bancada'' com um painel de linha (nível do tanque nas últimas horas), um de barra (volume ou média por intervalo) e um medidor (nível atual dentro da faixa). Em regime normal, tudo em cinza, e um dos painéis com a cor de alarme para ilustrar o princípio da cor apenas para o anormal.}
+
+\par O painel de linha mostra, na janela escolhida, a evolução de até 12 tags. Em janelas de até uma hora cada ponto é a leitura bruta, e em janelas maiores o gráfico usa médias de 1 min, 10 min, 30 min ou 6 h, acompanhadas da faixa de mínimo e máximo, para que um pico curto não desapareça na média. A linha é interrompida onde falta dado, para que a lacuna seja visível, e a janela pode chegar a dez anos. O painel de barra mostra, por intervalo, a média, o mínimo, o máximo, o volume ou o tempo ligado, e o medidor mostra o valor atual dentro de uma faixa. Quando o equipamento deixa de responder, o medidor exibe o último valor com um triângulo de alerta e o instante da falha, ou apenas um traço, conforme a escolha do autor do painel. Cada painel tem uma tabela alternativa aos dados, para quem não usa o gráfico. Depois da primeira carga, o painel pede ao servidor apenas o trecho novo e o junta ao que já tem, o que limita o tráfego e a carga sobre o banco.
+
+\par A montagem é feita na tela ``Montar dashboard'' (rota \texttt{/telas/dashboard}), aberta pela ação ``Montar'' na lista de telas. O administrador cria seções e painéis, escolhe o tipo (``Linha'', ``Barra'' ou ``Medidor'') e as tags, e ajusta título, período, atualização, faixas de cor e linhas de meta. Arrastar e redimensionar os painéis tem alternativa por clique e por teclado, e o resultado pode ser pré-visualizado antes de publicado. Cada tela tem um rascunho e uma versão publicada, e o operador nunca vê o rascunho. Se outra pessoa salvou antes, a tela avisa e oferece recarregar sem apagar o trabalho. Essa montagem sem alterar o código cumpre o requisito de incluir telas com o sistema em produção (RF10).
+
+\subsection{Sinótico}
+
+\par O Sinótico é a tela de área que representa o processo por meio de um desenho vetorial animado pelos dados em tempo real, e é o equivalente moderno do esquema sinótico das salas de controle. Como o Dashboard, ele tem uma face de execução, usada pelo operador, e uma face de edição, usada pelo administrador do cliente. Ambas atendem ao requisito de exibição das telas de supervisão (RF12).
+
+\par Na edição, aberta pela ação ``Editar tela'' em ``Telas'' (rota \texttt{/telas/editor}), o administrador desenha o processo no navegador, como mostra a Figura~\ref{fig:cap4_editor}. À esquerda está a ``Paleta'' de objetos, agrupados em formas, texto, imagens, tubulações, valores, controles e outros, em um total de dezessete tipos, como retângulos, textos, tubulações com fluxo animado, cartões de valor, barras de nível, indicadores luminosos e botões. Ao centro fica a área de desenho, com grade, ímã, réguas, guias e zoom. À direita está o inspetor do objeto selecionado, com as abas ``Aparência'', ``Dados'' e ``Animações'', e as seções ``Camadas'' e ``Tags'' da lateral. É possível agrupar, alinhar, distribuir, desfazer e refazer, e todas as ações também funcionam só com o teclado. A biblioteca de imagens do cliente, gerida em ``Imagens'', fornece figuras de equipamentos.
+
+\begin{figure}[H]
+    \centering
+    \caption{Editor do sinótico com paleta, área de desenho e inspetor}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura do editor do sinótico com um tanque, uma bomba e tubulações em desenho (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_editor}
+\end{figure}
+\todo[inline]{Inserir captura: rota /telas/editor com o sinótico da bancada em edição (tanque com barra de nível, bomba, tubulação, valor de nível e botão de comando), um objeto selecionado e a aba Dados do inspetor aberta mostrando o vínculo da propriedade com a tag.}
+
+\par O vínculo entre desenho e dado é feito na aba ``Dados'', na qual uma propriedade do objeto é ligada a uma tag. O vínculo pode ser simples, em tabela (valor ou faixa convertidos em texto ou cor) ou de comando, que apenas abre o diálogo de comando. A aba ``Animações'' permite cor por tabela, visibilidade, preenchimento proporcional, rotação, translação e piscar. Arrastar uma tag do painel ``Tags'' até o desenho cria o objeto de valor já vinculado. Salvar é uma ação manual e publicar pede confirmação, e uma pré-visualização mostra exatamente o que o operador verá. Um objeto com defeito não derruba o desenho, pois aparece como ``Objeto inválido'' enquanto o restante da tela continua funcionando.
+
+\par Na execução, o operador abre o sinótico pelo item Sinótico do menu, que lista as telas por pasta, como mostra a Figura~\ref{fig:cap4_sinotico}. A tela já abre com os valores atuais. Cada objeto de valor exibe o dado formatado conforme a tag e uma marca de qualidade: desatualizado em cinza e itálico com o instante de origem, falha de comunicação com o último valor e um triângulo de alerta, ``Sem dado'' e ``Sem acesso''. Um selo de alarme aparece sobre o objeto da tag em alarme. Se o sistema não recebe valor para um objeto em 10 s, o objeto mostra um traço e a indicação ``Sem dado'', e o valor desenhado no editor nunca é mostrado no lugar do real. A barra de controles do desenho oferece ``Ampliar'', ``Reduzir'', ``Ajustar'' e ``Pausar animações'', com zoom de 1 a 4 vezes, e a lista ``Valores desta tela'' apresenta, em forma de tabela, os objetos, valores, situações e ações da tela, o que serve de caminho alternativo para quem não usa o desenho. Botões de comando abrem o diálogo de quatro fases e botões de navegação levam a outras telas, formando a hierarquia de telas.
+
+\begin{figure}[H]
+    \centering
+    \caption{Sinótico em execução com valores ao vivo e objeto em alarme}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura do sinótico em execução com valores ao vivo, bomba ligada e um selo de alarme (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_sinotico}
+\end{figure}
+\todo[inline]{Inserir captura: rota /telas/ver (aberta a partir de /sinotico) do mesmo desenho da bancada em execução, valores reais, bomba ligada animada, o selo de alarme sobre o tanque com nível Alto e, ao lado, a lista ``Valores desta tela'' aberta.}
+
+\subsection{Mapa das plantas}
+
+\par O Mapa, primeiro item do menu, é a visão geral do cliente e o topo da hierarquia de telas. A Figura~\ref{fig:cap4_mapa} mostra um pino por planta com coordenada. O pino de uma planta sem alarme aberto é neutro, e o de uma planta com alarme assume a cor do alarme mais grave dela e traz o nome do nível escrito (Crítico, Alto, Médio ou Baixo), de modo que a cor nunca é o único sinal. A planta desabilitada aparece indicando que não é monitorada. Uma lista lateral repete todas as plantas, inclusive as sem coordenada, agrupadas em ``Sem coordenada'', e é o caminho completo para quem usa o teclado. Ao clicar em um pino ou em uma linha da lista, abre-se um resumo com nome, coordenadas, nível e quantidade de alarmes, e o atalho ``Ver alarmes desta planta''.
+
+\begin{figure}[H]
+    \centering
+    \caption{Mapa das plantas com o estado de alarme de cada uma}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura do mapa com três plantas, uma delas com pino de alarme, e a lista lateral (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_mapa}
+\end{figure}
+\todo[inline]{Inserir captura: rota /mapa com ao menos três plantas de exemplo em locais distintos, uma delas com pino colorido e o nível escrito, o resumo da planta aberto e a lista lateral com uma planta em ``Sem coordenada''.}
+
+\par O mapa de fundo vem do projeto OpenStreetMap, por meio da biblioteca Leaflet \cite{LEAFLET_DOCS,OPENSTREETMAP_DOCS}. Como as imagens do mapa são buscadas de um serviço de terceiros, a tela informa, em uma nota fixa, que a região visível, o endereço de rede do usuário e o endereço do site são enviados a esse serviço, e há uma configuração que abre o mapa sem fundo, sem nenhuma chamada externa. Quem tem permissão de ver o mapa e não a de ver alarmes enxerga pinos neutros e a indicação ``Alarmes indisponíveis'', e a resposta do servidor sequer leva dados de alarme. A tela atende à exibição das telas de supervisão (RF12).
+
+\subsection{Alarmes e eventos}
+
+\par O tratamento de alarmes envolve duas famílias de telas, a de configuração, usada pelo administrador do cliente, e a de operação, usada por quem acompanha o processo. Os níveis de alarme seguem a prática da norma de gestão de alarmes da \sigla{isa}, com quatro níveis fixos \cite{ISA182_2016_ALARM}.
+
+\par Na configuração, o ponto de partida é a tela ``Eventos'' (rota \texttt{/configuracao/eventos}), que lista os eventos do cliente com nome, tipo, situação e atrasos. Um evento é uma condição e pode ser de tag, composto ou agendado. O evento de tag compara a tag com um valor por um operador (maior, maior ou igual, menor, menor ou igual, igual, diferente, dentro ou fora de uma faixa), com banda morta e atrasos de ativação e de retorno de 0 a 3600 s. O evento composto combina outros eventos com E, OU e NÃO, e o evento agendado dispara em horários definidos, com uma prévia das próximas cinco execuções. Cada dispositivo Modbus traz ainda três eventos de sistema, de falha de comunicação, de falha de leitura e de falha de escrita. Um evento, por si só, não gera registro nem aviso. A seção de tratadores permite ligar a um evento um script, descrito adiante.
+
+\par O alarme é um objeto separado, configurado na tela ``Configuração de alarmes'' (rota \texttt{/configuracao/alarmes}), que a Figura~\ref{fig:cap4_alarme_config} apresenta. O formulário tem as seções ``Identificação'', com uma descrição de até 200 caracteres, ``Nível e ícone'', em que se escolhe um dos quatro níveis fixos e um ícone, ``Planta'' e ``Eventos'', em que se ligam de um a vinte eventos que, ao ficarem ativos, abrem o alarme. Essa separação permite que vários eventos acionem o mesmo alarme e que um evento acione vários alarmes. O sistema não cria alarmes sozinho, e quem quiser ver uma falha de comunicação como alarme cria um alarme comum e liga a ele o evento de sistema correspondente (RF13).
+
+\begin{figure}[H]
+    \centering
+    \caption{Formulário de configuração de um alarme}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura do formulário de alarme com nível, ícone e eventos ligados (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_alarme_config}
+\end{figure}
+\todo[inline]{Inserir captura: rota /configuracao/alarmes/editar com o alarme ``Nível alto do tanque'' (nível Alto, ícone de triângulo), planta da bancada e dois eventos ligados (nível acima do limite e falha de comunicação do dispositivo).}
+
+\par Na operação, a tela ``Alarmes'' (rota \texttt{/alarmes}), mostrada na Figura~\ref{fig:cap4_alarmes}, tem duas abas, ``Ativos'' e ``Histórico''. A aba de ativos lista, para cada ocorrência, nível, descrição, planta, origens, instante de ativação (``Desde''), estado e quem reconheceu. Os estados são ``Ativo, não reconhecido'', ``Normalizado, não reconhecido'', ``Reconhecido'' e ``Reconhecido depois de normalizar'', entre outros, cada um com cor e texto próprios. A aba de histórico traz as ocorrências já fechadas, com duração e motivo do fechamento, e os filtros ``De'', ``Até'', ``Planta'', ``Dispositivo'', ``Tag'', ``Situação'' e ``Faixa''. A ação ``Reconhecer'' abre um diálogo ``Reconhecer alarme'' com um campo ``Comentário'' opcional, e ``Reconhecer todos'' atua sobre os alarmes que a tela mostra, após uma confirmação. O reconhecimento é sempre referido à ocorrência que a pessoa viu, de modo que um novo disparo nunca é reconhecido por um clique dado em uma tela velha, e o registro guarda quem reconheceu, quando e com qual comentário (RNF06).
+
+\begin{figure}[H]
+    \centering
+    \caption{Tela de alarmes ativos com reconhecimento}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura da tela de alarmes ativos com o diálogo Reconhecer alarme aberto (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_alarmes}
+\end{figure}
+\todo[inline]{Inserir captura: rota /alarmes, aba Ativos, com três ocorrências de níveis diferentes (uma Crítica não reconhecida, uma Alta reconhecida, uma Média normalizada não reconhecida) e o diálogo ``Reconhecer alarme'' aberto com um comentário digitado, por exemplo, ``Verificada a bomba em campo''.}
+
+\subsection{Linha do tempo}
+
+\par A Linha do tempo, apresentada na Figura~\ref{fig:cap4_linha_tempo}, é uma lista única, da mais nova para a mais velha, que reúne o que aconteceu com alarmes (disparo, reconhecimento, normalização e fechamento), com comandos (confirmado, executado, falho ou com resultado tardio) e com os dispositivos (início e fim de falha de comunicação, de leitura e de escrita). Cada linha traz data e hora, planta, origem, evento e o ator, que pode ser uma pessoa ou um script identificado pelo nome. Os filtros são ``Período'' (1 h, 24 h, 7 dias, 31 dias ou personalizado, até 31 dias), ``Filtrar por planta'', ``Tags'' e ``Filtrar por origem'', e a lista é carregada aos poucos, sem repetir nem perder linhas.
+
+\begin{figure}[H]
+    \centering
+    \caption{Linha do tempo de alarmes, comandos e eventos de dispositivo}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura da linha do tempo com alarmes, comandos e falhas de comunicação misturados (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_linha_tempo}
+\end{figure}
+\todo[inline]{Inserir captura: rota /linha-do-tempo com o período de 24 h e linhas de origens distintas (um alarme disparado e reconhecido, um comando ``Executado e confirmado pelo equipamento'' e uma falha de comunicação do dispositivo e a volta ao normal), com o aviso fixo sobre a ordem do registro visível.}
+
+\par Cada origem só aparece para quem tem a permissão correspondente, e a tela avisa o que foi escondido. Um aviso permanente informa que a ordem exibida é a do registro do sistema e não a do relógio do equipamento, pois a linha do tempo é uma sequência cronológica de eventos e não promete a resolução de uma sequência de eventos com carimbo do equipamento. Esse é o recurso de consulta cronológica ao histórico (RF14), e a tela de comandos, descrita a seguir, completa a rastreabilidade das ações do operador (RNF06).
+
+\subsection{Histórico e tendência}
+
+\par O sistema não tem uma tela isolada de histórico. A consulta ao histórico de uma tag está incorporada às telas em que ela é útil, a Lista de acompanhamento e o Dashboard, e ambas usam o mesmo gráfico e a mesma regra de detalhe, o que garante coerência. A Figura~\ref{fig:cap4_tendencia} mostra o gráfico de tendência de uma tag, aberto pela ação ``Ver gráfico'' da lista de acompanhamento.
+
+\begin{figure}[H]
+    \centering
+    \caption{Tendência de uma tag em janela de sete dias}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura do diálogo de tendência com a curva de média e a faixa de mínimo e máximo (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_tendencia}
+\end{figure}
+\todo[inline]{Inserir captura: diálogo ``Gráfico da lista'' (aberto em /lista-de-acompanhamento) com a janela de 7 dias para o nível do tanque, mostrando a curva de média, a faixa de mínimo e máximo e uma lacuna na curva, onde faltou dado.}
+
+\par O detalhe do gráfico é definido pela janela escolhida. Até uma hora, cada ponto é a leitura gravada. Até um dia, usa-se a média por minuto, até sete dias a média de dez minutos, até 31 dias a de trinta minutos e, acima disso, a média de seis horas, sempre acompanhada do mínimo e do máximo do intervalo para que um pico breve não desapareça. A curva cobre exatamente o período pedido e, onde falta dado, a linha é interrompida, de modo que a lacuna do histórico é visível e é, ela própria, a evidência de uma falha de leitura. Como cada tag grava o histórico de um modo (não gravar, gravar tudo ou gravar quando muda mais o registro periódico), o gráfico reflete o que foi realmente guardado (RF02 e RF14). Os valores guardados são sempre os de engenharia, e o que está além da retenção do cliente é tratado como inexistente.
+
+\subsection{Variável meta e scripts}
+
+\par O sistema permite ao administrador do cliente escrever pequenos programas em JavaScript que calculam valores e reagem a eventos. Esse código é executado em um ambiente isolado, sem acesso à rede, a arquivos ou a segredos e com tetos de tempo e de memória, formado pelo interpretador QuickJS compilado para \sigla{wasm} e executado sob o Wasmtime \cite{QUICKJS_DOCS,WASMTIME_DOCS}. Para o usuário, a diferença para um programa comum é pequena, pois o editor é o mesmo nos dois casos de uso, que são a variável meta e o script.
+
+\par A variável meta é uma tag de um dispositivo interno cujo valor é calculado por um código que lê o valor atual de outras tags da mesma planta, como uma diferença de pressões ou um volume por hora. Na tela da tag, a seção ``Variável meta'' mostra o gatilho (a cada leitura nova de uma tag lida, ou por tempo) e a ação ``Editar código'', que abre o diálogo ``Código da variável meta''. O script, por sua vez, é configurado na tela ``Scripts'' (rota \texttt{/configuracao/scripts}), que lista nome, situação, eventos ligados e a última execução. O script é ligado a um ou mais eventos, para rodar ``na ativação'', ``no retorno'' ou ``nos dois'', e pode ler tags, escrever em tags, habilitar e desabilitar tags e dispositivos. A escrita em hora marcada se obtém ligando o script a um evento agendado. Todo comando escrito por um script é registrado com a origem ``script'' seguida do nome dele.
+
+\par O editor de código, mostrado na Figura~\ref{fig:cap4_editor_codigo}, abre em um diálogo e só é carregado quando necessário, para não pesar nas demais telas. Ele tem realce de sintaxe de JavaScript, numeração de linhas, a posição do cursor e um painel ``Referência'' com a lista das funções disponíveis e uma frase sobre cada uma, por exemplo, ``Último valor da tag'' e ``Escreve no dispositivo''. Pelo teclado, a tecla Tab indenta e as teclas Esc ou Ctrl+M liberam o foco para sair do editor, o que preserva a navegação por teclado. O botão ``Testar'' analisa o código sem executá-lo e mostra quais tags ele lê, e, no script, a área ``Simular'' mostra o que ele faria sem escrever nada. Ao salvar, o sistema confere se cada tag citada existe e se o autor pode usá-la. A tela de scripts exibe a ``Última execução'' e a ``Última falha'', esta última mantida mesmo depois de uma execução bem-sucedida, para que um defeito intermitente não passe despercebido.
+
+\begin{figure}[H]
+    \centering
+    \caption{Editor de código da variável meta e do script}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura do diálogo do editor de código com a referência e o resultado do teste (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_editor_codigo}
+\end{figure}
+\todo[inline]{Inserir captura: diálogo ``Código da variável meta'' (a partir de uma tag interna em /cadastro/tags/editar) com um código curto de exemplo, por exemplo, a diferença entre duas pressões da bancada, o painel ``Referência'' aberto e o resultado do botão ``Testar'' listando as tags lidas.}
+
+\subsection{Diálogo de comando de quatro fases}
+
+\par O comando é a única ação da interface que escreve no equipamento, e por isso passa por um diálogo próprio, reutilizado por todas as telas que oferecem comando, a Lista de acompanhamento e o Sinótico. O diálogo conduz o operador pelas quatro fases do comando, indicadas por uma barra de etapas, como mostra a Figura~\ref{fig:cap4_comando}. Na ``Seleção'', o operador escolhe a ação, ``Ligada (1)'' ou ``Desligada (0)'' para uma tag digital, ou digita o ``Novo valor'' para uma tag analógica, com o valor atual e o dispositivo visíveis. Na ``Verificação'', acionada por ``Verificar'', o servidor confere se a tag existe e aceita escrita, se o dispositivo está habilitado e comunicando, se o valor está dentro da faixa e se o usuário tem a permissão do tipo de comando. Aprovado, o comando vale um código de 120 s ligado exatamente ao que o operador viu. Na ``Confirmação'', o operador revê o resumo e aciona ``Confirmar'', e o servidor confere a permissão de novo. Na ``Execução'', o comando é enviado ao equipamento e o diálogo mostra o ``Resultado do comando''. Esse fluxo cumpre os requisitos de comando instantâneo e de condução pelas quatro fases (RF07 e RF09).
+
+\begin{figure}[H]
+    \centering
+    \caption{Diálogo de comando nas fases de confirmação e resultado}
+    \fbox{\parbox[c][5cm][c]{0.85\textwidth}{\centering Captura do diálogo de comando com a barra de etapas e o resumo na fase de confirmação (a inserir)}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+    \label{fig:cap4_comando}
+\end{figure}
+\todo[inline]{Inserir captura: diálogo de comando a partir do sinótico ou da lista, acionando a bomba da bancada, na etapa ``Confirmação'' (resumo com tag, planta, dispositivo, valor atual e novo valor), e, em segunda captura, o ``Resultado do comando'' com o desfecho de sucesso.}
+
+\par O resultado nunca é otimista. O sucesso significa que o equipamento respondeu à escrita com o eco que confere com o pedido. Se o equipamento não responde ou responde com erro, o diálogo informa a falha e o motivo, por exemplo, ``O comando não foi executado. Nada foi escrito no equipamento.'' Se o sistema perde o rastro da escrita, a mensagem é ``Sem confirmação do estado do comando. Confira a lista de comandos antes de repetir.'' e a tag fica bloqueada por 35 s para evitar uma segunda escrita sobreposta. Outro comando em andamento sobre a mesma tag também é recusado com uma mensagem própria. Esses cuidados evitam que um comando seja repetido por engano e protegem o equipamento, o que corresponde às travas e à auditoria do requisito de segurança (RNF06).
+
+\par A tela ``Comandos'' (rota \texttt{/comandos}) é o histórico dessas ações. A tabela mostra data, planta, valor, origem, estado e quem emitiu cada comando, com filtros por estado, planta e período, e permite cancelar um comando ainda não confirmado. O registro guarda uma cópia do nome da pessoa, da tag e da planta, de modo que ele continua legível mesmo que o cadastro mude depois. O comando em hora marcada não é um comando de pessoa e sim um evento agendado ligado a um script que escreve.
+
+\subsection{Síntese: telas, cargos e requisitos}
+
+\par A Tabela~\ref{tab:cap4_telas} reúne as telas descritas neste capítulo, o cargo ou a permissão que dá acesso a cada uma e os requisitos que elas atendem. As permissões das telas de supervisão são concedidas por grupo e, por isso, são indicadas pelo nome da permissão, enquanto as telas de configuração dependem do cargo. O administrador da Movi, ao entrar em um cliente, acessa o que o administrador do cliente acessa.
+
+{\renewcommand{\arraystretch}{1.3}\small
+\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}p{3.1cm}>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}X>{\centering\arraybackslash}p{2.8cm}}
+        \caption{Telas, cargos que acessam e requisitos atendidos.}
+        \label{tab:cap4_telas}\\
+        \hline
+        \textbf{Tela} & \textbf{Rota} & \textbf{Quem acessa} & \textbf{Requisitos} \\
+        \hline
+        \endfirsthead
+        \hline
+        \textbf{Tela} & \textbf{Rota} & \textbf{Quem acessa} & \textbf{Requisitos} \\
+        \hline
+        \endhead
+        \endfoot
+        \multicolumn{4}{c}{Fonte: Autor.} \\
+        \endlastfoot
+        Entrar e trocar senha & /login, /trocar-senha & Qualquer usuário & RF05, RNF05 \\
+        \hline
+        Meu perfil & /meu-perfil & Qualquer usuário autenticado & RF05 \\
+        \hline
+        Clientes e criação de cliente & /admin/clientes & Administrador da Movi & RF06, RNF03, RNF05 \\
+        \hline
+        Usuários & /configuracao/usuarios & Administrador do cliente e supervisor (apenas operadores) & RF05, RF06 \\
+        \hline
+        Grupos & /configuracao/grupos & Administrador do cliente & RF06, RNF05 \\
+        \hline
+        Plantas, dispositivos, tags e pastas & /cadastro/... & Administrador do cliente & RF01, RF02, RF10, RF11, RNF07 \\
+        \hline
+        Lista de acompanhamento & /lista-de-acompanhamento & Permissão de ver valores das tags & RF03, RF07, RF12, RNF01 \\
+        \hline
+        Dashboard (execução) & /dashboard & Permissão de ver telas & RF12, RF14, RNF01 \\
+        \hline
+        Montagem de dashboard e do sinótico, telas, pastas de telas e imagens & /telas/..., /configuracao/telas & Administrador do cliente & RF10, RF12 \\
+        \hline
+        Sinótico (execução) & /sinotico, /telas/ver & Permissão de ver telas & RF03, RF07, RF12, RNF01 \\
+        \hline
+        Mapa & /mapa & Permissão de ver telas & RF12, RF13 \\
+        \hline
+        Alarmes (ativos e histórico) & /alarmes & Permissão de ver alarmes (reconhecer exige permissão própria) & RF13, RNF06 \\
+        \hline
+        Configuração de alarmes e eventos & /configuracao/alarmes, /configuracao/eventos & Administrador do cliente & RF13 \\
+        \hline
+        Linha do tempo & /linha-do-tempo & Permissão de ver alarmes ou comandos & RF14, RNF06 \\
+        \hline
+        Scripts e variável meta & /configuracao/scripts & Administrador do cliente & RF10, RF13 \\
+        \hline
+        Comandos (histórico) e diálogo de comando & /comandos & Permissões de ver ou emitir comandos & RF07, RF09, RNF06 \\
+\end{xltabular}}
+
+\par O conjunto mostra que a mesma interface atende a quatro perfis de uso. O administrador da Movi administra clientes. O administrador do cliente configura o sistema e monta as telas. O supervisor gerencia operadores, e o operador acompanha o processo e emite comandos conforme as permissões do seu grupo. Essa separação, somada aos princípios de fundo neutro, de cor apenas para o anormal e de hierarquia de telas, mantém a interface sóbria para quem opera e completa para quem configura, tudo acessível por navegador e com atualização em tempo real a partir dos dados do processo.
