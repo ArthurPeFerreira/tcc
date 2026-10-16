@@ -1,0 +1,552 @@
+\newpage
+\section{Bancada de Teste}
+
+\providecommand{\espacoreservado}[3]{\fbox{\parbox[c][#1][c]{#2}{\centering #3}}}
+
+\par Este capítulo descreve a bancada de testes montada para validar o sistema supervisório em operação com equipamentos reais de campo. Primeiro, apresentam-se o objetivo da bancada e os equipamentos que a compõem. Em seguida, detalha-se a arquitetura de comunicação, que liga o supervisório ao controlador e o controlador ao inversor de frequência, e descreve-se a configuração do inversor. Depois, expõem-se a lógica programada no controlador e o modelo matemático do tanque simulado, que dá sentido físico ao processo. Por fim, mostra-se como a bancada é cadastrada no supervisório e define-se o roteiro dos ensaios, cujos resultados são relatados no capítulo seguinte.
+
+\subsection{Objetivo e Visão Geral}
+
+\par A bancada tem por finalidade submeter o sistema desenvolvido a um cenário de supervisão realista, com um controlador lógico programável (\sigla{clp}) industrial, um inversor de frequência e um motor elétrico em funcionamento. O processo escolhido é o de uma bomba de água que enche um reservatório. Como a montagem de um tanque físico, com sensor de nível e tubulações, exigiria uma infraestrutura que foge ao escopo do trabalho, o nível do reservatório é simulado por software, calculado a cada ciclo dentro do próprio \sigla{clp}. O motor, por outro lado, é real. Ele é acionado pelo inversor e fornece grandezas elétricas verdadeiras, como frequência de saída e corrente, de modo que a parte simulada convive com a parte física e as duas são tratadas de forma idêntica pelo supervisório.
+
+\par O papel do supervisório nessa bancada é o de qualquer sistema \sigla{scada}. Ele lê periodicamente as informações do processo, exibe o nível do tanque, a frequência e a corrente do motor e o estado da bomba em telas e gráficos, sinaliza alarmes quando o nível sai da faixa desejada e permite que o operador ligue e desligue a bomba e altere a referência de frequência. A Figura~\ref{fig:cap6_bancada_montada} reserva o espaço para o registro fotográfico da bancada montada.
+
+\begin{figure}[H]
+    \centering
+    \caption{Bancada de teste montada.}
+    \label{fig:cap6_bancada_montada}
+    \espacoreservado{6cm}{0.8\textwidth}{Espaço reservado para a fotografia da bancada completa (painel com o CLP, o inversor de frequência e o motor).}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\todo[inline]{Inserir a fotografia da bancada montada em Imagens/Desenvolvimento/Cap5/ e trocar o espaço reservado por \texttt{\textbackslash includegraphics}. Informar o local (laboratório do instituto) e a data da montagem.}
+
+\subsection{Equipamentos Utilizados}
+
+\par A bancada reúne um computador servidor, que executa o sistema supervisório em contêineres, uma rede local Ethernet, um controlador programável, um inversor de frequência e um motor de indução trifásico. A Tabela~\ref{tab:cap6_equipamentos} resume os itens e a função de cada um.
+
+{\renewcommand{\arraystretch}{1.3}\small
+\begin{xltabular}{\textwidth}{>{\centering\arraybackslash}p{3.4cm}>{\centering\arraybackslash}p{4.2cm}>{\centering\arraybackslash}X}
+        \caption{Equipamentos da bancada de teste.}
+        \label{tab:cap6_equipamentos}\\
+        \hline
+        \textbf{Equipamento} & \textbf{Modelo} & \textbf{Função na bancada} \\
+        \hline
+        \endfirsthead
+        \hline
+        \textbf{Equipamento} & \textbf{Modelo} & \textbf{Função na bancada} \\
+        \hline
+        \endhead
+        \endfoot
+        \multicolumn{3}{c}{Fonte: Autor.} \\
+        \endlastfoot
+        Servidor & A definir & Executa os contêineres do supervisório (telas, \emph{API}, aquisição, banco e cache) \\
+        \hline
+        Rede local & Switch Ethernet & Interliga o servidor, o \sigla{clp} e o computador de programação \\
+        \hline
+        \sigla{clp} & Schneider Modicon TM221CE40T & Executa a lógica da bancada, simula o tanque e atua como servidor Modbus TCP e mestre Modbus \sigla{rtu} \\
+        \hline
+        Inversor de frequência & Schneider Altivar ATV320 & Aciona o motor e disponibiliza, por comunicação serial, o comando e as medições \\
+        \hline
+        Motor & Motor de indução trifásico do instituto & Representa a bomba de água \\
+        \hline
+\end{xltabular}}
+
+\todo[inline]{Preencher na Tabela~\ref{tab:cap6_equipamentos} o modelo do servidor e os dados da placa do motor (potência, tensão, corrente, frequência e velocidade nominais).}
+
+\par O Modicon TM221CE40T é um controlador compacto da família M221, programado no ambiente EcoStruxure Machine Expert Basic. Esse modelo dispõe de entradas e saídas digitais embutidas, de uma porta Ethernet e de uma porta serial, identificada como SL1, que pode ser configurada para Modbus como mestre ou escravo \cite{SCHNEIDER_TM221_HARDWARE_GUIDE,SCHNEIDER_MACHINE_EXPERT_BASIC}. A porta Ethernet permite que o controlador responda a requisições Modbus TCP na porta 502, comportando-se como servidor, enquanto a porta serial permite que ele consulte o inversor como mestre de uma rede Modbus \sigla{rtu}.
+
+\todo[inline]{Confirmar no guia de hardware do TM221CE40T a quantidade de entradas e saídas digitais embutidas, o tipo das saídas (transistor), a existência da porta Ethernet e as portas seriais disponíveis (SL1 e eventual SL2). Citar a página.}
+
+\par O Altivar ATV320 é um inversor de frequência para aplicações de máquinas, que converte a tensão de alimentação em uma tensão trifásica de frequência e amplitude variáveis, permitindo controlar a velocidade do motor. Além de entradas e saídas próprias, ele oferece uma porta de comunicação Modbus serial em conector RJ45, por meio da qual é possível enviar comandos e referências e ler o estado e as grandezas medidas \cite{SCHNEIDER_ATV320_MODBUS_MANUAL,SCHNEIDER_ATV320_PROGRAMMING_MANUAL}. O motor, por sua vez, é o elemento que torna o ensaio tangível. Sua frequência de alimentação, ajustada pelo inversor, determina a velocidade de rotação, e é essa mesma frequência que, no modelo do tanque, determina a vazão de entrada de água.
+
+\subsection{Arquitetura de Comunicação}
+
+\par A comunicação da bancada ocorre em dois segmentos independentes, cada um com o seu meio físico e o seu protocolo. No primeiro, o serviço de aquisição do supervisório consulta o \sigla{clp} por Modbus TCP, pela rede Ethernet \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}. No segundo, o \sigla{clp} consulta o inversor por Modbus \sigla{rtu}, sobre um enlace serial \sigla{rs485} \cite{MODBUS_SERIAL_SPEC}. O \sigla{clp} funciona, portanto, como um intermediário, que é servidor para o supervisório e mestre para o inversor. Essa organização é a mesma encontrada em instalações reais, nas quais um controlador concentra os equipamentos de campo e expõe seus dados a um único ponto de acesso.
+
+\par A Figura~\ref{fig:cap6_topologia} apresenta a topologia. O servidor do supervisório envia requisições Modbus TCP ao \sigla{clp} por meio do switch da rede local (1 e 2). O \sigla{clp} responde com os valores do processo, mantidos em palavras e bits de memória. Em paralelo, o \sigla{clp} consulta e comanda o inversor por Modbus \sigla{rtu} em \sigla{rs485} (3), e o inversor alimenta o motor (4). O tanque, por ser simulado, não aparece como equipamento, mas como um bloco lógico dentro do \sigla{clp}, que recebe a frequência lida do inversor e calcula o nível.
+
+\begin{figure}[H]
+    \centering
+    \caption{Topologia de comunicação da bancada.}
+    \label{fig:cap6_topologia}
+    \vspace{0.4cm}
+    \begin{tikzpicture}[
+        bloco/.style={draw, rectangle, rounded corners=2pt, minimum height=1.1cm, minimum width=2.4cm, align=center, font=\small},
+        logico/.style={draw, dashed, rectangle, rounded corners=2pt, minimum height=0.9cm, minimum width=2.4cm, align=center, font=\footnotesize},
+        enlace/.style={->, thick},
+        rotulo/.style={font=\scriptsize, align=center}
+    ]
+        \node[bloco] (srv) at (0,0) {Servidor Movi\\(contêineres)};
+        \node[bloco] (sw) at (3.4,0) {Switch\\Ethernet};
+        \node[bloco, minimum width=3.2cm, minimum height=2.8cm] (clp) at (7.4,0) {};
+        \node[font=\small, align=center] at (7.4,1.1) {CLP TM221CE40T};
+        \node[logico] (tanque) at (7.4,0.15) {Tanque simulado\\(bloco lógico)};
+        \node[logico] (mestre) at (7.4,-0.95) {Mestre Modbus RTU};
+        \node[bloco] (inv) at (11.9,-0.95) {Inversor\\ATV320};
+        \node[bloco] (mot) at (11.9,-3.4) {Motor};
+
+        \draw[enlace, <->] (srv) -- node[above, rotulo] {(1)} (sw);
+        \draw[enlace, <->] (sw) -- node[above, rotulo] {(2) Modbus TCP} (5.8,0);
+        \draw[enlace, <->] (mestre.east) -- node[above, rotulo] {(3) RS-485} (inv.west);
+        \draw[enlace] (inv) -- node[right, rotulo] {(4) Tensão\\trifásica} (mot);
+        \draw[enlace, <-] (tanque.south) -- node[right, rotulo] {frequência} (mestre.north);
+    \end{tikzpicture}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\par No segmento Ethernet, o \sigla{clp} atende o servidor como um escravo Modbus TCP. As palavras de memória (\texttt{\%MW}) e os bits de memória (\texttt{\%M}) do controlador são acessíveis ao supervisório pelos mesmos endereços numéricos, contados a partir de zero, de modo que a palavra \texttt{\%MW0} corresponde ao registrador de retenção de endereço 0 e o bit \texttt{\%M0} à bobina de endereço 0 \cite{SCHNEIDER_MACHINE_EXPERT_BASIC}. O supervisório usa as funções de leitura de registradores e bobinas para obter os valores e as funções de escrita para enviar comandos.
+
+\todo[inline]{Confirmar no guia de programação do Machine Expert Basic a correspondência entre \texttt{\%MW}/\texttt{\%M} e os endereços Modbus (base zero), as funções Modbus suportadas pelo servidor do TM221 (leitura e escrita de registradores e bobinas) e o identificador de unidade aceito.}
+
+\par No segmento serial, o \sigla{clp} utiliza os blocos de comunicação do Machine Expert Basic, \texttt{READ\_VAR} e \texttt{WRITE\_VAR}, para ler e escrever registradores do inversor. A porta SL1 é configurada como Modbus mestre, com a taxa de transmissão, a paridade e o número de bits de parada compatíveis com os do inversor. A ligação física é feita por cabo de par trançado entre o conector RJ45 do \sigla{clp} e o conector RJ45 de comunicação do inversor, ligando os terminais de dados diferenciais e a referência comum. A Figura~\ref{fig:cap6_foto_rs485} reserva o espaço para o registro dessa ligação.
+
+\todo[inline]{Confirmar nos guias de hardware do TM221 e do ATV320 a pinagem dos conectores RJ45 (D1/D+, D0/D- e comum) e a necessidade de resistores de terminação de 120 ohms e de polarização. Descrever o cabo efetivamente utilizado.}
+
+\begin{figure}[H]
+    \centering
+    \caption{Ligação serial RS-485 entre o CLP e o inversor.}
+    \label{fig:cap6_foto_rs485}
+    \espacoreservado{5cm}{0.8\textwidth}{Espaço reservado para a fotografia da ligação RS-485 (conectores RJ45 do CLP e do inversor).}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\subsection{Configuração do Inversor ATV320}
+
+\par Para que o \sigla{clp} comande o inversor, é preciso configurá-lo para aceitar o comando e a referência de frequência pela comunicação Modbus, em vez dos terminais físicos ou do painel. Isso envolve dois grupos de parâmetros. O primeiro define os parâmetros da comunicação serial, como o endereço do escravo, a taxa de transmissão e o formato do quadro. O segundo define os canais de comando e de referência, e ajusta os dados do motor e as rampas de aceleração e desaceleração. A Tabela~\ref{tab:cap6_params_atv320} lista os parâmetros previstos, com os valores propostos para a bancada.
+
+{\renewcommand{\arraystretch}{1.3}\small
+\begin{xltabular}{\textwidth}{>{\centering\arraybackslash}p{4.6cm}>{\centering\arraybackslash}p{3.6cm}>{\centering\arraybackslash}X}
+        \caption{Parâmetros propostos para o ATV320.}
+        \label{tab:cap6_params_atv320}\\
+        \hline
+        \textbf{Parâmetro} & \textbf{Valor proposto} & \textbf{Finalidade} \\
+        \hline
+        \endfirsthead
+        \hline
+        \textbf{Parâmetro} & \textbf{Valor proposto} & \textbf{Finalidade} \\
+        \hline
+        \endhead
+        \endfoot
+        \multicolumn{3}{c}{Fonte: Autor.} \\
+        \endlastfoot
+        Endereço Modbus & 2 & Identifica o inversor na rede serial \\
+        \hline
+        Taxa de transmissão Modbus & 19200 bit/s & Velocidade do enlace \sigla{rs485} \\
+        \hline
+        Formato Modbus & 8 bits, paridade par, 1 bit de parada (8E1) & Formato padrão do Modbus serial \cite{MODBUS_SERIAL_SPEC} \\
+        \hline
+        Tempo limite Modbus & 10 s & Falha de comunicação se o mestre deixar de consultar \\
+        \hline
+        Canal de comando 1 & Modbus & O comando de marcha e parada vem da rede \\
+        \hline
+        Canal de referência 1 & Modbus & A referência de frequência vem da rede \\
+        \hline
+        Rampas de aceleração e de desaceleração & 5 s & Suaviza a partida e a parada do motor \\
+        \hline
+        Frequência mínima e máxima & 0 Hz e 50 Hz & Faixa de operação da bomba \\
+        \hline
+        Dados da placa do motor & Conforme a placa & Tensão, frequência, corrente e velocidade nominais \\
+        \hline
+\end{xltabular}}
+
+\todo[inline]{Confirmar no manual de programação do ATV320 os nomes exatos e os códigos dos parâmetros da Tabela~\ref{tab:cap6_params_atv320} (menu de comunicação: endereço, taxa, formato e tempo limite do Modbus, canal de comando e canal de referência, perfil de comando), os valores padrão de fábrica e o procedimento de configuração do motor (autoajuste, se utilizado). Indicar se o perfil de comando adotado é o de entradas e saídas ou o de acionamento CiA402, e definir os valores das rampas e dos dados do motor.}
+
+\par Com o inversor configurado, o \sigla{clp} passa a interagir com ele por um pequeno conjunto de registradores, designados no manual pelos nomes \texttt{CMD} (palavra de controle), \texttt{LFR} (referência de frequência enviada pela rede), \texttt{RFR} (frequência de saída), \texttt{LCR} (corrente do motor) e \texttt{ETA} (palavra de estado) \cite{SCHNEIDER_ATV320_MODBUS_MANUAL}. A palavra de controle liga e desliga o motor e reconhece falhas, a referência define a frequência desejada, e as demais fornecem as medições e o estado. A Tabela~\ref{tab:cap6_registradores_atv320} apresenta o mapa previsto. Para reduzir o número de transações no enlace serial, a leitura dos quatro registradores consecutivos que contêm estado, frequência e corrente é feita em uma única consulta, e a escrita da palavra de controle e da referência em uma única requisição.
+
+{\renewcommand{\arraystretch}{1.3}\small
+\begin{xltabular}{\textwidth}{>{\centering\arraybackslash}p{2cm}>{\centering\arraybackslash}p{2.6cm}>{\centering\arraybackslash}p{2.2cm}>{\centering\arraybackslash}X}
+        \caption{Registradores Modbus do ATV320 utilizados (endereços a confirmar).}
+        \label{tab:cap6_registradores_atv320}\\
+        \hline
+        \textbf{Nome} & \textbf{Endereço proposto} & \textbf{Sentido} & \textbf{Descrição e unidade} \\
+        \hline
+        \endfirsthead
+        \hline
+        \textbf{Nome} & \textbf{Endereço proposto} & \textbf{Sentido} & \textbf{Descrição e unidade} \\
+        \hline
+        \endhead
+        \endfoot
+        \multicolumn{4}{c}{Fonte: Autor.} \\
+        \endlastfoot
+        \texttt{CMD} & 8501 & Escrita & Palavra de controle (marcha, parada e reconhecimento de falha) \\
+        \hline
+        \texttt{LFR} & 8502 & Escrita & Referência de frequência pela rede, em décimos de hertz \\
+        \hline
+        \texttt{ETA} & 3201 & Leitura & Palavra de estado (operação habilitada, falha) \\
+        \hline
+        \texttt{RFR} & 3202 & Leitura & Frequência de saída, em décimos de hertz \\
+        \hline
+        \texttt{LCR} & 3204 & Leitura & Corrente do motor, em décimos de ampere \\
+        \hline
+\end{xltabular}}
+
+\todo[inline]{Confirmar no manual do Modbus do ATV320 os endereços, as unidades e a escala de \texttt{CMD}, \texttt{LFR}, \texttt{ETA}, \texttt{RFR} e \texttt{LCR}, o significado de cada bit de \texttt{CMD} e de \texttt{ETA}, a sequência de valores de \texttt{CMD} para partir e parar o motor e o registrador que traz o código da última falha. Verificar também se os endereços do manual são de base zero ou de base um e se \texttt{LFR} é o registrador correto para a referência pela rede.}
+
+\par A parametrização do inversor e o ambiente de programação do controlador são os dois pontos em que a bancada depende de configuração manual. As Figuras~\ref{fig:cap6_foto_mebasic} e~\ref{fig:cap6_foto_atv320} reservam o espaço para o registro dessas telas.
+
+\begin{figure}[H]
+    \centering
+    \caption{Configuração da comunicação serial no EcoStruxure Machine Expert Basic.}
+    \label{fig:cap6_foto_mebasic}
+    \espacoreservado{5.5cm}{0.85\textwidth}{Espaço reservado para a captura de tela do Machine Expert Basic (configuração da porta SL1 como Modbus mestre e do programa do CLP).}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \caption{Parametrização do inversor ATV320.}
+    \label{fig:cap6_foto_atv320}
+    \espacoreservado{5.5cm}{0.85\textwidth}{Espaço reservado para a fotografia do display do inversor ou captura do software de configuração mostrando os parâmetros de comunicação.}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\subsection{Programa do Controlador}
+
+\par O programa do \sigla{clp} executa, a cada ciclo, quatro funções encadeadas. A primeira é a comunicação com o inversor, que lê estado, frequência e corrente e escreve a palavra de controle e a referência. A segunda é a lógica de comando, que traduz as solicitações do supervisório em ações sobre o inversor. A terceira é o modelo do tanque, que calcula o nível a partir da frequência lida. A quarta é a publicação dos resultados nas posições de memória que o supervisório consulta. A Figura~\ref{fig:cap6_blocos_clp} mostra o fluxo de informações entre esses blocos e as áreas de memória acessíveis pelo Modbus TCP.
+
+\begin{figure}[H]
+    \centering
+    \caption{Blocos funcionais do programa do CLP.}
+    \label{fig:cap6_blocos_clp}
+    \vspace{0.4cm}
+    \begin{tikzpicture}[
+        bloco/.style={draw, rectangle, rounded corners=2pt, minimum height=1.1cm, minimum width=3.4cm, align=center, font=\small},
+        mem/.style={draw, rectangle, minimum height=1.1cm, minimum width=3.4cm, align=center, font=\small, fill=black!5},
+        fluxo/.style={->, thick},
+        rotulo/.style={font=\scriptsize, align=center}
+    ]
+        \node[mem] (cmd) at (0,2.6) {Memória de comando\\\texttt{\%M0}, \texttt{\%MW3}};
+        \node[bloco] (logica) at (5.2,2.6) {Lógica de comando};
+        \node[bloco] (com) at (10.4,2.6) {Comunicação\\com o inversor};
+        \node[bloco] (tanque) at (5.2,0) {Modelo do tanque};
+        \node[mem] (pub) at (0,0) {Memória de leitura\\\texttt{\%MW0} a \texttt{\%MW2}\\\texttt{\%M1}, \texttt{\%M2}};
+        \node[bloco] (inv) at (10.4,0) {Inversor ATV320};
+
+        \draw[fluxo] (cmd) -- node[above, rotulo] {(1)} (logica);
+        \draw[fluxo] (logica) -- node[above, rotulo] {(2)} (com);
+        \draw[fluxo, <->] (com) -- node[right, rotulo] {(3)} (inv);
+        \draw[fluxo] (com.south west) -- node[above, rotulo, sloped] {(4) frequência} (tanque.north east);
+        \draw[fluxo] (tanque) -- node[above, rotulo] {(5) nível} (pub);
+    \end{tikzpicture}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\par O supervisório escreve o comando liga/desliga e a referência de frequência na memória do controlador (1). A lógica de comando lê essas posições e decide o que enviar ao inversor (2). O bloco de comunicação transfere a palavra de controle e a referência ao inversor e traz de volta o estado, a frequência e a corrente (3). A frequência medida alimenta o modelo do tanque (4), que calcula o nível e o publica, junto com as demais grandezas, nas posições de leitura (5). O supervisório, por fim, consulta essas posições em seu ciclo de aquisição.
+
+\par A lógica de comando segue uma regra de prioridade conservadora. A partida só é efetivada quando não há falha ativa no inversor e quando a comunicação serial está íntegra. Se o inversor sinaliza falha, o bit de falha é ativado e o comando de marcha é ignorado até que a falha seja reconhecida. Se o bloco de comunicação deixa de obter resposta do inversor por mais de um número de ciclos configurável, o \sigla{clp} ativa um bit de falha de comunicação serial e envia o comando de parada. Esse comportamento evita que um erro de comunicação deixe o motor funcionando sem supervisão.
+
+\par A Tabela~\ref{tab:cap6_memoria_clp} reúne o mapa de memória proposto, com os endereços acessíveis ao supervisório e as áreas internas de troca com o inversor. Os valores analógicos são mantidos como inteiros em décimos de unidade, o que evita o uso de números de ponto flutuante e simplifica a leitura pelo supervisório, que reconstrói o valor de engenharia por uma escala linear.
+
+{\renewcommand{\arraystretch}{1.3}\small
+\begin{xltabular}{\textwidth}{>{\centering\arraybackslash}p{3.4cm}>{\centering\arraybackslash}p{2.2cm}>{\centering\arraybackslash}X}
+        \caption{Mapa de memória proposto para o CLP.}
+        \label{tab:cap6_memoria_clp}\\
+        \hline
+        \textbf{Endereço} & \textbf{Tipo} & \textbf{Conteúdo} \\
+        \hline
+        \endfirsthead
+        \hline
+        \textbf{Endereço} & \textbf{Tipo} & \textbf{Conteúdo} \\
+        \hline
+        \endhead
+        \endfoot
+        \multicolumn{3}{c}{Fonte: Autor.} \\
+        \endlastfoot
+        \texttt{\%M0} & Bit & Comando liga/desliga escrito pelo supervisório \\
+        \hline
+        \texttt{\%M1} & Bit & Estado da bomba (1 quando o motor está em marcha) \\
+        \hline
+        \texttt{\%M2} & Bit & Falha do inversor \\
+        \hline
+        \texttt{\%M3} & Bit & Falha de comunicação serial com o inversor \\
+        \hline
+        \texttt{\%MW0} & Palavra & Nível do tanque, em décimos de por cento \\
+        \hline
+        \texttt{\%MW1} & Palavra & Frequência de saída, em décimos de hertz \\
+        \hline
+        \texttt{\%MW2} & Palavra & Corrente do motor, em décimos de ampere \\
+        \hline
+        \texttt{\%MW3} & Palavra & Referência de frequência escrita pelo supervisório, em décimos de hertz \\
+        \hline
+        \texttt{\%MW10} a \texttt{\%MW13} & Palavras & Área de leitura do inversor (estado, frequência, frequência interna e corrente) \\
+        \hline
+        \texttt{\%MW20} e \texttt{\%MW21} & Palavras & Área de escrita no inversor (palavra de controle e referência) \\
+        \hline
+\end{xltabular}}
+
+\todo[inline]{Confirmar a viabilidade do mapa de memória no Machine Expert Basic (limites de \texttt{\%MW} e \texttt{\%M}, endereços retentivos e necessidade de declarar as áreas de memória como acessíveis à rede). Informar a configuração dos blocos \texttt{READ\_VAR} e \texttt{WRITE\_VAR} (endereço do escravo, tipo e quantidade de objetos, tempo limite, gerenciamento da mensagem) efetivamente usada e o tempo de ciclo medido.}
+
+\subsection{Modelo do Tanque Simulado}
+
+\par O nível do reservatório é calculado por um integrador discreto, executado uma vez a cada período de amostragem. Em cada período, o nível aumenta em proporção à vazão de entrada, que depende da frequência de saída do inversor, e diminui em proporção à vazão de saída, tomada como constante. A frequência é a medida real, lida do inversor, de modo que o modelo reage ao comando de partida, à referência e à parada exatamente como reagiria uma bomba real. Esse tratamento representa uma bomba centrífuga em primeira aproximação, em que a vazão cresce com a rotação do motor, e se justifica pela finalidade da bancada, que é exercitar o supervisório e não reproduzir com fidelidade a hidráulica de um sistema específico.
+
+\par Seja $h[k]$ o nível no instante $k$, em porcentagem da capacidade do tanque, $T_\text{s}$ o período de amostragem, em segundos, $f[k]$ a frequência de saída do inversor, em hertz, e $b[k]$ o estado da bomba, igual a 1 quando o motor está em marcha e a 0 quando está parado. A vazão de entrada, expressa em porcentagem da capacidade por segundo, é proporcional à frequência.
+
+\myequation{q_\text{e}[k] = k_\text{q} \cdot f[k] \cdot b[k]}{eq:cap6_vazao_entrada}{Vazão de entrada do tanque simulado}{\%/\text{s}}
+
+\par Nessa expressão, $k_\text{q}$ é o coeficiente de vazão, em porcentagem por segundo e por hertz. A vazão de saída $q_\text{s}$ é uma constante, que representa o consumo do reservatório. O nível no instante seguinte é o nível atual somado à variação líquida no período, limitado entre 0 e 100 por cento, que correspondem ao tanque vazio e ao tanque cheio.
+
+\myequation{h[k+1] = \min\left\{100,\ \max\left\{0,\ h[k] + T_\text{s} \cdot \left(q_\text{e}[k] - q_\text{s}\right)\right\}\right\}}{eq:cap6_nivel}{Equação de diferença do nível do tanque simulado}{\%}
+
+\par O limite inferior impede que o nível se torne negativo quando a bomba está parada e o tanque esvazia, e o limite superior representa o extravasamento, em que o excesso de água é perdido. Em regime, com a bomba ligada a uma frequência constante, o nível varia linearmente com o tempo. O tempo necessário para o nível passar de um valor inicial $h_1$ a um valor final $h_2$ é dado pela razão entre a variação de nível e a vazão líquida.
+
+\myequation{t = \frac{h_2 - h_1}{k_\text{q} \cdot f - q_\text{s}}}{eq:cap6_tempo_enchimento}{Tempo para variar o nível entre dois valores com a bomba ligada}{\text{s}}
+
+\par Para ilustrar o cálculo, adotam-se parâmetros que fazem o enchimento durar alguns minutos, tempo adequado para observação na tela. O período de amostragem é de 1 segundo, o coeficiente é $k_\text{q} = 0{,}025\,\%/(\text{s}\cdot\text{Hz})$ e a vazão de saída é $q_\text{s} = 0{,}4\,\%/\text{s}$. O nível inicial é de 20 por cento e a bomba é ligada com a frequência de 40 hertz. Pela Equação~\ref{eq:cap6_vazao_entrada}, a vazão de entrada vale:
+
+\begin{align*}
+    q_\text{e} &= 0{,}025 \cdot 40 \cdot 1 = 1{,}0\,\%/\text{s}
+\end{align*}
+
+\par A vazão líquida é a diferença entre as vazões, igual a $1{,}0 - 0{,}4 = 0{,}6\,\%/\text{s}$, de modo que, em cada período de 1 segundo, o nível sobe $0{,}6$ ponto percentual. Aplicando a Equação~\ref{eq:cap6_nivel} nos três primeiros ciclos, obtém-se:
+
+\begin{align*}
+    h[1] &= 20{,}0 + 1 \cdot (1{,}0 - 0{,}4) = 20{,}6\,\% \\
+    h[2] &= 20{,}6 + 1 \cdot (1{,}0 - 0{,}4) = 21{,}2\,\% \\
+    h[3] &= 21{,}2 + 1 \cdot (1{,}0 - 0{,}4) = 21{,}8\,\%
+\end{align*}
+
+\par Suponha que a bomba seja desligada neste instante, de modo que $f[3] = 0$ e $b[3] = 0$ e a vazão de entrada se anule. O nível passa a decrescer com a vazão de saída de $0{,}4\,\%/\text{s}$:
+
+\begin{align*}
+    h[4] &= 21{,}8 + 1 \cdot (0 - 0{,}4) = 21{,}4\,\% \\
+    h[5] &= 21{,}4 + 1 \cdot (0 - 0{,}4) = 21{,}0\,\%
+\end{align*}
+
+\par Os tempos característicos do ciclo completo seguem da Equação~\ref{eq:cap6_tempo_enchimento}. Com a bomba a 40 hertz, o nível leva $(100 - 20)/0{,}6 \approx 133{,}3$ segundos para ir de 20 a 100 por cento e $(90 - 20)/0{,}6 \approx 116{,}7$ segundos para alcançar 90 por cento, que é o limite do alarme de nível alto adotado a seguir. Com a bomba parada, o esvaziamento de 100 a 20 por cento leva $(100 - 20)/0{,}4 = 200$ segundos. O efeito do limite superior também é visível. Se o nível for de $99{,}8$ por cento e a bomba continuar ligada a 40 hertz, o cálculo bruto resultaria em $99{,}8 + 0{,}6 = 100{,}4$, e o limitador mantém o nível em 100 por cento.
+
+\par Como o controlador opera com inteiros, a implementação trabalha com o nível em décimos de por cento e com a frequência em décimos de hertz. Com esses valores, a vazão de entrada, em décimos de por cento por segundo, é igual à frequência em décimos de hertz dividida por 40, e a vazão de saída vale 4. Assim, com $F = 400$ (40 hertz), a vazão de entrada vale 10 e a variação líquida por ciclo vale 6 décimos, o que reproduz o exemplo.
+
+\par A Figura~\ref{fig:cap6_curva_nivel} mostra o nível calculado pela própria equação em um ciclo completo de liga e desliga. A bomba é ligada em $t = 0$ com o tanque em 20 por cento, o nível sobe até saturar em 100 por cento em $t \approx 133{,}3$ segundos, a bomba é desligada em $t = 150$ segundos e o tanque esvazia até retornar a 20 por cento em $t = 350$ segundos. As linhas tracejadas indicam os limites dos alarmes.
+
+\begin{figure}[H]
+    \centering
+    \caption{Nível simulado em um ciclo de liga e desliga da bomba a 40 Hz.}
+    \label{fig:cap6_curva_nivel}
+    \vspace{0.4cm}
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=0.9\textwidth,
+            height=7cm,
+            xlabel={Tempo (s)},
+            ylabel={Nível (\%)},
+            xmin=0, xmax=360,
+            ymin=0, ymax=110,
+            xtick={0,50,100,150,200,250,300,350},
+            ytick={0,10,20,40,60,80,90,100},
+            grid=both,
+            legend pos=south east,
+            legend style={font=\footnotesize}
+        ]
+            \addplot[thick, blue] coordinates {(0,20) (133.33,100) (150,100) (350,20)};
+            \addlegendentry{Nível}
+            \addplot[dashed, red] coordinates {(0,90) (360,90)};
+            \addlegendentry{Limite de nível alto (90\%)}
+            \addplot[dashed, orange] coordinates {(0,10) (360,10)};
+            \addlegendentry{Limite de nível baixo (10\%)}
+            \addplot[dotted, black] coordinates {(150,0) (150,110)};
+            \addlegendentry{Desligamento da bomba}
+        \end{axis}
+    \end{tikzpicture}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\par Os parâmetros $k_\text{q}$ e $q_\text{s}$ podem ser alterados no programa do controlador sem qualquer modificação no supervisório, o que permite acelerar ou retardar o enchimento conforme a necessidade de cada ensaio.
+
+\todo[inline]{Confirmar com o autor os valores definitivos de $k_\text{q}$, $q_\text{s}$, o período de amostragem de 1 segundo (tarefa periódica do CLP) e a frequência de operação dos ensaios. Se o programa final usar valores diferentes, refazer o exemplo numérico e o gráfico.}
+
+\subsection{Configuração no Movi}
+
+\par O cadastro da bancada no supervisório segue a hierarquia do sistema: cliente, planta, dispositivo de entrada e saída e tags. Todo o cadastro é feito pela interface web, por um usuário com o cargo de administrador do cliente, sem alteração de código, o que valida o requisito de inclusão de novos pontos com o sistema em operação. O cliente representa a organização, neste caso o instituto, e é criado por um administrador da plataforma, que também provisiona o banco de dados próprio do cliente.
+
+\par A planta, que organiza os dispositivos e é o pino do mapa, recebe o nome da bancada e as coordenadas de latitude e longitude do local. O dispositivo de entrada e saída corresponde ao \sigla{clp} e é do tipo Modbus TCP, com endereço \sigla{ip} do controlador na rede local, porta 502, identificador de unidade (\emph{unit ID}) igual ao configurado no controlador e os tempos limite e o número de tentativas padrão do sistema. A Tabela~\ref{tab:cap6_cadastro} resume esse cadastro.
+
+{\renewcommand{\arraystretch}{1.3}\small
+\begin{xltabular}{\textwidth}{>{\centering\arraybackslash}p{4.2cm}>{\centering\arraybackslash}X}
+        \caption{Cadastro da bancada no Movi.}
+        \label{tab:cap6_cadastro}\\
+        \hline
+        \textbf{Item} & \textbf{Valor proposto} \\
+        \hline
+        \endfirsthead
+        \hline
+        \textbf{Item} & \textbf{Valor proposto} \\
+        \hline
+        \endhead
+        \endfoot
+        \multicolumn{2}{c}{Fonte: Autor.} \\
+        \endlastfoot
+        Cliente & Nome do instituto (a definir) \\
+        \hline
+        Planta & Bancada de bombeamento \\
+        \hline
+        Coordenadas da planta & Latitude e longitude do instituto (a conferir) \\
+        \hline
+        Dispositivo de E/S & \sigla{clp} TM221, protocolo Modbus TCP \\
+        \hline
+        Endereço \sigla{ip} e porta & Endereço do \sigla{clp} na rede local (a definir), porta 502 \\
+        \hline
+        Identificador de unidade & Valor aceito pelo TM221, por exemplo 1 (a confirmar) \\
+        \hline
+        Tempo limite e tentativas & Padrões do sistema (1000 ms e 2 tentativas) \\
+        \hline
+\end{xltabular}}
+
+\todo[inline]{Preencher a Tabela~\ref{tab:cap6_cadastro}: nome do cliente, latitude e longitude do instituto (conferir no mapa), endereço IP do CLP e identificador de unidade efetivamente usado.}
+
+\par As tags representam as variáveis monitoradas e comandadas. Cada uma carrega o mapeamento Modbus (tipo de registrador e endereço), o tipo bruto do dado, a escala de conversão para a unidade de engenharia e o período de varredura. Como os valores analógicos do controlador são inteiros em décimos, a escala linear leva, por exemplo, o intervalo bruto de 0 a 1000 ao intervalo de engenharia de 0 a 100 por cento, no caso do nível. A Tabela~\ref{tab:cap6_tags} apresenta as sete tags previstas.
+
+{\renewcommand{\arraystretch}{1.3}\small
+\begin{xltabular}{\textwidth}{>{\centering\arraybackslash}p{2.6cm}>{\centering\arraybackslash}p{2.8cm}>{\centering\arraybackslash}p{2.3cm}>{\centering\arraybackslash}p{1.7cm}>{\centering\arraybackslash}X>{\centering\arraybackslash}p{1.6cm}}
+        \caption{Tags cadastradas no Movi para a bancada (endereços propostos).}
+        \label{tab:cap6_tags}\\
+        \hline
+        \textbf{Nome} & \textbf{Endereço Modbus} & \textbf{Tipo bruto} & \textbf{Unidade} & \textbf{Formato e escala} & \textbf{Período} \\
+        \hline
+        \endfirsthead
+        \hline
+        \textbf{Nome} & \textbf{Endereço Modbus} & \textbf{Tipo bruto} & \textbf{Unidade} & \textbf{Formato e escala} & \textbf{Período} \\
+        \hline
+        \endhead
+        \endfoot
+        \multicolumn{6}{c}{Fonte: Autor.} \\
+        \endlastfoot
+        Nível do tanque & Registrador de retenção 0 (\texttt{\%MW0}) & Inteiro 16 bits sem sinal & \% & Analógico, 0 a 1000 em 0 a 100 & 1 s \\
+        \hline
+        Frequência de saída & Registrador de retenção 1 (\texttt{\%MW1}) & Inteiro 16 bits sem sinal & Hz & Analógico, 0 a 500 em 0 a 50 & 1 s \\
+        \hline
+        Corrente do motor & Registrador de retenção 2 (\texttt{\%MW2}) & Inteiro 16 bits sem sinal & A & Analógico, 0 a 200 em 0 a 20 (faixa a confirmar) & 1 s \\
+        \hline
+        Estado da bomba & Bobina 1 (\texttt{\%M1}) & Digital & n/a & Simples, 0 desligada e 1 ligada & 1 s \\
+        \hline
+        Comando liga/desliga & Bobina 0 (\texttt{\%M0}) & Digital, leitura e escrita & n/a & Simples & 1 s \\
+        \hline
+        Referência de frequência & Registrador de retenção 3 (\texttt{\%MW3}) & Inteiro 16 bits sem sinal, leitura e escrita & Hz & Analógico, 0 a 500 em 0 a 50 & 5 s \\
+        \hline
+        Falha do inversor & Bobina 2 (\texttt{\%M2}) & Digital & n/a & Simples, 0 normal e 1 em falha & 1 s \\
+        \hline
+\end{xltabular}}
+
+\todo[inline]{Confirmar os endereços da Tabela~\ref{tab:cap6_tags} depois de fechado o mapa de memória do CLP e a faixa de corrente conforme o motor. Conferir o período mínimo de varredura aceito pelo sistema (500 ms) e se a tag de comando admite período diferente de 1 s.}
+
+\par A tag de comando liga/desliga e a de referência de frequência têm acesso de leitura e escrita, e é por elas que o operador atua sobre a bancada. A escrita passa pelo fluxo de comando em quatro fases do sistema, composto por seleção, verificação, confirmação e execução, o que protege o processo de acionamentos acidentais. Como o supervisório considera o comando bem-sucedido quando recebe a resposta do controlador à escrita, sem releitura, a confirmação do efeito real é feita pela leitura posterior do estado da bomba e da frequência, que reflete o que o inversor de fato executou.
+
+\par Dois alarmes são configurados sobre a tag do nível. O alarme de nível alto é disparado quando o nível ultrapassa 90 por cento, com o nível de severidade Crítico, pois o risco é o de transbordamento do reservatório. O alarme de nível baixo é disparado quando o nível cai abaixo de 10 por cento, com o nível de severidade Alto, pois indica a aproximação de uma condição de falta de água. Cada alarme é construído sobre um evento de comparação de tag, com o operador e o valor de disparo, e uma banda morta para evitar disparos repetidos por pequenas oscilações em torno do limite. Quando disparados, os alarmes aparecem no indicador de alarmes do cabeçalho e na lista de alarmes, onde podem ser reconhecidos pelo operador.
+
+\todo[inline]{Confirmar a associação entre severidades e limites (nível alto Crítico e nível baixo Alto, conforme proposto) e os valores da banda morta. Registrar o nome exato dos eventos e dos alarmes criados.}
+
+\par As telas de supervisão completam a configuração. O sinótico representa o tanque como um reservatório cujo preenchimento acompanha o valor do nível, a bomba por um símbolo cuja cor indica o estado de marcha, e a frequência e a corrente por indicadores numéricos. O símbolo da bomba é o ponto de comando, a partir do qual se abre o diálogo de quatro fases para ligar e desligar. O \emph{dashboard} reúne um gráfico de linha com o nível e a frequência ao longo do tempo, um medidor do nível atual e o indicador de estado da bomba. A lista de acompanhamento mostra, em uma única tabela, as sete tags com seus valores e a qualidade da leitura. A Figura~\ref{fig:cap6_telas_movi} reserva o espaço para as capturas dessas telas.
+
+\begin{figure}[H]
+    \centering
+    \caption{Telas de supervisão da bancada no Movi.}
+    \label{fig:cap6_telas_movi}
+    \espacoreservado{6cm}{0.85\textwidth}{Espaço reservado para as capturas do sinótico do tanque com a bomba e do \emph{dashboard} com o gráfico de nível e frequência.}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\todo[inline]{Montar o sinótico, o dashboard e a lista de acompanhamento no Movi e inserir as capturas em Imagens/Desenvolvimento/Cap5/. Descrever o desenho do sinótico efetivamente criado (objetos, vínculos de animação e cores).}
+
+\subsection{Roteiro de Ensaios}
+
+\par Os ensaios foram planejados para exercitar, em sequência, as funções centrais do supervisório sobre a bancada: leitura contínua, comando, acompanhamento de um processo dinâmico, sinalização e reconhecimento de alarmes, tratamento de falha de comunicação e alteração de parâmetro em operação. A Tabela~\ref{tab:cap6_ensaios} resume o conjunto. Cada ensaio é detalhado a seguir, com o objetivo, o procedimento, o comportamento esperado na tela e um espaço reservado para a evidência e o resultado, que são relatados no capítulo seguinte.
+
+{\renewcommand{\arraystretch}{1.3}\small
+\begin{xltabular}{\textwidth}{>{\centering\arraybackslash}p{1.4cm}>{\centering\arraybackslash}p{5.4cm}>{\centering\arraybackslash}X}
+        \caption{Resumo dos ensaios da bancada.}
+        \label{tab:cap6_ensaios}\\
+        \hline
+        \textbf{Ensaio} & \textbf{Descrição} & \textbf{Funcionalidade exercitada} \\
+        \hline
+        \endfirsthead
+        \hline
+        \textbf{Ensaio} & \textbf{Descrição} & \textbf{Funcionalidade exercitada} \\
+        \hline
+        \endhead
+        \endfoot
+        \multicolumn{3}{c}{Fonte: Autor.} \\
+        \endlastfoot
+        E1 & Leitura contínua com a bomba desligada & Aquisição periódica e exibição de valores \\
+        \hline
+        E2 & Partida pelo supervisório e enchimento & Comando em quatro fases e acompanhamento em gráfico \\
+        \hline
+        E3 & Parada e esvaziamento & Comando de parada e histórico \\
+        \hline
+        E4 & Alarme de nível alto e reconhecimento & Detecção de evento, alarme e reconhecimento \\
+        \hline
+        E5 & Perda de comunicação e retorno & Detecção de falha de comunicação e recuperação \\
+        \hline
+        E6 & Troca de referência de frequência & Escrita de valor analógico e reação do processo \\
+        \hline
+\end{xltabular}}
+
+\subsubsection{E1: Leitura Contínua com a Bomba Desligada}
+
+\par O objetivo é verificar que o sistema adquire periodicamente as variáveis da bancada e as exibe corretamente quando o processo está em repouso. Com o \sigla{clp} ligado, o inversor energizado e a bomba desligada, o ensaio consiste em abrir a lista de acompanhamento e o sinótico e observar os valores durante alguns minutos. Espera-se ver o nível estável ou em lento decréscimo, conforme a vazão de saída, a frequência e a corrente nulas e o estado da bomba como desligada, todos com qualidade boa e atualização no período de varredura de 1 segundo. O histórico deve registrar os pontos no mesmo ritmo.
+
+\begin{center}
+\espacoreservado{4cm}{0.85\textwidth}{Espaço reservado para a captura da lista de acompanhamento e do sinótico no ensaio E1.}
+\end{center}
+
+\todo[inline]{E1: inserir a captura de tela, o horário, a duração da observação e o resultado (valores lidos, taxa de atualização observada e eventuais falhas).}
+
+\subsubsection{E2: Partida pelo Supervisório e Enchimento}
+
+\par O objetivo é validar o comando de partida e o acompanhamento de um processo dinâmico. O operador define a referência de frequência em 40 hertz e liga a bomba pelo diálogo de comando, que percorre as quatro fases e exige confirmação. O \sigla{clp} repassa o comando ao inversor, o motor parte seguindo a rampa de aceleração e o nível do tanque passa a subir. Espera-se que o símbolo da bomba mude de cor ao indicar a marcha, que a frequência e a corrente subam até o valor de regime, que o nível suba com a inclinação prevista pela Equação~\ref{eq:cap6_nivel} (cerca de 0,6 ponto percentual por segundo) e que o gráfico do \emph{dashboard} mostre o enchimento. Mede-se o intervalo entre a confirmação do comando e a mudança de estado na tela.
+
+\begin{center}
+\espacoreservado{4cm}{0.85\textwidth}{Espaço reservado para a captura do diálogo de comando e da tela durante o enchimento no ensaio E2.}
+\end{center}
+
+\todo[inline]{E2: inserir as capturas, o intervalo medido entre o comando e a resposta na tela, a inclinação do nível observada (comparar com 0,6 ponto percentual por segundo) e a corrente em regime.}
+
+\subsubsection{E3: Parada e Esvaziamento}
+
+\par O objetivo é validar o comando de parada e o comportamento do processo após ele. Com o tanque em nível intermediário e a bomba ligada, o operador a desliga pelo supervisório. O motor desacelera pela rampa até parar, a frequência e a corrente caem a zero e o nível passa a decrescer com a vazão de saída, de $0{,}4\,\%/\text{s}$. Espera-se que a tela reflita o estado de bomba desligada, que o gráfico mostre a mudança de inclinação do nível no instante da parada e que o histórico preserve toda a trajetória, que pode ser consultada posteriormente na tela de tendência.
+
+\begin{center}
+\espacoreservado{4cm}{0.85\textwidth}{Espaço reservado para a captura do gráfico de tendência com a curva de enchimento e esvaziamento no ensaio E3.}
+\end{center}
+
+\todo[inline]{E3: inserir a captura do gráfico de tendência, a taxa de queda do nível observada e o tempo de parada do motor.}
+
+\subsubsection{E4: Alarme de Nível Alto e Reconhecimento}
+
+\par O objetivo é verificar a detecção da condição de nível alto, a sinalização do alarme e o seu reconhecimento. O ensaio parte de um nível próximo de 80 por cento com a bomba ligada. O operador mantém a bomba em marcha até que o nível ultrapasse 90 por cento. Espera-se que, ao cruzar o limite, o alarme de nível alto seja gerado com a severidade Crítico, apareça no indicador de alarmes do cabeçalho e na lista de alarmes, e que, depois de o operador desligar a bomba e o nível voltar abaixo do limite descontada a banda morta, o alarme retorne ao estado normal. Registra-se também o reconhecimento do alarme pelo operador, com a identificação de quem o realizou e o horário.
+
+\begin{center}
+\espacoreservado{4cm}{0.85\textwidth}{Espaço reservado para a captura da lista de alarmes com o alarme de nível alto ativo e reconhecido no ensaio E4.}
+\end{center}
+
+\todo[inline]{E4: inserir as capturas do alarme ativo e reconhecido, o instante do disparo, o valor de nível no disparo e o tempo entre o cruzamento do limite e a sinalização na tela.}
+
+\subsubsection{E5: Perda de Comunicação e Retorno}
+
+\par O objetivo é verificar como o sistema trata a perda do enlace com o equipamento de campo e a sua recuperação. Com a bancada em operação normal, desconecta-se o cabo Ethernet entre o switch e o \sigla{clp}. Espera-se que o supervisório detecte a falha de comunicação depois das tentativas configuradas, que o dispositivo passe a ser exibido como sem comunicação, que os valores deixem de ser atualizados e sejam sinalizados como desatualizados, e que o evento de falha de comunicação do dispositivo seja registrado. Ao reconectar o cabo, espera-se que a aquisição retome sozinha, que o estado volte a comunicando e que os valores voltem a ser atualizados, sem intervenção do operador. Observa-se também que, durante a falha, o \sigla{clp} continua executando o seu programa e o nível simulado continua evoluindo, o que se evidencia ao comparar o valor ao retorno com o último valor exibido.
+
+\begin{center}
+\espacoreservado{4cm}{0.85\textwidth}{Espaço reservado para a captura da tela com o dispositivo sem comunicação e, depois, com a comunicação restabelecida no ensaio E5.}
+\end{center}
+
+\todo[inline]{E5: inserir as capturas, o tempo até a detecção da falha, o tempo até a retomada após a reconexão e o comportamento do histórico durante a lacuna.}
+
+\subsubsection{E6: Troca de Referência de Frequência}
+
+\par O objetivo é validar a escrita de um valor analógico em operação e a reação do processo. Com a bomba ligada a 40 hertz, o operador altera a referência para 30 hertz, pelo mesmo diálogo de quatro fases. O inversor ajusta a velocidade do motor segundo a rampa e a vazão de entrada do modelo diminui. Com $f = 30$ hertz, a vazão de entrada passa a $0{,}025 \cdot 30 = 0{,}75\,\%/\text{s}$ e a vazão líquida a $0{,}75 - 0{,}4 = 0{,}35\,\%/\text{s}$. Espera-se que a frequência e a corrente na tela acompanhem a nova referência e que a inclinação da curva do nível diminua de 0,6 para 0,35 ponto percentual por segundo, o que confirma que a escrita chegou ao inversor e produziu o efeito esperado.
+
+\begin{center}
+\espacoreservado{4cm}{0.85\textwidth}{Espaço reservado para a captura do gráfico de nível e frequência antes e depois da troca de referência no ensaio E6.}
+\end{center}
+
+\todo[inline]{E6: inserir a captura, os valores de frequência antes e depois, a corrente em cada regime e a inclinação do nível medida (comparar com 0,35 ponto percentual por segundo).}
+
+\par Com o roteiro definido e a bancada configurada, o capítulo seguinte apresenta os resultados obtidos em cada ensaio e a discussão a respeito do desempenho do sistema.
