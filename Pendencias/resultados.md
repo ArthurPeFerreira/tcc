@@ -12,5 +12,5 @@ Nenhuma nova (usadas: DOCKER_DOCS, POSTGRESQL_DOCS, REDIS_DOCS, ARGON2_RFC9106, 
 
 ## Para o integrador
 
-- A Tabela de validação usa RF01 a RF14 e RNF01 a RNF10: conferir contra o Capítulo 3 reescrito.
-- Os ensaios E1 a E6 foram definidos a partir do pedido, com o Capítulo 6 ainda vazio: conferir contra ele.
+- A Tabela de validação usa RF01 a RF19 e RNF01 a RNF13 (Capítulo 3 de 16/10/2026).
+- Os ensaios E1 a E6 foram definidos a partir do pedido, alinhados ao Capítulo 6 de 16/10/2026.

@@ -90,7 +90,7 @@
 
 \subsubsection{Cadastro de clientes e custo da autenticação}
 
-\par O sistema é multi-tenant com banco próprio por cliente, e por isso a criação de um cliente envolve criar o banco, aplicar o esquema e cadastrar os dados iniciais, tudo num trabalho assíncrono retomável. Mediu-se o tempo entre o pedido de criação e o banco pronto para uso. Com o sistema aquecido, o processo levou 1,7 s e, na primeira criação de um cliente, que inclui o ensaio da migração com reversão, levou 3,4 s. O aplicador de migrações sozinho levou de 0,36 a 0,54 s. Esses valores sustentam o requisito de infraestrutura de dados que cresce sob demanda (RNF03), pois a entrada de um novo cliente não exige intervenção manual nem espera perceptível.
+\par O sistema é multi-tenant com banco próprio por cliente, e por isso a criação de um cliente envolve criar o banco, aplicar o esquema e cadastrar os dados iniciais, tudo num trabalho assíncrono retomável. Mediu-se o tempo entre o pedido de criação e o banco pronto para uso. Com o sistema aquecido, o processo levou 1,7 s e, na primeira criação de um cliente, que inclui o ensaio da migração com reversão, levou 3,4 s. O aplicador de migrações sozinho levou de 0,36 a 0,54 s. Esses valores sustentam o requisito de banco próprio por cliente, criado de forma automática (RF12), pois a entrada de um novo cliente não exige intervenção manual nem espera perceptível.
 
 \par A exclusão de um cliente é a operação inversa e mais cara. O comando que remove o banco com desconexão forçada levou de 5 a 18 s na pilha local anterior, tempo dominado pelo ponto de verificação do banco. A limpeza das chaves do cliente no Redis usa uma varredura incremental cujo custo cresce com o total de chaves da instância e não com as chaves do cliente, com cerca de 15 ms para 500 chaves, de 0,08 a 0,37 s para 20 mil e de 0,56 a 1,4 s para 100 mil. Como a exclusão roda em segundo plano e não bloqueia as telas, esses tempos são aceitáveis, mas indicam que a limpeza deve ser repensada se o Redis for compartilhado por muitos clientes. Na campanha de capacidade, a exclusão de clientes de teste ficou em execução por horas sem terminar, achado registrado e ainda sem causa comprovada, o que a seção de limitações retoma.
 
@@ -156,15 +156,15 @@
         \hline
 \end{xltabular}}
 
-\par A pontuação de acessibilidade em 100 indica que o teste automático não encontrou violação das diretrizes \sigla{wcag}, o que não substitui a conferência com leitor de tela e com a navegação por teclado, que ficou como risco aceito. A pontuação de \emph{SEO} em 54 é esperada e não representa defeito, porque a área autenticada é marcada como não indexável por decisão de projeto. A medição foi feita com outras atividades pesadas no mesmo computador, de modo que os valores tendem a ser conservadores. As medidas dão suporte ao requisito de acesso por navegador sem instalação (RNF10) e ao de exibição das telas de supervisão (RF12).
+\par A pontuação de acessibilidade em 100 indica que o teste automático não encontrou violação das diretrizes \sigla{wcag}, o que não substitui a conferência com leitor de tela e com a navegação por teclado, que ficou como risco aceito. A pontuação de \emph{SEO} em 54 é esperada e não representa defeito, porque a área autenticada é marcada como não indexável por decisão de projeto. A medição foi feita com outras atividades pesadas no mesmo computador, de modo que os valores tendem a ser conservadores. As medidas dão suporte ao requisito de acesso por navegador sem instalação (RNF13) e ao de exibição das telas de supervisão (RF15 e RF16).
 
 \todo[inline]{As medianas vêm do registro de 15/10/2026 (madrugada) e o piso consta no CLAUDE.md do código com data de 14/10/2026. Confirmar qual data deve aparecer no texto e se vale citar o INP, que o Lighthouse não mede em modo de navegação.}
 
-\par Além da pontuação geral, mediu-se o custo de atualizar uma tela de sinótico com muitos objetos. Uma tela de teste com 200 objetos, 120 vínculos entre objetos e tags e 506 nós gráficos foi mantida aberta por 60 s com dez tags que mudavam a cada ciclo. Nenhuma tarefa longa, isto é, nenhuma tarefa de mais de 50 ms na \emph{thread} principal, foi registrada. O tempo para aplicar um ciclo de valores, medido do fim da resposta até a última alteração na árvore da página, teve mediana de 6 ms e percentil 95 de 8 ms, abaixo do orçamento de 16 ms, que corresponde a um quadro de uma tela de 60 quadros por segundo. Esse resultado mostra que o ritmo de atualização por \emph{polling} curto não degrada a interface e sustenta o requisito de telas de tempo real com baixa latência (RNF01) do lado do cliente.
+\par Além da pontuação geral, mediu-se o custo de atualizar uma tela de sinótico com muitos objetos. Uma tela de teste com 200 objetos, 120 vínculos entre objetos e tags e 506 nós gráficos foi mantida aberta por 60 s com dez tags que mudavam a cada ciclo. Nenhuma tarefa longa, isto é, nenhuma tarefa de mais de 50 ms na \emph{thread} principal, foi registrada. O tempo para aplicar um ciclo de valores, medido do fim da resposta até a última alteração na árvore da página, teve mediana de 6 ms e percentil 95 de 8 ms, abaixo do orçamento de 16 ms, que corresponde a um quadro de uma tela de 60 quadros por segundo. Esse resultado mostra que o ritmo de atualização por \emph{polling} curto não degrada a interface e sustenta, do lado do cliente, o requisito de telas de tempo real com baixa latência (RNF01) e o de execução do sinótico (RF16).
 
 \subsubsection{Motor de scripts isolado}
 
-\par O cálculo de variáveis derivadas, de scripts de eventos e de componentes de conteúdo escritos pelos clientes executa em um motor isolado, com o interpretador \emph{QuickJS} \cite{QUICKJS_DOCS} compilado para \emph{WebAssembly} \cite{WEBASSEMBLY_SPEC} e executado sob o \emph{Wasmtime} \cite{WASMTIME_DOCS}, sem acesso a rede, arquivo, banco nem segredo. O isolamento tem um custo, e as medidas procuram dimensioná-lo. Com um hospedeiro já aquecido em um contêiner de 0,25 \emph{vCPU}, o custo fixo de uma avaliação foi de 3,1 ms na mediana para a variável derivada, 3,5 ms para o script e 3,3 ms para o componente. O percentil 95 ficou entre 46 e 56 ms e o 99 entre 58 e 60 ms. Esses valores altos nas caudas correspondem à pausa da cota de processador, e não ao motor. O motor anterior, em \emph{Python}, custava cerca de 34 ms por avaliação nas mesmas condições, o que justificou a troca.
+\par O cálculo de variáveis derivadas, de scripts de eventos e de componentes de conteúdo escritos pelos clientes executa em um motor isolado, com o interpretador \emph{QuickJS} \cite{QUICKJS_DOCS} compilado para \emph{WebAssembly} \cite{WEBASSEMBLY_SPEC} e executado sob o \emph{Wasmtime} \cite{WASMTIME_DOCS}, sem acesso a rede, arquivo, banco nem segredo. O isolamento, exigido pelo requisito de execução segura do código do usuário (RNF07), tem um custo, e as medidas procuram dimensioná-lo. Com um hospedeiro já aquecido em um contêiner de 0,25 \emph{vCPU}, o custo fixo de uma avaliação foi de 3,1 ms na mediana para a variável derivada, 3,5 ms para o script e 3,3 ms para o componente. O percentil 95 ficou entre 46 e 56 ms e o 99 entre 58 e 60 ms. Esses valores altos nas caudas correspondem à pausa da cota de processador, e não ao motor. O motor anterior, em \emph{Python}, custava cerca de 34 ms por avaliação nas mesmas condições, o que justificou a troca.
 
 \par A vazão foi medida com um programa de comparação que executa avaliações em sequência. Um hospedeiro de 0,25 \emph{vCPU} sustentou de 144 a 149 avaliações por segundo, e quatro hospedeiros chegaram a 353. Por \emph{vCPU}, isso equivale a uma faixa de 380 a 590 avaliações por segundo, com ruído de cerca de 50\,\% entre execuções, porque o computador do ensaio executava outras cargas. O agrupamento de avaliações em lote aumentou a vazão, como mostra a Figura~\ref{fig:cap7_lote}. Com lote de 25 avaliações, o mesmo hospedeiro chegou, em média, a 545 avaliações por segundo, cerca de 3,7 vezes a de uma avaliação por vez.
 
@@ -191,7 +191,7 @@
     Fonte: Autor.
 \end{figure}
 
-\par O ponto de maior interesse é o comportamento com muitos clientes ativos. Cada troca de cliente em um hospedeiro obriga a reciclar o ambiente de execução, para que nada de um cliente vaze ao seguinte, e essa reciclagem custa cerca de 0,55 s a 0,25 \emph{vCPU}, quase 180 vezes o custo de uma avaliação. Com três hospedeiros, um cliente ativo usou 121 avaliações por segundo, três clientes ativos chegaram a 253, que é 74\,\% do ideal de 340, e seis ou mais clientes derrubaram a vazão para menos de duas avaliações por segundo, como mostra a Figura~\ref{fig:cap7_clientes}. A conclusão de projeto é que o número de clientes ativos por contêiner não deve passar o número de hospedeiros, e que a escala se faz por réplicas do contêiner. O resultado ilustra o compromisso entre isolamento forte e desempenho, e só se torna problema quando muitos clientes avaliam scripts simultaneamente, o que o agrupamento por cliente atenua na prática.
+\par O ponto de maior interesse é o comportamento com muitos clientes ativos. Cada troca de cliente em um hospedeiro obriga a reciclar o ambiente de execução, para que nada de um cliente vaze ao seguinte, e essa reciclagem custa cerca de 0,55 s a 0,25 \emph{vCPU}, quase 180 vezes o custo de uma avaliação. Com três hospedeiros, um cliente ativo usou 121 avaliações por segundo, três clientes ativos chegaram a 253, que é 74\,\% do ideal de 340, e seis ou mais clientes derrubaram a vazão para menos de duas avaliações por segundo, como mostra a Figura~\ref{fig:cap7_clientes}. A conclusão de projeto é que o número de clientes ativos por contêiner não deve passar o número de hospedeiros, e que a escala se faz por réplicas do contêiner. O resultado ilustra o compromisso entre isolamento forte e desempenho, e só se torna problema quando muitos clientes avaliam scripts simultaneamente, o que o agrupamento por cliente atenua na prática. Essas medidas confirmam o requisito de cálculo de valores derivados e de execução de scripts (RF13 e RF14) e mostram o seu custo em recursos.
 
 \begin{figure}[H]
     \centering
@@ -254,7 +254,7 @@
 
 \par O histórico de leituras é gravado por uma fila dedicada, em lotes, com decisão atômica de gravar e gravação idempotente, numa tabela particionada por mês. O teste de carga dessa fila mediu, para um cliente, de 186 a 235 trabalhos por segundo com 40 linhas cada, o que equivale a 7.430 a 9.400 linhas por segundo, a um custo de 1,8 a 2,7 ms de processador por trabalho. Com quatro clientes simultâneos, a taxa ficou entre 128 e 277 trabalhos por segundo. A decisão de gravar, feita por um \emph{script} no Redis, custou 16,4 \textmu s por chamada e 2,3\,\% do processador do Redis a 1.000 leituras por segundo. A retirada de 200.000 linhas pelo expurgo levou 1,6 s, ou 125 mil linhas por segundo. Esses resultados sustentam o registro contínuo do histórico (RF02) com folga em relação à carga de um cliente típico.
 
-\par O mesmo teste verifica se um cliente que gera muito trabalho prejudica os demais. Nos dois cenários de sobrecarga de um cliente lento, o de pressão alta e o de controle com pressão baixa, a latência máxima de gravação do cliente vizinho ficou, depois das correções, entre 274 e 426 ms no primeiro e entre 303 e 313 ms no segundo, contra o limite de 15 s do critério. Nas primeiras execuções, porém, o limite foi ultrapassado, com 20,2 s no cenário de pressão alta e com 54,9 e 77,3 s no de controle. A investigação mostrou que o cenário anterior deixava milhares de trabalhos na fila e contaminava o seguinte, o que foi corrigido no teste, e que o resultado é muito sensível à disputa de processador na máquina, pois com oito laços de processamento ocupando o computador a latência do vizinho foi de 91,8 s. O resultado confirma o isolamento entre clientes em condições normais e mostra uma fragilidade sob escassez de processador, hoje registrada como risco do projeto.
+\par O mesmo teste verifica se um cliente que gera muito trabalho prejudica os demais. Nos dois cenários de sobrecarga de um cliente lento, o de pressão alta e o de controle com pressão baixa, a latência máxima de gravação do cliente vizinho ficou, depois das correções, entre 274 e 426 ms no primeiro e entre 303 e 313 ms no segundo, contra o limite de 15 s do critério. Nas primeiras execuções, porém, o limite foi ultrapassado, com 20,2 s no cenário de pressão alta e com 54,9 e 77,3 s no de controle. A investigação mostrou que o cenário anterior deixava milhares de trabalhos na fila e contaminava o seguinte, o que foi corrigido no teste, e que o resultado é muito sensível à disputa de processador na máquina, pois com oito laços de processamento ocupando o computador a latência do vizinho foi de 91,8 s. O resultado confirma o enfileiramento justo entre clientes (RNF03) em condições normais e mostra uma fragilidade sob escassez de processador, hoje registrada como risco do projeto.
 
 \par Outro teste de carga manteve, por 10 minutos, seis clientes com leituras contínuas e conferiu que nenhuma tag ficava desatualizada na leitura final. Depois de uma correção no próprio teste, que passou a considerar o catálogo já carregado, três execuções seguidas passaram, em 639, 652 e 636 s. Isso confirma que o valor atual das tags permanece disponível e atualizado no Redis sob carga contínua (RF03), e que o orçamento de conexões do banco impõe espera, e não perda, quando o número de clientes simultâneos excede o de conexões reservadas.
 
@@ -287,7 +287,7 @@
         \hline
 \end{xltabular}}
 
-\par A Figura~\ref{fig:cap7_aquisicao} compara esses tetos com os obtidos em rodadas anteriores com uma única requisição por \sigla{clp} e ciclo. O custo da requisição é significativo, porque cada ida e volta Modbus tem um custo fixo de enquadramento, resposta e despacho independente do número de registradores. Passar de uma para cinco requisições reduziu o teto de 2.000 para 1.250 tags a 5 s, queda de 37\,\%, e de 4.000 para 3.250 a 10 s, queda de 19\,\%. Em equipamentos reais, o tempo de resposta do \emph{modem} e da rede soma-se a cada requisição, de modo que o teto prático será menor. A medida dimensiona uma réplica, mas o efeito de uma segunda réplica não foi medido, de modo que a replicação horizontal (RNF02) é sustentada pela arquitetura. Como a fila reparte o trabalho e o Moleculer leva cada dispositivo sempre à mesma réplica, o total deve crescer com o número de réplicas até o Redis passar a ser o limite, o que também chegou perto de 100\,\% no ensaio.
+\par A Figura~\ref{fig:cap7_aquisicao} compara esses tetos com os obtidos em rodadas anteriores com uma única requisição por \sigla{clp} e ciclo. O custo da requisição é significativo, porque cada ida e volta Modbus tem um custo fixo de enquadramento, resposta e despacho independente do número de registradores. Passar de uma para cinco requisições reduziu o teto de 2.000 para 1.250 tags a 5 s, queda de 37\,\%, e de 4.000 para 3.250 a 10 s, queda de 19\,\%. Em equipamentos reais, o tempo de resposta do \emph{modem} e da rede soma-se a cada requisição, de modo que o teto prático será menor. A medida dimensiona uma réplica, mas o efeito de uma segunda réplica não foi medido, de modo que a replicação horizontal (RNF02) é sustentada pela arquitetura. O requisito de aquisição periódica (RF01) fica confirmado em carga. Como a fila reparte o trabalho e o Moleculer leva cada dispositivo sempre à mesma réplica, o total deve crescer com o número de réplicas até o Redis passar a ser o limite, o que também chegou perto de 100\,\% no ensaio.
 
 \begin{figure}[H]
     \centering
@@ -319,7 +319,7 @@
 
 \par Para validar a cadeia completa contra um servidor que se comporta como um \sigla{clp} comum, o autor usou o ProtoProbe, um servidor Modbus TCP de teste que escuta na porta 502 com identificador de escravo 1 e expõe 2.500 registradores de retenção de 16 bits sem sinal. O ensaio cadastrou, pela interface do sistema, uma planta, um dispositivo Modbus apontando para o servidor e uma tag no endereço 7, lida de 1 em 1 s com função de leitura de registradores de retenção. Também se cadastrou um dispositivo interno com uma tag gravável, um evento que compara a tag lida com um limite e um \emph{script} que copia o valor lido para a tag interna. Nenhuma função de escrita foi usada nessa prova.
 
-\par O resultado foi positivo em toda a cadeia. O valor 12.314, que o servidor de teste mantém no endereço 7, chegou ao valor atual da tag com qualidade boa. O evento disparou, o \emph{script} executou no contêiner isolado em 13 a 87 ms e gravou a tag interna com o mesmo valor, sem falha registrada. Como os registradores do servidor de teste são estáticos, o limite do evento foi movido entre dois valores para provocar a desativação e a ativação, e o \emph{script} executou nas duas transições. A prova mostra que a leitura Modbus, o valor atual no Redis, o detector de eventos, o motor de scripts e a escrita em tag interna funcionam em sequência e atende ao requisito de comunicação por configuração, sem código específico do equipamento (RNF07).
+\par O resultado foi positivo em toda a cadeia. O valor 12.314, que o servidor de teste mantém no endereço 7, chegou ao valor atual da tag com qualidade boa. O evento disparou, o \emph{script} executou no contêiner isolado em 13 a 87 ms e gravou a tag interna com o mesmo valor, sem falha registrada. Como os registradores do servidor de teste são estáticos, o limite do evento foi movido entre dois valores para provocar a desativação e a ativação, e o \emph{script} executou nas duas transições. A prova mostra que a leitura Modbus, o valor atual no Redis, o detector de eventos, o motor de scripts e a escrita em tag interna funcionam em sequência e atende ao requisito de comunicação por configuração, sem código específico do equipamento (RNF09).
 
 \par O ensaio de carga de leitura contra o ProtoProbe consiste em cadastrar um número crescente de tags sobre os 2.500 registradores, com períodos de 1 e de 5 s, manter a leitura por um intervalo fixo e conferir três coisas: se o número de leituras gravadas no histórico coincide com o esperado, se o valor atual no Redis acompanha as mudanças e se a tela de lista de acompanhamento exibe o valor com o atraso previsto. Como os registradores do servidor de teste são estáticos, o ensaio de carga usa tags internas geradas para variar o valor, ou o próprio autor altera registradores durante a medição. A Tabela~\ref{tab:cap7_protoprobe} reserva o espaço para os resultados.
 
@@ -352,9 +352,9 @@
 
 \subsection{Resultados da bancada}
 
-\par A bancada reúne um reservatório com sensor de nível, uma bomba acionada por inversor de frequência com comunicação Modbus \cite{SCHNEIDER_ATV320_MODBUS_MANUAL} e o servidor que executa o sistema. Os ensaios E1 a E6, listados na Tabela~\ref{tab:cap7_ensaios}, percorrem o comportamento esperado de uma estação de bombeamento, da leitura contínua com a bomba parada até a troca da referência de frequência com a bomba em operação. Em todos, interessam duas medidas de tempo. A primeira é o tempo entre o envio do comando e a resposta do inversor, que mede a latência do caminho de escrita. A segunda é o atraso do supervisório, o tempo entre uma mudança no equipamento e o instante em que ela aparece na tela do operador. Pela arquitetura de \emph{polling}, esse atraso é limitado pela soma do período de varredura da tag, do período de atualização da tela e de uma margem de processamento, e é essa soma que os ensaios procuram confirmar (RNF01).
+\par A bancada reúne um \sigla{clp} que simula o nível do reservatório e atua como servidor Modbus TCP para o sistema, um inversor de frequência que aciona um motor real e é comandado pelo \sigla{clp} por rede serial \cite{SCHNEIDER_ATV320_MODBUS_MANUAL}, e o servidor que executa o sistema. Os ensaios E1 a E6, listados na Tabela~\ref{tab:cap7_ensaios}, percorrem o comportamento esperado de uma estação de bombeamento, da leitura contínua com a bomba parada até a troca da referência de frequência com a bomba em operação. Em todos, interessam duas medidas de tempo. A primeira é o tempo entre a confirmação do comando e a resposta do equipamento, primeiro a do \sigla{clp} à escrita e depois a do inversor, que aparece como a mudança da frequência na tela, e que mede a latência do caminho de escrita. A segunda é o atraso do supervisório, o tempo entre uma mudança no equipamento e o instante em que ela aparece na tela do operador. Pela arquitetura de \emph{polling}, esse atraso é limitado pela soma do período de varredura da tag, do período de atualização da tela e de uma margem de processamento, e é essa soma que os ensaios procuram confirmar (RNF01).
 
-\todo[inline]{Os ensaios E1 a E6 são os definidos no Capítulo 6 (bancada), que estava vazio quando este texto foi escrito. Conferir nomes, ordem e parâmetros (frequência de partida, rampas do inversor, limite do alarme de nível, endereços dos registradores) contra o texto final desse capítulo e preencher as tabelas e os gráficos com as medições. Confirmar também o modelo do inversor citado.}
+\todo[inline]{Os ensaios E1 a E6 seguem o roteiro do Capítulo 6 (bancada: CLP TM221 simulando o tanque e inversor ATV320). Conferir os parâmetros citados (referência de 40 e 30 Hz, inclinações de 0,6, 0,4 e 0,35 ponto percentual por segundo, limite de 90\,\%) se o Capítulo 6 mudar, e preencher as tabelas e os gráficos com as medições.}
 
 {\renewcommand{\arraystretch}{1.3}\small
 \begin{xltabular}{\textwidth}{cXX}
@@ -373,13 +373,13 @@
         \endlastfoot
         E1 & Leitura contínua com a bomba desligada & RF01, RF02, RF03, RF04, RNF01 \\
         \hline
-        E2 & Partida da bomba e enchimento do reservatório & RF07, RF09, RNF01 \\
+        E2 & Partida pelo supervisório e enchimento & RF07, RF09, RNF01 \\
         \hline
-        E3 & Parada da bomba e esvaziamento & RF07, RF09, RNF01 \\
+        E3 & Parada e esvaziamento & RF07, RF09, RF19, RNF01 \\
         \hline
-        E4 & Alarme de nível alto e reconhecimento & RF13, RF14, RNF06 \\
+        E4 & Alarme de nível alto e reconhecimento & RF18, RF19, RNF06 \\
         \hline
-        E5 & Perda e retorno de comunicação & RF01, RF03, RF13 \\
+        E5 & Perda de comunicação e retorno & RF01, RF03, RF18 \\
         \hline
         E6 & Troca da referência de frequência & RF07, RF09, RNF06 \\
         \hline
@@ -387,9 +387,9 @@
 
 \subsubsection{E1: leitura contínua com a bomba desligada}
 
-\par Com a bomba parada, a frequência do inversor é zero e o nível do reservatório varia pouco, o que isola o desempenho da aquisição de qualquer efeito do processo. O ensaio mantém as tags de nível, de frequência de saída, de estado do inversor e de corrente em leitura contínua por um intervalo longo e confere três propriedades. A primeira é que o histórico não perde amostras, isto é, o número de leituras gravadas é o esperado para o período de varredura. A segunda é que o carimbo de tempo de cada leitura é monotônico e espaçado pelo período configurado, com variação de poucos milissegundos. A terceira é que a tela de lista de acompanhamento mostra o valor com qualidade boa e atrasa em relação ao equipamento no máximo o período de varredura mais o período de atualização da tela. Espera-se uma taxa de entrega próxima de 100\,\% e nenhum alarme, e que o ruído do sensor de nível apareça como variação pequena em torno de um valor estável.
+\par Com a bomba parada, a frequência do inversor é zero e o nível simulado varia pouco, o que isola o desempenho da aquisição de qualquer efeito do processo. O ensaio mantém as tags de nível, de frequência de saída, de estado do inversor e de corrente em leitura contínua por um intervalo longo e confere três propriedades. A primeira é que o histórico não perde amostras, isto é, o número de leituras gravadas é o esperado para o período de varredura. A segunda é que o carimbo de tempo de cada leitura é monotônico e espaçado pelo período configurado, com variação de poucos milissegundos. A terceira é que a tela de lista de acompanhamento mostra o valor com qualidade boa e atrasa em relação ao equipamento no máximo o período de varredura mais o período de atualização da tela. Espera-se uma taxa de entrega próxima de 100\,\% e nenhum alarme, e que o ruído do sensor de nível apareça como variação pequena em torno de um valor estável.
 
-\graficoreservado{Nível do reservatório e frequência do inversor no ensaio E1.}{fig:cap7_e1}{(nível em porcentagem e frequência em hertz, ao longo do tempo, vistos na tela de tendência)}
+\graficoreservado{Nível simulado e frequência do inversor no ensaio E1.}{fig:cap7_e1}{(nível em porcentagem e frequência em hertz, ao longo do tempo, vistos na tela de tendência)}
 
 {\renewcommand{\arraystretch}{1.3}\small
 \begin{xltabular}{\textwidth}{Xcc}
@@ -418,9 +418,9 @@
 
 \subsubsection{E2: partida da bomba e enchimento}
 
-\par O operador envia o comando de partida, que percorre as quatro fases do comando: a seleção da tag, a verificação das condições e da permissão, a confirmação e a execução. Na execução, o sistema escreve a ordem no registrador de controle do inversor. O ensaio mede o tempo entre a confirmação do operador e a resposta do inversor à escrita, que é o instante em que o comando é dado como concluído, pois o sucesso do comando é a resposta do equipamento. Depois, a frequência de saída sobe segundo a rampa de aceleração configurada no inversor e o nível do reservatório começa a subir. Espera-se que o tempo do comando até a resposta seja da ordem de dezenas de milissegundos em rede local, bem abaixo do limite de 30 s do comando, e que a subida da frequência e do nível apareça na tela com o atraso do supervisório já medido no E1. Espera-se também que a trava por tag impeça um segundo comando simultâneo sobre a mesma bomba e que o comando fique registrado com o nome do operador, a tag, o valor e o instante.
+\par O operador define a referência de 40 hertz e envia o comando de partida, que percorre as quatro fases do comando: a seleção da tag, a verificação das condições e da permissão, a confirmação e a execução. Na execução, o sistema escreve a ordem em um registrador do \sigla{clp}, que a repassa ao inversor pela rede serial. O ensaio mede o tempo entre a confirmação do operador e a resposta do \sigla{clp} à escrita, que é o instante em que o comando é dado como concluído, pois o sucesso do comando é a resposta do equipamento. Mede também o tempo até a frequência do inversor começar a subir na tela. Depois, a frequência sobe segundo a rampa de aceleração do inversor e o nível simulado passa a subir cerca de 0,6 ponto percentual por segundo. Espera-se que a resposta do \sigla{clp} chegue em dezenas de milissegundos em rede local, bem abaixo do limite de 30 s do comando, e que a subida da frequência e do nível apareça na tela com o atraso do supervisório já medido no E1. Espera-se também que a trava por tag impeça um segundo comando simultâneo sobre a mesma bomba e que o comando fique registrado com o nome do operador, a tag, o valor e o instante.
 
-\graficoreservado{Nível do reservatório e frequência do inversor no ensaio E2.}{fig:cap7_e2}{(marcar o instante do comando de partida, o da resposta do inversor e o da primeira mudança visível na tela)}
+\graficoreservado{Nível simulado e frequência do inversor no ensaio E2.}{fig:cap7_e2}{(marcar o instante do comando de partida, o da resposta do CLP e o da primeira mudança visível na tela)}
 
 {\renewcommand{\arraystretch}{1.3}\small
 \begin{xltabular}{\textwidth}{Xcc}
@@ -437,23 +437,23 @@
         \endfoot
         \multicolumn{3}{c}{Fonte: Autor.} \\
         \endlastfoot
-        Confirmação do operador até a resposta do inversor & dezenas de ms & a medir \\
+        Confirmação do operador até a resposta do CLP à escrita & dezenas de ms & a medir \\
         \hline
-        Resposta do inversor até a primeira mudança de frequência na tela & varredura mais atualização da tela & a medir \\
+        Resposta do CLP até a primeira mudança de frequência na tela & varredura mais atualização da tela & a medir \\
         \hline
         Duração da rampa de aceleração observada & valor configurado no inversor & a medir \\
         \hline
-        Taxa de subida do nível & a medir & a medir \\
+        Inclinação do nível & cerca de 0,6 ponto percentual por segundo & a medir \\
         \hline
 \end{xltabular}}
 
-\todo[inline]{Medir e inserir: gráfico da tela do E2 e a tabela. Informar a rampa de aceleração do inversor e a frequência de partida usadas, e anexar a linha do registro de comandos que mostra a auditoria do comando.}
+\todo[inline]{Medir e inserir: gráfico da tela do E2 e a tabela. Informar a rampa de aceleração do inversor e confirmar a referência de 40 Hz, e anexar a linha do registro de comandos que mostra a auditoria do comando.}
 
 \subsubsection{E3: parada da bomba e esvaziamento}
 
-\par O ensaio de parada repete o caminho do comando com a ordem de parada. A frequência desce segundo a rampa de desaceleração e o nível cai à medida que o reservatório esvazia, pelo consumo ou por um dreno controlado. Espera-se o mesmo tempo de comando do E2, já que o caminho de escrita é o mesmo, e que a tela acompanhe a descida da frequência até zero e a mudança do estado do inversor para parado. O ensaio também verifica que a leitura continua sem perda durante a transição e que nenhum alarme de comunicação aparece, o que separa o efeito do processo do efeito do sistema.
+\par O ensaio de parada repete o caminho do comando com a ordem de parada. A frequência desce segundo a rampa de desaceleração e o nível simulado passa a cair com a vazão de saída, de 0,4 ponto percentual por segundo. Espera-se o mesmo tempo de comando do E2, já que o caminho de escrita é o mesmo, e que a tela acompanhe a descida da frequência até zero e a mudança do estado do inversor para parado. O ensaio também verifica que a leitura continua sem perda durante a transição e que nenhum alarme de comunicação aparece, o que separa o efeito do processo do efeito do sistema.
 
-\graficoreservado{Nível do reservatório e frequência do inversor no ensaio E3.}{fig:cap7_e3}{(marcar o instante do comando de parada e o instante em que a frequência chega a zero)}
+\graficoreservado{Nível simulado e frequência do inversor no ensaio E3.}{fig:cap7_e3}{(marcar o instante do comando de parada e o instante em que a frequência chega a zero)}
 
 {\renewcommand{\arraystretch}{1.3}\small
 \begin{xltabular}{\textwidth}{Xcc}
@@ -470,21 +470,23 @@
         \endfoot
         \multicolumn{3}{c}{Fonte: Autor.} \\
         \endlastfoot
-        Confirmação do operador até a resposta do inversor & dezenas de ms & a medir \\
+        Confirmação do operador até a resposta do CLP à escrita & dezenas de ms & a medir \\
         \hline
-        Resposta do inversor até a frequência zero na tela & rampa de desaceleração mais atraso do supervisório & a medir \\
+        Resposta do CLP até a frequência zero na tela & rampa de desaceleração mais atraso do supervisório & a medir \\
+        \hline
+        Inclinação do nível após a parada & cerca de 0,4 ponto percentual por segundo (queda) & a medir \\
         \hline
         Leituras perdidas durante a transição & nenhuma & a medir \\
         \hline
 \end{xltabular}}
 
-\todo[inline]{Medir e inserir: gráfico da tela do E3 e a tabela. Informar a rampa de desaceleração e como o reservatório foi esvaziado.}
+\todo[inline]{Medir e inserir: gráfico da tela do E3 e a tabela. Informar a rampa de desaceleração e o tempo de parada do motor.}
 
 \subsubsection{E4: alarme de nível alto e reconhecimento}
 
-\par Com a bomba em operação, o nível sobe até cruzar o limite do alarme de nível alto. O detector compara cada leitura com o limite, usa uma banda morta para evitar oscilação em torno do valor e, ao ativar, cria uma ocorrência de alarme com o nível de severidade configurado e a descrição fixa no instante do disparo. O ensaio mede o tempo entre o instante em que a leitura cruza o limite e o instante em que o indicador de alarmes da tela mostra a ocorrência, que deve ser da ordem do atraso do supervisório. Em seguida, o operador reconhece o alarme, com comentário opcional, e o ensaio confere que a ocorrência passa ao estado reconhecido e que o registro guarda o nome do operador e o instante. Por fim, a bomba é parada, o nível cai abaixo do limite, descontada a banda morta, e o alarme retorna ao normal. Espera-se que o alarme apareça uma única vez por cruzamento, sem repetição por ruído do sensor, e que a linha do tempo de alarmes e comandos reconstrua a sequência na ordem correta.
+\par Com a bomba em operação a partir de um nível próximo de 80 por cento, o nível sobe até cruzar o limite de 90 por cento do alarme de nível alto. O detector compara cada leitura com o limite, usa uma banda morta para evitar oscilação em torno do valor e, ao ativar, cria uma ocorrência de alarme com a severidade Crítico e a descrição fixa no instante do disparo. O ensaio mede o tempo entre o instante em que a leitura cruza o limite e o instante em que o indicador de alarmes da tela mostra a ocorrência, que deve ser da ordem do atraso do supervisório. Em seguida, o operador reconhece o alarme, com comentário opcional, e o ensaio confere que a ocorrência passa ao estado reconhecido e que o registro guarda o nome do operador e o instante. Por fim, a bomba é parada, o nível cai abaixo do limite, descontada a banda morta, e o alarme retorna ao normal. Espera-se que o alarme apareça uma única vez por cruzamento, sem repetição por ruído do sensor, e que a linha do tempo de alarmes e comandos reconstrua a sequência na ordem correta.
 
-\graficoreservado{Nível do reservatório, limite do alarme e instantes de alarme, reconhecimento e retorno ao normal no ensaio E4.}{fig:cap7_e4}{(marcar o limite, a banda morta, o instante do disparo e o do reconhecimento)}
+\graficoreservado{Nível simulado, limite do alarme e instantes de alarme, reconhecimento e retorno ao normal no ensaio E4.}{fig:cap7_e4}{(marcar o limite, a banda morta, o instante do disparo e o do reconhecimento)}
 
 {\renewcommand{\arraystretch}{1.3}\small
 \begin{xltabular}{\textwidth}{Xcc}
@@ -509,11 +511,11 @@
         \hline
 \end{xltabular}}
 
-\todo[inline]{Medir e inserir: gráfico da tela do E4 (nível, limite e alarme), a tabela e uma captura da linha do tempo com o disparo e o reconhecimento. Informar o limite, a banda morta e o nível de severidade configurados.}
+\todo[inline]{Medir e inserir: gráfico da tela do E4 (nível, limite e alarme), a tabela e uma captura da linha do tempo com o disparo e o reconhecimento. Informar a banda morta configurada e confirmar o limite de 90 por cento e a severidade Crítico.}
 
 \subsubsection{E5: perda e retorno de comunicação}
 
-\par Neste ensaio, a comunicação com o inversor é interrompida de forma controlada, por exemplo desconectando o cabo de rede, e depois restabelecida. O sistema marca o valor de cada tag como desatualizado depois de três períodos de varredura sem leitura nova, mantendo o último valor e o carimbo original, e o estado de comunicação do dispositivo passa a degradado depois de três ciclos de leitura falhos. Esses dois mecanismos têm o mesmo prazo nominal, e o evento de falha de comunicação do dispositivo pode ser ligado a um alarme comum. Ao restabelecer o cabo, o primeiro ciclo bem sucedido fecha o estado degradado e o valor volta a ter qualidade boa, sem rajada de leituras acumuladas. O ensaio mede o tempo entre a interrupção e a marcação de desatualizado, o tempo entre o retorno do cabo e a volta à qualidade boa, e confere que não há lacuna artificial preenchida no histórico, pois a falha de leitura não gera linha e a lacuna é a evidência da falha.
+\par Neste ensaio, a comunicação com o equipamento de campo é interrompida de forma controlada, desconectando o cabo Ethernet entre o comutador e o \sigla{clp}, e depois restabelecida. Durante a falha o \sigla{clp} continua executando o programa e o nível simulado continua evoluindo. O sistema marca o valor de cada tag como desatualizado depois de três períodos de varredura sem leitura nova, mantendo o último valor e o carimbo original, e o estado de comunicação do dispositivo passa a degradado depois de três ciclos de leitura falhos. Esses dois mecanismos têm o mesmo prazo nominal, e o evento de falha de comunicação do dispositivo pode ser ligado a um alarme comum. Ao restabelecer o cabo, o primeiro ciclo bem sucedido fecha o estado degradado e o valor volta a ter qualidade boa, sem rajada de leituras acumuladas. O ensaio mede o tempo entre a interrupção e a marcação de desatualizado, o tempo entre o retorno do cabo e a volta à qualidade boa, e confere que não há lacuna artificial preenchida no histórico, pois a falha de leitura não gera linha e a lacuna é a evidência da falha.
 
 \graficoreservado{Valor, qualidade e estado de comunicação durante a perda e o retorno de comunicação no ensaio E5.}{fig:cap7_e5}{(marcar o instante da interrupção, o da marcação de desatualizado e o do retorno)}
 
@@ -542,13 +544,13 @@
         \hline
 \end{xltabular}}
 
-\todo[inline]{Medir e inserir: gráfico da tela do E5 e a tabela. Informar o período de varredura e como a comunicação foi interrompida. Confirmar se o alarme de falha de comunicação foi ligado nesse ensaio.}
+\todo[inline]{Medir e inserir: gráfico da tela do E5 e a tabela. Informar o período de varredura (1 s no roteiro). Confirmar se o alarme de falha de comunicação foi ligado nesse ensaio.}
 
 \subsubsection{E6: troca da referência de frequência}
 
-\par Com a bomba em operação, o operador altera a frequência de referência do inversor pelo mesmo comando de quatro fases, agora com um valor numérico em vez de uma ordem de liga e desliga. O sistema escreve o novo valor no registrador de referência, o inversor responde e a frequência de saída migra para o novo valor seguindo a rampa. O ensaio mede o tempo do comando até a resposta e o tempo para a frequência medida atingir a referência, e confere duas propriedades de segurança. A primeira é que um segundo comando enviado imediatamente à mesma tag é recusado pela trava por tag, em vez de gerar duas escritas concorrentes. A segunda é que o reenvio do mesmo comando, com a mesma chave de idempotência, não cria uma segunda escrita. Espera-se que a resposta do inversor chegue em dezenas de milissegundos, que a frequência alcance a referência no tempo da rampa do inversor e que o registro de comandos guarde o valor anterior, o novo valor, o operador e a origem.
+\par Com a bomba ligada a 40 hertz, o operador altera a frequência de referência para 30 hertz pelo mesmo comando de quatro fases, agora com um valor numérico em vez de uma ordem de liga e desliga. O sistema escreve o novo valor no \sigla{clp}, que o repassa ao inversor, e a frequência de saída migra para o novo valor seguindo a rampa. A inclinação do nível simulado deve passar de 0,6 para 0,35 ponto percentual por segundo. O ensaio mede o tempo do comando até a resposta do \sigla{clp} e o tempo para a frequência medida atingir a referência, e confere duas propriedades de segurança. A primeira é que um segundo comando enviado imediatamente à mesma tag é recusado pela trava por tag, em vez de gerar duas escritas concorrentes. A segunda é que o reenvio do mesmo comando, com a mesma chave de idempotência, não cria uma segunda escrita. Espera-se que a resposta do \sigla{clp} chegue em dezenas de milissegundos, que a frequência alcance a referência no tempo da rampa do inversor e que o registro de comandos guarde o valor anterior, o novo valor, o operador e a origem.
 
-\graficoreservado{Frequência de referência e frequência medida no ensaio E6.}{fig:cap7_e6}{(marcar o instante do comando, o da resposta do inversor e o instante em que a frequência alcança a referência)}
+\graficoreservado{Frequência de referência e frequência medida no ensaio E6.}{fig:cap7_e6}{(marcar o instante do comando, o da resposta do CLP e o instante em que a frequência alcança a referência)}
 
 {\renewcommand{\arraystretch}{1.3}\small
 \begin{xltabular}{\textwidth}{Xcc}
@@ -565,9 +567,11 @@
         \endfoot
         \multicolumn{3}{c}{Fonte: Autor.} \\
         \endlastfoot
-        Confirmação do operador até a resposta do inversor & dezenas de ms & a medir \\
+        Confirmação do operador até a resposta do CLP à escrita & dezenas de ms & a medir \\
         \hline
-        Resposta do inversor até a frequência medida igual à referência & rampa do inversor mais atraso do supervisório & a medir \\
+        Resposta do CLP até a frequência medida igual à referência & rampa do inversor mais atraso do supervisório & a medir \\
+        \hline
+        Inclinação do nível depois da troca & cerca de 0,35 ponto percentual por segundo & a medir \\
         \hline
         Segundo comando imediato na mesma tag & recusado pela trava & a medir \\
         \hline
@@ -575,13 +579,13 @@
         \hline
 \end{xltabular}}
 
-\todo[inline]{Medir e inserir: gráfico da tela do E6 e a tabela. Informar as frequências de partida e de destino, o registrador da referência e a rampa configurada.}
+\todo[inline]{Medir e inserir: gráfico da tela do E6 e a tabela. Informar o registrador da referência, a rampa configurada e a corrente em cada regime.}
 
 \subsection{Validação dos requisitos}
 
-\par A Tabela~\ref{tab:cap7_requisitos} confronta cada requisito funcional e não funcional com a evidência disponível e com a situação resultante. Considera-se atendido o requisito com medida realizada ou com teste automatizado que exercita o comportamento, e parcialmente atendido o que depende da bancada ou de uma medida que ainda não foi feita. Os requisitos de comando, de alarmes e de latência são os que mais dependem dos ensaios E1 a E6 e por isso aparecem como parciais até que as tabelas anteriores sejam preenchidas. O requisito de redundância com comutação entre zonas é pendente, porque a implantação em mais de uma zona é descrita e não realizada, e a arquitetura em contêineres é o que permite levá-la a um orquestrador no futuro \cite{NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES}.
+\par A Tabela~\ref{tab:cap7_requisitos} confronta cada requisito funcional e não funcional com a evidência disponível e com a situação resultante. Considera-se atendido o requisito com medida realizada ou com teste automatizado que exercita o comportamento, e parcialmente atendido o que depende da bancada ou de uma medida que ainda não foi feita. Os requisitos de comando, de alarmes e de latência são os que mais dependem dos ensaios E1 a E6 e por isso aparecem como parciais até que as tabelas anteriores sejam preenchidas. Nenhum requisito ficou sem evidência. A redundância entre zonas de disponibilidade fica como trabalho futuro, e a arquitetura em contêineres é o que permite levá-la a um orquestrador \cite{NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES}.
 
-\todo[inline]{A tabela usa os IDs RF01 a RF14 e RNF01 a RNF10 da versão dos requisitos que estava no repositório. O Capítulo 3 está sendo reescrito. Conferir ao fim se os IDs e os textos continuam os mesmos, e se o RF08 (comando agendado) e o RF09 (releitura) foram redefinidos, já que o código registra que o comando agendado de pessoa não existe e que o sucesso do comando é a resposta do equipamento, sem releitura.}
+\todo[inline]{A tabela usa os IDs RF01 a RF19 e RNF01 a RNF13 da versão do Capítulo 3 vigente em 16/10/2026. Se o Capítulo 3 mudar de novo, conferir ids e textos.}
 
 {\renewcommand{\arraystretch}{1.3}\small
 \begin{xltabular}{\textwidth}{cXc}
@@ -598,7 +602,7 @@
         \endfoot
         \multicolumn{3}{c}{Fonte: Autor.} \\
         \endlastfoot
-        RF01 & Teste automatizado do driver, ensaio contra o ProtoProbe, campanha de capacidade até 9.750 tags a 30 s, E1 & Atendido \\
+        RF01 & Testes do driver, ensaio contra o ProtoProbe, campanha de capacidade até 9.750 tags a 30 s, E1 & Atendido \\
         \hline
         RF02 & Testes de gravação e de partição, teste de carga do histórico (até 9.400 linhas por segundo), E1 & Atendido \\
         \hline
@@ -606,45 +610,61 @@
         \hline
         RF04 & Testes automatizados do carimbo por ciclo, E1 & Atendido \\
         \hline
-        RF05 & Testes de login, de renovação e de revogação, medida do Argon2id & Atendido \\
+        RF05 & Testes de login, renovação, revogação e troca de senha, medida do Argon2id & Atendido \\
         \hline
         RF06 & Testes de cargos, grupos e permissões, verificação do isolamento entre clientes & Atendido \\
         \hline
         RF07 & Testes da cadeia de comando, prova do comando contra o ProtoProbe, E2, E3 e E6 & Parcial \\
         \hline
-        RF08 & Testes do evento agendado com \emph{script} que escreve, sem ensaio na bancada & Parcial \\
+        RF08 & Testes e conferência visual do evento agendado com \emph{script} que escreve & Atendido \\
         \hline
-        RF09 & Testes das quatro fases e do alarme de falha de comando, E2 e E6 & Parcial \\
+        RF09 & Testes da trava por tag, da idempotência e do registro de comandos, E2 e E6 & Parcial \\
         \hline
         RF10 & Testes de reconciliação e recarga do cadastro sem reinício da aquisição & Atendido \\
         \hline
-        RF11 & Testes do cadastro e do esquema, criação de cliente em 1,7 a 3,4 s & Atendido \\
+        RF11 & Testes do cadastro, do esquema e das pastas de tags & Atendido \\
         \hline
-        RF12 & \emph{Lighthouse} das três telas, medida de 8 ms para aplicar um ciclo no sinótico & Atendido \\
+        RF12 & Criação de cliente em 1,7 a 3,4 s, testes de provisionamento e de exclusão & Atendido \\
         \hline
-        RF13 & Testes dos detectores e das ocorrências, E4 e E5 & Parcial \\
+        RF13 & Testes das variáveis derivadas e das tags internas, teto medido por contêiner & Atendido \\
         \hline
-        RF14 & Testes da linha do tempo e das consultas ao histórico & Atendido \\
+        RF14 & Medidas do motor isolado, testes de isolamento, prova do \emph{script} contra o ProtoProbe & Atendido \\
+        \hline
+        RF15 & \emph{Lighthouse} da tela de dashboard, testes, E1 & Atendido \\
+        \hline
+        RF16 & Medida de 8 ms para aplicar um ciclo no sinótico, \emph{Lighthouse}, conferência visual & Atendido \\
+        \hline
+        RF17 & Testes do mapa e das consultas de tendência ao histórico, E3 & Atendido \\
+        \hline
+        RF18 & Testes dos detectores e das ocorrências, E4 e E5 & Parcial \\
+        \hline
+        RF19 & Testes da linha do tempo, do registro de comandos e de alarmes, E4 & Atendido \\
         \hline
         RNF01 & Medida do lado do cliente, teste de carga de valores atuais, atraso do supervisório em E1 a E6 & Parcial \\
         \hline
         RNF02 & Medida do teto por réplica, afinidade por dispositivo, sem medida com duas réplicas & Parcial \\
         \hline
-        RNF03 & Banco por cliente criado em segundos, sem medida de crescimento em volume real & Parcial \\
+        RNF03 & Teste de carga do histórico com cliente lento, sensível à disputa de processador & Parcial \\
         \hline
-        RNF04 & Redundância descrita, sem implantação em mais de uma zona & Pendente \\
+        RNF04 & Testes de reconstrução do Redis e de filas duráveis, sem ensaio de queda de réplica & Parcial \\
         \hline
         RNF05 & Argon2id, isolamento por banco, testes de permissão, teste de segurança de fim de lote & Atendido \\
         \hline
         RNF06 & Testes de limite de requisições, de trava por tag e de registro de comando e de reconhecimento & Atendido \\
         \hline
-        RNF07 & Mesma configuração Modbus com o ProtoProbe, o simulador e o inversor & Atendido \\
+        RNF07 & Testes de isolamento do motor de scripts, medidas de custo e de memória & Atendido \\
         \hline
-        RNF08 & Rotas versionadas sob \texttt{/v1} com contratos \sigla{json} verificados por teste de forma & Atendido \\
+        RNF08 & Testes da cifra de segredos com AES-256-GCM e chave por cliente & Atendido \\
         \hline
-        RNF09 & Serviços em contêineres independentes, ligados por Moleculer e filas & Atendido \\
+        RNF09 & Mesma configuração Modbus com o ProtoProbe, os simuladores e o CLP da bancada & Atendido \\
         \hline
-        RNF10 & Acesso por navegador, \emph{Lighthouse} em celular & Atendido \\
+        RNF10 & Rotas versionadas sob \texttt{/v1} com contratos \sigla{json} verificados por teste de forma & Atendido \\
+        \hline
+        RNF11 & Serviços independentes ligados por Moleculer e filas, guardas de arquitetura & Atendido \\
+        \hline
+        RNF12 & Pilha completa de contêineres com limites de recursos, usada em todas as medidas & Atendido \\
+        \hline
+        RNF13 & Acesso por navegador, \emph{Lighthouse} em celular, interface em português & Atendido \\
         \hline
 \end{xltabular}}
 
