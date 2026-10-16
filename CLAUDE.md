@@ -25,7 +25,23 @@ Quando estiver inseguro, **pergunte antes de editar**.
 - **Idioma:** Português Brasileiro.
 - **Norma bibliográfica:** ABNT (via `biblatex-abnt`).
 - **Arquivo principal:** `Texto.tex` na raiz.
-- **Diretório de trabalho:** `/home/arthur-ferreira/Desktop/TCC/`.
+- **Diretório de trabalho:** `C:\Users\Arthur Ferreira\Desktop\Latex\TCC`.
+- **Fase:** TCC final (o trabalho deixou de ser projeto). A Conclusão entra no documento e o Cronograma saiu (`16_Cronograma.tex` continua no repositório, sem inclusão em `Texto.tex`).
+- **Decisões de conteúdo do TCC final:**
+  - **Sem AWS no TCC.** O sistema roda em contêineres Docker num servidor (o computador do autor ou um servidor do instituto). Nada de ECS, RDS, ElastiCache, Lambda, CloudFront ou zonas de disponibilidade no texto. A computação em nuvem fica como conceito na fundamentação e como evolução nos trabalhos futuros (a arquitetura em contêineres permite levar o sistema a um provedor de nuvem ou a um orquestrador como o Kubernetes sem mudar o código). As siglas `aws`, `ecs` e `rds` seguem registradas em `Configurações/Commands.tex` para esse uso.
+  - **Sem código no texto.** Mostrar caminhos e fluxos (diagramas de blocos com passos numerados e o texto que percorre os passos), não trechos de programa.
+  - **Diagramas simples**, só quadradinhos em TikZ, no estilo dos artigos do orientador (figura de blocos com passos numerados e um parágrafo que os percorre: "o cliente envia o pedido (1), que ... (2)"). Bibliotecas carregadas em `Configurações/Commands.tex`: `positioning, arrows.meta, fit, calc, backgrounds`.
+  - Artigos do orientador citáveis: `NETTO2016_STATE_MACHINE_REPLICATION_KUBERNETES`, `NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES`, `NETTO2019_RAFT_KUBERNETES`.
+
+### 1.1 Compilação
+
+Compilar numa cópia da pasta, nunca dentro dela quando houver mais de um agente trabalhando. Com a imagem Docker `latex`:
+
+```
+MSYS_NO_PATHCONV=1 docker run --rm -v "<pasta da cópia>:/doc" -w /doc latex:latest latexmk -pdf -interaction=nonstopmode -halt-on-error Texto.tex
+```
+
+O `Texto.pdf` é versionado. Todo o resto da compilação (`.aux`, `.bbl`, `.bcf`, `.log`, `.toc` etc.) é ignorado pelo `.gitignore` e nunca vai ao commit.
 
 ---
 
@@ -47,11 +63,14 @@ TCC/
 │   │   ├── 13_3_Objetivos.tex
 │   │   └── 13_4_Estrutura.tex
 │   ├── 14_Desenvolvimento/
-│   │   ├── 14_1_Cap.tex            # Conceitos e Tecnologias
-│   │   ├── 14_2_Cap.tex            # Funcionamento
-│   │   └── 14_3 a 14_6_Cap.tex     # ainda a desenvolver
-│   ├── 15_Conclusão.tex
-│   ├── 16_Cronograma.tex
+│   │   ├── 14_1_Cap.tex            # 2 Conceitos e tecnologias
+│   │   ├── 14_2_Cap.tex            # 3 Arquitetura e requisitos
+│   │   ├── 14_3_Cap.tex            # 4 Fluxos do sistema
+│   │   ├── 14_4_Cap.tex            # 5 Interface do sistema
+│   │   ├── 14_5_Cap.tex            # 6 Bancada de teste
+│   │   └── 14_6_Cap.tex            # 7 Resultados
+│   ├── 15_Conclusão.tex            # 8 Conclusão
+│   ├── 16_Cronograma.tex           # fora do TCC final (sem inclusão em Texto.tex)
 │   └── 00_Referencias.tex          # \printbibliography
 ├── Imagens/
 │   ├── Capa/
@@ -59,8 +78,7 @@ TCC/
 │   │   ├── Contextualizacao/
 │   │   └── Justificativa/
 │   └── Desenvolvimento/            # convenção: CapN/ ↔ 14_N_Cap.tex
-│       ├── Cap1/                   # figuras de 14_1_Cap.tex (Conceitos)
-│       └── Cap2/                   # figuras de 14_2_Cap.tex (Funcionamento)
+│       └── Cap1/ … Cap6/           # figuras de 14_1_Cap.tex … 14_6_Cap.tex
 └── Referencias/                    # PDFs das referências (só leitura)
 ```
 
@@ -344,27 +362,30 @@ Convenção do projeto: usar `\,unidade` inline (`4\,mA`, `0\,bar`) como padrão
 
 ## 9. Estrutura semântica dos capítulos
 
-### Capítulo 14_1 (Conceitos)
-1. **Sistema SCADA** (Zanghi 2019 como base, referências diversificadas e distribuídas)
-   - Aquisição e Registro de Dados (dispositivos genéricos inteligentes; meios de comunicação: RF, 4G, internet, rede local; tags por tipo de dado, booleano/int/real/texto)
-   - Sincronismo de Tempo (estampa de tempo ligada ao ciclo de leitura/`polling`, não ao instante exato da transição)
-   - **Níveis de Acesso** (controle de acesso por planta e por **cargo**, menor privilégio; **não** é a hierarquia de operação 0-3)
-   - **Comando** (conceito unificado: escrita de uma informação no dispositivo; dois tipos, instantâneo e agendado)
-   - Escalabilidade
-   - Redundância
-2. **Ajuste para Escala de Engenharia e Linearização de Sensores** (autoral, com equações)
-3. **Automação e Tecnologias da Indústria 4.0** (fusão de Automação/Informática Industrial + IoT, IIoT, M2M, CPS, Indústria 4.0; prosa corrida; Colombo, Stankovic, Pisching, Bigheti, Monostori, Lasi)
-4. **Computação em Nuvem** (conceito + AWS como provedor adotado; Henriques, Pedrosa)
-5. Demais tecnologias: Banco de Dados, Redis, Docker, Next.js, HTTP/API REST/JSON, Microsserviços, Moleculer, Protocolo Modbus TCP e RTU, Modelagem/serviço de leitura e agendamento
+Mapa de capítulos do TCC final: 1 Introdução, 2 Conceitos e tecnologias (14_1), 3 Arquitetura e requisitos (14_2), 4 Fluxos do sistema (14_3), 5 Interface do sistema (14_4), 6 Bancada de teste (14_5), 7 Resultados (14_6), 8 Conclusão (15). Fonte da verdade sobre o sistema: o repositório do código (`Desktop\Movi Scada`, `docs/DECISOES-VIGENTES.md`), somente leitura.
 
-### Capítulo 14_2 (Funcionamento)
+### Capítulo 2, Conceitos e tecnologias (14_1)
+Subseções definitórias e genéricas (origem, definição, características, sem enquadrar a proposta): sistema SCADA (aquisição e registro, sincronismo de tempo, níveis de acesso por cargo, comando, escalabilidade, redundância), escala de engenharia e linearização de sensores, automação e Indústria 4.0, computação em nuvem, contêineres e orquestração (Docker, Kubernetes, com os artigos do orientador), banco de dados e cache, HTTP/API REST/JSON, microsserviços e filas, Modbus TCP e RTU, e as demais tecnologias do sistema.
 
-1. **Arquitetura do sistema** — diagrama em camadas (frontend, backend, banco, cache, APScheduler, Moleculer, workers, gateway).
-2. **Validações dos Requisitos do SCADA** — uma subseção por requisito (Aquisição e Registro, Sincronismo, **Níveis de Acesso**, **Comando** e Controle, Escalabilidade, Redundância), espelhando a estrutura do Cap. 14_1.
-3. **Servidores** — descrição componente por componente (Frontend, Backend, Banco, Cache, APScheduler, Moleculer, Workers).
-4. **Aquisição de Dados** — Modbus, Modbus TCP, Modbus RTU, gateway, modem.
+### Capítulo 3, Arquitetura e requisitos (14_2)
+Requisitos, arquitetura em contêineres Docker (web, API, workers, aquisição, runtime de scripts, PostgreSQL, Redis), a validação de cada requisito do SCADA contra a arquitetura e as decisões de projeto. Aqui entra o enquadramento da proposta e o mapeamento teoria para implementação.
 
-**Padrão das subseções de validação.** Cada subseção mapeia o requisito conceitual a componentes concretos da arquitetura, fechando a ponte entre teoria (Cap. 14_1) e implementação (Cap. 14_2). É aqui (não no Cap. 2) que entra o enquadramento da proposta.
+### Capítulo 4, Fluxos do sistema (14_3)
+Fluxos descritos por diagramas de blocos com passos numerados e o texto que os percorre: aquisição e tempo real, histórico, comando em quatro fases, alarmes, multi-tenant e provisionamento.
+
+### Capítulo 5, Interface do sistema (14_4)
+Telas do sistema (cadastro, acompanhamento, dashboard, sinótico, mapa, alarmes, linha do tempo, histórico) e os princípios de IHM adotados.
+
+### Capítulo 6, Bancada de teste (14_5)
+Equipamentos reais e simulados usados na validação (inversor de frequência, CLP, servidor Modbus de teste), ligações e parâmetros. Dado que só o autor tem (foto, medição, parâmetro) fica como `\todo[inline]`.
+
+### Capítulo 7, Resultados (14_6)
+Medições e verificações com os números medidos e suas datas, relacionadas aos requisitos.
+
+### Capítulo 8, Conclusão (15)
+Síntese, limitações e trabalhos futuros (inclui levar o sistema a um provedor de nuvem ou a um orquestrador como o Kubernetes).
+
+**Padrão das subseções de validação.** Cada subseção do capítulo 3 mapeia o requisito conceitual a componentes concretos da arquitetura, fechando a ponte entre teoria (capítulo 2) e implementação. É aqui (não no capítulo 2) que entra o enquadramento da proposta.
 
 ---
 
