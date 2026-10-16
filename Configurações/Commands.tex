@@ -22,6 +22,9 @@
 
 \usepackage{tocloft} % Personaliza a aparência do sumário e listas de figuras/tabelas
 
+% Bibliotecas do TikZ para os diagramas de blocos (sem shapes.geometric)
+\usetikzlibrary{positioning,arrows.meta,fit,calc,backgrounds}
+
 % Definir um novo tipo de lista para equações
 \newcommand{\listequationsname}{\Large\textbf{Lista de Equações}} % Define o título da lista de equações
 \newlistof{myequations}{equ}{\listequationsname} % Cria uma nova lista para equações
@@ -192,8 +195,8 @@
 % Registro das siglas (ordem alfabética = ordem na Lista de Siglas)
 % Conceituais -> \newsigla (auto-expande 1x). Protocolo/produto -> \newsigla*.
 % --------------------------------------------------
-% Conceituais (auto-expandem na 1a ocorrencia): cps, erp, iiot, iot, m2m,
-%   mes, soa, ta, ti, ttl.
+% Conceituais (auto-expandem na 1a ocorrencia): acl, cps, cpu, erp, iiot, iot,
+%   lan, m2m, mes, mvp, orm, rpc, sgbd, soa, ta, ti, ttl, vm.
 % Link-only (\newsigla*): siglas de protocolo/produto e as cujo termo no texto
 %   usa variante (plural/minuscula/prosa propria) que nao casa com a expansao.
 \newsigla{acl}{ACL}{Access Control List}{lista de controle de acesso}
