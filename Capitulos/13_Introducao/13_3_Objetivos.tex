@@ -4,16 +4,16 @@
 
 \subsubsection{Objetivo Geral}
 
-\par Desenvolver e validar um sistema supervisório web multi-cliente com arquitetura orientada a serviços em contêineres, capaz de apoiar o monitoramento, o comando e a supervisão de processos industriais, com serviços bem definidos, reutilizáveis e acessíveis pelo navegador.
+\par Desenvolver e validar um sistema supervisório com arquitetura orientada a serviços em contêineres, capaz de apoiar o monitoramento, o comando e a supervisão de processos industriais, com serviços bem definidos, reutilizáveis e acessíveis pelo navegador.
 
 \subsubsection{Objetivos Específicos}
 
 \begin{itemize}
     \item Revisar os conceitos de Indústria~4.0, sistemas supervisórios, arquitetura orientada a serviços (\sigla{soa}), contêineres e computação em nuvem, de modo a embasar a solução proposta.
-    \item Especificar os requisitos funcionais e não funcionais e projetar a arquitetura de serviços em contêineres, com a separação entre interface web, API, serviços de aquisição, filas de trabalho e armazenamento de dados.
-    \item Implementar a aquisição de dados via Modbus TCP, com agendamento das leituras e escritas, e o registro do valor atual e do histórico das variáveis, com banco de dados próprio para cada cliente.
-    \item Implementar a interface web de supervisão, com telas de tempo real, alarmes, gráficos de tendência e sinótico.
-    \item Implementar o comando de equipamentos em quatro fases, com seleção, verificação, confirmação e execução.
+    \item Especificar os requisitos funcionais e não funcionais e projetar a arquitetura de serviços em contêineres, com a separação entre \emph{front-end}, \emph{back-end}, serviços de aquisição, filas de trabalho e armazenamento de dados.
+    \item Implementar a aquisição de dados via Modbus, com agendamento das leituras e escritas, e o registro do valor atual e do histórico das variáveis.
+    \item Implementar a interface de supervisão, com telas de tempo real, alarmes, gráficos de tendência e sinótico.
+    \item Implementar o comando de equipamentos e a validação do seu resultado.
     \item Implementar o controle de acesso por cargo e por grupo de permissões.
-    \item Validar o sistema em uma bancada de teste com um controlador lógico programável (CLP) e um inversor de frequência, e medir seu desempenho frente ao volume de dados esperado.
+    \item Validar o sistema em uma bancada de teste com um controlador lógico programável (CLP) e um inversor de frequência.
 \end{itemize}

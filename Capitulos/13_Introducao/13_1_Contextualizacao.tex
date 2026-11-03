@@ -4,36 +4,51 @@
 
 \par A indústria é o setor da economia dedicado à produção de bens materiais, apoiado em trabalho humano, energia e equipamentos de alto valor agregado. Ao longo de sua evolução, sucessivos saltos tecnológicos redefiniram processos, produtos e formas de organização do trabalho, as chamadas "revoluções industriais" \cite{LASI_INDUSTRY_40}.
 
-\par A Figura~\ref{fig:revolucoes_industriais} resume essa linha do tempo. Na primeira fase, destaca-se a mecanização da produção, na segunda, a difusão da energia elétrica e a produção em massa baseada no modelo Fordista e na terceira fase, a digitalização \cite{LASI_INDUSTRY_40}. Foi nessa fase que a introdução da tecnologia da informação, da automação e da eletrônica impulsionou o início da automação dos processos produtivos. Surgiram então os controladores lógicos programáveis (CLPs), os Controladores Numéricos Computadorizados (CNCs) e os robôs \cite{PISCHING2017}. Essas tecnologias tornaram-se essenciais para as indústrias que buscam maior eficiência e qualidade com menores custos e prazos. Sua adoção contribui diretamente para o aumento da produtividade \cite{BIGHETI2020}.
+\par A Figura~\ref{fig:revolucoes_industriais} resume essa linha do tempo. Na primeira fase, destaca-se a mecanização da produção, na segunda, a difusão da energia elétrica e a produção em massa e, na terceira, a digitalização \cite{LASI_INDUSTRY_40,PISCHING2017}. Foi nessa fase que a introdução da tecnologia da informação, da automação e da eletrônica impulsionou o início da automação dos processos produtivos. Surgiram então os controladores lógicos programáveis (CLPs), os Controladores Numéricos Computadorizados (CNCs) e os robôs \cite{PISCHING2017}. Essas tecnologias tornaram-se essenciais para as indústrias que buscam maior eficiência e qualidade com menores custos e prazos. Sua adoção contribui diretamente para o aumento da produtividade \cite{BIGHETI2020}.
 
 \begin{figure}[H]
     \centering
     \caption{Linha do Tempo das Revoluções Industriais}
     \centering
-    \includegraphics[width=0.85\textwidth]{Imagens/Introducao/Contextualizacao/evolucoes-industriais-nova.png}
+    \includegraphics[width=0.76\textwidth,height=0.58\textheight,keepaspectratio]{Imagens/Introducao/Contextualizacao/evolucoes-industriais-nova.png}
     \centering
     \vspace{0.2cm} \\
     Fonte: Adaptado de \textcite{PISCHING2017}.
     \label{fig:revolucoes_industriais}
 \end{figure}
 
-\par Atualmente, vive-se a quarta fase, a chamada Indústria 4.0, baseada na indústria inteligente, na \sigla{iot} e nos \sigla{cps} \cite{BIGHETI2020}. Nesses sistemas, subsistemas computacionais cooperam entre si e permanecem integrados ao mundo físico e a seus processos, o que permite medir, controlar e analisar dados em tempo real por meio da rede, inclusive a Internet \cite{MONOSTORI2016_CPS_MANUFACTURING}.
-
-\par A Figura~\ref{fig:piramide_automacao} organiza a automação na Indústria 4.0 em forma de pirâmide, distribuída em cinco níveis. No nível 0 está o processo físico de produção, com elementos como motores, bombas e tanques. No nível 1, o sensoriamento e a atuação, realizados por sensores, transmissores e válvulas. O nível 2 reúne o monitoramento, a supervisão e o controle, camada em que se encontram os controladores lógicos programáveis (CLPs), os sistemas supervisórios (\sigla{scada}) e as interfaces homem-máquina (\sigla{ihm}), responsáveis por acompanhar e comandar o processo em tempo real e por se comunicar com o nível 1 por protocolos seriais ou diretamente pelas entradas e saídas (\sigla{io}). O nível 3 corresponde às operações de manufatura e ao controle da produção, em que atuam os \sigla{mes}. No topo, o nível 4 abrange o planejamento de negócios e a logística, em que se destacam os \sigla{erp} \cite{BIGHETI2020,COLOMBO2014_STATE_ART_AUTOMATION}.
+\par Atualmente, vive-se a quarta fase, a chamada Indústria 4.0, baseada na indústria inteligente, na \sigla{iot} e nos \sigla{cps} \cite{BIGHETI2020}. Nesses sistemas, subsistemas computacionais cooperam entre si e permanecem integrados ao mundo físico e a seus processos, o que permite medir, controlar e analisar dados em tempo real por meio da rede, inclusive pela Internet \cite{MONOSTORI2016_CPS_MANUFACTURING}.
 
 \begin{figure}[H]
     \centering
     \caption{Pirâmide de Automação}
     \centering
-    \includegraphics[width=0.85\textwidth]{Imagens/Introducao/Contextualizacao/piramide-automacao-nova.png}
+    \vspace{0.3cm}
+    \figpadrao{\begin{tikzpicture}[x=1cm,y=1.15cm]
+        \foreach \n/\cor/\titulo in {%
+            0/0F2942/{Processo de Produção},%
+            1/1D4570/{Sensoriamento e Atuação},%
+            2/2D6494/{Monitoramento, Supervisão\\e Controle},%
+            3/3A7BB0/{Operações de Manufatura\\e Controle},%
+            4/4A96D0/{Planejamento de Negócios\\e Logística}} {
+            \definecolor{nivel}{HTML}{\cor}
+            \pgfmathsetmacro{\base}{5.2-0.5*\n}
+            \pgfmathsetmacro{\topo}{\base-0.5}
+            \fill[nivel, draw=white, line width=1pt] (-\base,\n) -- (\base,\n) -- (\topo,\n+1) -- (-\topo,\n+1) -- cycle;
+            \node[text=white, font=\small, align=center] at (0,\n+0.5) {\titulo};
+            \node[anchor=west, font=\small] at (5.4,\n+0.5) {Nível \n};
+        }
+    \end{tikzpicture}}
     \centering
     \vspace{0.2cm} \\
     Fonte: Adaptado de \textcite{COLOMBO2014_STATE_ART_AUTOMATION}.
     \label{fig:piramide_automacao}
 \end{figure}
 
-\par Recentemente, as camadas de supervisão e de gestão, do nível 2 ao nível 4, ganharam mais notoriedade: ao digitalizar serviços antes restritos ao ambiente físico da planta, passou-se a ofertá-los sobre infraestrutura em nuvem e a compartilhá-los entre diferentes sistemas e usuários. Em geral, esses serviços seguem a \sigla{soa}, materializada por serviços em nuvem \cite{COLOMBO2014_STATE_ART_AUTOMATION,AHMED2011_EFFICIENT_WEB_SCADA}. Esse movimento é sustentado pela própria natureza da Indústria 4.0, que se caracteriza pelo grande avanço dos protocolos de comunicação e de telemetria, pela popularização do desenvolvimento de software e pela interconexão inteligente de máquinas e sistemas \cite{LASI_INDUSTRY_40,PISCHING2017,BIGHETI2020}.
+\par A Figura~\ref{fig:piramide_automacao} organiza a automação na Indústria 4.0 em forma de pirâmide, distribuída em cinco níveis. No nível 0 está o processo físico de produção, com elementos como motores, bombas e tanques. No nível 1, o sensoriamento e a atuação, realizados por sensores, transmissores e válvulas. O nível 2 reúne o monitoramento, a supervisão e o controle, camada em que se encontram os controladores lógicos programáveis (CLPs), os sistemas supervisórios (\sigla{scada}) e as interfaces homem-máquina (\sigla{ihm}), responsáveis por acompanhar e comandar o processo em tempo real e por se comunicar com o nível 1 \cite{COLOMBO2014_STATE_ART_AUTOMATION}. O nível 3 corresponde às operações de manufatura e ao controle da produção. No topo, o nível 4 abrange o planejamento de negócios e a logística \cite{BIGHETI2020}.
 
-\par A materialização desses serviços apoia-se hoje em contêineres e em sua orquestração. Um contêiner empacota uma aplicação com suas dependências e a executa de forma isolada, o que permite dividir um sistema em serviços independentes, replicá-los e distribuí-los em diferentes servidores. Ferramentas de orquestração, como o Kubernetes, coordenam esses contêineres, mantêm o estado desejado dos serviços e sustentam a replicação com tolerância a falhas \cite{NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES,NETTO2016_STATE_MACHINE_REPLICATION_KUBERNETES}. Essa base é a mesma que sustenta os serviços modernos oferecidos em nuvem, e seus conceitos são detalhados no Capítulo~2.
+\par Recentemente, as camadas do nível 2 ao nível 4 ganharam notoriedade: serviços antes restritos à planta passaram a ser oferecidos em nuvem e compartilhados entre sistemas e usuários, em geral segundo a \sigla{soa} \cite{COLOMBO2014_STATE_ART_AUTOMATION,AHMED2011_EFFICIENT_WEB_SCADA}. Esse movimento é sustentado pela Indústria 4.0, com o avanço dos protocolos de comunicação e de telemetria, a popularização do software e a interconexão de máquinas e sistemas \cite{LASI_INDUSTRY_40,PISCHING2017,BIGHETI2020}.
 
-\par Tais avanços permitiram o monitoramento e a supervisão centralizada de processos complexos em tempo real, elevando o papel dos sistemas supervisórios de simples interfaces de operação para centrais estratégicas de análise de dados. Nesse cenário, este trabalho propõe e implementa um sistema supervisório web orientado a serviços, multi-cliente, que disponibiliza pelo navegador funcionalidades antes restritas ao ambiente físico da planta \cite{COLOMBO2014_STATE_ART_AUTOMATION}. O sistema é executado em contêineres num servidor, e essa mesma arquitetura pode ser levada a um provedor de nuvem ou a um orquestrador, o que mantém a nuvem como horizonte de evolução. Alinhada às tendências da Indústria 4.0 \cite{BIGHETI2020}, a proposta torna o monitoramento e a supervisão acessíveis e compartilháveis entre diferentes sistemas e usuários.
+\par Esses serviços se apoiam hoje em contêineres. Um contêiner empacota uma aplicação com suas dependências e a executa de forma isolada, o que permite dividir um sistema em serviços independentes \cite{NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES,NETTO2016_STATE_MACHINE_REPLICATION_KUBERNETES}, e executa da mesma forma em um computador local, em um servidor ou em um provedor de nuvem.
+
+\par Nesse cenário, este trabalho propõe, implementa e valida um sistema supervisório com arquitetura orientada a serviços, que disponibiliza pelo navegador funcionalidades antes restritas ao ambiente físico da planta \cite{COLOMBO2014_STATE_ART_AUTOMATION}. O sistema é executado em contêineres num servidor, e a mesma arquitetura poderia ser levada a um provedor de nuvem. Alinhada à Indústria 4.0 \cite{BIGHETI2020}, a proposta torna o monitoramento e a supervisão acessíveis e compartilháveis entre sistemas e usuários.

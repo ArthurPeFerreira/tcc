@@ -1,11 +1,11 @@
 \newpage
 \section{Arquitetura e Requisitos do Sistema}
 
-\par Este capítulo especifica os requisitos da solução e apresenta a arquitetura que os atende. Primeiro, são descritos os requisitos funcionais e não funcionais, derivados dos seis pilares de um sistema \sigla{scada} discutidos anteriormente e das demais funcionalidades da aplicação. Em seguida, mostra-se a arquitetura em contêineres, com a divisão de responsabilidades entre os serviços. Depois, valida-se cada pilar frente a essa arquitetura, detalha-se cada serviço, descreve-se o modelo de dados e, por fim, a implantação. O capítulo responde à pergunta ``quem é quem'' no sistema. O caminho percorrido por cada dado e por cada comando entre esses serviços é tratado no capítulo seguinte.
+\par Este capítulo especifica os requisitos da solução e apresenta a arquitetura que os atende: os requisitos funcionais e não funcionais, a arquitetura, a validação de cada pilar do \sigla{scada} e os serviços. O caminho de cada dado e de cada comando é tratado no capítulo seguinte.
 
 \subsection{Requisitos}
 
-\par Os requisitos do sistema foram organizados em funcionais, que descrevem o que a aplicação deve fazer, e não funcionais, que estabelecem as qualidades e as restrições sob as quais essas funções devem operar. Boa parte deles deriva diretamente dos seis pilares de um sistema \sigla{scada}: aquisição e registro de dados, sincronismo de tempo, níveis de acesso, comando e controle, escalabilidade e redundância \cite{ZANGHI2019_SCADA_CONCEITOS}. A esses somam-se requisitos próprios de uma solução web orientada a serviços, como o cadastro hierárquico das instalações, o isolamento entre clientes, os valores calculados e os scripts, a visualização das informações e a sinalização de alarmes e eventos \cite{AHMED2011_EFFICIENT_WEB_SCADA}.
+\par Os requisitos funcionais descrevem o que a aplicação deve fazer, e os não funcionais estabelecem as qualidades e as restrições sob as quais ela opera. Boa parte deles deriva de sete conceitos de um sistema \sigla{scada}, aqui chamados de pilares: aquisição e registro de dados, sincronismo de tempo, níveis de acesso, comando e controle, escalabilidade, integrabilidade e redundância \cite{ZANGHI2019_SCADA_CONCEITOS}. Somam-se os próprios de uma solução orientada a serviços, como o cadastro das instalações, os valores calculados, a visualização e os alarmes.
 
 \subsubsection{Requisitos Funcionais}
 
@@ -26,43 +26,39 @@
         \endfoot
         \multicolumn{3}{c}{Fonte: Autor.} \\
         \endlastfoot
-        RF01        & Adquirir periodicamente, por \emph{polling}, grandezas analógicas e digitais dos dispositivos de campo via Modbus TCP, inclusive com quadro RTU encapsulado, com período de varredura configurável por tag & Aquisição        \\
+        RF01        & Adquirir periodicamente os dados dos dispositivos de campo via Modbus, com período configurável por dispositivo & Aquisição        \\
         \hline
-        RF02        & Registrar continuamente as leituras no histórico, conforme o tipo de dado da tag, mantendo também médias por minuto e por hora para consultas longas & Aquisição        \\
+        RF02        & Registrar as leituras no histórico, com médias por minuto e por hora & Aquisição        \\
         \hline
-        RF03        & Manter o valor atual de cada tag, com indicação de qualidade, disponível para as telas com baixa latência                    & Aquisição        \\
+        RF03        & Manter o valor atual de cada tag, com indicação de qualidade                    & Aquisição        \\
         \hline
-        RF04        & Associar a cada leitura uma estampa de tempo referente ao ciclo de aquisição                                                & Sincronismo      \\
+        RF04        & Associar a cada leitura uma estampa de tempo                                                & Sincronismo      \\
         \hline
-        RF05        & Autenticar os usuários, gerir suas sessões e permitir a troca da própria senha                                              & Níveis de acesso \\
+        RF05        & Manter os usuários e controlar o acesso por cargo e por grupo de permissões                                              & Níveis de acesso \\
         \hline
-        RF06        & Controlar o acesso por cliente, por cargo e por grupo de permissões, segundo o princípio do menor privilégio                & Níveis de acesso \\
+        RF06        & Executar comandos nos dispositivos e validar o resultado pela resposta do equipamento      & Comando          \\
         \hline
-        RF07        & Executar o comando em quatro fases (seleção, verificação, confirmação e execução) como escrita imediata no dispositivo      & Comando          \\
+        RF07        & Executar escrita em hora marcada por evento agendado com script         & Comando          \\
         \hline
-        RF08        & Executar escrita em hora marcada por meio de evento agendado associado a um script, registrando a origem da escrita         & Comando          \\
+        RF08        & Proteger o comando com trava por tag, idempotência e registro de auditoria          & Comando          \\
         \hline
-        RF09        & Concluir o comando pela resposta do dispositivo à escrita, com trava por tag, idempotência e registro de auditoria          & Comando          \\
+        RF09        & Incluir pontos, dispositivos e telas sem alterar o código                                  & Escalabilidade   \\
         \hline
-        RF10        & Incluir novos pontos, dispositivos e telas com o sistema em produção, sem alterar o código                                  & Escalabilidade   \\
+        RF10        & Manter o cadastro de plantas, dispositivos e tags, com pastas e mapeamento Modbus & Cadastro         \\
         \hline
-        RF11        & Manter o cadastro hierárquico de cliente, planta, dispositivo de E/S e tag, com pastas de tags e o mapeamento Modbus de cada ponto & Cadastro         \\
+        RF11        & Calcular valores derivados a partir de outras tags                                     & Cálculo          \\
         \hline
-        RF12        & Manter um banco de dados próprio para cada cliente, criado e removido de forma automática                                   & Multicliente     \\
+        RF12        & Executar scripts do usuário em JavaScript de forma isolada            & Cálculo          \\
         \hline
-        RF13        & Calcular valores derivados por variável meta e por tag interna, a partir de outras tags                                     & Cálculo          \\
+        RF13        & Exibir a lista de acompanhamento em tempo real e dashboards configuráveis                              & Visualização     \\
         \hline
-        RF14        & Executar scripts do usuário em JavaScript, em eventos, variáveis meta e componentes de conteúdo, de forma isolada            & Cálculo          \\
+        RF14        & Desenhar telas sinóticas e executá-las com valores e comandos                  & Visualização     \\
         \hline
-        RF15        & Exibir a lista de acompanhamento de tags em tempo real e o dashboard com gráficos configuráveis                              & Visualização     \\
+        RF15        & Exibir as plantas em um mapa e consultar o histórico das tags                             & Visualização     \\
         \hline
-        RF16        & Permitir desenhar telas sinóticas em um editor gráfico e executá-las com os valores das tags e com comandos                  & Visualização     \\
+        RF16        & Gerar alarmes em quatro níveis a partir de eventos, com reconhecimento   & Alarmes          \\
         \hline
-        RF17        & Exibir as plantas em um mapa e consultar o histórico e a tendência das tags por janela de tempo                             & Visualização     \\
-        \hline
-        RF18        & Gerar alarmes em quatro níveis fixos a partir de eventos de tag e de eventos de sistema do dispositivo, com reconhecimento   & Alarmes          \\
-        \hline
-        RF19        & Registrar eventos, alarmes e comandos e exibi-los em uma linha do tempo                                                     & Alarmes          \\
+        RF17        & Exibir eventos, alarmes e comandos em uma linha do tempo                                                     & Alarmes          \\
         \hline
 \end{xltabular}}
 
@@ -85,297 +81,198 @@
         \endfoot
         \multicolumn{3}{c}{Fonte: Autor.} \\
         \endlastfoot
-        RNF01       & As telas de tempo real refletem as leituras com baixa latência, buscando o valor corrente mantido em memória, com atualização por \emph{polling} curto & Desempenho         \\
+        RNF01       & Atualizar as telas de tempo real com pouco atraso & Desempenho         \\
         \hline
-        RNF02       & Os serviços de aquisição e de processamento em segundo plano são replicáveis na horizontal, com distribuição do trabalho por afinidade ao dispositivo & Escalabilidade     \\
+        RNF02       & Permitir várias réplicas da aquisição e do processamento em segundo plano & Escalabilidade     \\
         \hline
-        RNF03       & O trabalho de cada cliente é enfileirado de forma justa, de modo que um cliente não monopoliza o processamento dos demais     & Escalabilidade     \\
+        RNF03       & Continuar operando com funções reduzidas diante de falhas, sem mostrar dado incorreto & Disponibilidade    \\
         \hline
-        RNF04       & Os serviços possuem réplicas e filas duráveis, e o cache em memória é reconstruído a partir do banco quando volta vazio, com degradação suave em vez de dado incorreto & Disponibilidade    \\
+        RNF04       & Autenticar o acesso e autorizá-lo por cargo e por grupo & Segurança          \\
         \hline
-        RNF05       & O acesso é autenticado por credencial e autorizado por cargo e grupo, com senhas guardadas por Argon2id e isolamento entre clientes & Segurança          \\
+        RNF05       & Proteger os comandos com travas e manter registro de auditoria & Segurança          \\
         \hline
-        RNF06       & O sistema limita as requisições por usuário e por endereço, protege comandos críticos com travas distribuídas e mantém registro de auditoria & Segurança          \\
+        RNF06       & Executar o código do usuário sem rede, arquivos ou segredos e com limites de recursos & Segurança          \\
         \hline
-        RNF07       & O código escrito pelo usuário executa isolado, sem rede, sem arquivos e sem segredos, com limites de tempo, de memória e de saída & Segurança          \\
+        RNF07       & Comunicar com equipamentos de fabricantes distintos apenas por configuração Modbus                              & Interoperabilidade \\
         \hline
-        RNF08       & Os segredos que o sistema precisa ler de volta, como a senha do banco de um cliente, são guardados cifrados                    & Segurança          \\
+        RNF08       & Dividir a solução em serviços que podem ser atualizados separadamente          & Manutenibilidade   \\
         \hline
-        RNF09       & A comunicação com medidores e CLPs de fabricantes distintos se dá apenas por configuração Modbus                              & Interoperabilidade \\
+        RNF09       & Poder levar a solução a outro servidor sem alterar o código  & Portabilidade      \\
         \hline
-        RNF10       & A comunicação entre a interface e o servidor usa padrões abertos (REST/JSON), com contratos validados e versionados          & Interoperabilidade \\
-        \hline
-        RNF11       & A solução separa-se em serviços com implantação independente e baixo acoplamento, cada um com camadas bem delimitadas          & Manutenibilidade   \\
-        \hline
-        RNF12       & Todos os serviços executam em contêineres, de modo que o mesmo conjunto pode ser levado a outro servidor sem alterar o código  & Portabilidade      \\
-        \hline
-        RNF13       & O acesso ocorre por navegador, de qualquer lugar, sem instalação local, com a interface em português                          & Usabilidade        \\
+        RNF10       & Permitir o acesso por navegador, sem instalação local, com a interface em português                          & Usabilidade        \\
         \hline
 \end{xltabular}}
 
+\newpage
 \subsection{Arquitetura}
 
-\par O sistema organiza-se em serviços executados em contêineres \emph{Docker} num servidor, conforme ilustrado na Figura~\ref{fig:arquitetura_sistema}. A divisão separa a interface de supervisão, os serviços que tratam as regras de negócio, o serviço que conversa com o campo, o serviço que executa o código do usuário e os dois armazenamentos de dados. O navegador do operador alcança o servidor por duas vias, a das telas, atendida pela aplicação web, e a da interface de programação, atendida pela \sigla{api}. Os dispositivos de campo ficam fora do servidor e só são alcançados pelo serviço de aquisição.
+\par O sistema organiza-se em serviços, conforme a Figura~\ref{fig:arquitetura_sistema}. O navegador do operador chega ao servidor por duas vias: a das telas, atendida pelo \emph{front-end}, e a dos dados e comandos, atendida pelo \emph{back-end}. Os dispositivos de campo ficam fora do servidor e só o serviço de aquisição fala com eles.
 
 \begin{figure}[H]
     \centering
     \caption{Arquitetura do Sistema}
     \label{fig:arquitetura_sistema}
     \vspace{0.4cm}
-    \resizebox{\textwidth}{!}{%
-    \begin{tikzpicture}[
+        \figpadrao{\begin{tikzpicture}[
         box/.style={draw, rounded corners=2pt, minimum width=2.7cm, minimum height=1.4cm, align=center, font=\footnotesize, fill=white, inner sep=3pt},
         store/.style={box, fill=gray!20, minimum height=0.9cm},
         ext/.style={box, dashed, minimum height=0.9cm},
         conn/.style={->, thick}]
         \draw[dashed, rounded corners=4pt] (-1.6,1.3) rectangle (14.6,-5.7);
-        \node[anchor=south west, font=\footnotesize] at (-1.5,-5.6) {Servidor (contêineres Docker)};
-        \node[ext] (nav) at (1.55,3.0) {Navegador};
-        \node[box] (web) at (0,0) {Web\\{\scriptsize Next.js}};
-        \node[box] (api) at (3.1,0) {API\\{\scriptsize Fastify}};
-        \node[box] (wrk) at (6.2,0) {Worker\\{\scriptsize sistema, interno}\\{\scriptsize e provisionador}};
-        \node[box] (rt) at (9.3,0) {Runtime\\de scripts};
+        \node[anchor=south west, font=\footnotesize] at (-1.5,-5.6) {Servidor};
+        \node[ext, minimum width=1.8cm] (nav) at (1.55,3.0) {Navegador};
+        \node[box] (web) at (0,0) {Front-end\\{\scriptsize Next.js}};
+        \node[box] (api) at (3.1,0) {Back-end\\{\scriptsize Fastify}};
+        \node[box] (wrk) at (6.2,0) {Worker\\{\scriptsize Filas de Trabalho}};
+        \node[box] (rt) at (9.3,0) {Executor\\de Scripts};
         \node[box] (aq) at (12.4,0) {Aquisição\\{\scriptsize Agendador e Modbus}};
-        \node[store] (pg) at (4.65,-2.5) {PostgreSQL\\{\scriptsize central e um por cliente}};
-        \node[store, minimum width=8.8cm] (rd) at (6.2,-4.5) {Redis\\{\scriptsize valor atual, filas e transporte do Moleculer}};
-        \node[ext] (campo) at (12.4,-7.2) {Campo\\{\scriptsize CLPs e dispositivos Modbus TCP}};
-        \draw[conn] (nav.south west) -- (web.north) node[midway, left, font=\scriptsize] {telas};
-        \draw[conn] (nav.south east) -- (api.north) node[midway, right, font=\scriptsize] {/v1};
-        \draw[conn] ([xshift=0.7cm]api.south) -- (pg.north west);
-        \draw[conn] ([xshift=-0.7cm]wrk.south) -- (pg.north east);
+        \node[store] (pg) at (4.65,-2.5) {PostgreSQL\\{\scriptsize Dados e Histórico}};
+        \node[store, minimum width=8.8cm] (rd) at (6.2,-4.5) {Redis\\{\scriptsize Valor Atual, Filas e Transporte do Moleculer}};
+        \node[ext] (campo) at (12.4,-7.2) {Campo\\{\scriptsize CLPs e Dispositivos Modbus}};
+        \draw[conn] (nav.west) -| (web.north);
+        \draw[conn] (nav.east) -| (api.north);
+        \draw[conn] ([xshift=0.7cm]api.south) -- ([xshift=0.7cm]api.south |- pg.north);
+        \draw[conn] ([xshift=-0.7cm]wrk.south) -- ([xshift=-0.7cm]wrk.south |- pg.north);
         \draw[conn] ([xshift=-0.7cm]api.south) -- ([xshift=-0.7cm]api.south |- rd.north);
         \draw[conn] ([xshift=0.7cm]wrk.south) -- ([xshift=0.7cm]wrk.south |- rd.north);
         \draw[conn] (rt.south) -- (rt.south |- rd.north);
         \draw[conn] ([xshift=-0.8cm]aq.south) |- (rd.east);
-        \draw[conn] (aq.south) -- (campo.north) node[midway, right, font=\scriptsize] {Modbus TCP};
+        \draw[conn] (aq.south) -- (campo.north);
+        \node[font=\scriptsize, anchor=west] at (12.5,-6.2) {Modbus};
     \end{tikzpicture}}
     \vspace{0.2cm} \\
     Fonte: Autor.
 \end{figure}
 
-\par A solução reúne cinco serviços de aplicação, apoiados por dois serviços de dados. A aplicação web, em Next.js, entrega apenas as telas e não acessa banco de dados \cite{NEXTJS_DOCS}. A \sigla{api}, em Fastify, concentra as regras de negócio, o cadastro, a autenticação e o acesso aos bancos. O \emph{worker} executa, a partir de filas, as tarefas em segundo plano que precisam de banco, como a gravação do histórico, a avaliação de eventos, o cálculo de valores derivados e a criação do banco de cada cliente. O serviço de aquisição reúne o agendador, que decide o instante de cada leitura, e o cliente Modbus, que fala com o dispositivo de campo. O \emph{runtime} de scripts executa o código JavaScript escrito pelos usuários, de forma isolada. O PostgreSQL guarda o que precisa durar, e o Redis guarda o que precisa ser rápido.
+\par São cinco serviços de aplicação e dois de dados. O \emph{front-end}, em Next.js, entrega apenas as telas \cite{NEXTJS_DOCS}. O \emph{back-end}, em Fastify, concentra as regras de funcionamento, o cadastro, a autenticação e o acesso ao banco. O \emph{worker} retira tarefas de filas e as executa em segundo plano, como a gravação do histórico, a avaliação de eventos e o cálculo de valores derivados. A aquisição reúne o agendador, que decide o instante de cada leitura, e o cliente Modbus, que fala com o dispositivo. O executor de scripts roda, de forma isolada, o JavaScript escrito pelos usuários. O PostgreSQL guarda o que precisa durar, e o Redis guarda o que precisa ser rápido.
 
-\par Os serviços não se chamam diretamente por endereço de rede. A comunicação entre eles usa o Moleculer, um \emph{framework} de microsserviços que descobre os nós disponíveis e distribui as chamadas entre eles \cite{MOLECULER_DOCS}, tendo o Redis como meio de transporte. O trabalho assíncrono e repetível passa por filas do BullMQ, também guardadas no Redis. Essa combinação mantém cada serviço pequeno, com uma responsabilidade clara, e permite criar réplicas de um serviço sem que os demais precisem saber \cite{BIGHETI2020}. A arquitetura segue, portanto, o paradigma de microsserviços e a orientação a serviços que a literatura aponta para os supervisórios modernos \cite{YADAV2020_SCADA_ARCHITECTURE_REVIEW}, com a vantagem de empacotar cada serviço em um contêiner, o que facilita a implantação e a replicação \cite{NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES}.
+\par Os serviços se comunicam pelo Moleculer, usando o Redis como transporte. O trabalho que pode ser feito depois e repetido em caso de falha passa por filas, também no Redis. Com isso, cada serviço fica pequeno e é possível criar réplicas sem que os demais precisem saber \cite{BIGHETI2020}. A arquitetura segue o modelo orientado a serviços, discutido na literatura para aplicações industriais \cite{BIGHETI2020}.
 
-\par Duas decisões de projeto merecem destaque. A primeira é que cada cliente do sistema possui um banco de dados próprio, de modo que o isolamento entre empresas é físico e não apenas lógico. A segunda é que o serviço de aquisição e o \emph{runtime} de scripts não têm acesso a banco de dados nem a credenciais de armazenamento. O primeiro recebe a configuração pronta de cada ponto e devolve o valor lido. O segundo recebe o código e os valores de entrada e devolve o resultado. Se um desses serviços fosse comprometido, o invasor não alcançaria diretamente os dados dos clientes, o que reduz a superfície de ataque exatamente nos dois pontos que lidam com o mundo externo, o campo e o código do usuário \cite{STOUFFER2015_NIST_ICS_SECURITY}.
+\par A aquisição e o executor de scripts não têm acesso ao banco nem às senhas dos armazenamentos: o primeiro recebe pronta a configuração de cada ponto e devolve o valor lido, e o segundo recebe o código e os valores e devolve o resultado. Isso reduz os pontos de ataque justamente onde o sistema lida com o mundo externo, o campo e o código do usuário \cite{STOUFFER2015_NIST_ICS_SECURITY}.
 
-\par O código-fonte é organizado em um único repositório, com os serviços e os pacotes compartilhados lado a lado. Os contratos de dados, escritos como esquemas declarativos, e as funções puras comuns ficam em um pacote que todos os serviços importam, de modo que a interface, a API e os demais serviços falam sobre os mesmos tipos. A Tabela~\ref{tab:cap3_tecnologias} resume as tecnologias adotadas em cada serviço. Todas são de código aberto e têm documentação pública, o que reduz o custo de licenciamento, tema recorrente na literatura sobre supervisórios acessíveis \cite{PHUYAL2020_COST_EFFICIENT_SCADA}.
+\subsection{Validações dos Requisitos}
+
+\par A seguir, mostra-se como a arquitetura da Figura~\ref{fig:arquitetura_sistema} atende a cada um dos pilares de um sistema \sigla{scada} \cite{ZANGHI2019_SCADA_CONCEITOS}.
+
+\subsubsection{Aquisição e Registro de Dados}
+
+\par As leituras (RF01 a RF03) são feitas pela aquisição, que conversa com os dispositivos de campo por Modbus \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}. Cada ponto é cadastrado como tag, com um tipo de dado (booleano, inteiro de 16 ou 32 bits, ponto flutuante, decimal codificado em binário ou texto) e a escala entre o valor bruto e a grandeza de engenharia. O período de varredura é definido por dispositivo, de 45 segundos por padrão. Redes seriais antigas são alcançadas por um \emph{gateway}, sem exigir porta serial no servidor.
+
+\par O valor atual de cada tag fica no Redis, com um indicador de qualidade (bom, desatualizado, falha, desconhecido ou implausível), e as telas o consultam sem sobrecarregar o banco. O histórico é gravado no PostgreSQL, em uma tabela dividida por mês, com médias por minuto e por hora que aceleram os gráficos longos \cite{POSTGRESQL_DOCS}. A gravação passa por filas, de modo que um pico de leituras não a derruba, e uma banda morta configurável evita registrar variações sem significado.
+
+\subsubsection{Sincronismo de Tempo}
+
+\par O sincronismo (RF04) vem do carimbo de tempo que a aquisição aplica ao ciclo de leitura. Todas as tags lidas no mesmo ciclo de um dispositivo recebem a mesma estampa, que indica o instante da amostragem e não o da transição do processo, como é próprio da leitura periódica. O carimbo acompanha o valor até a tela sem ser alterado, o que garante a cronologia para a análise de ocorrências \cite{ZANGHI2019_SCADA_CONCEITOS}. Como todos os serviços usam o relógio do mesmo servidor, a referência é comum, e com mais de um servidor o requisito passa a depender da sincronização entre as máquinas. Os instantes são guardados em UTC e convertidos para o fuso do usuário na exibição.
+
+\subsubsection{Níveis de Acesso}
+
+\par Nos níveis de acesso (RF05), há quatro cargos fixos: o administrador do sistema, que cuida da plataforma, o administrador da instalação, que configura o sistema, o supervisor, que cuida dos usuários e dos operadores, e o operador, que supervisiona e comanda. Há também grupos de permissões, criados a partir de um catálogo de dez permissões, que se somam quando a pessoa está em mais de um grupo. Assim se aplica o menor privilégio, e quem não pode comandar vê os valores, mas não escreve no equipamento \cite{STOUFFER2015_NIST_ICS_SECURITY}.
+
+\par A cada pedido, o \emph{back-end} verifica o cargo e as permissões do usuário, e uma alteração vale no pedido seguinte.
+
+\subsubsection{Comando e Controle}
+
+\par O comando e o controle (RF06 a RF08) seguem as variantes da literatura \cite{ZANGHI2019_SCADA_CONCEITOS}: o comando instantâneo, que muda o estado de um equipamento, e o controle por valor de referência, que define um alvo, ambos executados como escrita Modbus pela aquisição. O comando passa pela tela, que conduz o operador, pelo \emph{back-end}, que verifica a permissão e guarda o registro, e pela aquisição, que escreve. Cada comando tem uma chave de idempotência, identificador que impede a execução dupla, e uma trava por tag, que impede dois comandos simultâneos no mesmo ponto \cite{STOUFFER2015_NIST_ICS_SECURITY}.
+
+\par O comando termina com a resposta do dispositivo, que já espelha o que foi aceito, sem releitura do ponto. Sem resposta no prazo, o comando falha, e quando o sistema perde o rastro, o estado é registrado como desconhecido, nunca como sucesso. Todo comando e todo reconhecimento de alarme ficam registrados com o autor e a origem. A escrita em hora marcada é feita por um evento agendado que dispara um script, com o nome do script registrado como origem.
+
+\subsubsection{Escalabilidade}
+
+\par A escalabilidade (RF09 e RNF02), ou seja, a capacidade de crescer, tem três frentes. Novos pontos, dispositivos e telas entram com o sistema em funcionamento, sem mexer no código. A aquisição e o \emph{worker} podem rodar em várias réplicas, isto é, cópias do mesmo serviço trabalhando juntas, e cada dispositivo fica sempre com a mesma réplica, para que leituras e escritas não se atropelem.
+
+\par Nos dados, o PostgreSQL cresce dividindo o histórico por mês, com retenção configurável, e o Redis tem um limite de memória e recusa novas escritas em vez de descartar dados em silêncio. Isso evita o limite de pontos comum nos supervisórios comerciais, embora o teto dependa da capacidade da máquina.
+
+\subsubsection{Integrabilidade}
+
+\par A integrabilidade (RNF07) vem do protocolo Modbus: a aquisição fala com dispositivos de fabricantes diferentes apenas por configuração, sem alterar o código. Dentro do servidor, os serviços trocam dados pelo Moleculer e pelas filas, e o navegador fala com o \emph{back-end} por \sigla{http}, com dados em \sigla{json}. A troca de dados com outros programas fica como evolução.
+
+\subsubsection{Redundância}
+
+\par A redundância (RNF03) apoia-se nas réplicas e nas filas, que sobrevivem a falhas \cite{ZANGHI2019_SCADA_CONCEITOS}. Cada réplica da aquisição e do \emph{worker} retira trabalho das mesmas filas, de modo que a perda de uma é absorvida pelas demais, e o \emph{front-end} e o \emph{back-end} também rodam em duas réplicas. Os trabalhos que falham são repetidos com espera controlada, os que esgotam as tentativas ficam guardados para inspeção, e o histórico tolera pausas curtas do banco. As travas de comando têm prazo de validade, de modo que a queda de uma cópia nunca as deixa presas.
+
+\par O ponto mais sensível é o Redis, que concentra o valor atual, as filas e o transporte entre serviços, e por isso seu conteúdo pode ser recuperado. Quando ele volta vazio, a ausência de um marcador, o \emph{boot-marker}, aciona uma rotina que recoloca o valor de cada tag a partir da última leitura no banco, agenda de novo as tarefas periódicas e refaz o estado dos alarmes. Enquanto isso, as funções que dependem dele respondem que estão indisponíveis, e os valores recolocados ficam marcados como desatualizados até a próxima leitura.
+
+\par A replicação do PostgreSQL com comutação automática e a execução em mais de uma máquina ficam como evolução. Como os serviços não guardam dados importantes dentro de si, isso não exige mudança no código, apenas na forma de instalá-los.
+
+\subsection{Serviços}
+
+\par Cada serviço pode ser iniciado e parado separadamente, segundo o modelo orientado a serviços \cite{BIGHETI2020}, o que permite aumentar a capacidade só onde é preciso e impede que a falha de um derrube os outros. A Tabela~\ref{tab:servicos} resume a função de cada serviço.
 
 {\renewcommand{\arraystretch}{1.3}\small
-\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}X}
-        \caption{Tecnologias adotadas em cada serviço.}
-        \label{tab:cap3_tecnologias}\\
+\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}X}
+        \caption{Serviços e responsabilidades.}
+        \label{tab:servicos}\\
         \hline
-        \textbf{Serviço} & \textbf{Tecnologias principais} \\
+        \textbf{Serviço} & \textbf{Responsabilidade} \\
         \hline
         \endfirsthead
         \hline
-        \textbf{Serviço} & \textbf{Tecnologias principais} \\
+        \textbf{Serviço} & \textbf{Responsabilidade} \\
         \hline
         \endhead
         \endfoot
         \multicolumn{2}{c}{Fonte: Autor.} \\
         \endlastfoot
-        Web                & Next.js, React, TypeScript, gráficos em ECharts, consultas ao servidor com cache no cliente \\
+        Front-end                 & Entregar as telas ao navegador, sem regra de funcionamento \\
         \hline
-        API                & Node.js, TypeScript, Fastify, esquemas Zod, mapeamento objeto-relacional tipado, BullMQ, Moleculer \\
+        Back-end                 & Atender os pedidos, autenticar, autorizar, cadastrar, consultar e colocar trabalho nas filas \\
         \hline
-        Worker             & O mesmo código da API, em modo de processamento de filas \\
+        Worker              & Executar as tarefas das filas: histórico, eventos e cálculos \\
         \hline
-        Aquisição          & Node.js, TypeScript, cliente Modbus TCP, BullMQ, Moleculer \\
+        Aquisição           & Agendar e executar a leitura e a escrita Modbus nos dispositivos de campo \\
         \hline
-        Runtime de scripts & Interpretador JavaScript compilado para WebAssembly, executado em um ambiente isolado, Moleculer \\
+        Executor de scripts  & Executar o JavaScript do usuário de forma isolada \\
         \hline
-        Dados              & PostgreSQL e Redis \\
+        PostgreSQL          & Guardar de forma permanente o cadastro, o histórico e os demais dados \\
         \hline
-\end{xltabular}}
-
-\par O isolamento entre os serviços é reforçado por regras automáticas de verificação do código. Cada serviço só pode importar o que a sua camada permite, e dependências sensíveis ficam confinadas a um único lugar, como o interpretador de scripts, que só pode ser usado dentro do próprio \emph{runtime}, e a biblioteca de cifra, que só pode ser usada no adaptador responsável pelos segredos. Com isso, a separação desenhada na arquitetura não depende apenas da disciplina de quem escreve o código, pois a ferramenta de verificação reprova a violação.
-
-\subsection{Validações dos Requisitos}
-
-\par As subseções a seguir mostram, pilar a pilar, como a arquitetura da Figura~\ref{fig:arquitetura_sistema} atende aos requisitos apresentados, derivados dos pilares clássicos de um sistema \sigla{scada} \cite{ZANGHI2019_SCADA_CONCEITOS}: aquisição e registro de dados, sincronismo de tempo, níveis de acesso, comando e controle, escalabilidade e redundância.
-
-\subsubsection{Aquisição e Registro de Dados}
-
-\par Na aquisição e no registro de dados (RF01 a RF03), as leituras são feitas pelo serviço de aquisição, que conversa diretamente com os dispositivos de campo por Modbus TCP e entrega os valores em formato digital \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}. Cada ponto é cadastrado como tag, com um tipo de dado que pode ser booleano, inteiro de 16 ou 32 bits, ponto flutuante, decimal codificado em binário ou texto, e com um período de varredura próprio, de cinco segundos por padrão. A tag carrega a escala entre o valor bruto do registrador e a grandeza de engenharia, o que permite apresentar pressão, vazão, nível ou corrente em suas unidades usuais. O dispositivo pode ser acessado por Modbus TCP puro ou por um \emph{gateway} que encapsula o quadro RTU, o que cobre redes seriais legadas sem exigir porta serial no servidor.
-
-\par O resultado de cada leitura segue por dois caminhos. O valor atual de cada tag é guardado no Redis, junto com um indicador de qualidade, que distingue o valor bom, o desatualizado, a falha, o desconhecido e o implausível, e as telas o consultam sem sobrecarregar o banco. O histórico é gravado no PostgreSQL, em uma tabela de leituras particionada por mês, complementada por médias por minuto e por hora que aceleram os gráficos de períodos longos \cite{POSTGRESQL_DOCS}. A gravação do histórico passa por filas duráveis, de modo que um pico de leituras não derruba a gravação, e uma banda morta configurável por tag evita registrar variações sem significado para o processo.
-
-\subsubsection{Sincronismo de Tempo}
-
-\par O sincronismo de tempo (RF04) vem do carimbo de tempo que o serviço de aquisição aplica ao ciclo de leitura. Todas as tags lidas no mesmo ciclo de um dispositivo recebem a mesma estampa, o que reflete o instante da amostragem e não o instante exato da transição do processo, conforme a natureza da aquisição por \emph{polling}. Esse carimbo acompanha o valor por toda a cadeia, do serviço de aquisição ao banco, ao cache e à tela do operador, sem ser alterado. Assim, leituras, alarmes e eventos de pontos diferentes recebem marcações coerentes, o que garante a cronologia necessária para a análise posterior de ocorrências \cite{ZANGHI2019_SCADA_CONCEITOS}. Como todos os serviços rodam em contêineres do mesmo servidor e compartilham o relógio da máquina hospedeira, a referência de tempo é comum a todos os componentes. Em implantações com mais de um servidor, o requisito passa a depender da sincronização de relógio entre as máquinas, premissa registrada para a evolução do sistema. Os instantes são guardados em UTC e convertidos para o fuso do cliente apenas na exibição.
-
-\subsubsection{Níveis de Acesso}
-
-\par Nos níveis de acesso (RF05 e RF06), o controle combina três elementos. O primeiro é o cliente, que é a fronteira rígida do sistema, pois cada cliente tem o seu banco e uma pessoa pertence a um único cliente. O segundo são os quatro cargos fixos, o administrador do sistema, que é a equipe do fornecedor, o administrador do cliente, que configura o sistema, o supervisor, que cuida dos usuários e dos operadores, e o operador, que supervisiona e comanda. O terceiro são os grupos de permissões, criados pelo próprio cliente a partir de um catálogo fixo de dez permissões, que somam seus efeitos quando a pessoa pertence a mais de um grupo. Assim, o princípio do menor privilégio é aplicado de forma granular, e quem não tem a permissão de comandar vê os valores, mas não consegue escrever no equipamento \cite{STOUFFER2015_NIST_ICS_SECURITY}.
-
-\par A autenticação usa um token de acesso de curta duração, mantido em memória no navegador, e um token de renovação guardado em \emph{cookie} protegido contra leitura por scripts. As senhas são guardadas apenas como resumo criptográfico Argon2id, e o cadastro de uma pessoa gera uma senha de uso único que só serve para entrar e trocar a senha. A API verifica a cada requisição o cargo e as permissões da pessoa, lidos de um cache que é invalidado a cada mudança, de modo que a alteração de um grupo vale já na próxima requisição. Como a solução atende vários clientes sobre a mesma infraestrutura, o isolamento por banco de dados, combinado com a resolução do cliente a partir da sessão e nunca de um parâmetro enviado pelo navegador, impede que usuários de uma empresa acessem ou comandem pontos de outra \cite{WALI2024_CLOUD_SCADA_SECURITY}.
-
-\subsubsection{Comando e Controle}
-
-\par O comando e o controle (RF07 a RF09) seguem as variantes previstas na literatura \cite{ZANGHI2019_SCADA_CONCEITOS}. O comando instantâneo, em que o operador muda na hora o estado de um equipamento, e o controle por valor de referência, em que define um alvo a ser mantido, tornam-se uma escrita Modbus executada pelo serviço de aquisição. As quatro fases, seleção, verificação, confirmação e execução, dividem-se entre a tela, que conduz o operador, a API, que verifica a permissão e as condições do comando e guarda o registro, e o serviço de aquisição, que realiza a escrita. Cada comando tem uma chave de idempotência, que impede a execução dupla em caso de reenvio, e uma trava por tag, que impede dois comandos simultâneos sobre o mesmo ponto \cite{STOUFFER2015_NIST_ICS_SECURITY}.
-
-\par A conclusão do comando decorre da resposta do próprio dispositivo à escrita. O sistema não relê o ponto para confirmar, pois a resposta Modbus à escrita já espelha o que foi aceito. Quando o dispositivo não responde no prazo, o comando falha, e quando o sistema perde o rastro da execução, o estado é registrado como desconhecido, nunca como sucesso presumido. Todo comando e todo reconhecimento de alarme ficam registrados com o autor e a origem. O comando agendado de uma pessoa não existe no sistema. A escrita em hora marcada é obtida de outra forma, por um evento agendado que dispara um script capaz de escrever em uma tag, com a origem da escrita registrada como o nome do script.
-
-\subsubsection{Escalabilidade}
-
-\par A escalabilidade (RF10, RNF02 e RNF03) é atendida em três frentes. Na expansão do cadastro, novos pontos, dispositivos e telas entram com o sistema em produção, sem mexer no código, pois a aquisição é parametrizada pelo cadastro e uma recarga incremental leva cada alteração ao agendador sem reiniciar o serviço. Na capacidade de processamento, os serviços que carregam a maior parte do trabalho, a aquisição e o \emph{worker}, são replicáveis na horizontal. Cada réplica da aquisição assume um subconjunto dos dispositivos, com afinidade por dispositivo, de modo que todas as leituras e escritas de um mesmo equipamento passam pela mesma instância e as ordens de comando e de leitura não se atropelam. A replicação de serviços em contêineres é um padrão consolidado para obter capacidade sob demanda \cite{NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES}.
-
-\par Na justiça entre clientes, as filas de trabalho aplicam um limite de concorrência por cliente, de forma que um cliente com muitas tags não monopoliza os \emph{workers} nem o \emph{runtime} de scripts. O \emph{runtime} mantém uma fila justa por cliente e tetos globais de execução simultânea. Na infraestrutura de dados, o PostgreSQL cresce em volume por meio do particionamento do histórico e da retenção configurável, e o Redis é dimensionado com um limite de memória explícito e política que recusa novas escritas em vez de descartar dados em silêncio. O acréscimo de clientes, por sua vez, é feito pela criação automática de um novo banco, sem alterar o código nem os demais clientes. Esse arranjo evita o limite de pontos comum nos supervisórios comerciais, embora o teto de cada instalação dependa, na prática, da capacidade da máquina que hospeda os contêineres.
-
-\subsubsection{Redundância}
-
-\par A redundância (RNF04) apoia-se nas réplicas dos serviços e na durabilidade das filas \cite{ZANGHI2019_SCADA_CONCEITOS}. O serviço de aquisição e o \emph{worker} funcionam como uma frota, em que cada instância retira trabalho das mesmas filas, de modo que a perda de uma é absorvida pelas demais. A aplicação web e a API também rodam em duas réplicas. As filas do BullMQ são persistidas no Redis, e os trabalhos que falham são repetidos com espera controlada, os que esgotam as tentativas ficam guardados para inspeção e a gravação do histórico tolera pausas curtas do banco sem perder leituras. O comando é protegido por travas com prazo de validade, de modo que a queda de uma instância no meio de uma operação libera a trava por expiração e nunca a deixa presa.
-
-\par O ponto mais sensível é o Redis, que concentra o valor atual, as filas e o transporte entre serviços. Ele é configurado com um limite de memória e com política que não descarta chaves, e o sistema foi desenhado para que o seu conteúdo seja recuperável. Quando o Redis volta vazio, a ausência de uma chave sentinela, o \emph{boot-marker}, aciona uma rotina de reconstrução que repovoa o valor atual de cada tag a partir da última leitura guardada no banco, reagenda as tarefas repetíveis e refaz o estado dos alarmes, e durante o processo as rotas que dependem do Redis respondem indisponibilidade em vez de dados incorretos. Os valores reabastecidos são marcados como desatualizados até a próxima leitura real.
-
-\par Ficam como evolução os recursos que dependem de mais de um servidor. A replicação do PostgreSQL com comutação automática e a execução dos contêineres sob um orquestrador, que reinicia e redistribui as instâncias entre máquinas, ampliam a disponibilidade para além de um único hospedeiro. A literatura sobre contêineres gerenciados por orquestradores mostra que é possível manter o estado de serviços replicados coerente com protocolos de replicação de máquina de estados e de consenso, e avaliar o comportamento sob falhas \cite{NETTO2016_STATE_MACHINE_REPLICATION_KUBERNETES,NETTO2019_RAFT_KUBERNETES}. Como os serviços já são contêineres sem estado local relevante, essa evolução não exige mudança no código dos serviços, apenas na forma de implantá-los.
-
-\subsection{Serviços}
-
-\par O sistema divide-se em cinco serviços de aplicação e dois de dados, cada um em seu contêiner, com responsabilidades bem delimitadas e ciclos de vida próprios. Essa separação segue o paradigma de microsserviços para sistemas industriais orientados a serviços \cite{BIGHETI2020}, em que cada serviço é implantado de forma independente, o que permite escalar de modo granular e isolar falhas. Dentro de cada serviço de aplicação, o código segue uma organização em quatro camadas, domínio, aplicação, infraestrutura e apresentação, em que a dependência aponta sempre para dentro e uma camada nunca acessa diretamente o que pertence a outra. A Tabela~\ref{tab:conteineres} resume o papel de cada contêiner e o que ele pode acessar.
-
-{\renewcommand{\arraystretch}{1.3}\small
-\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}Xcc}
-        \caption{Contêineres, responsabilidades e acessos.}
-        \label{tab:conteineres}\\
-        \hline
-        \textbf{Contêiner} & \textbf{Responsabilidade} & \textbf{Acessa banco?} & \textbf{Acessa Redis?} \\
-        \hline
-        \endfirsthead
-        \hline
-        \textbf{Contêiner} & \textbf{Responsabilidade} & \textbf{Acessa banco?} & \textbf{Acessa Redis?} \\
-        \hline
-        \endhead
-        \endfoot
-        \multicolumn{4}{c}{Fonte: Autor.} \\
-        \endlastfoot
-        Web                 & Entregar as telas ao navegador, sem regra de negócio                                                                  & Não  & Não  \\
-        \hline
-        API                 & Atender toda rota \texttt{/v1}, autenticar, autorizar, cadastrar, consultar e enfileirar trabalho                      & Sim  & Sim  \\
-        \hline
-        Worker              & Executar as tarefas das filas: histórico, eventos, cálculos e criação do banco de cada cliente                          & Sim  & Sim  \\
-        \hline
-        Aquisição           & Agendar e executar a leitura e a escrita Modbus nos dispositivos de campo                                              & Não  & Sim  \\
-        \hline
-        Runtime de scripts  & Executar o JavaScript do usuário de forma isolada                                                                      & Não  & Sim, restrito \\
-        \hline
-        PostgreSQL          & Guardar o banco central e um banco por cliente                                                                         & Próprio & Não  \\
-        \hline
-        Redis               & Guardar valor atual, filas, limites, travas e o transporte do Moleculer                                                & Não  & Próprio \\
+        Redis               & Guardar, para busca rápida, o valor atual, as filas e as travas, e transportar as mensagens do Moleculer \\
         \hline
 \end{xltabular}}
 
-\subsubsection{Web}
+\subsubsection{Front-end}
 
-\par A aplicação web é desenvolvida em Next.js com React e entrega apenas as telas \cite{NEXTJS_DOCS}. Ela não tem banco de dados, não executa regras de negócio e não enfileira trabalho. As telas oferecem a lista de acompanhamento, o dashboard, o editor e a execução do sinótico, o mapa das plantas, a consulta de histórico, os alarmes, a linha do tempo e os formulários de cadastro e de administração. O navegador, depois de carregar a aplicação, chama a API diretamente, com o token do usuário, por caminhos que começam em \texttt{/v1}, sem um intermediário na aplicação web, pois não há credencial a esconder.
+\par O \emph{front-end} é desenvolvido em Next.js com React e entrega apenas as telas \cite{NEXTJS_DOCS}, sem banco de dados e sem regras de funcionamento. Depois de carregadas as telas, o navegador chama o \emph{back-end} diretamente.
 
-\par As telas de tempo real funcionam por \emph{polling} curto, em que o navegador pede periodicamente à API os valores atuais das tags que está exibindo. O período é único por cliente, de um a dez segundos, definido pelo fornecedor, e uma resposta de falha de infraestrutura é tratada com aviso de conexão e nova tentativa. A interface é montada a partir de um conjunto próprio de componentes, com tema claro, textos em português e verificação de acessibilidade, de modo que telas do mesmo tipo se comportam do mesmo modo.
+\par As telas de tempo real funcionam por consultas periódicas, e uma falha gera aviso de conexão e nova tentativa. A interface usa um conjunto próprio de componentes, com tema claro e textos em português.
 
-\subsubsection{API}
+\subsubsection{Back-end}
 
-\par A \sigla{api} é o centro do sistema e é desenvolvida em Node.js com o \emph{framework} Fastify. Toda rota do sistema nasce sob o prefixo de versão \texttt{/v1}, e uma mudança incompatível exigiria uma nova versão, o que protege os clientes que a consomem. Cada rota valida a entrada contra um esquema declarativo compartilhado com a interface e devolve erros em um formato padronizado. A API realiza o \emph{login}, a renovação de sessão e a verificação de permissões, e executa o cadastro de clientes, plantas, dispositivos, tags e pastas, as consultas ao histórico, a gestão de usuários, cargos e grupos, a edição de telas, scripts e eventos e o disparo dos comandos do operador.
+\par O \emph{back-end} é o centro do sistema, desenvolvido em Node.js com o \emph{framework} Fastify. Antes de atender um pedido, o \emph{back-end} confere o formato dos dados, descrito em um esquema compartilhado com a interface. Ele faz o \emph{login} e a verificação de permissões, o cadastro, as consultas ao histórico, a gestão de usuários, a edição de telas, scripts e eventos e o envio dos comandos.
 
-\par A API é o único serviço, além do \emph{worker}, que fala com o banco de dados, por meio de um mapeamento objeto-relacional tipado, e escolhe o banco do cliente a partir da sessão da pessoa. Ela também fala com o Redis, para ler o valor atual das tags, controlar limites de taxa e travas, e com o Moleculer, para chamar o serviço de aquisição e o \emph{runtime} de scripts. O processo HTTP atende apenas requisições, e nenhuma tarefa de fundo roda dentro dele, o que evita que um trabalho pesado afete o tempo de resposta das telas. Quando uma operação precisa ser executada depois ou repetida, a API a coloca em uma fila e responde ao usuário, deixando a execução para o \emph{worker}.
+\par Além do \emph{worker}, o \emph{back-end} é o único serviço que fala com o banco. Ele usa o Redis para ler o valor atual e controlar as travas, e o Moleculer para chamar a aquisição e o executor. Nenhuma tarefa de fundo roda junto dele, para que um trabalho pesado não atrase as telas: o que precisa ser executado depois ou repetido vai para uma fila, a cargo do \emph{worker}.
 
 \subsubsection{Worker}
 
-\par O \emph{worker} usa o mesmo código da API, mas em um modo sem servidor HTTP, e consome as filas do BullMQ. Ele roda em um único contêiner no qual um supervisor mantém um subprocesso por família de fila, e cada subprocesso recebe apenas o ambiente e a credencial da sua família. A família \emph{sistema} grava as leituras no histórico, atualiza o valor atual e as médias, avalia os eventos que geram alarmes, dispara os eventos agendados e executa as reconciliações e as varreduras de manutenção. A família \emph{interno} calcula as tags internas e as variáveis meta, valores derivados de outras tags, e para isso solicita a avaliação de scripts ao \emph{runtime}. A família \emph{provisionador} cria e remove o banco de cada cliente, e é a única com a credencial de criação de estruturas no PostgreSQL.
-
-\par Essa separação por família permite que o administrador veja e escale cada tipo de trabalho de forma independente, e que a falha ou a lentidão de uma família não atrase as demais. O \emph{worker} não atende requisições externas. Ele também não fala com o campo, pois a leitura e a escrita nos dispositivos pertencem à aquisição. O isolamento entre as famílias é por processo e não por contêiner, uma escolha que simplifica a operação à custa de compartilhar o mesmo disco e as mesmas permissões do contêiner.
+\par O \emph{worker}, em TypeScript, não atende pedidos do navegador: apenas processa as filas de trabalho. Ele grava o histórico, atualiza o valor atual e as médias, avalia os eventos, dispara os agendados, executa as rotinas de manutenção e calcula as tags internas e as variáveis meta, pedindo a avaliação de scripts ao executor. O \emph{worker} não fala com o campo, e sua capacidade pode ser aumentada com réplicas.
 
 \subsubsection{Aquisição}
 
-\par O serviço de aquisição é a fronteira do sistema com o campo e o único componente que conversa em Modbus com os dispositivos. Ele é um serviço Node sem servidor HTTP e sem banco de dados, e reúne dois papéis. O agendador decide o instante de cada leitura, a partir do período de varredura de cada tag, agrupa as tags de um mesmo dispositivo em uma única rodada para reduzir o tráfego e evita sobrepor ciclos quando a leitura anterior ainda não terminou. O cliente Modbus monta o quadro, envia-o ao dispositivo, valida o tamanho da resposta e os códigos de erro do protocolo, decodifica os registradores, combinando palavras e aplicando a ordem de bytes e a escala cadastradas, e produz o valor na unidade de engenharia \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}.
+\par A aquisição é a fronteira com o campo e o único componente que conversa em Modbus. Ela roda em Node, sem banco de dados, e reúne duas funções. O agendador decide o instante de cada leitura, agrupa as tags de um dispositivo em uma rodada para reduzir o tráfego e não inicia um ciclo enquanto o anterior não terminar. O cliente Modbus monta o quadro, valida a resposta e os códigos de erro, decodifica os registradores, aplicando a ordem de bytes e a escala, e produz o valor na unidade de engenharia \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}.
 
-\par A aquisição recebe a configuração de cada dispositivo já pronta, de modo que não precisa conhecer o cadastro nem o banco, e se mantém por réplicas com afinidade por dispositivo, o que garante que as leituras e as escritas de um mesmo equipamento passem sempre pela mesma instância. A trava por dispositivo, guardada no Redis, estabelece a prioridade entre os usos da conexão, com o comando acima da leitura periódica. A conexão com cada dispositivo é mantida aberta, e as falhas de comunicação são contadas por dispositivo, com tempo limite, número de tentativas e de ciclos configuráveis. Quando uma leitura falha, o último valor válido é mantido e marcado como desatualizado, e a ocorrência alimenta os eventos de sistema do dispositivo, pois, em um \sigla{scada}, a ausência de um dado precisa ser tão visível quanto um limite de processo ultrapassado.
+\par Ela recebe pronta a configuração de cada dispositivo e pode rodar em réplicas, com cada dispositivo fixo em uma delas. A trava por dispositivo, no Redis, dá ao comando prioridade sobre a leitura periódica. As falhas de comunicação são contadas por dispositivo, com tempo limite e número de tentativas configuráveis. Quando uma leitura falha, o último valor é mantido e marcado como desatualizado, e a ocorrência alimenta os eventos do dispositivo, pois, em um \sigla{scada}, a ausência de um dado precisa ser tão visível quanto um limite ultrapassado.
 
-\par Os resultados saem da aquisição como mensagens, que o \emph{worker} transforma em histórico, valor atual e eventos. O serviço também executa as escritas de comando, que chegam pelo Moleculer e viram uma escrita Modbus no dispositivo. O que a aquisição não faz é igualmente relevante. Ela não guarda dados, não decide permissões, não conhece usuários e não executa scripts. Essa pequenez facilita a replicação, o teste e a substituição do protocolo, pois outros protocolos industriais entrariam como novas famílias de trabalho sem alterar o restante.
+\par Os resultados saem como mensagens, que o \emph{worker} transforma em histórico, valor atual e eventos, e as escritas de comando chegam pelo Moleculer. A aquisição não guarda dados, não decide permissões e não executa scripts, o que facilita replicá-la, testá-la e acrescentar outros protocolos industriais sem alterar o restante.
 
-\subsubsection{Runtime de Scripts}
+\subsubsection{Executor de Scripts}
 
-\par O \emph{runtime} de scripts executa o código JavaScript escrito pelos usuários, que aparece em quatro lugares, a variável meta, o script de um evento, o componente de conteúdo do sinótico e a tag interna gerada. Deixar o usuário escrever código em um sistema que supervisiona processos industriais exige isolamento forte. Por isso, cada avaliação roda em uma instância nova de um interpretador JavaScript compilado para \emph{WebAssembly} e executado dentro de um \emph{sandbox} de execução, num processo hospedeiro que é reciclado. O código não tem acesso à rede, ao sistema de arquivos nem a segredos, e cada execução tem tetos de tempo de processamento, de memória, de recursão e de tamanho de saída.
+\par O executor roda o JavaScript dos usuários, presente na variável meta, no script de um evento, no componente de conteúdo do sinótico e na tag interna gerada. Deixar o usuário escrever código em um sistema industrial exige isolamento forte. Por isso, cada avaliação roda em uma cópia nova de um interpretador, em um ambiente fechado, em um processo hospedeiro que é reciclado. O código não acessa rede, arquivos nem segredos, e cada execução tem limites de tempo, memória, recursão e saída.
 
-\par O serviço roda em contêiner próprio, sem credencial de banco e sem a chave de cifra do sistema. Quem lê o banco é a API ou o \emph{worker}, que enviam os valores no pedido de avaliação. O serviço fala com o resto do sistema apenas pela ação de avaliação do Moleculer, em um espaço de nomes próprio, e a conta que ele usa no Redis tem permissões reduzidas ao mínimo. As avaliações entram em uma fila justa por cliente, com tetos globais e por cliente, de modo que um script lento de um cliente não impede o dos demais. Assim, mesmo que um script malicioso consiga escapar do interpretador, não alcança o banco, a rede interna nem os comandos de escrita do campo, o que atende ao requisito de segurança do código do usuário.
+\par O serviço não tem credencial de banco: o \emph{back-end} ou o \emph{worker} leem o banco e enviam os valores no pedido. A conta dele no Redis tem o mínimo de permissões, e um limite global de execuções simultâneas impede que um script lento ocupe o serviço inteiro. Assim, mesmo que um script malicioso escape do interpretador, não alcança o banco, a rede interna nem os comandos de escrita do campo.
 
 \subsubsection{PostgreSQL}
 
-\par O PostgreSQL é um banco relacional de código aberto, com bom suporte a tipos complexos, particionamento e consultas em janelas de tempo \cite{POSTGRESQL_DOCS}, e guarda por longo prazo todo o estado relevante do sistema. Há um banco central, que guarda os clientes, os usuários, as sessões e o registro de qual banco pertence a cada cliente, e um banco para cada cliente, que guarda o cadastro, o histórico, os alarmes e eventos, as telas, os scripts e os grupos de permissões. Os dois níveis de banco são descritos adiante, no modelo de dados.
+\par O PostgreSQL é um banco relacional de código aberto, com bom suporte a particionamento e a consultas em janelas de tempo \cite{POSTGRESQL_DOCS}, e guarda os usuários, as sessões, o cadastro, o histórico, os alarmes, as telas, os scripts e os grupos de permissões.
 
-\par O acesso é feito por um mapeamento objeto-relacional tipado, em conjuntos de conexões separados por finalidade, de modo que a ingestão de leituras, as telas e as consultas pesadas de histórico não disputam as mesmas conexões. Há um teto global de conexões por processo, e o esquema de cada banco evolui por migrações compatíveis com a versão anterior do código, executadas sob trava e ensaiadas antes da aplicação real. O histórico de leituras é particionado por mês, e a retenção é configurável por cliente. Os índices acompanham as consultas, e cada consulta nova nasce com o índice que a atende, para que o custo não cresça com o tamanho da tabela inteira.
+\par As conexões são separadas por finalidade, de modo que a gravação de leituras, as telas e as consultas pesadas não as disputam. As mudanças na estrutura do banco são feitas por migrações, roteiros de alteração compatíveis com a versão anterior do código e ensaiados antes da aplicação. O histórico é dividido por mês, com retenção configurável, e cada consulta nova nasce com o índice que a atende.
 
 \subsubsection{Redis}
 
-\par O Redis é um armazenamento de estruturas de dados em memória \cite{REDIS_DOCS} que acumula vários papéis. Como cache, mantém o valor atual de cada tag, lido pelas telas sem onerar o banco. Como memória das filas, guarda os trabalhos do BullMQ. Como meio de transporte, sustenta a comunicação do Moleculer entre os serviços. Como apoio à segurança e à coordenação, guarda os contadores dos limites de taxa, as travas distribuídas dos comandos e dos dispositivos e a lista das sessões revogadas.
+\par O Redis é um armazenamento de dados em memória \cite{REDIS_DOCS} com várias funções. Como memória de acesso rápido (\emph{cache}), mantém o valor atual de cada tag. Guarda os trabalhos das filas, transporta a comunicação do Moleculer e guarda os contadores de limites, as travas distribuídas e a lista de sessões revogadas.
 
-\par Há duas categorias de chaves. As de apoio têm prazo de validade e se renovam sozinhas, como os contadores de limite e as travas. As que sustentam o estado em tempo real, como o último valor de cada tag, não expiram, e por isso o sistema trata o Redis como recuperável, reconstruindo-o do banco quando volta vazio. Toda chave cujo identificador vem do banco de um cliente leva o identificador do cliente, para que a limpeza na exclusão de um cliente apague apenas o que é dele. O Redis é acessível apenas pela rede interna dos contêineres, e as permissões de cada serviço são restritas por conta de acesso, de modo que o \emph{runtime} de scripts, por exemplo, só alcança a ação de avaliação.
+\par Os contadores e as travas têm prazo de validade. Já o último valor de cada tag não expira, e por isso o Redis é reconstruído do banco quando volta vazio. Ele só é acessível pela rede interna, e cada serviço tem uma conta com permissões próprias.
 
 \subsubsection{Comunicação Moleculer e Filas}
 
-\par A comunicação entre os serviços de aplicação é coordenada pelo Moleculer, que se apoia no Redis como meio de transporte e funciona como orquestrador lógico da solução \cite{MOLECULER_DOCS}. É por ele que a API pede ao serviço de aquisição uma escrita, que a aquisição entrega os resultados das leituras e que a API e o \emph{worker} pedem a avaliação de scripts ao \emph{runtime}. O Moleculer oferece descoberta automática dos serviços, distribui as chamadas entre as instâncias replicadas, aplica tempo limite e isola falhas para que não se propaguem. A afinidade por dispositivo da aquisição é obtida por uma estratégia de distribuição que direciona as chamadas de um mesmo dispositivo à mesma instância.
+\par O Moleculer usa o Redis como transporte \cite{MOLECULER_DOCS} e é por ele que o \emph{back-end} pede uma escrita à aquisição, que a aquisição entrega os resultados das leituras e que o \emph{back-end} e o \emph{worker} pedem a avaliação de scripts. Ele encontra os serviços automaticamente, distribui as chamadas entre as réplicas, aplica tempo limite e impede que uma falha se propague.
 
-\par O trabalho que não precisa de resposta imediata passa por filas do BullMQ. Cada família de trabalho tem a sua fila geral, e uma fila a mais só existe quando há motivo, como uma credencial diferente, um limite de concorrência próprio ou um caminho quente de dado. As filas aplicam limites por cliente, descartam o histórico excedente quando a memória do Redis passa de um limiar, mantêm os trabalhos falhados por um período para inspeção e exigem que cada tarefa seja idempotente, de modo que repetir uma tarefa não produz efeito duplicado. Os dois mecanismos se complementam. O Moleculer cobre a chamada com resposta, e as filas cobrem o trabalho durável e repetível.
-
-\subsubsection{Segurança entre os Serviços}
-
-\par A segurança atravessa todos os serviços e se apoia em camadas. Na borda, a API aplica limites de taxa por usuário e por endereço de origem, com limites mais rígidos para o \emph{login} e para as consultas pesadas de histórico, e bloqueia temporariamente o acesso após tentativas de entrada malsucedidas. Os segredos que o sistema precisa ler de volta, como a senha do banco de um cliente, são guardados com cifra simétrica autenticada, usando uma chave de dados por cliente protegida por uma chave mestra, enquanto as senhas de usuários e as chaves de acesso emitidas pelo sistema são guardadas apenas como resumo irreversível \cite{STOUFFER2015_NIST_ICS_SECURITY}.
-
-\par Entre os serviços, cada contêiner recebe somente o ambiente de que precisa. A aquisição não tem as credenciais do banco, o \emph{runtime} de scripts não tem a chave de cifra, e dentro do \emph{worker} cada família de fila recebe apenas a sua credencial, de modo que só a família que cria bancos de clientes dispõe da permissão de criação de estruturas. A comunicação pelo Moleculer confere a identidade de quem chama, e as contas do Redis de cada serviço restringem quais ações ele pode executar. Esse desenho segue o princípio de que o comprometimento de uma peça não pode se transformar em acesso irrestrito ao conjunto, requisito central em sistemas de controle industrial conectados a redes corporativas e à internet \cite{WALI2024_CLOUD_SCADA_SECURITY}.
-
-\subsection{Modelo de Dados}
-
-\par O modelo de dados separa o que é comum a todos os clientes do que pertence a cada um. A Figura~\ref{fig:cap3_modelo_dados} apresenta a visão geral. O banco central guarda os dados que o sistema precisa antes de saber quem é o cliente, que são os clientes, os usuários, as sessões e o registro que indica em qual banco estão os dados de cada cliente. O banco de cada cliente guarda tudo o que é operacional daquele cliente.
-
-\begin{figure}[H]
-    \centering
-    \caption{Modelo de Dados}
-    \label{fig:cap3_modelo_dados}
-    \vspace{0.4cm}
-    \resizebox{\textwidth}{!}{%
-    \begin{tikzpicture}[
-        box/.style={draw, rounded corners=2pt, minimum width=2.6cm, minimum height=0.9cm, align=center, font=\footnotesize, fill=white, inner sep=3pt},
-        conn/.style={->, thick}]
-        \draw[dashed, rounded corners=4pt] (-0.4,3.0) rectangle (3.6,-3.4);
-        \node[font=\footnotesize] at (1.6,2.6) {Banco central};
-        \node[box] (cli) at (1.6,1.5) {Clientes};
-        \node[box] (usr) at (1.6,0.2) {Usuários};
-        \node[box] (ses) at (1.6,-1.1) {Sessões};
-        \node[box] (reg) at (1.6,-2.4) {Registro do\\banco do cliente};
-        \draw[dashed, rounded corners=4pt] (5.2,3.0) rectangle (19.4,-3.4);
-        \node[font=\footnotesize] at (12.3,2.6) {Banco do cliente (um para cada cliente)};
-        \node[box] (pla) at (6.9,1.2) {Planta};
-        \node[box] (dis) at (10.2,1.2) {Dispositivo\\de E/S};
-        \node[box] (tag) at (13.5,1.2) {Tag};
-        \node[box] (lei) at (17.0,1.2) {Leituras\\{\scriptsize particionadas por mês}};
-        \node[box] (pas) at (13.5,-1.0) {Pasta de tags};
-        \node[box] (out) at (8.5,-1.8) {Alarmes, eventos, telas,\\scripts e grupos};
-        \draw[conn] (pla) -- (dis) node[midway, above, font=\scriptsize] {1:N};
-        \draw[conn] (dis) -- (tag) node[midway, above, font=\scriptsize] {1:N};
-        \draw[conn] (tag) -- (lei) node[midway, above, font=\scriptsize] {1:N};
-        \draw[conn] (pas) -- (tag) node[midway, right, font=\scriptsize] {contém};
-        \draw[conn] (cli) -- (usr) node[midway, right, font=\scriptsize] {1:N};
-        \draw[conn] (usr) -- (ses) node[midway, right, font=\scriptsize] {1:N};
-        \draw[conn] (cli) to[bend right=40] (reg);
-        \draw[conn] (reg.east) -- (5.2,-2.4) node[midway, above, font=\scriptsize] {aponta};
-    \end{tikzpicture}}
-    \vspace{0.2cm} \\
-    Fonte: Autor.
-\end{figure}
-
-\par O cadastro obedece a uma hierarquia de quatro níveis. O cliente é a empresa contratante. A planta é a instalação física, em um único nível, com nome, identificador textual e coordenadas geográficas, que a posicionam no mapa. O dispositivo de E/S é a conexão com a origem do dado, que pode ser um equipamento Modbus TCP ou um dispositivo interno, que gera valores calculados ou simulados, e pertence a uma única planta, em uma lista simples. A tag é a variável monitorada ou comandada, a menor unidade do cadastro, e carrega o endereço do registrador, o tipo de dado, a ordem de bytes, a escala, o período de varredura e a banda morta. Uma árvore de pastas, separada dos dispositivos e própria de cada planta, organiza as tags para a visualização. Uma pasta pode reunir tags de dispositivos diferentes da mesma planta, e a tag fica na raiz ou em uma única pasta.
-
-\par As leituras ligam-se à tag e formam a maior tabela do sistema. Elas são particionadas por mês, e as partições futuras são criadas por tarefas de manutenção. Para as consultas de períodos longos, o sistema mantém ainda as médias por minuto, usadas quando o período de varredura da tag é inferior a sessenta segundos, e as médias por hora. O banco do cliente guarda também as ocorrências de alarme, os eventos e seus estados, as telas, as listas de acompanhamento, os scripts, as variáveis meta, os grupos de permissões e o registro de comandos, com a cópia do nome de quem os emitiu.
-
-\par A separação entre o banco central e o banco do cliente tem consequências práticas. O cliente é resolvido pela sessão, e a conexão ao banco dele é aberta a partir do registro guardado no banco central, com a senha cifrada. A criação de um novo cliente é uma tarefa retomável do \emph{worker}, que cria o banco, aplica o esquema e os dados iniciais e registra o resultado, e que desfaz tudo se falhar no meio. A exclusão do cliente apaga o banco inteiro e as chaves dele no Redis. A exclusão de registros do cadastro é real, sem marcar como apagado, e o que se pode fazer é desabilitar um item, que é um estado de negócio. As referências entre os dois bancos, como o vínculo do usuário com os grupos, não têm chave estrangeira, e uma tarefa de limpeza remove os vínculos que ficaram órfãos.
-
-\subsection{Implantação}
-
-\par A implantação reúne os contêineres em um servidor com Docker, descrito por uma composição de serviços em que cada contêiner tem a sua imagem, as suas variáveis de ambiente e os seus limites de memória e de processamento. São seis contêineres de aplicação e de cache, a aplicação web, a API, o \emph{worker}, a aquisição, o \emph{runtime} de scripts e o Redis, além do PostgreSQL, que pode estar na mesma máquina ou em uma instância dedicada. Os contêineres se comunicam por uma rede interna, e apenas a porta de entrada do servidor é exposta ao navegador. Um \emph{proxy} reverso encaminha, para o mesmo endereço, as rotas \texttt{/v1} e a verificação de saúde à API e todo o resto à aplicação web, de modo que o navegador conhece uma única origem e o sistema dispensa configuração de compartilhamento de recursos entre origens.
-\todo[inline]{Confirmar com o autor qual servidor hospeda o sistema no trabalho (computador do autor ou servidor do instituto), a configuração da máquina (processador, memória) e o \emph{proxy} reverso usado na bancada, para completar esta subseção.}
-
-\par O acesso aos dispositivos de campo é feito a partir do contêiner de aquisição, por conexões Modbus TCP de saída. Os dispositivos não precisam enxergar o restante do servidor, e a rede do campo precisa permitir apenas o endereço da máquina que hospeda a aquisição. O Redis e o PostgreSQL não são expostos fora da rede interna. Cada serviço recebe apenas as variáveis de ambiente de que precisa, organizadas por assunto, e os segredos de desenvolvimento são gerados localmente e nunca versionados. As mesmas imagens servem a qualquer ambiente, pois a configuração entra em tempo de execução.
-
-\par A arquitetura foi desenhada para sair de um único servidor sem mudança de código. Como todos os serviços já são contêineres, a levada para um provedor de computação em nuvem, com banco gerenciado, cache gerenciado e balanceamento de carga, ou para um orquestrador como o Kubernetes, que distribui e reinicia os contêineres entre várias máquinas, é uma mudança na forma de implantar. A literatura mostra que a replicação de serviços e a coordenação de contêineres sob um orquestrador permitem obter tolerância a falhas e escala \cite{NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES,NETTO2016_STATE_MACHINE_REPLICATION_KUBERNETES}, e é essa evolução que se aponta como trabalho futuro, junto da replicação do banco de dados com consenso \cite{NETTO2019_RAFT_KUBERNETES}.
-
-\par A implantação em servidor único traz uma limitação que deve ficar explícita. A máquina hospedeira é um ponto único de falha, e uma queda dela interrompe todo o sistema. A disponibilidade obtida pelas réplicas e pelas filas protege contra a falha de um processo ou de um contêiner, mas não contra a falha do servidor. Os requisitos de disponibilidade foram redigidos com essa premissa, e a evolução para a nuvem ou para um orquestrador é o caminho para eliminar essa limitação.
+\par O trabalho sem resposta imediata passa por filas, que limitam as tarefas simultâneas, descartam os trabalhos de histórico excedentes quando a memória do Redis passa de um limiar e guardam por um tempo os que falharam. Cada tarefa deve ser idempotente, isto é, repeti-la não produz efeito duplicado. O Moleculer cobre a chamada que espera resposta, e as filas cobrem o trabalho que precisa sobreviver a falhas.

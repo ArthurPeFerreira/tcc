@@ -8,6 +8,11 @@ Este arquivo documenta as convenções, padrões e regras de comportamento que *
 
 **Só faça uma alteração quando você tiver 95% de certeza de que ela está correta.** Caso não tenha, **faça perguntas ao usuário** até atingir esse nível de confiança. Use a ferramenta `AskUserQuestion` para perguntas estruturadas quando houver opções concretas; use texto livre quando precisar de esclarecimento aberto.
 
+- Regras estritas de conteúdo (decisão do autor, 27/10/2026):
+  1. Não inventar nada. Todo conteúdo vem das referências do trabalho (`Referencias.bib` e os PDFs da pasta de referências). Se faltar base para uma afirmação, parar e falar com o autor para buscarem artigos juntos.
+  2. Não tirar conteúdo da internet para o texto.
+  3. Seguir as normas ABNT da pasta `Normas ABNT` na raiz do Latex (`../Normas ABNT/`, ver o `LEIA-ME.md` de lá) em formatação, citações, referências e elementos do trabalho. Norma que não estiver na pasta: perguntar ao autor, não supor.
+
 Aplicar essa regra em particular a:
 - Mudanças em texto técnico (definições, números, fórmulas)
 - Estrutura de capítulos/seções/labels
@@ -21,17 +26,24 @@ Quando estiver inseguro, **pergunte antes de editar**.
 
 ## 1. Visão geral do projeto
 
-- **Tema:** Sistema supervisório web orientado a serviços (SCADA na nuvem) com aquisição via Modbus TCP/RTU, integração com IoT/IIoT/CPS/Indústria 4.0.
+- **Tema:** Sistema supervisório web orientado a serviços (SCADA na nuvem) com aquisição via Modbus, integração com IoT/IIoT/CPS/Indústria 4.0.
 - **Idioma:** Português Brasileiro.
 - **Norma bibliográfica:** ABNT (via `biblatex-abnt`).
 - **Arquivo principal:** `Texto.tex` na raiz.
 - **Diretório de trabalho:** `C:\Users\Arthur Ferreira\Desktop\Latex\TCC`.
 - **Fase:** TCC final (o trabalho deixou de ser projeto). A Conclusão entra no documento e o Cronograma saiu (`16_Cronograma.tex` continua no repositório, sem inclusão em `Texto.tex`).
 - **Decisões de conteúdo do TCC final:**
-  - **Sem AWS no TCC.** O sistema roda em contêineres Docker num servidor (o computador do autor ou um servidor do instituto). Nada de ECS, RDS, ElastiCache, Lambda, CloudFront ou zonas de disponibilidade no texto. A computação em nuvem fica como conceito na fundamentação e como evolução nos trabalhos futuros (a arquitetura em contêineres permite levar o sistema a um provedor de nuvem ou a um orquestrador como o Kubernetes sem mudar o código). As siglas `aws`, `ecs` e `rds` seguem registradas em `Configurações/Commands.tex` para esse uso.
+  - **Sem AWS no TCC.** O sistema roda em contêineres Docker num servidor (o computador do autor ou um servidor do instituto). Nada de ECS, RDS, ElastiCache, Lambda, CloudFront ou zonas de disponibilidade no texto. A computação em nuvem fica como conceito na fundamentação e como ideia de aplicação/evolução nos trabalhos futuros (a arquitetura em contêineres permite levar o sistema a um provedor de nuvem e a mais de um servidor sem mudar o código), nunca como algo que o sistema faz hoje.
+  - **Não citar nada que o sistema não usa** (decisão do autor, 2026-10-25), para não abrir pergunta da banca. Fora do texto: Kubernetes, orquestradores, Raft, Paxos, etcd, replicação de máquinas de estados, OPC UA, MQTT, MySQL/Oracle como exemplo, MES e ERP (saíram da descrição da pirâmide de automação em 27/10) etc.
+  - **Sem multi-cliente** (decisão do autor, 2026-10-25). O objetivo é arquitetar e mostrar o sistema funcionando. Nada de multi-tenant, banco por cliente, isolamento entre clientes, fila justa por cliente, criação/administração de clientes. Cargos: administrador do sistema, administrador da instalação, supervisor e operador. Requisitos: RF01 a RF18 e RNF01 a RNF12. As siglas `aws`, `ecs` e `rds` (e as demais sem uso no texto) foram retiradas de `Configurações/Commands.tex`, porque `\printlistasiglas` imprime toda sigla registrada, usada ou não.
+  - **Sem nomes de biblioteca** (decisão do autor, 01/11/2026). Só a base fica nomeada: Fastify, Moleculer, Next.js, React, Node.js, TypeScript, Docker, PostgreSQL e Redis. Fora do texto: BullMQ, Zod, biblioteca de gráfico e de mapa, interpretador de scripts, Argon2id e JWT. Dizer o que a função faz, com "boas práticas" onde couber. Testes de carga e números de CPU ficam até o autor falar com o orientador.
+  - **Bancada sem simulação** (decisão do autor, 01/11/2026). O tanque saiu por completo. A bancada é só CLP, inversor e motor: ligar, desligar e mudar a velocidade, com demonstração pelo tablet aos professores. Tags: comando, estado, referência, frequência, corrente, tensão e falha. O alarme de corrente alta é proposta, com limite a confirmar.
+  - **Sem nome de produto** (decisão do autor, 01/11/2026). O texto não usa "Movi" nem outro nome: é "o sistema" ou "o supervisório". O autor vai tirar o nome também da interface, então as capturas de tela só entram depois disso.
+  - **Sem seção de implantação** (decisão do autor, 01/11/2026). O foco é a arquitetura e a validação de que ela funciona. Na apresentação, o sistema roda em Docker Compose no computador do autor (só contexto, não escrever no texto). Não cortar mais texto por iniciativa própria: o autor vai pedindo os cortes conforme lê.
+  - **Modbus sem variantes** (decisão do autor, 01/11/2026). O texto fala só do protocolo Modbus, sem citar TCP, RTU ou ASCII. Os títulos das referências ficam como são.
   - **Sem código no texto.** Mostrar caminhos e fluxos (diagramas de blocos com passos numerados e o texto que percorre os passos), não trechos de programa.
-  - **Diagramas simples**, só quadradinhos em TikZ, no estilo dos artigos do orientador (figura de blocos com passos numerados e um parágrafo que os percorre: "o cliente envia o pedido (1), que ... (2)"). Bibliotecas carregadas em `Configurações/Commands.tex`: `positioning, arrows.meta, fit, calc, backgrounds`.
-  - Artigos do orientador citáveis: `NETTO2016_STATE_MACHINE_REPLICATION_KUBERNETES`, `NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES`, `NETTO2019_RAFT_KUBERNETES`.
+  - **Diagramas simples**, só quadradinhos em TikZ, no estilo dos artigos do coorientador (figura de blocos com passos numerados e um parágrafo que os percorre: "o cliente envia o pedido (1), que ... (2)"). Bibliotecas carregadas em `Configurações/Commands.tex`: `positioning, arrows.meta, fit, calc, backgrounds`.
+  - Artigos do coorientador citáveis: `NETTO2016_STATE_MACHINE_REPLICATION_KUBERNETES` e `NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES`, só onde definem virtualização, contêiner e imagem. `NETTO2019_RAFT_KUBERNETES` saiu junto com o Raft.
 
 ### 1.1 Compilação
 
@@ -79,7 +91,7 @@ TCC/
 │   │   └── Justificativa/
 │   └── Desenvolvimento/            # convenção: CapN/ ↔ 14_N_Cap.tex
 │       └── Cap1/ … Cap6/           # figuras de 14_1_Cap.tex … 14_6_Cap.tex
-└── Referencias/                    # PDFs das referências (só leitura)
+└── Referencias/                    # PDFs (só leitura), com o nome da citação como aparece no texto, ex.: "Bangemann et al., 2014.pdf" (chave COLOMBO2014...), "Abbas, 2011.pdf" (chave AHMED2011...)
 ```
 
 ---
@@ -98,7 +110,7 @@ TCC/
 - **Citação parentética no texto corrido (padrão):** `\cite{KEY}` ou `\cite{KEY1,KEY2}`. Apresentar a definição/afirmação com palavras próprias (reformulando o conteúdo do autor, sem copiar a redação dele) e ancorar a referência ao final da frase ou da oração que ela sustenta.
 - **NÃO usar citação narrativa em prosa.** Evitar construções como "\textcite{KEY} aponta/define/destaca", "Para \textcite{KEY}, ...", "Como observa \textcite{KEY}, ...", "Segundo \textcite{KEY}, ...", "De acordo com ...". Em todos esses casos, reescrever a afirmação e colocar `\cite{KEY}` no fim.
 - `\textcite` fica reservado à **atribuição de fonte de figuras e tabelas** (ver Seção 5.3), por exemplo `Fonte: \textcite[p.~N]{KEY}.` (usar `~` para non-break space).
-- **Distribuir as citações ao longo do parágrafo**, ancorando cada `\cite` à afirmação que ele sustenta, em vez de agrupar todas as referências no fim do parágrafo.
+- **Distribuir as citações ao longo do parágrafo**, ancorando cada `\cite` à afirmação que ele sustenta, em vez de agrupar todas as referências no fim do parágrafo. Não citar a cada frase nem repetir a mesma referência no parágrafo: cada fonte aparece uma vez, e as citações ficam espalhadas pela folha (pedido do autor, 01/11/2026).
 - **Diversificar as fontes:** evitar sustentar uma subseção inteira em um único autor; buscar nas referências disponíveis (Seção 10) outras que corroborem cada ponto.
 
 ### 4.3 Aspas
@@ -365,13 +377,13 @@ Convenção do projeto: usar `\,unidade` inline (`4\,mA`, `0\,bar`) como padrão
 Mapa de capítulos do TCC final: 1 Introdução, 2 Conceitos e tecnologias (14_1), 3 Arquitetura e requisitos (14_2), 4 Fluxos do sistema (14_3), 5 Interface do sistema (14_4), 6 Bancada de teste (14_5), 7 Resultados (14_6), 8 Conclusão (15). Fonte da verdade sobre o sistema: o repositório do código (`Desktop\Movi Scada`, `docs/DECISOES-VIGENTES.md`), somente leitura.
 
 ### Capítulo 2, Conceitos e tecnologias (14_1)
-Subseções definitórias e genéricas (origem, definição, características, sem enquadrar a proposta): sistema SCADA (aquisição e registro, sincronismo de tempo, níveis de acesso por cargo, comando, escalabilidade, redundância), escala de engenharia e linearização de sensores, automação e Indústria 4.0, computação em nuvem, contêineres e orquestração (Docker, Kubernetes, com os artigos do orientador), banco de dados e cache, HTTP/API REST/JSON, microsserviços e filas, Modbus TCP e RTU, e as demais tecnologias do sistema.
+Subseções definitórias e genéricas (origem, definição, características, sem enquadrar a proposta): sistema SCADA (aquisição e registro, sincronismo de tempo, níveis de acesso por cargo, comando, escalabilidade, redundância), automação e Indústria 4.0, computação em nuvem, contêineres e Docker (com os artigos do coorientador), banco de dados e cache, HTTP/API REST/JSON, microsserviços e filas, o protocolo Modbus, e as demais tecnologias do sistema.
 
 ### Capítulo 3, Arquitetura e requisitos (14_2)
 Requisitos, arquitetura em contêineres Docker (web, API, workers, aquisição, runtime de scripts, PostgreSQL, Redis), a validação de cada requisito do SCADA contra a arquitetura e as decisões de projeto. Aqui entra o enquadramento da proposta e o mapeamento teoria para implementação.
 
 ### Capítulo 4, Fluxos do sistema (14_3)
-Fluxos descritos por diagramas de blocos com passos numerados e o texto que os percorre: aquisição e tempo real, histórico, comando em quatro fases, alarmes, multi-tenant e provisionamento.
+Fluxos descritos por diagramas de blocos com passos numerados e o texto que os percorre: cadastro de tag, aquisição e tempo real, histórico, comando em quatro fases, alarmes, variável meta e login (oito fluxos).
 
 ### Capítulo 5, Interface do sistema (14_4)
 Telas do sistema (cadastro, acompanhamento, dashboard, sinótico, mapa, alarmes, linha do tempo, histórico) e os princípios de IHM adotados.
@@ -383,7 +395,7 @@ Equipamentos reais e simulados usados na validação (inversor de frequência, C
 Medições e verificações com os números medidos e suas datas, relacionadas aos requisitos.
 
 ### Capítulo 8, Conclusão (15)
-Síntese, limitações e trabalhos futuros (inclui levar o sistema a um provedor de nuvem ou a um orquestrador como o Kubernetes).
+Síntese, limitações e trabalhos futuros (inclui levar o sistema a um provedor de nuvem e a mais de um servidor, sem nomear orquestrador).
 
 **Padrão das subseções de validação.** Cada subseção do capítulo 3 mapeia o requisito conceitual a componentes concretos da arquitetura, fechando a ponte entre teoria (capítulo 2) e implementação. É aqui (não no capítulo 2) que entra o enquadramento da proposta.
 
@@ -431,6 +443,7 @@ A lista completa de referências está em `Referencias.bib` (chaves prontas para
 - Prefere "cargos" a "papéis" em controle de acesso baseado em cargos.
 - **Não** quer reprodução de figuras dos PDFs originais — usa TikZ ou extrações próprias.
 - Quando a fonte é dele, prefere `Fonte: Autor.` (curto), não `Fonte: Elaborado pelo autor.`.
+- Linguagem acessível a um engenheiro de automação ou elétrica (pedido do autor, 27/10/2026): explicar o termo de software na primeira ocorrência, frases curtas, "pedido" em vez de "requisição" (exceto Modbus), "endereço" em vez de "rota", "réplica" explicada como cópia do serviço. O conteúdo não muda.
 
 ---
 

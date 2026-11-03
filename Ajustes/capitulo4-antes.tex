@@ -1,0 +1,428 @@
+\newpage
+\section{Fluxos do Sistema}
+
+\tikzset{
+    c4b/.style={draw, rounded corners=3pt, minimum width=2.3cm, minimum height=0.95cm, align=center, font=\footnotesize, fill=white, line width=0.6pt},
+    c4a/.style={-{Latex[length=2mm]}, line width=0.6pt},
+    c4d/.style={-{Latex[length=2mm]}, line width=0.6pt, dashed},
+    c4x/.style={-{Latex[length=2mm]}, line width=0.6pt, dash pattern=on 2pt off 1.5pt on 0.6pt off 1.5pt},
+    c4l/.style={line width=0.6pt},
+    c4n/.style={fill=white, inner sep=1.2pt, font=\scriptsize},
+}
+\newcommand{\cNav}{\node[c4b] (nav) at (0,0) {Navegador};}
+\newcommand{\cWeb}{\node[c4b] (web) at (3.6,0) {Front-end};}
+\newcommand{\cApi}{\node[c4b] (api) at (7.2,0) {Back-end};}
+\newcommand{\cWrk}{\node[c4b] (wrk) at (10.8,0) {\emph{Worker}};}
+\newcommand{\cRts}{\node[c4b] (rts) at (14.4,0) {Executor\\de Scripts};}
+\newcommand{\cPg}{\node[c4b, minimum width=5cm] (pg) at (9,2.6) {PostgreSQL};}
+\newcommand{\cRed}{\node[c4b, minimum width=5cm] (red) at (9,-3.2) {Redis};}
+\newcommand{\cAcq}{\node[c4b] (acq) at (9,-5.8) {Aquisição};}
+\newcommand{\cCam}{\node[c4b] (cam) at (0,-5.8) {Campo\\(CLP)};}
+\newcommand{\cs}[5][0.5]{\draw[#2] (#3) -- node[c4n, pos=#1] {#5} (#4);}
+\newcommand{\cVt}[6]{\draw[#1] ([xshift=#4]#2) -- node[c4n, pos=#6] {#5} ([xshift=#4]#2 |- #3);}
+\newcommand{\cVtt}[8]{\draw[#1] ([xshift=#4]#2) -- node[c4n, pos=#6] {#5} node[c4n, pos=#8] {#7} ([xshift=#4]#2 |- #3);}
+\newcommand{\cHz}[6]{\draw[#1] ([yshift=#4]#2) -- node[c4n, pos=#6] {#5} ([yshift=#4]#2 -| #3);}
+\newcommand{\cHzz}[8]{\draw[#1] ([yshift=#4]#2) -- node[c4n, pos=#6] {#5} node[c4n, pos=#8] {#7} ([yshift=#4]#2 -| #3);}
+\newcommand{\cUp}[7]{\coordinate (cuA) at ([xshift=#4]#2.north); \coordinate (cuB) at ([xshift=#5]#3.north); \draw[#1] (cuA) -- ($(cuA)+(0,#6)$) coordinate (cuC) -- node[c4n] {#7} (cuC -| cuB) -- (cuB);}
+\newcommand{\cDn}[7]{\coordinate (cuA) at ([xshift=#4]#2.south); \coordinate (cuB) at ([xshift=#5]#3.south); \draw[#1] (cuA) -- ($(cuA)-(0,#6)$) coordinate (cuC) -- node[c4n] {#7} (cuC -| cuB) -- (cuB);}
+
+\par Este capítulo descreve os caminhos que o dado e as ações percorrem no sistema: quem pede, quem responde, onde cada informação é guardada e o que acontece quando uma peça falha. Cada fluxo é apresentado por um diagrama de blocos com setas numeradas, seguido de um texto que percorre os passos na ordem.
+
+\par Os blocos correspondem aos serviços da arquitetura e têm as posições fixas da Figura~\ref{fig:fx_mapa}. O navegador e o equipamento de campo ficam fora do servidor. Dentro dele estão o \emph{front-end}, que entrega as telas, o \emph{back-end}, que concentra as regras de funcionamento, o \emph{worker}, que retira tarefas das filas e grava no banco, a aquisição, que conversa com o equipamento, e o executor de scripts, que roda, de forma isolada, o JavaScript escrito pelos usuários. O PostgreSQL guarda os dados que precisam durar, e o Redis guarda o valor atual de cada tag, as filas e as travas e transporta a comunicação entre os serviços.
+
+\begin{figure}[H]
+    \centering
+    \caption{Mapa dos blocos usados nos fluxos}
+    \label{fig:fx_mapa}
+    \vspace{0.4cm}
+    \figpadrao{\begin{tikzpicture}
+        \cNav \cWeb \cApi \cWrk \cRts \cRed \cPg \cAcq \cCam
+        \begin{scope}[on background layer]
+            \node[draw, dashed, rounded corners=6pt, fit=(web)(api)(wrk)(rts)(red)(pg)(acq), inner sep=9pt, fill=black!4] (srv) {};
+        \end{scope}
+        \node[font=\scriptsize, anchor=south east] at (srv.south east) {Servidor};
+        \draw[c4l] (nav) -- (web);
+        \draw[c4l] (nav.north) -- ++(0,0.8) -| ([xshift=0.5cm]api.north west);
+        \draw[c4l] (api.south) -- (api.south |- red.north);
+        \draw[c4l] (wrk.south) -- (wrk.south |- red.north);
+        \draw[c4l] (api.north) -- (api.north |- pg.south);
+        \draw[c4l] (wrk.north) -- (wrk.north |- pg.south);
+        \draw[c4l] (wrk) -- (rts);
+        \draw[c4l] (red) -- (acq);
+        \draw[c4l] (acq) -- (cam);
+    \end{tikzpicture}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\par Em todas as figuras, a linha cheia indica o caminho normal, a tracejada indica uma resposta e a de traço e ponto indica um caminho alternativo, percorrido quando alguma peça falha. Os números entre parênteses seguem a ordem dos passos, e o mesmo número em dois trechos de linha indica um único passo que atravessa o Redis, como nas chamadas entre o \emph{back-end} e a aquisição, que o Moleculer transporta por esse banco \cite{MOLECULER_DOCS,REDIS_DOCS}. Os passos alternativos recebem o número do passo normal e uma letra, como em (4b). Cada fluxo termina com o que acontece quando uma peça deixa de funcionar.
+
+\subsection{Cadastro de uma Tag}
+
+\par O cadastro de uma tag é o ponto em que o sistema passa a conhecer uma nova variável do processo. A tag pertence a um dispositivo de entrada e saída, ligado a uma planta, e traz o mapeamento do ponto no equipamento, a escala de engenharia e as regras de histórico. Como o cadastro é feito com o sistema em funcionamento, a nova tag precisa chegar à aquisição sem reiniciar nenhum processo, como mostra a Figura~\ref{fig:fx_cadastro_tag}.
+
+\begin{figure}[H]
+    \centering
+    \caption{Fluxo do cadastro de uma tag}
+    \label{fig:fx_cadastro_tag}
+    \vspace{0.4cm}
+    \figpadrao{\begin{tikzpicture}
+        \cNav \cWeb \cApi \cRed \cPg \cAcq
+        \cs{c4a}{nav}{web}{(1)}
+        \cUp{c4a}{nav}{api}{0.4cm}{-0.6cm}{0.55}{(2)}
+        \cUp{c4d}{api}{nav}{0.1cm}{-0.4cm}{1.1}{(4)}
+        \cVt{c4a}{api.south}{red.north}{0cm}{(5)}{0.5}
+        \cVt{c4a}{api.north}{pg.south}{0.8cm}{(3)}{0.5}
+        \cVt{c4a}{red.south}{acq.north}{-0.35cm}{(6)}{0.3}
+        \cVt{c4a}{acq.north}{red.south}{0.35cm}{(7)}{0.7}
+    \end{tikzpicture}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\par O administrador abre a tela de tags de um dispositivo, entregue pelo \emph{front-end} (1). Ao salvar o formulário, o navegador envia o pedido de criação ao \emph{back-end} (2). O \emph{back-end} confere a permissão do usuário e as regras do cadastro, como a validade do mapeamento Modbus. Aprovado o pedido, o \emph{back-end} grava (3) em uma única transação, operação em que tudo é gravado ou nada é gravado, a tag, o mapeamento Modbus e uma linha no registro de mudanças do cadastro, com a nova versão de configuração da planta. Essa técnica, conhecida como \emph{outbox}, garante que nunca exista tag sem o registro da mudança, nem o contrário.
+
+\par O \emph{back-end} responde ao navegador (4) e publica o evento de mudança do cadastro (5), que informa a planta, a versão e os motivos da alteração. O Moleculer entrega o evento, pelo Redis, ao Agendador, que roda dentro da aquisição (6). Como a aquisição não tem banco de dados, o Agendador pede ao \emph{back-end} a configuração pronta do dispositivo (7), guarda-a no Redis e na memória e inclui a tag no plano de leitura do dispositivo, junto das demais. A primeira leitura acontece no ciclo seguinte, e até lá a tela mostra a tag como sem dado.
+
+\par O cadastro por grade, em que o administrador cola várias linhas de uma planilha, segue o mesmo caminho. As alterações seguidas são reunidas em poucos eventos, e o Agendador as aplica com uma única consulta de configuração.
+
+\par A tag pertence para sempre ao dispositivo em que nasceu e pode ser colocada em uma pasta da árvore de pastas da planta, independente da lista de dispositivos, o que permite agrupar tags de dispositivos diferentes sem alterar a leitura. Seu identificador textual é único no sistema, e a exclusão exige que o administrador o digite para confirmar. A tag sai da lista na mesma hora, e suas leituras saem do banco depois, em segundo plano, para que a exclusão não mantenha uma única operação aberta sobre milhões de linhas.
+
+\par Quando a validação falha, o \emph{back-end} recusa o pedido com uma mensagem, e nada é gravado. Se outro usuário alterou a mesma tag antes, a versão não confere, o pedido é recusado por conflito e a tela oferece recarregar o formulário. Se o processo cai entre a gravação e a publicação do evento, a mudança continua no \emph{outbox}, e uma verificação periódica publica o evento de novo. Além disso, a cada cinco minutos a réplica do Agendador que está à frente das demais (réplica líder) compara a versão do cadastro de cada planta e relê apenas as que mudaram. Um evento com versão anterior à conhecida é ignorado, o que impede que uma resposta atrasada traga de volta uma configuração antiga.
+
+\par Sem o \emph{back-end}, o Redis ou o banco, o cadastro não é possível, mas a leitura do campo continua, porque a aquisição mantém a última configuração recebida. Com a aquisição parada, o cadastro funciona normalmente, e ao voltar o Agendador compara as versões e atualiza as plantas que mudaram, sem perder nenhuma mudança.
+
+\subsection{Do Campo ao Banco}
+
+\par Este é o fluxo principal de um supervisório, da leitura no registrador do equipamento até o histórico no banco. São três etapas encadeadas por filas: a aquisição lê o equipamento e publica o resultado, o \emph{worker} atualiza o valor atual e grava o histórico, e rotinas periódicas calculam os resumos. As filas permitem aumentar a capacidade de cada etapa separadamente e impedem que a falha de uma derrube as outras \cite{BULLMQ_DOCS}. A Figura~\ref{fig:fx_campo_aquisicao} mostra a primeira etapa, e a Figura~\ref{fig:fx_campo_worker} mostra a segunda.
+
+\begin{figure}[H]
+    \centering
+    \caption{Fluxo da leitura do equipamento pela aquisição}
+    \label{fig:fx_campo_aquisicao}
+    \vspace{0.4cm}
+    \figpadrao{\begin{tikzpicture}
+        \cRed \cAcq \cCam
+        \cVt{c4a}{acq.north}{red.south}{-0.55cm}{(1)}{0.3}
+        \cVt{c4a}{red.south}{acq.north}{0cm}{(2)}{0.5}
+        \cVt{c4a}{acq.north}{red.south}{0.55cm}{(5)}{0.7}
+        \cHz{c4a}{acq.west}{cam.east}{0.25cm}{(3)}{0.5}
+        \cHz{c4d}{cam.east}{acq.west}{-0.25cm}{(4)}{0.5}
+        \cDn{c4x}{cam}{acq}{0cm}{0cm}{0.8}{(4b)}
+        \coordinate (b5b) at ([xshift=1.9cm]red.south);
+        \draw[c4x] (acq.east) -- (acq.east -| b5b) -- node[c4n, pos=0.5] {(5b)} (b5b);
+    \end{tikzpicture}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\par Para cada dispositivo, uma tarefa periódica do Agendador, com defasagem fixa para espalhar as leituras no tempo, marca no Redis que o dispositivo deve ser lido (1). O Agendador chama então a ação de leitura da aquisição pelo Moleculer (2), com o plano de leitura, que reúne as tags na hora de ser lidas. Cada dispositivo fica fixo em uma réplica, e uma trava no Redis impede dois ciclos simultâneos no mesmo dispositivo. A aquisição agrupa os registradores contíguos em blocos e envia uma requisição Modbus por bloco ao \sigla{clp} (3) \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}, que responde com os registradores brutos (4). Para cada bloco, a aquisição carimba o instante da resposta, decodifica os bytes, aplica a escala de engenharia, atribui a qualidade e um número de sequência, que indica a ordem das leituras, e publica o resultado em duas filas do Redis, uma de histórico e outra de valor atual, chamada de ingestão (5). O carimbo acompanha o valor por todo o caminho, sem ser alterado.
+
+\par Se o equipamento não responde no prazo, se a conexão falha ou se ele devolve uma exceção Modbus (4b), a aquisição publica as tags com qualidade ruim e o motivo da falha (5b), e o Agendador conta a falha no seu disjuntor, mecanismo que acompanha as falhas seguidas do dispositivo. Depois de um número configurável de ciclos falhos seguidos, por padrão três, o dispositivo passa a degradado, estado informado a cada sessenta segundos e que origina o evento de falha de comunicação. O primeiro ciclo bem-sucedido fecha o estado.
+
+\par As tags de um dispositivo são lidas juntas, no período dele, de modo que doze tags em um dispositivo com período de um segundo resultam em uma leitura por segundo. O comando de um operador passa na frente da leitura, e quando o serviço volta de uma queda não há rajada de leituras acumuladas. O trabalho vai para filas separadas por faixa de tempo de varredura, para que uma leitura rápida não espere por uma lenta. Aumentar a capacidade significa acrescentar réplicas, sem alterar o cadastro. A cada cinco minutos, a réplica líder confere o cadastro de todas as plantas e corrige o que divergir.
+
+\begin{figure}[H]
+    \centering
+    \caption{Fluxo da gravação do valor atual, do histórico e dos resumos}
+    \label{fig:fx_campo_worker}
+    \vspace{0.4cm}
+    \figpadrao{\begin{tikzpicture}
+        \cWrk \cRed \cPg
+        \cVt{c4a}{red.north}{wrk.south}{1.9cm}{(1)}{0.5}
+        \cVtt{c4a}{wrk.south}{red.north}{-0.6cm}{(2)}{0.3}{(3)}{0.7}
+        \coordinate (b2b) at ([xshift=1.2cm]wrk.east);
+        \draw[c4x] (wrk.east) -- (b2b) -- node[c4n, pos=0.5] {(2b)} (b2b |- red.east) -- (red.east);
+        \cVt{c4a}{wrk.north}{pg.south}{0.2cm}{(4)}{0.35}
+        \cVt{c4a}{wrk.north}{pg.south}{-0.5cm}{(5)}{0.65}
+    \end{tikzpicture}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\par A segunda etapa é feita pelo \emph{worker}, que retira as leituras da fila de ingestão (1) e grava o valor atual no Redis, com a qualidade e o carimbo (2). A gravação é atômica, ou seja, acontece de uma só vez, e usa o número de sequência, e nunca o relógio, para decidir se a leitura é mais nova, de modo que uma leitura atrasada jamais sobrescreve um valor recente. Esse número combina uma época, iniciada pelo relógio do Redis e que só cresce, e um contador, e por isso a ordem não depende dos relógios das réplicas. Em seguida, o \emph{worker} retira as leituras da fila de histórico e decide, no Redis, se cada uma deve ser gravada (3), conforme o modo da tag: não gravar, gravar toda leitura, ou gravar quando o valor muda além da banda morta e, além disso, periodicamente. A decisão atômica evita duplicar uma linha quando duas réplicas processam a mesma tag. Por fim, o \emph{worker} insere a linha (4) na tabela de leituras, dividida em partes por mês (partições), criadas com antecedência de três meses \cite{POSTGRESQL_DOCS}.
+
+\par Tarefas executadas a cada minuto calculam os resumos (5). Para cada tag analógica, a tarefa calcula, em \sigla{sql} e no próprio banco, a média ponderada no tempo, o mínimo, o máximo, a contagem e a cobertura de cada intervalo. O resumo de um minuto só existe para tags com período menor que sessenta segundos, e o de uma hora existe para toda tag analógica com histórico. O mínimo e o máximo acompanham a média porque ela sozinha esconde picos curtos. Uma leitura atrasada dispara o recálculo apenas da faixa afetada. A cada trinta segundos, o último valor bom de cada tag é copiado para uma tabela do banco, chamada de espelho, que repõe os valores no Redis caso ele volte vazio.
+
+\par Uma tarefa diária cria as partições dos meses seguintes, e o histórico vencido é apagado entre uma e quatro horas da manhã, em lotes, para não disputar recursos com a operação diurna. O corte de cada tag é o maior entre a retenção configurada nela e o teto do sistema, e a retenção pode chegar a dez anos. Quando o teto é reduzido, as consultas deixam, na mesma hora, de devolver dado mais antigo que o novo teto, e o apagamento da noite seguinte remove o excedente.
+
+\par No caminho alternativo, o \emph{worker} recebe a leitura de qualidade ruim (1), mantém o valor e o carimbo anteriores e registra o motivo e desde quando o problema dura (2b). A tela segue com o último valor e, depois de três períodos sem leitura nova, o identifica como desatualizado. Uma leitura com dado inválido vai para uma fila separada, a fila de mortos, para análise. Uma falha passageira do banco ou da rede apenas faz o trabalho ser repetido com espera crescente, sem perder a leitura.
+
+\par Se o \emph{worker} para, as leituras se acumulam nas filas e são processadas na ordem quando ele volta. Se o Redis cai, a aquisição não publica nem obtém a trava, o ciclo se perde e, ao voltar, o Agendador retoma o ritmo normal. Se o Redis volta vazio, uma rotina refaz o valor atual a partir do espelho, marcado como desatualizado até a próxima leitura. Se o banco fica indisponível, os trabalhos de histórico esperam e tentam de novo, o valor atual segue no Redis, mas a tela de valores informa indisponibilidade. Se a fila de histórico passa de metade da memória do Redis, o trabalho mais antigo que três minutos é descartado, proteção para não esgotar a memória.
+
+\subsection{Do Banco à Tela em Tempo Real}
+
+\par A tela obtém o valor atual por consultas periódicas, em vez de manter uma conexão permanente, o que simplifica a recuperação de falhas. Periodicamente, ela pergunta os valores das tags da planta aberta, e a resposta vem apenas do Redis, sem consultar o banco nem o equipamento, como resume a Figura~\ref{fig:fx_polling}.
+
+\begin{figure}[H]
+    \centering
+    \caption{Fluxo da exibição do valor atual por consulta periódica}
+    \label{fig:fx_polling}
+    \vspace{0.4cm}
+    \figpadrao{\begin{tikzpicture}
+        \cNav \cApi \cRed
+        \cHz{c4a}{nav.east}{api.west}{0.25cm}{(1)}{0.5}
+        \cHz{c4d}{api.west}{nav.east}{-0.25cm}{(3)}{0.5}
+        \cVt{c4a}{api.south}{red.north}{0cm}{(2)}{0.5}
+    \end{tikzpicture}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\par A tela envia o pedido ao \emph{back-end} (1), com a identificação da última resposta. O \emph{back-end} lê do Redis, em lote, o valor atual de cada tag (2) e define sua qualidade: boa, desatualizada, com falha, sem dado, implausível ou sem acesso. Se nada mudou, a resposta é vazia. Caso contrário, o \emph{back-end} devolve os valores (3), e a tela atualiza o que mudou.
+
+\par A qualidade aparece com texto e ícone. O valor bom não tem marcação. O valor parado há mais de três períodos aparece como desatualizado, com a data da última renovação, e a tela faz essa troca sozinha quando o tempo passa, mesmo que o servidor responda que nada mudou. A tag cuja leitura falha mostra o último valor bom com um símbolo de alerta e o texto de falha de comunicação.
+
+\par A lista de acompanhamento, o sinótico, o medidor do painel e a grade de tags do cadastro usam a mesma consulta e o mesmo componente de exibição, de modo que a qualidade aparece da mesma forma em qualquer lugar. Para que a tela não abra vazia, a primeira resposta pode vir junto com a página. A grade de tags mostra também a idade do valor, o que permite conferir um mapeamento recém-cadastrado sem sair do cadastro.
+
+\par Depois de três falhas seguidas de pedido, a tela mostra o aviso de conexão instável, exibe os valores como desatualizados e aumenta o intervalo entre as tentativas, para não sobrecarregar um servidor em recuperação.
+
+\par Com o Redis fora do ar ou vazio, ou com o banco fora do ar, a tela mostra que o serviço está indisponível em vez de valores. A queda do equipamento de campo não derruba a tela, que continua a responder com o último valor e a qualidade correspondente.
+
+\subsection{Histórico e Tendência}
+
+\par A consulta ao histórico alimenta os gráficos de tendência. O desafio é entregar rapidamente janelas de alguns minutos a dez anos sem que uma consulta mal dimensionada prejudique as telas e os comandos. Para isso, o sistema escolhe, pelo tamanho da janela, entre a leitura bruta e os resumos já calculados, como mostra a Figura~\ref{fig:fx_tendencia}.
+
+\begin{figure}[H]
+    \centering
+    \caption{Fluxo da consulta de tendência}
+    \label{fig:fx_tendencia}
+    \vspace{0.4cm}
+    \figpadrao{\begin{tikzpicture}
+        \cNav \cApi \cPg
+        \cHz{c4a}{nav.east}{api.west}{0.25cm}{(1)}{0.5}
+        \cHz{c4d}{api.west}{nav.east}{-0.25cm}{(3)}{0.5}
+        \cVt{c4a}{api.north}{pg.south}{0cm}{(2)}{0.5}
+    \end{tikzpicture}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\par A tela envia o pedido de tendência (1), com até doze tags e o intervalo desejado. O detalhe depende da janela: até uma hora, as leituras brutas, até um dia, a média de um minuto, até sete dias, a de dez minutos, até trinta e um dias, a de trinta minutos, e acima disso a de seis horas. Toda média vem com o mínimo e o máximo do intervalo, para que um pico de poucos segundos não desapareça.
+
+\par O \emph{back-end} consulta o banco (2), em um conjunto de conexões reservado às leituras pesadas, para que uma consulta lenta não ocupe as conexões das telas e dos comandos. A consulta lê os resumos e completa o início e o fim do intervalo com as leituras brutas, para que a curva cubra exatamente o período pedido. O \emph{back-end} devolve o resultado (3), e a tela desenha então a série.
+
+\par Depois da primeira carga, a tela pede apenas o trecho novo, com recarga completa a cada quinze minutos. Só o painel visível atualiza.
+
+\par O painel oferece três gráficos: linha, barra e medidor. O de linha mostra a leitura bruta até uma hora e as médias acima disso, com a faixa entre o mínimo e o máximo, e a linha se interrompe onde falta dado. O de barra apresenta, por intervalo, a média, o mínimo, o máximo, o volume ou o tempo ligado. O medidor mostra o valor atual, pelo fluxo anterior.
+
+\par Há um teto de retenção de até dez anos, e nenhuma consulta devolve dado mais antigo que ele. Se o teto é reduzido, a mudança vale na hora, antes do apagamento noturno, e a tela de administração mostra antes o impacto, com o número de tags e o intervalo de dados perdidos, e pede uma confirmação digitada.
+
+\par Um pedido grande demais é recusado, nunca cortado em silêncio, assim como a agregação que o tipo da tag não possui, como a média de uma tag digital. Se as conexões pesadas estão ocupadas, a resposta é de indisponibilidade. Sem o banco, não há histórico a devolver. Em nenhum caso a consulta altera dado, e sua falha não prejudica a exibição dos valores atuais, que têm caminho próprio.
+
+\subsection{Comando de Equipamentos}
+
+\par O comando é a escrita de um valor em um ponto do equipamento, como ligar um motor ou alterar um ponto de ajuste. Na tela, o operador escolhe a tag, informa o novo valor e confirma, e o navegador envia o pedido ao \emph{back-end} (1), como mostra a Figura~\ref{fig:fx_comando_execucao}.
+
+\begin{figure}[H]
+    \centering
+    \caption{Fluxo do comando}
+    \label{fig:fx_comando_execucao}
+    \vspace{0.4cm}
+    \figpadrao{\begin{tikzpicture}
+        \cNav \cApi \cRed \cPg \cAcq \cCam
+        \cHz{c4a}{nav.east}{api.west}{0.25cm}{(1)}{0.5}
+        \cHz{c4d}{api.west}{nav.east}{-0.25cm}{(10)}{0.5}
+        \cVtt{c4a}{api.north}{pg.south}{0.4cm}{(2)}{0.3}{(9)}{0.7}
+        \cVtt{c4a}{api.south}{red.north}{-0.3cm}{(3)}{0.3}{(4)}{0.7}
+        \cVt{c4x}{api.south}{red.north}{0.3cm}{(8b)}{0.4}
+        \cVt{c4d}{red.north}{api.south}{-0.9cm}{(8)}{0.35}
+        \cVt{c4a}{red.south}{acq.north}{-0.6cm}{(4)}{0.5}
+        \cVt{c4a}{acq.north}{red.south}{0cm}{(5)}{0.3}
+        \cVt{c4d}{acq.north}{red.south}{0.6cm}{(8)}{0.7}
+        \cHz{c4a}{acq.west}{cam.east}{0.25cm}{(6)}{0.5}
+        \cHz{c4d}{cam.east}{acq.west}{-0.25cm}{(7)}{0.5}
+        \cDn{c4x}{cam}{acq}{0cm}{0cm}{0.8}{(7b)}
+    \end{tikzpicture}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\par O \emph{back-end} confere a permissão do usuário, se a tag permite escrita, se o dispositivo está habilitado e se comunica e se o valor está dentro da faixa, e registra o comando no banco (2). Sem a certeza de que o equipamento se comunica, o comando é recusado. Repetir o pedido com a mesma chave de idempotência não cria um segundo comando, o que protege contra um duplo clique. Regras de unicidade no banco garantem no máximo um comando em andamento por tag, e uma rotina que roda a cada dez segundos fecha os comandos cujo prazo venceu.
+
+\par O \emph{back-end} obtém no Redis a trava da tag, com validade de trinta e cinco segundos (3), e chama a ação de escrita da aquisição pelo Moleculer (4), sem fila e sem nova tentativa automática. A aquisição obtém no Redis a trava do dispositivo (5). O comando tem prioridade sobre as escritas automáticas e a leitura periódica, e nenhum byte é enviado depois de vinte e cinco segundos da chegada do pedido, para que o quadro não alcance o equipamento depois de o \emph{back-end} ter desistido. A aquisição envia a escrita ao \sigla{clp} (6), e o sucesso é a resposta normal do equipamento, que repete o pedido enviado (7) e é conferida contra o endereço e o valor. Não há releitura do ponto. A aquisição publica o valor escrito como valor atual, e a próxima leitura periódica o corrige se o equipamento não o reteve. Em seguida, devolve o resultado ao \emph{back-end} (8) e deixa no Redis uma marca com o resultado, válida por uma hora. O \emph{back-end} fecha o comando como executado, grava as transições e a auditoria (9), e o diálogo mostra que o equipamento confirmou a escrita (10).
+
+\par A auditoria guarda quem emitiu o comando, o valor, quando ocorreu cada transição e o resultado, com uma cópia do nome da pessoa, da tag, da planta e do dispositivo. Regras automáticas do banco (gatilhos) impedem apagar ou alterar um comando já registrado.
+
+\par Além do usuário, o sistema aceita duas origens de escrita: o componente de conteúdo de uma tela, que passa por uma conferência, e o script. A escrita em hora marcada é feita por um evento agendado que aciona um script, registrado como origem. Ela usa o mesmo caminho de escrita do comando, cede ao comando do operador e não tem limite de frequência próprio, de modo que evitar repetições sem fim é responsabilidade de quem escreve o script. A tag interna, que não tem equipamento, recebe o valor diretamente do sistema, sem passar pela aquisição.
+
+\par Há dois desfechos alternativos. Se o equipamento responde com exceção, com uma repetição que não confere ou não responde no prazo (7b), a escrita é tratada como falha, a mensagem pede que o operador confira o valor do ponto, e o comando não é repetido de forma automática. A falha também sinaliza o evento de falha de escrita do dispositivo. O segundo desfecho ocorre quando o próprio sistema perde o rastro, por exemplo, se a resposta da aquisição não chega ao \emph{back-end} (8b). O \emph{back-end} consulta a marca de resultado no Redis e, se ela não existe, grava que a escrita foi abandonada, para que um pedido atrasado não escreva. O comando é fechado como sem confirmação do equipamento, e a tag fica bloqueada por trinta e cinco segundos.
+
+\par Quando uma peça falha, o sistema prefere recusar a arriscar. Sem o Redis, não há trava, e o comando nunca executa. Com o Agendador ou a aquisição indisponíveis, o comando é recusado. Se o \emph{back-end} cair no meio da execução, a rotina de fechamento, aos trinta e dois segundos, e a marca de resultado permitem fechar o comando com o estado real.
+
+\subsection{Alarme}
+
+\par O alarme transforma uma condição do processo em um aviso que exige a atenção de uma pessoa. A condição é um evento da tag, formado por um comparador: a tag, um operador (maior, menor, igual, diferente, dentro ou fora da faixa, entre outros), o valor de referência e uma banda morta opcional, que evita que um valor oscilando em torno do limite abra e feche o alarme a cada leitura. Cada evento tem atrasos de ativação e de retorno, de zero a uma hora. O alarme liga um ou mais eventos a um de quatro níveis fixos, Crítico, Alto, Médio e Baixo, como mostra a Figura~\ref{fig:fx_alarme}.
+
+\begin{figure}[H]
+    \centering
+    \caption{Fluxo da detecção, da sinalização e do reconhecimento de um alarme}
+    \label{fig:fx_alarme}
+    \vspace{0.4cm}
+    \figpadrao{\begin{tikzpicture}
+        \cNav \cApi \cWrk \cRed \cPg \cAcq
+        \cVt{c4a}{acq.north}{red.south}{0cm}{(1)}{0.5}
+        \cVt{c4a}{red.north}{wrk.south}{2.1cm}{(2)}{0.5}
+        \cVtt{c4a}{wrk.south}{red.north}{-0.3cm}{(3)}{0.3}{(5)}{0.7}
+        \cVt{c4x}{wrk.south}{red.north}{-0.9cm}{(4b)}{0.5}
+        \cVt{c4a}{wrk.north}{pg.south}{0cm}{(4)}{0.5}
+        \cHzz{c4a}{nav.east}{api.west}{0cm}{(6)}{0.3}{(8)}{0.7}
+        \cVt{c4a}{api.south}{red.north}{0cm}{(7)}{0.5}
+        \cVt{c4a}{api.north}{pg.south}{0cm}{(9)}{0.5}
+    \end{tikzpicture}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\par A leitura é publicada pela aquisição na fila de ingestão (1) e retirada pelo \emph{worker} (2), que, depois de gravar o valor atual, avalia os eventos da tag. A avaliação é feita por um pequeno programa executado de uma só vez dentro do Redis, que guarda o estado de cada detector (3), compara o valor com o limite, aplica a banda morta e os atrasos e usa o número de sequência para decidir se houve transição, de modo que a mesma leitura processada por duas réplicas não gera dois alarmes. Havendo transição, o \emph{worker} a registra numa fila de pendências no Redis e a grava no banco (4), abrindo, atualizando ou fechando a ocorrência do alarme, que é o episódio do disparo ao fechamento. A ocorrência combina estar ativa ou normalizada com estar reconhecida ou não, e há no máximo uma aberta por alarme. Por fim, o \emph{worker} soma um à versão do sumário de alarmes no Redis (5).
+
+\par A sinalização usa a mesma consulta periódica das demais telas. A moldura da aplicação, presente em todas as páginas, pergunta periodicamente o sumário de alarmes (6), e o \emph{back-end} o lê no Redis (7), recalculando-o a partir do banco se a versão mudou. O indicador exibe o nível mais grave não reconhecido e a quantidade de ocorrências. O operador reconhece uma ocorrência na página de alarmes (8), e o pedido leva a revisão vista na tela, para que um novo disparo não seja reconhecido por um clique sobre a tela antiga. O \emph{back-end} grava o reconhecimento, com o nome da pessoa e um comentário opcional (9). Se outro evento do mesmo alarme se ativa depois, a ocorrência volta a não reconhecida.
+
+\par O evento composto combina outros eventos com os operadores E, OU e NÃO, e o evento agendado dispara em horários definidos, ambos pelo mesmo caminho. Os eventos de sistema do dispositivo, falha de comunicação, de leitura e de escrita, são criados automaticamente com o dispositivo Modbus e alimentam a linha do tempo. A tag mostra um selo com o contador de ocorrências abertas, e a planta no mapa mostra um pino com a cor da pior ocorrência.
+
+\par Se o processo cai entre a fila de pendências e a gravação no banco (4b), a transição não se perde: uma tarefa executada a cada sessenta segundos grava o que está pendente há mais de um minuto. Outra, a cada cinco minutos, fecha as ocorrências cujo evento, tag, dispositivo ou alarme foi desabilitado ou excluído.
+
+\par Com o Redis fora, a avaliação para e o trabalho de ingestão é repetido. Se ele volta vazio, a rotina de reconstrução refaz o estado dos detectores a partir do banco. Com o banco indisponível, as transições ficam pendentes até ele voltar. Com o \emph{worker} parado, nenhum alarme novo é detectado, e a fila preserva as leituras. O sistema não cria alarme de sistema automaticamente, e o integrador pode ligar um alarme comum aos eventos do dispositivo.
+
+\subsection{Variável Meta}
+
+\par A variável meta é uma tag cujo valor vem de um cálculo escrito pelo administrador sobre outras tags da mesma planta, como uma diferença de pressões ou um volume por hora. Ela tem histórico, tela e alarme como qualquer tag, mas depende de um código que não faz parte do sistema, o que exige isolamento. O código, em JavaScript, roda em um interpretador isolado, em um processo sem banco, rede, arquivo nem segredo, como mostra a Figura~\ref{fig:fx_meta}.
+
+\begin{figure}[H]
+    \centering
+    \caption{Fluxo do cálculo de uma variável meta}
+    \label{fig:fx_meta}
+    \vspace{0.4cm}
+    \figpadrao{\begin{tikzpicture}
+        \cWrk \cRed \cPg \cAcq
+        \node[c4b] (rts) at (15.2,0) {Executor\\de Scripts};
+        \cVt{c4a}{acq.north}{red.south}{0cm}{(1)}{0.5}
+        \cVt{c4a}{red.north}{wrk.south}{2.1cm}{(2)}{0.5}
+        \cVtt{c4a}{wrk.south}{red.north}{-0.3cm}{(3)}{0.3}{(7)}{0.7}
+        \cVt{c4a}{wrk.north}{pg.south}{0cm}{(4)}{0.5}
+        \cHz{c4a}{wrk.east}{rts.west}{0.34cm}{(5)}{0.5}
+        \cHz{c4d}{rts.west}{wrk.east}{0cm}{(6)}{0.5}
+        \cHz{c4x}{rts.west}{wrk.east}{-0.34cm}{(6b)}{0.5}
+    \end{tikzpicture}}
+    \vspace{0.2cm} \\
+    Fonte: Autor.
+\end{figure}
+
+\par A variável é recalculada a cada leitura nova de uma tag que o código lê, em horários definidos, ou ao ser criada, editada ou habilitada. No gatilho por leitura, a aquisição publica a leitura na fila de ingestão (1), e o \emph{worker} a retira (2), consulta o mapa de dependências, que informa quais variáveis meta leem aquela tag, e coloca um conjunto de cálculos, chamado de onda, na fila própria (3). Um lote de leituras gera uma onda só, e uma meta que depende de outra espera o valor novo dela. No gatilho por tempo, uma verificação por minuto cria a onda.
+
+\par O \emph{worker} retira a onda. Como os scripts não acessam o banco, ele busca antes os dados de que o código precisa: o valor atual, no Redis, e até quinhentos pontos das tags consultadas por série, no banco (4). Os dados seguem com o código em um único lote ao executor, por um canal exclusivo do Moleculer (5). Para cada cálculo, o executor cria uma cópia nova do interpretador, sem rede, arquivo ou segredo, com limites de tempo, memória, recursão e saída. O resultado de cada meta volta com o valor ou o erro (6).
+
+\par O \emph{worker} valida o que veio, porque o servidor nunca confia em dado do ambiente isolado, e o publica como leitura da tag interna (7), pelo mesmo caminho das leituras do equipamento. A qualidade da meta é a pior entre as tags que ela lê, e uma entrada desatualizada ou com falha impede o cálculo, sem nunca virar zero por omissão. Quando o administrador salva o código, o executor analisa sua estrutura, sem executá-lo, e descobre quais tags ele usa, e o salvamento é recusado se esse ambiente estiver indisponível.
+
+\par O mesmo ambiente executa a tag interna gerada, como a rampa e o valor aleatório usados em testes, o script de dispositivo e de evento, que pode escrever em tags, e o componente de conteúdo do sinótico, recalculado em um ritmo configurado. Em todos os casos, o ambiente isolado recebe os dados e devolve um resultado, e quem escreve em banco, em fila ou no equipamento é sempre o \emph{back-end} ou o \emph{worker}, depois de validar o que voltou.
+
+\par Se o código ultrapassa um limite, gera um erro ou divide por zero (6b), apenas aquela meta recebe erro, as demais do lote seguem, e o \emph{worker} publica a qualidade ruim em vez de um valor.
+
+\par Se o executor cai, nenhuma meta é calculada, a fila repete a onda e a variável fica com o último valor, mostrado como desatualizado. As demais tags, seus alarmes e os comandos não dependem dele. Uma falha no interpretador compromete, no pior caso, apenas esse serviço. Esse risco foi aceito, e as medidas para reduzi-lo são a ausência de credenciais, a reciclagem do processo hospedeiro e a validação do resultado.
+
+\subsection{Garantias Comuns aos Fluxos}
+
+\par Alguns cuidados se repetem nos fluxos. O primeiro é a ordem das leituras, decidida pelo número de sequência, e não pelo relógio. O segundo é a idempotência: a chave do comando, o identificador de cada leitura, a marca de resultado da escrita e a decisão atômica do histórico fazem com que uma repetição não produza um segundo efeito.
+
+\par O terceiro cuidado é a falha fechada, em que, na dúvida, o sistema bloqueia a ação, aplicada onde o erro seria mais caro. O comando é recusado quando falta o Redis ou a confirmação de que o equipamento se comunica, as funções que exigem login respondem indisponibilidade quando o Redis cai, e um valor que não pôde ser renovado nunca é apresentado como bom. O quarto é a durabilidade do trabalho, que não se perde em uma falha, garantia obtida pelas filas duráveis, pelo \emph{outbox} do cadastro, pela fila de pendências do alarme e pelas novas tentativas com espera. A Tabela~\ref{tab:fx_garantias} associa cada garantia ao mecanismo que a sustenta e aos fluxos em que ela aparece.
+
+{\renewcommand{\arraystretch}{1.3}\small
+\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{4.2cm}}
+    \caption{Garantias comuns aos fluxos do sistema.}
+    \label{tab:fx_garantias}\\
+    \hline
+    \textbf{Garantia} & \textbf{Mecanismo} & \textbf{Fluxos} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{Garantia} & \textbf{Mecanismo} & \textbf{Fluxos} \\
+    \hline
+    \endhead
+    \endfoot
+    \multicolumn{3}{c}{Fonte: Autor.} \\
+    \endlastfoot
+    Ordem das leituras & Número de sequência formado por época e contador, e não o relógio & Do campo ao banco, tempo real, alarme \\
+    \hline
+    Idempotência & Chave de idempotência do comando, identificador por leitura, marca de resultado da escrita, decisão atômica do histórico & Comando, do campo ao banco \\
+    \hline
+    Falha fechada & Recusa do comando sem Redis ou sem estado de comunicação, indisponibilidade das funções com login sem Redis & Comando, tempo real \\
+    \hline
+    Durabilidade do trabalho & Filas duráveis, \emph{outbox}, pendências do alarme, novas tentativas com espera & Cadastro, do campo ao banco, alarme \\
+    \hline
+    Dado velho não vira dado bom & Qualidade desatualizada, marca de falha de comunicação, qualidade ruim na variável meta & Tempo real, do campo ao banco, variável meta \\
+    \hline
+    Registro imutável & Registro de comando e de reconhecimento que só aceita novas linhas, protegido por gatilhos & Comando, alarme \\
+    \hline
+\end{xltabular}}
+
+\par A Tabela~\ref{tab:fx_falhas} reúne o efeito da falha de cada bloco e mostra que o sistema perde apenas as funções ligadas à peça que falhou.
+
+{\renewcommand{\arraystretch}{1.3}\small
+\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}X}
+    \caption{Efeito da falha de cada bloco nos fluxos do sistema.}
+    \label{tab:fx_falhas}\\
+    \hline
+    \textbf{Bloco que falha} & \textbf{O que deixa de funcionar e o que continua} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{Bloco que falha} & \textbf{O que deixa de funcionar e o que continua} \\
+    \hline
+    \endhead
+    \endfoot
+    \multicolumn{2}{c}{Fonte: Autor.} \\
+    \endlastfoot
+    Front-end & Páginas novas deixam de ser entregues. As telas já abertas continuam a consultar o \emph{back-end}, e a aquisição, o histórico e os alarmes não são afetados. \\
+    \hline
+    Back-end & Cadastro, login, comando e consultas deixam de responder. A aquisição continua a ler com a última configuração, e o \emph{worker} continua a gravar o valor atual, o histórico e a avaliar os alarmes. \\
+    \hline
+    \emph{Worker} & O valor atual, o histórico, os alarmes e as variáveis meta deixam de avançar, e as leituras se acumulam nas filas. As telas continuam a responder com o último valor, que passa a desatualizado. \\
+    \hline
+    Aquisição & Não há leitura nem escrita no equipamento, e os valores passam a desatualizados. O cadastro, as telas e os alarmes já abertos continuam disponíveis, e o comando é recusado. \\
+    \hline
+    Executor de scripts & Variáveis meta, scripts e componentes de conteúdo param, e a variável meta fica com o último valor. As tags de equipamento, os alarmes sobre elas e os comandos seguem normalmente. \\
+    \hline
+    Redis & As funções que exigem login e o próprio login respondem indisponibilidade, a aquisição não publica e o comando não executa. Ao voltar vazio, a rotina de reconstrução refaz o valor atual, os estados e a lista de sessões revogadas. \\
+    \hline
+    PostgreSQL & Cadastro, login, histórico e alarmes deixam de funcionar, e a tela de valores informa indisponibilidade. O valor atual continua a ser atualizado no Redis. \\
+    \hline
+    Campo & O último valor é mantido e passa a desatualizado, o evento de falha de comunicação do dispositivo é ativado e o comando é recusado. Os demais dispositivos não são afetados. \\
+    \hline
+\end{xltabular}}
+
+\subsection{Resumo dos Fluxos}
+
+\par A Tabela~\ref{tab:fx_resumo_fluxos} reúne os sete fluxos, os blocos que cada um percorre e o que transporta o trabalho entre eles. A comunicação entre os serviços usa dois mecanismos: a chamada do Moleculer, quando o solicitante precisa da resposta, como no comando, e a fila, quando o trabalho pode esperar e não pode ser perdido, como no histórico. Entre o navegador e o \emph{back-end}, o transporte é o \sigla{http} com dados em \sigla{json}.
+
+{\renewcommand{\arraystretch}{1.3}\small
+\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{4.6cm}}
+    \caption{Resumo dos fluxos do sistema.}
+    \label{tab:fx_resumo_fluxos}\\
+    \hline
+    \textbf{Fluxo} & \textbf{Blocos envolvidos} & \textbf{Fila ou ação usada} \\
+    \hline
+    \endfirsthead
+    \hline
+    \textbf{Fluxo} & \textbf{Blocos envolvidos} & \textbf{Fila ou ação usada} \\
+    \hline
+    \endhead
+    \endfoot
+    \multicolumn{3}{c}{Fonte: Autor.} \\
+    \endlastfoot
+    Cadastro de uma tag & Navegador, Front-end, Back-end, Redis, PostgreSQL, Aquisição & \sigla{http}, evento de mudança do cadastro e ações de registro do Moleculer \\
+    \hline
+    Do campo ao banco & Aquisição, Campo, Redis, \emph{Worker}, PostgreSQL & Ação de leitura do Moleculer, filas de ingestão e de histórico, fila geral de tarefas periódicas \\
+    \hline
+    Valor atual em tempo real & Navegador, Back-end, Redis & \sigla{http} com consulta periódica, leitura direta do Redis \\
+    \hline
+    Histórico e tendência & Navegador, Back-end, PostgreSQL & \sigla{http}, consulta somente leitura \\
+    \hline
+    Comando de equipamentos & Navegador, Back-end, Redis, PostgreSQL, Aquisição, Campo & \sigla{http}, ação de escrita do Moleculer, evento de escrita concluída \\
+    \hline
+    Alarme & Aquisição, Redis, \emph{Worker}, PostgreSQL, Back-end, Navegador & Fila de ingestão, fila geral de tarefas, sumário no Redis \\
+    \hline
+    Variável meta & Aquisição, Redis, \emph{Worker}, Executor de scripts, PostgreSQL & Fila de ingestão, fila de ondas de cálculo, ação de avaliação do Moleculer \\
+    \hline
+\end{xltabular}}
+
+\par O que precisa de resposta imediata passa pelo \emph{back-end}, que sempre confere a permissão. O que não pode se perder passa por uma fila e é processado por um \emph{worker} idempotente. O valor atual fica no Redis e o histórico no PostgreSQL, de modo que a tela em tempo real nunca consulta o banco. Em cada fluxo, a falha de uma peça leva à recusa do pedido, à repetição do trabalho ou à marcação do valor como desatualizado, sem produzir um dado falso.
