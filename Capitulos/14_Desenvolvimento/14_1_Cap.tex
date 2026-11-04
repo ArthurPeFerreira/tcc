@@ -69,11 +69,11 @@
     \includegraphics[width=0.76\textwidth,height=0.58\textheight,keepaspectratio]{Imagens/Desenvolvimento/Cap1/cps.png}
     \centering
     \vspace{0.2cm} \\
-    Fonte: Adaptado de \textcite{BIGHETI2020}.
+    Fonte: \textcite[p.~28]{BIGHETI2020}.
     \label{fig:cps}
 \end{figure}
 
-\par À direita da figura está o sistema físico, com sensores, controladores e \sigla{clp}s. À esquerda estão a computação e as redes, com servidores, roteadores e computadores. A comunicação leva os dados de um lado para o outro, e o controle faz o caminho de volta, agindo sobre o processo. Por exemplo, um sensor mede o nível de um tanque, e esse valor chega pela rede a um servidor. O servidor analisa o dado e pode enviar uma ordem de volta para ligar uma bomba.
+\par À direita da figura está o sistema físico, com sensores, controladores e \sigla{clp}s. À esquerda estão a computação e as redes, com servidores, roteadores e computadores. A comunicação leva os dados de um lado para o outro, e o controle faz o caminho de volta, agindo sobre o processo \cite{BIGHETI2020}. Por exemplo, um sensor mede o nível de um tanque, e esse valor chega pela rede a um servidor. O servidor analisa o dado e pode enviar uma ordem de volta para ligar uma bomba.
 
 \par Para que essa troca de dados aconteça, os objetos físicos precisam estar ligados em rede. É essa a ideia da Internet das Coisas (\sigla{iot}), que liga objetos físicos, com sensores e atuadores, por meio de redes, principalmente sem fio, que se comunicam pela internet \cite{BIGHETI2020}. Cada objeto tem uma identidade digital própria e pode trocar informações com pouca intervenção humana \cite{PISCHING2017,BIGHETI2020}. No ambiente industrial, ela recebe o nome de \sigla{iiot}, voltada a aumentar a eficiência das fábricas, com requisitos rígidos de tempo real, confiabilidade e segurança \cite{BIGHETI2020}. A Figura~\ref{fig:venn_iot_iiot_cps_i40} mostra como esses conceitos se relacionam: a \sigla{iot} é o universo mais amplo, a \sigla{iiot} é a parte dela aplicada à indústria, e a Indústria 4.0 surge do encontro entre a \sigla{iiot} e os \sigla{cps}.
 
@@ -98,47 +98,9 @@
 
 \subsection{Contêineres}
 
-\par A virtualização oferece um ambiente virtual sobre os recursos físicos de um computador, para melhorar seu aproveitamento. Na forma tradicional, usa máquinas virtuais, cada uma com um sistema operacional completo, chamado de convidado, sob o controle de um hipervisor \cite{NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES}. Esse modelo oferece forte isolamento entre as máquinas virtuais, mas cada uma carrega o custo de um sistema operacional inteiro \cite{NETTO2016_STATE_MACHINE_REPLICATION_KUBERNETES}.
+\par O contêiner empacota uma aplicação com o que ela precisa e a executa de forma isolada: compartilha o núcleo do sistema operacional do computador e isola os seus processos dos demais, com um gerenciador que controla o uso dos recursos \cite{NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES}. A ideia se difundiu com o Linux, cujo núcleo oferece o isolamento e a limitação de processador e memória \cite{DOCKER_DOCS}.
 
-\par O contêiner é uma alternativa mais leve: compartilha o núcleo do sistema hospedeiro e isola os seus processos dos demais, com um gerenciador que controla o uso dos recursos \cite{NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES}. A ideia se difundiu com o Linux, cujo núcleo oferece o isolamento e a limitação de processador e memória \cite{DOCKER_DOCS}. A Figura~\ref{fig:cap2_vm_conteiner} compara os dois modelos.
-
-\begin{figure}[H]
-    \centering
-    \caption{Máquinas virtuais e contêineres}
-    \label{fig:cap2_vm_conteiner}
-    \vspace{0.4cm}
-    \figpadrao{\begin{tikzpicture}[
-        caixa/.style={draw, rectangle, minimum height=0.7cm, font=\scriptsize, align=center, inner sep=1pt},
-        larga/.style={caixa, minimum width=6cm},
-        estreita/.style={caixa, minimum width=1.8cm}
-    ]
-        \node[larga] at (3,0.35) {Hardware};
-        \node[larga] at (3,1.2) {Sistema Operacional Hospedeiro};
-        \node[larga] at (3,2.05) {Monitor de Máquinas Virtuais};
-        \foreach \x/\n in {1/1,3/2,5/3} {
-            \node[estreita] at (\x,2.9) {SO Convidado};
-            \node[estreita] at (\x,3.75) {Bibliotecas};
-            \node[estreita, fill=gray!15] at (\x,4.6) {Aplicação \n};
-        }
-        \node[font=\footnotesize] at (3,-0.45) {(a) Máquinas Virtuais};
-
-        \begin{scope}[xshift=7.5cm]
-            \node[larga] at (3,0.35) {Hardware};
-            \node[larga] at (3,1.2) {SO Hospedeiro (Núcleo Compartilhado)};
-            \node[larga] at (3,2.05) {Gerenciador de Contêineres};
-            \foreach \x/\n in {1/1,3/2,5/3} {
-                \node[estreita] at (\x,3.75) {Bibliotecas};
-                \node[estreita, fill=gray!15] at (\x,4.6) {Aplicação \n};
-            }
-            \node[font=\footnotesize] at (3,-0.45) {(b) Contêineres};
-        \end{scope}
-    \end{tikzpicture}}
-    \vspace{0.2cm} \\
-    Fonte: Elaborado pelo autor com base em \textcite{NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES}.
-\end{figure}
-
-\par Sem inicializar um sistema operacional, o contêiner é criado muito mais rápido que uma máquina virtual \cite{NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES}. Ele nasce de uma imagem, pacote imutável com a aplicação, suas bibliotecas e dependências, normalmente em camadas \cite{NETTO2016_STATE_MACHINE_REPLICATION_KUBERNETES}. A mesma imagem executa de forma idêntica no computador do desenvolvedor ou em um servidor. Em contrapartida, tudo o que o contêiner tem em memória ou em disco se perde quando ele é encerrado, a menos que seja gravado em volumes externos.
-
+\par Como não inicializa um sistema operacional próprio, o contêiner é criado e iniciado rapidamente \cite{NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES}. Ele nasce de uma imagem, pacote imutável com a aplicação, suas bibliotecas e dependências, normalmente em camadas \cite{NETTO2016_STATE_MACHINE_REPLICATION_KUBERNETES}. A mesma imagem executa de forma idêntica no computador do desenvolvedor ou em um servidor. Em contrapartida, tudo o que o contêiner tem em memória ou em disco se perde quando ele é encerrado, a menos que seja gravado em volumes externos.
 
 \subsection{Arquitetura Orientada a Serviços}
 
@@ -150,19 +112,27 @@
 
 \par Os dados costumam vir no formato \sigla{json} (\emph{JavaScript Object Notation}), um texto leve, fácil de ler por pessoas e máquinas. Em sistemas industriais, uma camada de software pode falar Modbus com o equipamento e expor seus dados por serviços \sigla{rest} \cite{BIGHETI2020}.
 
-\par O \sigla{http} não guarda informação de um pedido para o outro, de modo que cada pedido leva o necessário para ser atendido, como a credencial do usuário. Os códigos de resposta 2xx indicam sucesso, os 4xx erro do cliente, como falta de autenticação (401) ou de permissão (403), e os 5xx erro do servidor.
-
-\par Para acompanhar um dado que muda com o tempo, o servidor pode enviar as atualizações por uma conexão sempre aberta, como as \emph{WebSockets}, ou o navegador pode consultá-lo em intervalos curtos. A consulta periódica é mais simples e funciona em qualquer infraestrutura \sigla{http}, ao custo de mais pedidos e de um atraso que não pode ser menor que o intervalo de consulta.
-
 \subsection{Node.js, TypeScript e Fastify}
 
 \par O Node.js permite rodar JavaScript fora do navegador. Seu modelo é orientado a eventos, com operações de entrada e saída que não travam o programa (não bloqueantes): um único fluxo de execução atende muitas conexões, pois, enquanto uma operação de rede ou de disco aguarda, atende outros pedidos \cite{NODEJS_DOCS}. Em contrapartida, cálculos longos travam esse fluxo e devem ir para processos separados.
 
 \par O TypeScript é uma extensão do JavaScript em que o programador declara o tipo de cada dado. O compilador verifica a coerência dos tipos e gera JavaScript comum, de modo que erros são detectados no desenvolvimento \cite{TYPESCRIPT_DOCS}. Como os tipos só existem na compilação, dados que chegam de fora do programa precisam ser validados na execução.
 
-\par O Fastify é um \emph{framework} web para Node.js de baixo custo de processamento por pedido, organizado em módulos (\emph{plugins}). Ele permite inserir rotinas próprias (\emph{hooks}) nas etapas de cada pedido, como a autenticação e a validação, e descrever o formato do pedido e da resposta por esquemas \cite{FASTIFY_DOCS}.
+\par O Fastify é um \emph{framework} web para Node.js de baixo custo de processamento por pedido, organizado em módulos. Ele permite inserir rotinas próprias nas etapas de cada pedido, como a autenticação e a validação, e descrever o formato do pedido e da resposta por esquemas \cite{FASTIFY_DOCS}.
 
 \par A validação por esquema descreve a estrutura que os dados devem ter e rejeita o que não a respeita, e uma única descrição pode servir na execução e na compilação \cite{FASTIFY_DOCS}. Compartilhado entre servidor e navegador, o esquema mantém os dois de acordo sobre o formato das mensagens.
+
+\subsection{React e Next.js}
+
+\par O React é uma biblioteca JavaScript para montar interfaces a partir de componentes, pequenos blocos reutilizáveis de tela, como botões e gráficos. O desenvolvedor descreve como a interface deve ser para um dado estado, e o React atualiza apenas as partes da tela que mudaram \cite{REACT_DOCS}.
+
+\par O Next.js é um \emph{framework} para aplicações web criado sobre o React. Sozinho, o React desenha a tela no navegador, depois que a página carrega, o que torna a primeira carga mais lenta \cite{NEXTJS_DOCS}.
+
+\par O Next.js oferece outras formas de gerar as páginas: no servidor, antes de enviá-las ao navegador, ou uma única vez, na publicação do sistema, para conteúdos que mudam pouco. A estratégia pode ser escolhida para cada tela \cite{NEXTJS_DOCS}.
+
+\par Ele também associa endereços a páginas pela organização dos arquivos do projeto e carrega apenas o código necessário a cada página \cite{NEXTJS_DOCS}.
+
+\par O \emph{framework} distingue os componentes que executam no servidor dos que executam no navegador, necessários quando há interação \cite{NEXTJS_DOCS}. Isso permite usar o Next.js só para as telas, enquanto as regras de funcionamento, a autenticação e o acesso aos dados ficam em um \emph{back-end} separado, que o navegador consulta por pedidos HTTP.
 
 \subsection{Moleculer}
 
@@ -170,13 +140,36 @@
 
 \par Cada serviço expõe operações que outros podem chamar remotamente e envia avisos quando algo relevante acontece. Os serviços são descobertos automaticamente, sem hierarquia entre eles: cada um mantém o próprio registro dos demais e distribui as chamadas entre as cópias disponíveis \cite{MOLECULER_DOCS,BIGHETI2020}. Para lidar com falhas, o Moleculer oferece nova tentativa, tempo limite e resposta alternativa \cite{MOLECULER_DOCS}, capacidade alinhada às arquiteturas orientadas a serviços da Indústria 4.0 \cite{BIGHETI2020}.
 
+\par Os serviços rodam em nós, e todos se comunicam por um transportador (\emph{transporter}), um canal de mensagens comum, como mostra a Figura~\ref{fig:cap2_moleculer}. Os serviços podem ser replicados para resistir a falhas \cite{BIGHETI2020}.
+
+\begin{figure}[H]
+    \centering
+    \caption{Serviços do Moleculer ligados por um transportador}
+    \label{fig:cap2_moleculer}
+    \vspace{0.4cm}
+    \figpadrao{\begin{tikzpicture}[
+        no/.style={draw, rounded corners=2pt, minimum width=3.4cm, minimum height=1.1cm, align=center, font=\small},
+        centro/.style={draw, rounded corners=2pt, minimum width=3.2cm, minimum height=1.3cm, align=center, font=\small, fill=gray!15},
+        liga/.style={<->, thick}
+    ]
+        \node[centro] (t) at (0,0) {Transportador\\(canal de mensagens)};
+        \node[no] (n1) at (-5.2,2) {Nó 1\\Porta de entrada};
+        \node[no] (n2) at (-5.2,0) {Nó 2\\Serviço A};
+        \node[no] (n3) at (-5.2,-2) {Nó 3\\Serviço B};
+        \node[no] (n4) at (5.2,2) {Nó 4\\Serviço C};
+        \node[no] (n5) at (5.2,0) {Nó 5\\Serviço D};
+        \node[no] (n6) at (5.2,-2) {Nó 6\\Serviço E};
+        \foreach \n in {n1,n2,n3,n4,n5,n6} \draw[liga] (\n) -- (t);
+    \end{tikzpicture}}
+    \vspace{0.2cm} \\
+    Fonte: Elaborado pelo autor com base em \textcite{BIGHETI2020}.
+\end{figure}
+
 \subsection{Filas de Mensagens e Processamento Assíncrono}
 
-\par Uma fila de mensagens separa quem pede um trabalho, o produtor, de quem o executa, o consumidor, frequentemente chamado de \emph{worker}. A tarefa, ou \emph{job}, fica na fila até haver capacidade, e o produtor segue adiante sem esperar o resultado, em processamento assíncrono \cite{BULLMQ_DOCS}.
+\par Uma fila de mensagens separa quem pede um trabalho, o produtor, de quem o executa, o consumidor, chamado de \emph{worker}. A tarefa fica na fila até o consumidor ter capacidade, e o produtor segue adiante sem esperar o resultado. Assim, a fila absorve picos de demanda, permite aumentar a capacidade acrescentando consumidores e evita que um trabalho demorado atrase o pedido feito na tela \cite{BULLMQ_DOCS}.
 
-\par A fila absorve picos de demanda, permite aumentar a capacidade acrescentando consumidores, isola falhas, pois o consumidor parado não impede o registro de novas tarefas, e tira do caminho de um pedido feito na tela os trabalhos demorados \cite{BULLMQ_DOCS}.
-
-\par Como a fila pode entregar a mesma tarefa mais de uma vez, seu tratamento deve ser idempotente, isto é, executá-lo duas vezes produz o mesmo resultado que uma. Quando o tratamento falha, a fila repete a tarefa um número limitado de vezes, com espera crescente (\emph{backoff}). Falhas que não se resolvem repetindo, como um dado inválido, levam a tarefa ao conjunto de tarefas falhas, para análise \cite{BULLMQ_DOCS}. A Figura~\ref{fig:cap2_fila} resume o fluxo.
+\par Quando uma tarefa falha, a fila a repete um número limitado de vezes, com uma espera que cresce a cada tentativa. Por isso, o tratamento deve ser idempotente, isto é, repetir a tarefa não pode produzir efeito duplicado. Esgotadas as tentativas, ou diante de um dado inválido, a tarefa vai para um conjunto de tarefas falhas, para análise \cite{BULLMQ_DOCS}. A Figura~\ref{fig:cap2_fila} resume o fluxo.
 
 \begin{figure}[H]
     \centering
@@ -208,44 +201,19 @@
 
 \par O produtor insere a tarefa na fila (1) e o consumidor a retira e processa (2). Se falha e restam tentativas, ela volta à fila após a espera (3). Esgotadas as tentativas, vai para o conjunto de tarefas falhas (4).
 
-\par Bibliotecas de filas para Node.js guardam o estado no Redis e oferecem repetição com \emph{backoff}, tarefas periódicas, prioridades, limites de tarefas e remoção automática de tarefas concluídas \cite{BULLMQ_DOCS}. Como todo o estado fica no Redis, recomenda-se a configuração que recusa novas escritas, em vez de remover dados, quando a memória se esgota \cite{BULLMQ_DOCS}.
+\par As bibliotecas de filas para Node.js guardam o estado das filas no Redis, e por isso recomenda-se configurá-lo para recusar novas escritas, em vez de apagar dados, quando a memória se esgota \cite{BULLMQ_DOCS}.
 
-\subsection{Banco de Dados}
+\subsection{PostgreSQL}
 
-\par O banco de dados armazena, organiza e recupera informações de forma persistente. O modelo relacional estrutura os dados em tabelas com formato definido (esquema) e relações explícitas \cite{MOHAMED2014_RELATIONAL_VS_NOSQL}, e a linguagem de consulta padrão é o \sigla{sql} (\emph{Structured Query Language}).
+\par O PostgreSQL é um sistema de banco de dados objeto-relacional de código aberto, que guarda os dados em disco de forma permanente e é consultado pela linguagem \sigla{sql} (\emph{Structured Query Language}) \cite{POSTGRESQL_DOCS}. No modelo relacional, os dados ficam em tabelas, com linhas, colunas e um formato definido, o esquema, e as transações são confiáveis, com atomicidade, consistência, isolamento e durabilidade \cite{MOHAMED2014_RELATIONAL_VS_NOSQL}.
 
-\par Bancos como o PostgreSQL organizam os dados em tabelas de linhas e colunas, com uma chave primária que identifica cada registro e chaves estrangeiras que ligam tabelas, garantindo a integridade referencial, isto é, que uma relação nunca aponte para um registro inexistente \cite{POSTGRESQL_DOCS}.
-
-
-\par O particionamento divide uma tabela muito grande em partes menores, segundo um critério como o intervalo de tempo, com uma partição por mês, por exemplo. O banco ignora as partições que não podem conter os registros pedidos, técnica denominada poda de partições, e remover dados antigos descartando uma partição inteira é muito mais rápido que apagar milhões de linhas \cite{POSTGRESQL_DOCS}. É usual manter também tabelas de agregados, como médias por minuto ou por hora, que exibem longos períodos sem percorrer os registros brutos.
+\par Em cada tabela, uma chave primária identifica cada registro, e chaves estrangeiras ligam uma tabela a outra, garantindo a integridade referencial, isto é, que uma relação nunca aponte para um registro inexistente \cite{POSTGRESQL_DOCS}.
 
 \subsection{Redis}
 
-\par O \emph{Redis} é um armazenamento de dados em memória, de código aberto, muito rápido, em que cada valor é encontrado por um nome, a chave. Ele mantém os dados em uso na memória \sigla{ram} e responde rapidamente a leituras e escritas \cite{REDIS_DOCS}.
-
-\par Ele pode gravar os dados em disco, apaga as chaves depois de um tempo de vida (\sigla{ttl}) e troca mensagens entre processos por um mecanismo publicador-assinante (Pub/Sub). É muito usado como cópia de acesso rápido (\emph{cache}) e como canal de eventos \cite{REDIS_DOCS}.
+\par O \emph{Redis} mantém os dados em uso na memória \sigla{ram} e responde rapidamente a leituras e escritas. Ele pode gravar os dados em disco, apaga um dado depois de um tempo de vida (\sigla{ttl}) e troca mensagens entre processos por um mecanismo publicador-assinante (Pub/Sub). É muito usado como cópia de acesso rápido (\emph{cache}) e como canal de eventos \cite{REDIS_DOCS}.
 
 \par O Redis oferece listas, conjuntos e outras estruturas, com operações atômicas, que acontecem de uma só vez, e executa pequenos programas em Lua sem interferência de outros clientes. Por isso serve para guardar o valor mais recente de uma informação, limitar pedidos por tempo, criar travas distribuídas e apoiar filas \cite{REDIS_DOCS}.
-
-\subsection{React e Next.js}
-
-\par O React é uma biblioteca JavaScript para montar interfaces a partir de componentes, pequenos blocos reutilizáveis de tela, como botões e gráficos. O desenvolvedor descreve como a interface deve ser para um dado estado, e o React atualiza apenas as partes da tela que mudaram \cite{REACT_DOCS}.
-
-\par O Next.js é um \emph{framework} para aplicações web criado sobre o React. Sozinho, o React desenha a tela no navegador, depois que a página carrega, o que torna a primeira carga mais lenta \cite{NEXTJS_DOCS}.
-
-\par O Next.js oferece outras formas de gerar as páginas: no servidor, antes de enviá-las ao navegador, ou uma única vez, na publicação do sistema, para conteúdos que mudam pouco. A estratégia pode ser escolhida para cada tela \cite{NEXTJS_DOCS}.
-
-\par Ele também associa endereços a páginas pela organização dos arquivos do projeto e carrega apenas o código necessário a cada página \cite{NEXTJS_DOCS}.
-
-\par O \emph{framework} distingue os componentes que executam no servidor dos que executam no navegador, necessários quando há interação \cite{NEXTJS_DOCS}. Isso permite usar o Next.js só para as telas, enquanto as regras de funcionamento, a autenticação e o acesso aos dados ficam em um \emph{back-end} separado, que o navegador consulta por pedidos HTTP.
-
-\subsection{Execução Isolada de Código}
-
-\par Às vezes um sistema precisa executar código escrito por seus usuários, como fórmulas e regras de cálculo. Fazer isso com as permissões da aplicação é arriscado, porque o programa pode consumir todo o processador ou a memória, entrar em laço infinito, ler arquivos ou obter segredos. A execução isolada é um ambiente restrito em que o código roda com permissões e recursos limitados, por processos com poucas permissões, contêineres, máquinas virtuais ou interpretadores embutidos.
-
-\par Uma técnica é executar o código em um interpretador pequeno, dentro de uma máquina virtual em que ele só acessa a própria memória, isolada da memória do programa que o executa, o hospedeiro. O código só alcança arquivos, rede ou relógio pelas funções que o hospedeiro liberar, e há limites de memória e de tempo, de modo que um laço infinito não trava o sistema. Criar um ambiente novo a cada execução evita que os dados de uma passem para a seguinte \cite{HAAS2017_WEBASSEMBLY}.
-
-
 
 \subsection{Protocolo Modbus}
 
@@ -253,6 +221,6 @@
 
 \par Os dados de um dispositivo Modbus ficam em quatro áreas de memória. As bobinas e as entradas discretas guardam valores de um bit, como ligado ou desligado. Os registradores de retenção e os registradores de entrada guardam valores numéricos de 16 bits. As bobinas e os registradores de retenção aceitam leitura e escrita, e as entradas discretas e os registradores de entrada são somente de leitura. Cada operação tem um código de função, que indica a área de memória e se é uma leitura ou uma escrita \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}.
 
-\par Para ler um valor, é preciso informar o equipamento, a área de memória e o endereço em que o dado está. Como essas informações são configuração, o mesmo programa se comunica com equipamentos de fabricantes diferentes sem mudar o código. Um valor que não cabe em 16 bits ocupa mais de um registrador, e a ordem em que eles são combinados varia entre fabricantes, por isso também precisa ser configurada. Quando necessário, uma escala converte o valor lido na grandeza real, como uma temperatura.
+\par Para ler um valor, é preciso informar o equipamento, a área de memória e o endereço em que o dado está. Como essas informações são configuração, o mesmo programa se comunica com equipamentos de fabricantes diferentes sem mudar o código. Um valor que não cabe em 16 bits ocupa mais de um registrador, e a ordem em que eles são combinados varia entre fabricantes, por isso também precisa ser configurada.
 
 \par Como o cliente envia um pedido e espera a resposta antes do seguinte, o tempo de um ciclo de leitura é aproximadamente a soma dos tempos de cada pedido. Por isso, o valor mostrado ao operador pode ter até a idade de um ciclo completo, e ler registradores vizinhos em um único pedido reduz esse tempo.

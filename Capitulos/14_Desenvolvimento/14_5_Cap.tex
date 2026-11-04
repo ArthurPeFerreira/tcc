@@ -20,8 +20,6 @@
     Fonte: Autor.
 \end{figure}
 
-\todo[inline]{Inserir a fotografia da bancada montada em Imagens/Desenvolvimento/Cap5/ e trocar o espaço reservado por \texttt{\textbackslash includegraphics}. Informar o local (laboratório do instituto) e a data da montagem.}
-
 \subsection{Equipamentos Utilizados}
 
 \par A Tabela~\ref{tab:cap6_equipamentos} resume os itens da bancada.
@@ -49,15 +47,15 @@
         \hline
         Inversor ATV320 & Aciona o motor \\
         \hline
-        Motor & Equipamento comandado na bancada \\
+        Motor de 1 CV & Equipamento comandado na bancada \\
         \hline
 \end{xltabular}}
 
 \subsection{Arquitetura de Comunicação}
 
-\par A comunicação tem dois segmentos independentes. No primeiro, a aquisição consulta o \sigla{clp} por Modbus, pela rede Ethernet \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}. No segundo, o \sigla{clp} consulta o inversor por Modbus, em um enlace serial \sigla{rs485} \cite{MODBUS_SERIAL_SPEC}. O \sigla{clp} é, portanto, servidor para o supervisório e mestre para o inversor, organização encontrada em instalações reais.
+\par A bancada tem duas ligações de comunicação e uma ligação elétrica de comando. Na primeira, a aquisição do supervisório consulta o \sigla{clp} por Modbus, pela rede Ethernet \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}. Na segunda, o \sigla{clp} consulta o inversor por Modbus, em um enlace serial \sigla{rs485}, por onde envia a referência de frequência e lê as grandezas do motor \cite{MODBUS_SERIAL_SPEC}. O \sigla{clp} é, portanto, servidor para o supervisório e mestre para o inversor. A partida e a parada não passam pela rede: o \sigla{clp} aciona uma saída digital ligada a uma entrada digital do inversor.
 
-\par Na topologia da Figura~\ref{fig:cap6_topologia}, o servidor envia requisições Modbus ao \sigla{clp} pelo switch da rede local (1 e 2), e o \sigla{clp} responde com os valores em palavras e bits de memória. Em paralelo, o \sigla{clp} troca dados com o inversor por Modbus em \sigla{rs485} e comanda a partida e a parada por uma saída digital (3), e o inversor alimenta o motor (4).
+\par Na Figura~\ref{fig:cap6_topologia}, o servidor envia as requisições Modbus ao \sigla{clp} pelo switch da rede local (1 e 2). O \sigla{clp} troca dados com o inversor pelo \sigla{rs485} (3) e comanda a partida e a parada pela saída digital (4), e o inversor alimenta o motor (5).
 
 \begin{figure}[H]
     \centering
@@ -75,13 +73,14 @@
         \node[bloco, minimum width=3.6cm, minimum height=2.6cm] (clp) at (7.8,0) {};
         \node[font=\small, align=center] at (7.8,0.95) {CLP TM221};
         \node[logico, minimum width=2cm] (mestre) at (7.8,-0.6) {Mestre Modbus};
-        \node[bloco] (inv) at (12.4,-0.6) {Inversor\\ATV320};
-        \node[bloco] (mot) at (12.4,-2.9) {Motor};
+        \node[bloco] (inv) at (14.4,-0.6) {Inversor\\ATV320};
+        \node[bloco] (mot) at (14.4,-2.9) {Motor};
 
         \draw[enlace, <->] (srv) -- node[above, rotulo] {(1)} (sw);
         \draw[enlace, <->] (sw.east) -- node[above, rotulo] {(2)\\Modbus} (clp.west |- sw.east);
-        \draw[enlace, <->] (mestre.east) -- node[above, rotulo, pos=0.72] {(3)\\RS-485} (inv.west);
-        \draw[enlace] (inv) -- node[right, rotulo] {(4) Tensão\\Trifásica} (mot);
+        \draw[enlace, <->] ([yshift=0.2cm]mestre.east) -- node[above, rotulo, pos=0.62] {(3) RS-485} ([yshift=0.2cm]mestre.east -| inv.west);
+        \draw[enlace] ([yshift=-0.75cm]clp.east) -- node[below, rotulo, pos=0.5] {(4) Saída digital} ([yshift=-0.75cm]clp.east -| inv.west);
+        \draw[enlace] (inv) -- node[right, rotulo] {(5) Tensão\\Trifásica} (mot);
     \end{tikzpicture}}
     \vspace{0.2cm} \\
     Fonte: Autor.
@@ -136,8 +135,6 @@
         Frequência mínima e máxima & 0 Hz e 50 Hz & Faixa de operação do motor \\
         \hline
 \end{xltabular}}
-
-\todo[inline]{Conferir os valores da Tabela~\ref{tab:cap6_params_atv320} no inversor.}
 
 \par O \sigla{clp} lê do inversor a frequência, a corrente, a tensão, a potência e a rotação do motor e escreve a referência de frequência.
 
@@ -194,7 +191,7 @@
 
 \par O supervisório escreve o comando e a referência na memória do controlador (1), e a lógica de comando aciona a saída digital do inversor e envia a referência ao bloco de comunicação (2). O bloco transfere a referência e traz a frequência, a corrente, a tensão, a potência e a rotação (3), publicadas nas posições de leitura (4).
 
-\par A Tabela~\ref{tab:cap6_memoria_clp} reúne o mapa de memória, em que \texttt{\%M0} é a bobina de endereço 0 e \texttt{\%MW0} é o registrador de endereço 0. Os valores analógicos são inteiros, e o supervisório reconstrói o valor de engenharia por uma escala linear.
+\par A Tabela~\ref{tab:cap6_memoria_clp} reúne o mapa de memória, em que \texttt{\%M0} é a bobina de endereço 0 e \texttt{\%MW0} é o registrador de endereço 0.
 
 {\renewcommand{\arraystretch}{1.3}\small
 \begin{xltabular}{\textwidth}{>{\centering\arraybackslash}p{3.4cm}>{\centering\arraybackslash}p{2.2cm}>{\centering\arraybackslash}X}
@@ -252,7 +249,7 @@
         \hline
         Coordenadas da planta & Latitude $-$26,8815 e longitude $-$49,1365 (Instituto Federal Catarinense, Campus Blumenau) \\
         \hline
-        Dispositivo de E/S & \sigla{clp} TM221, protocolo Modbus \\
+        Dispositivo & \sigla{clp} TM221, protocolo Modbus \\
         \hline
         Endereço \sigla{ip} e porta & Endereço do \sigla{clp} na rede local, porta 502 \\
         \hline
@@ -262,7 +259,7 @@
         \hline
 \end{xltabular}}
 
-\par Cada tag traz o mapeamento Modbus, o tipo bruto e a escala, e o período de varredura é o do dispositivo, de 1 s. Como os valores são inteiros em décimos, a escala linear leva, por exemplo, o intervalo bruto de 0 a 500 ao de 0 a 50 hertz, na frequência. A Tabela~\ref{tab:cap6_tags} apresenta as sete tags.
+\par Cada tag traz o mapeamento Modbus e o tipo bruto, e o período de varredura é o do dispositivo, de 1 s. A Tabela~\ref{tab:cap6_tags} apresenta as sete tags.
 
 {\renewcommand{\arraystretch}{1.3}\small
 \begin{xltabular}{\textwidth}{>{\centering\arraybackslash}p{2.6cm}>{\centering\arraybackslash}p{2.8cm}>{\centering\arraybackslash}p{2.3cm}>{\centering\arraybackslash}p{1.7cm}>{\centering\arraybackslash}X}
@@ -299,8 +296,6 @@
 
 \par Um alarme de corrente alta é configurado sobre a corrente do motor, com limite [A CONFIRMAR] e banda morta, para evitar disparos repetidos, e o evento de falha de comunicação do dispositivo pode ser ligado a um alarme comum.
 
-\todo[inline]{Confirmar com o autor se o alarme da bancada é o de corrente alta, com o limite, a severidade e a banda morta conforme o motor. Registrar o nome exato dos eventos e dos alarmes criados.}
-
 \par O sinótico representa o motor por um símbolo de onde se abre o diálogo de comando, com a frequência, a corrente, a tensão, a potência e a rotação em indicadores. O \emph{dashboard} reúne um gráfico da frequência e da corrente e um medidor, e a lista de acompanhamento mostra as sete tags. A Figura~\ref{fig:cap6_telas_movi} reserva o espaço para essas telas.
 
 \begin{figure}[H]
@@ -311,8 +306,6 @@
     \vspace{0.2cm} \\
     Fonte: Autor.
 \end{figure}
-
-\todo[inline]{Montar o sinótico, o dashboard e a lista de acompanhamento no sistema e inserir as capturas em Imagens/Desenvolvimento/Cap5/. Descrever o desenho do sinótico efetivamente criado (objetos, vínculos de animação e cores).}
 
 \subsection{Ensaios e Resultados}
 
@@ -337,11 +330,11 @@
         \hline
         E2 & Partida pelo supervisório & RF06, RF08, RNF01 \\
         \hline
-        E3 & Parada pelo supervisório & RF06, RF08, RF17, RNF01 \\
+        E3 & Parada pelo supervisório & RF06, RF08, RF18, RNF01 \\
         \hline
-        E4 & Alarme de corrente alta e reconhecimento & RF16, RF17, RNF05 \\
+        E4 & Alarme de corrente alta e reconhecimento & RF17, RF18, RNF05 \\
         \hline
-        E5 & Perda de comunicação e retorno & RF01, RF03, RF16 \\
+        E5 & Perda de comunicação e retorno & RF01, RF03, RF17 \\
         \hline
         E6 & Troca da referência de frequência & RF06, RF08, RNF05 \\
         \hline
@@ -355,67 +348,7 @@
 
 \par \emph{Ensaio E4.} Com o motor ligado, a corrente cruza o limite configurado [A CONFIRMAR] do alarme de corrente alta, e o detector cria uma ocorrência. O ensaio mede o tempo entre o cruzamento e a exibição no indicador de alarmes, que deve ser da ordem do atraso do supervisório. O operador reconhece o alarme, e confere-se que o registro guarda o nome e o instante. Parado o motor, a corrente cai abaixo do limite, descontada a banda morta, e o alarme retorna ao normal. Espera-se um alarme único por cruzamento e a sequência correta na linha do tempo.
 
-\par \emph{Ensaio E5.} A comunicação é interrompida desconectando o cabo Ethernet entre o comutador e o \sigla{clp}, e depois restabelecida. Durante a falha, o \sigla{clp} continua executando o programa. O sistema marca o valor como desatualizado depois de três períodos de varredura, mantendo o último valor e o carimbo, e o dispositivo passa a degradado depois de três ciclos falhos. Com o cabo de volta, o primeiro ciclo bem-sucedido fecha o estado, sem rajada de leituras acumuladas. O ensaio mede o tempo até a marcação de desatualizado e o tempo até a volta à qualidade boa e confere que não há lacuna preenchida no histórico, pois a lacuna é a evidência da falha.
+\par \emph{Ensaio E5.} A comunicação é interrompida desconectando o cabo Ethernet entre o comutador e o \sigla{clp}, e depois restabelecida. Durante a falha, o \sigla{clp} continua executando o programa. O sistema mantém o último valor e o carimbo, marca o valor como desatualizado e ativa o evento de falha de comunicação do dispositivo. Com o cabo de volta, o primeiro ciclo bem-sucedido fecha o estado, sem rajada de leituras acumuladas. O ensaio mede o tempo até a marcação de desatualizado e o tempo até a volta à qualidade boa e confere que não há lacuna preenchida no histórico, pois a lacuna é a evidência da falha.
 
 \par \emph{Ensaio E6.} Com o motor a 40 hertz, o operador altera a referência para 30 hertz pelo mesmo comando. O ensaio mede o tempo até a resposta do \sigla{clp} e até a frequência atingir a referência, e confere que um segundo comando imediato é recusado pela trava por tag e que o reenvio do mesmo pedido não cria uma segunda escrita.
 
-\par A Tabela~\ref{tab:cap6_medidas} reúne as medidas previstas.
-
-{\renewcommand{\arraystretch}{1.3}\small
-\begin{xltabular}{\textwidth}{cXcc}
-        \caption{Medidas previstas nos ensaios da bancada.}
-        \label{tab:cap6_medidas}\\
-        \hline
-        \textbf{Ensaio} & \textbf{Medida} & \textbf{Esperado} & \textbf{Medido} \\
-        \hline
-        \endfirsthead
-        \hline
-        \textbf{Ensaio} & \textbf{Medida} & \textbf{Esperado} & \textbf{Medido} \\
-        \hline
-        \endhead
-        \endfoot
-        \multicolumn{4}{c}{Fonte: Autor.} \\
-        \endlastfoot
-        E1 & Taxa de leituras gravadas em relação às esperadas & acima de 99\,\% & a medir \\
-        \hline
-        E1 & Variação do intervalo entre carimbos consecutivos & poucos ms & a medir \\
-        \hline
-        E1 & Atraso do supervisório (equipamento até a tela) & varredura mais atualização da tela & a medir \\
-        \hline
-        E2 & Confirmação do operador até a resposta do CLP à escrita & dezenas de ms & a medir \\
-        \hline
-        E2 & Resposta do CLP até a primeira mudança de frequência na tela & varredura mais atualização da tela & a medir \\
-        \hline
-        E2 & Duração da rampa de aceleração observada & valor configurado no inversor & a medir \\
-        \hline
-        E3 & Confirmação do operador até a resposta do CLP à escrita & dezenas de ms & a medir \\
-        \hline
-        E3 & Resposta do CLP até a frequência zero na tela & rampa de desaceleração mais atraso do supervisório & a medir \\
-        \hline
-        E3 & Leituras perdidas durante a transição & nenhuma & a medir \\
-        \hline
-        E4 & Cruzamento do limite até o alarme na tela & varredura mais atualização da tela & a medir \\
-        \hline
-        E4 & Ocorrências geradas por cruzamento & uma & a medir \\
-        \hline
-        E4 & Reconhecimento até o registro com nome e instante & imediato (próxima atualização da tela) & a medir \\
-        \hline
-        E5 & Interrupção até a marcação de desatualizado & três períodos de varredura & a medir \\
-        \hline
-        E5 & Interrupção até o estado de comunicação degradado & três ciclos falhos & a medir \\
-        \hline
-        E5 & Retorno do cabo até a qualidade boa na tela & um ciclo mais atualização da tela & a medir \\
-        \hline
-        E5 & Linhas gravadas no histórico durante a falha & nenhuma & a medir \\
-        \hline
-        E6 & Confirmação do operador até a resposta do CLP à escrita & dezenas de ms & a medir \\
-        \hline
-        E6 & Resposta do CLP até a frequência medida igual à referência & rampa do inversor mais atraso do supervisório & a medir \\
-        \hline
-        E6 & Segundo comando imediato na mesma tag & recusado pela trava & a medir \\
-        \hline
-        E6 & Reenvio do mesmo pedido & uma única escrita & a medir \\
-        \hline
-\end{xltabular}}
-
-\todo[inline]{Conferir os parâmetros citados (referência de 40 e 30 Hz, rampas do inversor, limite de corrente) e medir e inserir, para cada ensaio, o gráfico da tela e os valores da Tabela~\ref{tab:cap6_medidas}. Informar as rampas do inversor, o registrador da referência, o período de varredura, a corrente em cada regime e a linha do registro de comandos. Confirmar a referência de 40 e 30 Hz e se o alarme de falha de comunicação foi ligado.}

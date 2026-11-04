@@ -18,7 +18,7 @@
 
 \par O menu segue a hierarquia de telas: primeiro os itens de supervisão, Mapa, Dashboard, Sinótico, Lista de acompanhamento, Comandos, Alarmes e Linha do tempo, e depois os de configuração, exclusivos do administrador da instalação: Plantas, Usuários, Grupos, Imagens, Telas, Pastas de telas, Configuração de alarmes, Eventos e Scripts. Usuários é visível também ao supervisor, que gere somente operadores.
 
-\par O indicador de alarmes mostra um sino com o nível mais grave não reconhecido e a quantidade (RF16). Ele pulsa apenas com alarme Crítico ou Alto não reconhecido. Se os dados do indicador estiverem velhos por falha de rede, um relógio aparece junto ao sino.
+\par O indicador de alarmes mostra um sino com o nível mais grave não reconhecido e a quantidade (RF17). Ele pulsa apenas com alarme Crítico ou Alto não reconhecido. Se os dados do indicador estiverem velhos por falha de rede, um relógio aparece junto ao sino.
 
 \par As telas com valores ao vivo exibem uma faixa de estado da conexão, que avisa quando a rede oscila ou o serviço não responde, e o último valor continua na tela, marcado como desatualizado. Os valores são atualizados por consultas periódicas (RNF01).
 
@@ -35,7 +35,7 @@
     \label{fig:cap4_mapa}
 \end{figure}
 
-\par O mapa de fundo vem de um serviço de terceiros, e por isso uma nota fixa informa o que é enviado a ele, e uma configuração abre o mapa sem fundo, sem chamada externa. Quem não pode ver alarmes enxerga pinos neutros, e o servidor nem envia esses dados (RF15).
+\par O mapa de fundo vem de um serviço de terceiros, e por isso uma nota fixa informa o que é enviado a ele, e uma configuração abre o mapa sem fundo, sem chamada externa. Quem não pode ver alarmes enxerga pinos neutros, e o servidor nem envia esses dados (RF16).
 
 \subsection{Dashboard}
 
@@ -50,13 +50,13 @@
     \label{fig:cap4_dashboard}
 \end{figure}
 
-\par O painel de linha mostra até 12 tags. Até uma hora cada ponto é a leitura bruta, e em janelas maiores, de até dez anos, o gráfico usa médias de 1 min, 10 min, 30 min ou 6 h, com a faixa de mínimo e máximo, para que um pico curto não desapareça. A linha é interrompida onde falta dado. O painel de barra mostra, por intervalo, a média, o mínimo, o máximo, o volume ou o tempo ligado, e o medidor mostra o valor atual dentro de uma faixa.
+\par O painel de linha mostra até 12 tags ao longo do período escolhido. A linha é interrompida onde falta dado. O painel de barra mostra, por intervalo, a média, o mínimo, o máximo, o volume ou o tempo ligado, e o medidor mostra o valor atual dentro de uma faixa.
 
 \par A montagem é feita na tela ``Montar dashboard'', em que o administrador cria seções e painéis, escolhe o tipo e as tags e ajusta faixas de cor e linhas de meta. Cada tela tem um rascunho e uma versão publicada, e o operador só vê a publicada. Montar telas sem alterar o código cumpre o requisito de incluí-las com o sistema em funcionamento (RF09).
 
 \subsection{Sinótico}
 
-\par O Sinótico representa o processo por um desenho vetorial animado pelos dados em tempo real, equivalente moderno do esquema sinótico das salas de controle (RF14). Ele tem uma face de execução, para o operador, e uma de edição, para o administrador.
+\par O Sinótico representa o processo por um desenho vetorial animado pelos dados em tempo real, equivalente moderno do esquema sinótico das salas de controle (RF15). Ele tem uma face de execução, para o operador, e uma de edição, para o administrador.
 
 \par Na edição, o administrador desenha o processo no navegador, como mostra a Figura~\ref{fig:cap4_editor}. À esquerda está a ``Paleta'', com dezessete tipos de objeto, como tubulações com fluxo animado, cartões de valor, barras de nível, indicadores luminosos e botões. Ao centro fica a área de desenho, e à direita o inspetor do objeto, com as abas ``Aparência'', ``Dados'' e ``Animações''. A biblioteca de imagens fornece figuras de equipamentos.
 
@@ -122,7 +122,7 @@
 
 \par A tela ``Eventos'' lista as condições, que podem ser de tag, compostas ou agendadas. O evento de tag compara a tag com um valor por um operador, com banda morta e atrasos de ativação e de retorno de 0 a 3600 s. O composto combina eventos com E, OU e NÃO, e o agendado dispara em horários definidos. Cada dispositivo Modbus traz três eventos de sistema, de falha de comunicação, de leitura e de escrita. Um evento, por si só, não gera registro nem aviso.
 
-\par O alarme é um objeto separado, na tela da Figura~\ref{fig:cap4_alarme_config}, com descrição, um dos quatro níveis, ícone, planta e de um a vinte eventos que o abrem. Assim, vários eventos podem acionar o mesmo alarme e um evento pode acionar vários alarmes. O sistema não cria alarmes sozinho: para ver uma falha de comunicação como alarme, liga-se um alarme comum ao evento de sistema (RF16).
+\par O alarme é um objeto separado, na tela da Figura~\ref{fig:cap4_alarme_config}, com descrição, um dos quatro níveis, ícone, planta e de um a vinte eventos que o abrem. Assim, vários eventos podem acionar o mesmo alarme e um evento pode acionar vários alarmes. O sistema não cria alarmes sozinho: para ver uma falha de comunicação como alarme, liga-se um alarme comum ao evento de sistema (RF17).
 
 \begin{figure}[H]
     \centering
@@ -157,7 +157,7 @@
     \label{fig:cap4_linha_tempo}
 \end{figure}
 
-\par Cada origem só aparece para quem tem a permissão correspondente. Um aviso informa que a ordem é a do registro do sistema e não a do relógio do equipamento, pois a tela não promete a resolução de uma sequência de eventos com carimbo do equipamento. Esse recurso atende à consulta cronológica (RF17), e a tela de comandos completa a rastreabilidade das ações (RNF05).
+\par Cada origem só aparece para quem tem a permissão correspondente. Um aviso informa que a ordem é a do registro do sistema e não a do relógio do equipamento, pois a tela não promete a resolução de uma sequência de eventos com carimbo do equipamento. Esse recurso atende à consulta cronológica (RF18), e a tela de comandos completa a rastreabilidade das ações (RNF05).
 
 \subsection{Histórico e tendência}
 
@@ -172,15 +172,15 @@
     \label{fig:cap4_tendencia}
 \end{figure}
 
-\par O detalhe segue a janela: até uma hora, a leitura gravada, até um dia, a média por minuto, até sete dias, a de dez minutos, até 31 dias, a de trinta minutos, e acima disso a de seis horas, sempre com o mínimo e o máximo do intervalo. Onde falta dado, a linha é interrompida, e a lacuna é a própria evidência de uma falha de leitura. O gráfico reflete o que foi realmente guardado conforme o modo de cada tag (RF02 e RF15).
+\par Onde falta dado, a linha é interrompida, e a lacuna é a própria evidência de uma falha de leitura. O gráfico reflete o que foi realmente guardado conforme o modo de cada tag (RF02 e RF16).
 
-\subsection{Cadastro: plantas, dispositivos de E/S, tags e pastas}
+\subsection{Cadastro: plantas, dispositivos, tags e pastas}
 
-\par O cadastro segue a hierarquia planta, dispositivo de E/S e tag, com uma árvore de pastas de tags em cada planta (RF10). Só o administrador da instalação o edita, e toda alteração vale com o sistema em operação (RF09). A tela ``Plantas'' lista nome, \emph{slug} (identificador textual curto), coordenadas, quantidade de dispositivos e situação, e a exclusão exige digitar o \emph{slug}, já que apaga tudo o que a planta contém.
+\par O cadastro segue a hierarquia planta, dispositivo e tag, com uma árvore de pastas de tags em cada planta (RF10). Só o administrador da instalação o edita, e toda alteração vale com o sistema em operação (RF09). A tela ``Plantas'' lista nome, \emph{slug} (identificador textual curto), coordenadas, quantidade de dispositivos e situação, e a exclusão exige digitar o \emph{slug}, já que apaga tudo o que a planta contém.
 
-\par A lista de ``Dispositivos de E/S'' mostra nome, protocolo (Modbus ou interno), endereço e situação da comunicação. O formulário do dispositivo Modbus reúne a identificação, a conexão, os tempos e tentativas, os limites do pedido e a escrita \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}. Como o mapeamento é feito por configuração, equipamentos de fabricantes diferentes entram sem alteração de código (RNF07).
+\par A lista de dispositivos mostra nome, protocolo (Modbus ou interno), endereço e situação da comunicação. O formulário do dispositivo Modbus reúne a identificação, a conexão, os tempos e tentativas, os limites do pedido e a escrita \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}. Como o mapeamento é feito por configuração, equipamentos de fabricantes diferentes entram sem alteração de código (RNF07).
 
-\par A tela de uma tag, na Figura~\ref{fig:cap4_tag}, é dividida em seções. ``Identificação'' recebe nome, \emph{slug}, pasta, tipo (analógica, digital, texto ou multiestado) e acesso. ``Mapeamento Modbus'' recebe o tipo de registrador, o endereço, o tipo bruto e a ordem de bytes. ``Escala e unidade'' define a conversão para a grandeza de engenharia. As demais definem o formato mostrado, a banda morta, o histórico, os eventos de alarme e os limites do comando (RF01 e RF02).
+\par A tela de uma tag, na Figura~\ref{fig:cap4_tag}, é dividida em seções. ``Identificação'' recebe nome, \emph{slug}, pasta, tipo (analógica, digital, texto ou multiestado) e acesso. ``Mapeamento Modbus'' recebe o tipo de registrador, o endereço, o tipo bruto e a ordem de bytes. As demais definem o formato mostrado, a banda morta, o histórico, os eventos de alarme e os limites do comando (RF01 e RF02).
 
 \begin{figure}[H]
     \centering
@@ -234,7 +234,7 @@
 
 \par O administrador pode escrever pequenos programas em JavaScript que calculam valores e reagem a eventos, executados em um ambiente isolado, sem rede, arquivos ou segredos e com limites de tempo e de memória. O editor é o mesmo nos dois usos, a variável meta e o script.
 
-\par A variável meta é uma tag de um dispositivo interno calculada a partir de outras tags da mesma planta. A tela da tag mostra o gatilho, por leitura nova ou por tempo, e a ação ``Editar código''. O script, configurado na tela ``Scripts'', é ligado a eventos, para rodar na ativação, no retorno ou nos dois, e pode ler e escrever em tags e habilitar ou desabilitar tags e dispositivos. A escrita em hora marcada se obtém com um evento agendado, e todo comando de script é registrado com o nome dele.
+\par A variável meta é uma tag de um dispositivo interno calculada a partir de outras tags da mesma planta. A tela da tag mostra o gatilho, por leitura nova ou por tempo, e a ação ``Editar código''. O script, configurado na tela ``Scripts'', é ligado a eventos, para rodar na ativação, no retorno ou nos dois, e pode ler e escrever em tags e habilitar ou desabilitar tags e dispositivos. A escrita em hora marcada se obtém com um evento agendado.
 
 \par O editor de código, na Figura~\ref{fig:cap4_editor_codigo}, tem realce de sintaxe, numeração de linhas e um painel ``Referência'' com as funções disponíveis. O botão ``Testar'' confere o código e, na variável meta, mostra o resultado calculado e as tags lidas, e a área ``Simular'' mostra o que o script faria sem escrever nada. A tela de scripts exibe a ``Última execução'' e a ``Última falha'', mantida mesmo depois de um sucesso, para que um defeito intermitente não passe despercebido.
 
@@ -266,23 +266,23 @@
         \endfoot
         \multicolumn{4}{c}{Fonte: Autor.} \\
         \endlastfoot
-        Mapa & /mapa & Permissão de ver telas & RF15, RF16 \\
+        Mapa & /mapa & Permissão de ver telas & RF16, RF17 \\
         \hline
-        Dashboard (execução) & /dashboard & Permissão de ver telas & RF13, RNF01 \\
+        Dashboard (execução) & /dashboard & Permissão de ver telas & RF14, RNF01 \\
         \hline
-        Sinótico (execução) & /sinotico, /telas/ver & Permissão de ver telas & RF03, RF06, RF14, RNF01 \\
+        Sinótico (execução) & /sinotico, /telas/ver & Permissão de ver telas & RF03, RF06, RF15, RNF01 \\
         \hline
-        Montagem de dashboard e do sinótico, telas, pastas de telas e imagens & /telas/..., /configuracao/telas & Administrador da instalação & RF09, RF13, RF14 \\
+        Montagem de dashboard e do sinótico, telas, pastas de telas e imagens & /telas/..., /configuracao/telas & Administrador da instalação & RF09, RF14, RF15 \\
         \hline
         Lista de acompanhamento & /lista-de-acompanhamento & Permissão de ver valores das tags & RF03, RF06, RF13, RNF01 \\
         \hline
         Comandos (histórico) e diálogo de comando & /comandos & Permissões de ver ou emitir comandos & RF06, RF08, RNF05 \\
         \hline
-        Alarmes (ativos e histórico) & /alarmes & Permissão de ver alarmes (reconhecer exige permissão própria) & RF16, RNF05 \\
+        Alarmes (ativos e histórico) & /alarmes & Permissão de ver alarmes (reconhecer exige permissão própria) & RF17, RNF05 \\
         \hline
-        Configuração de alarmes e eventos & /configuracao/alarmes, /configuracao/eventos & Administrador da instalação & RF16 \\
+        Configuração de alarmes e eventos & /configuracao/alarmes, /configuracao/eventos & Administrador da instalação & RF17 \\
         \hline
-        Linha do tempo & /linha-do-tempo & Permissão de ver alarmes ou comandos & RF17, RNF05 \\
+        Linha do tempo & /linha-do-tempo & Permissão de ver alarmes ou comandos & RF18, RNF05 \\
         \hline
         Plantas, dispositivos, tags e pastas & /cadastro/... & Administrador da instalação & RF01, RF02, RF09, RF10, RNF07 \\
         \hline

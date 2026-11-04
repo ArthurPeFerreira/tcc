@@ -28,7 +28,7 @@
 
 \par Este capítulo descreve os caminhos que o dado e as ações percorrem no sistema: quem pede, quem responde, onde cada informação é guardada e o que acontece quando uma peça falha. Cada fluxo é apresentado por um diagrama de blocos com setas numeradas, seguido de um texto que percorre os passos na ordem.
 
-\par Os blocos correspondem aos serviços da arquitetura e têm as posições fixas da Figura~\ref{fig:fx_mapa}. O navegador e o equipamento de campo ficam fora do servidor. Dentro dele estão o \emph{front-end}, que entrega as telas, o \emph{back-end}, que concentra as regras de funcionamento, o \emph{worker}, que retira tarefas das filas e grava no banco, a aquisição, que conversa com o equipamento, e o executor de scripts, que roda, de forma isolada, o JavaScript escrito pelos usuários. O PostgreSQL guarda os dados que precisam durar, e o Redis guarda o valor atual de cada tag, as filas e as travas e transporta a comunicação entre os serviços.
+\par Os blocos correspondem aos serviços da arquitetura e têm as posições fixas da Figura~\ref{fig:fx_mapa}. O navegador e o equipamento de campo ficam fora do servidor. Dentro dele estão o \emph{front-end}, que entrega as telas, o \emph{back-end}, que concentra as regras de funcionamento, o \emph{worker}, que retira tarefas das filas e grava no banco, a aquisição, que conversa com o equipamento, e o executor de scripts, que roda, de forma isolada, o JavaScript escrito pelos usuários. O PostgreSQL guarda os dados que precisam durar. O Redis guarda o valor atual de cada tag, as filas e as travas, e também transporta a comunicação entre os serviços.
 
 \begin{figure}[H]
     \centering
@@ -59,7 +59,7 @@
 
 \subsection{Cadastro de uma Tag}
 
-\par O cadastro de uma tag é o ponto em que o sistema passa a conhecer uma nova variável do processo. A tag pertence a um dispositivo de entrada e saída, ligado a uma planta, e traz o mapeamento do ponto no equipamento, a escala de engenharia e as regras de histórico. O cadastro é feito com o sistema em funcionamento, e a nova tag chega à aquisição sem reiniciar nenhum processo, como mostra a Figura~\ref{fig:fx_cadastro_tag}.
+\par O cadastro de uma tag é o ponto em que o sistema passa a conhecer uma nova variável do processo. A tag pertence a um dispositivo, ligado a uma planta, e traz o mapeamento do ponto no equipamento e as regras de histórico. O cadastro é feito com o sistema em funcionamento, e a nova tag chega à aquisição sem reiniciar nenhum processo, como mostra a Figura~\ref{fig:fx_cadastro_tag}.
 
 \begin{figure}[H]
     \centering
@@ -84,9 +84,9 @@
 
 \par O \emph{back-end} responde ao navegador (4) e publica o evento de mudança do cadastro (5), que o Moleculer entrega, pelo Redis, ao Agendador, dentro da aquisição (6). Como a aquisição não tem banco de dados, o Agendador pede ao \emph{back-end} a configuração pronta do dispositivo (7) e inclui a tag no plano de leitura. A primeira leitura acontece no ciclo seguinte, e até lá a tela mostra a tag como sem dado.
 
-\par Quando a validação falha, o \emph{back-end} recusa o pedido com uma mensagem, e nada é gravado. Se o processo cai entre a gravação e a publicação do evento, a mudança continua registrada e é publicada depois. A cada cinco minutos, o Agendador compara as versões do cadastro de cada planta e relê as que mudaram.
+\par Quando a validação falha, o \emph{back-end} recusa o pedido com uma mensagem, e nada é gravado. Se o processo cai entre a gravação e a publicação do evento, a mudança continua registrada e é publicada depois.
 
-\par Sem o \emph{back-end}, o Redis ou o banco, o cadastro não é possível, mas a leitura do campo continua, porque a aquisição mantém a última configuração recebida. Com a aquisição parada, o cadastro funciona normalmente, e ao voltar ela atualiza as plantas que mudaram.
+\par Se o \emph{back-end}, o Redis ou o banco param, o cadastro fica indisponível, mas a leitura do campo continua com a última configuração recebida. Se a aquisição para, o cadastro continua funcionando, e ela recebe as mudanças quando volta.
 
 \subsection{Do Campo ao Banco}
 
@@ -111,11 +111,11 @@
     Fonte: Autor.
 \end{figure}
 
-\par No período de cada dispositivo, a aquisição envia uma requisição Modbus ao \sigla{clp} (1) \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}, que responde com os valores brutos (2). A aquisição registra o instante da resposta, aplica a escala de engenharia, atribui a qualidade e publica o resultado em duas filas no Redis, uma de valor atual, chamada de ingestão, e outra de histórico (3).
+\par No período de cada dispositivo, a aquisição envia uma requisição Modbus ao \sigla{clp} (1) \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}, que responde com os valores brutos (2). A aquisição registra o instante da resposta, atribui a qualidade e publica o resultado em duas filas no Redis, uma de valor atual, chamada de ingestão, e outra de histórico (3).
 
-\par O \emph{worker} retira as leituras das filas (4), grava o valor atual no Redis (5) e grava o histórico no banco (6), conforme o modo da tag: não gravar, gravar toda leitura ou gravar quando o valor muda além da banda morta. Tarefas periódicas calculam no banco as médias por minuto e por hora, usadas nas consultas de períodos longos.
+\par O \emph{worker} retira as leituras das filas (4), grava o valor atual no Redis (5) e grava o histórico no banco (6), conforme o modo da tag: não gravar, gravar toda leitura ou gravar quando o valor muda além da banda morta.
 
-\par Se o equipamento não responde ou devolve um erro (2b), a aquisição publica as tags com qualidade ruim, e o \emph{worker} mantém o último valor, com a indicação da falha. Depois de três ciclos falhos seguidos, por padrão, o evento de falha de comunicação do dispositivo é ativado, e o primeiro ciclo bem-sucedido o encerra.
+\par Se o equipamento não responde ou devolve um erro (2b), a aquisição publica as tags com qualidade ruim, e o \emph{worker} mantém o último valor, com a indicação da falha. Se as falhas se repetem, o evento de falha de comunicação do dispositivo é ativado, e o primeiro ciclo bem-sucedido o encerra.
 
 \par Se o \emph{worker} para, as leituras se acumulam nas filas e são processadas quando ele volta. Se o Redis volta vazio, uma rotina refaz o valor atual a partir do banco. Se o banco fica indisponível, os trabalhos de histórico esperam e tentam de novo.
 
@@ -146,7 +146,7 @@
 
 \subsection{Histórico e Tendência}
 
-\par A consulta ao histórico alimenta os gráficos de tendência. O sistema escolhe, pelo tamanho da janela, entre a leitura bruta e os resumos já calculados, como mostra a Figura~\ref{fig:fx_tendencia}.
+\par A consulta ao histórico alimenta os gráficos de tendência e permite ver períodos anteriores, como mostra a Figura~\ref{fig:fx_tendencia}. A tela envia o pedido de tendência (1), com as tags e o intervalo desejado. O \emph{back-end} consulta o banco (2) e devolve o resultado (3), e a tela desenha a série. Depois da primeira carga, a tela pede apenas o trecho novo. Um pedido grande demais é recusado, e a falha da consulta não prejudica a exibição dos valores atuais, que têm caminho próprio.
 
 \begin{figure}[H]
     \centering
@@ -162,10 +162,6 @@
     \vspace{0.2cm} \\
     Fonte: Autor.
 \end{figure}
-
-\par A tela envia o pedido de tendência (1), com as tags e o intervalo desejado. O detalhe depende da janela: até uma hora, as leituras brutas, até um dia, a média de um minuto, até sete dias, a de dez minutos, até trinta e um dias, a de trinta minutos, e acima disso a de seis horas. Toda média vem com o mínimo e o máximo do intervalo, para que um pico curto não desapareça.
-
-\par O \emph{back-end} consulta o banco (2), lendo os resumos e completando o início e o fim do intervalo com as leituras brutas, e devolve o resultado (3). A tela desenha então a série. Depois da primeira carga, a tela pede apenas o trecho novo. Um pedido grande demais é recusado, e a falha da consulta não prejudica a exibição dos valores atuais, que têm caminho próprio.
 
 \subsection{Comando de Equipamentos}
 

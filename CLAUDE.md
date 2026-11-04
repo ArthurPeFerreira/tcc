@@ -39,11 +39,12 @@ Quando estiver inseguro, **pergunte antes de editar**.
   - **Sem nomes de biblioteca** (decisão do autor, 01/11/2026). Só a base fica nomeada: Fastify, Moleculer, Next.js, React, Node.js, TypeScript, Docker, PostgreSQL e Redis. Fora do texto: BullMQ, Zod, biblioteca de gráfico e de mapa, interpretador de scripts, Argon2id e JWT. Dizer o que a função faz, com "boas práticas" onde couber. Testes de carga e números de CPU ficam até o autor falar com o orientador.
   - **Bancada sem simulação** (decisão do autor, 01/11/2026). O tanque saiu por completo. A bancada é só CLP, inversor e motor: ligar, desligar e mudar a velocidade, com demonstração pelo tablet aos professores. Tags: comando, estado, referência, frequência, corrente, tensão e falha. O alarme de corrente alta é proposta, com limite a confirmar.
   - **Sem nome de produto** (decisão do autor, 01/11/2026). O texto não usa "Movi" nem outro nome: é "o sistema" ou "o supervisório". O autor vai tirar o nome também da interface, então as capturas de tela só entram depois disso.
+  - **Prints e capítulo 6** (decisão do autor, 04/11/2026). O autor vai criar no sistema uma empresa nova só com a bancada e tirar dela todos os prints dos capítulos 5 e 6. O capítulo 6 não tem mais tabela de medidas previstas nem notas `\todo`, e o autor ainda vai melhorá-lo. Na bancada, a partida e a parada vão por uma saída digital do CLP ligada a uma entrada digital do inversor, e a referência e as leituras vão pelo RS-485.
   - **Sem seção de implantação** (decisão do autor, 01/11/2026). O foco é a arquitetura e a validação de que ela funciona. Na apresentação, o sistema roda em Docker Compose no computador do autor (só contexto, não escrever no texto). Não cortar mais texto por iniciativa própria: o autor vai pedindo os cortes conforme lê.
   - **Modbus sem variantes** (decisão do autor, 01/11/2026). O texto fala só do protocolo Modbus, sem citar TCP, RTU ou ASCII. Os títulos das referências ficam como são.
   - **Sem código no texto.** Mostrar caminhos e fluxos (diagramas de blocos com passos numerados e o texto que percorre os passos), não trechos de programa.
   - **Diagramas simples**, só quadradinhos em TikZ, no estilo dos artigos do coorientador (figura de blocos com passos numerados e um parágrafo que os percorre: "o cliente envia o pedido (1), que ... (2)"). Bibliotecas carregadas em `Configurações/Commands.tex`: `positioning, arrows.meta, fit, calc, backgrounds`.
-  - Artigos do coorientador citáveis: `NETTO2016_STATE_MACHINE_REPLICATION_KUBERNETES` e `NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES`, só onde definem virtualização, contêiner e imagem. `NETTO2019_RAFT_KUBERNETES` saiu junto com o Raft.
+  - Artigos do coorientador citáveis: `NETTO2016_STATE_MACHINE_REPLICATION_KUBERNETES` e `NETTO2017_COORDENACAO_CONTAINERS_KUBERNETES`, só onde definem contêiner e imagem (a virtualização saiu do texto em 04/11, porque não é usada em outro lugar). `NETTO2019_RAFT_KUBERNETES` saiu junto com o Raft.
 
 ### 1.1 Compilação
 
@@ -136,6 +137,7 @@ TCC/
 
 ### 4.6 Referências cruzadas
 
+- Requisitos sempre listados um a um, nunca em intervalo: "RF01, RF02 e RF03", não "RF01 a RF03" (pedido do autor, 04/11/2026).
 - `Figura~\ref{fig:nome}` (não "Fig." nem só "\ref")
 - `Tabela~\ref{tab:nome}`
 - `Equação~\ref{eq:nome}` ou `Equações~\ref{eq:a} e~\ref{eq:b}`

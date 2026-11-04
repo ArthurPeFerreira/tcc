@@ -28,7 +28,7 @@
         \endlastfoot
         RF01        & Adquirir periodicamente os dados dos dispositivos de campo via Modbus, com período configurável por dispositivo & Aquisição        \\
         \hline
-        RF02        & Registrar as leituras no histórico, com médias por minuto e por hora & Aquisição        \\
+        RF02        & Registrar as leituras no histórico & Aquisição        \\
         \hline
         RF03        & Manter o valor atual de cada tag, com indicação de qualidade                    & Aquisição        \\
         \hline
@@ -50,15 +50,17 @@
         \hline
         RF12        & Executar scripts do usuário em JavaScript de forma isolada            & Cálculo          \\
         \hline
-        RF13        & Exibir a lista de acompanhamento em tempo real e dashboards configuráveis                              & Visualização     \\
+        RF13        & Exibir a lista de acompanhamento em tempo real & Visualização     \\
         \hline
-        RF14        & Desenhar telas sinóticas e executá-las com valores e comandos                  & Visualização     \\
+        RF14        & Montar e exibir dashboards configuráveis & Visualização     \\
         \hline
-        RF15        & Exibir as plantas em um mapa e consultar o histórico das tags                             & Visualização     \\
+        RF15        & Desenhar telas sinóticas e executá-las com valores e comandos                  & Visualização     \\
         \hline
-        RF16        & Gerar alarmes em quatro níveis a partir de eventos, com reconhecimento   & Alarmes          \\
+        RF16        & Exibir as plantas em um mapa e consultar o histórico das tags                             & Visualização     \\
         \hline
-        RF17        & Exibir eventos, alarmes e comandos em uma linha do tempo                                                     & Alarmes          \\
+        RF17        & Gerar alarmes em quatro níveis a partir de eventos, com reconhecimento   & Alarmes          \\
+        \hline
+        RF18        & Exibir eventos, alarmes e comandos em uma linha do tempo                                                     & Alarmes          \\
         \hline
 \end{xltabular}}
 
@@ -156,13 +158,13 @@
 
 \subsubsection{Aquisição e Registro de Dados}
 
-\par As leituras (RF01 a RF03) são feitas pela aquisição, que conversa com os dispositivos de campo por Modbus \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}. Cada ponto é cadastrado como tag, com um tipo de dado (booleano, inteiro de 16 ou 32 bits, ponto flutuante, decimal codificado em binário ou texto) e a escala entre o valor bruto e a grandeza de engenharia. O período de varredura é definido por dispositivo, de 45 segundos por padrão. Redes seriais antigas são alcançadas por um \emph{gateway}, sem exigir porta serial no servidor.
+\par As leituras (RF01, RF02 e RF03) são feitas pela aquisição, que conversa com os dispositivos de campo por Modbus \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}. Cada ponto é cadastrado como tag, com o seu tipo de dado, como booleano, inteiro ou ponto flutuante. O período de varredura é definido por dispositivo.
 
-\par O valor atual de cada tag fica no Redis, com um indicador de qualidade (bom, desatualizado, falha, desconhecido ou implausível), e as telas o consultam sem sobrecarregar o banco. O histórico é gravado no PostgreSQL, em uma tabela dividida por mês, com médias por minuto e por hora que aceleram os gráficos longos \cite{POSTGRESQL_DOCS}. A gravação passa por filas, de modo que um pico de leituras não a derruba, e uma banda morta configurável evita registrar variações sem significado.
+\par O valor atual de cada tag fica no Redis, com um indicador de qualidade (bom, desatualizado, falha, desconhecido ou implausível), e as telas o consultam sem sobrecarregar o banco. O histórico é gravado no PostgreSQL e pode ser consultado por períodos anteriores. A gravação passa por filas, de modo que um pico de leituras não a derruba, e uma banda morta configurável evita registrar variações sem significado.
 
 \subsubsection{Sincronismo de Tempo}
 
-\par O sincronismo (RF04) vem do carimbo de tempo que a aquisição aplica ao ciclo de leitura. Todas as tags lidas no mesmo ciclo de um dispositivo recebem a mesma estampa, que indica o instante da amostragem e não o da transição do processo, como é próprio da leitura periódica. O carimbo acompanha o valor até a tela sem ser alterado, o que garante a cronologia para a análise de ocorrências \cite{ZANGHI2019_SCADA_CONCEITOS}. Como todos os serviços usam o relógio do mesmo servidor, a referência é comum, e com mais de um servidor o requisito passa a depender da sincronização entre as máquinas. Os instantes são guardados em UTC e convertidos para o fuso do usuário na exibição.
+\par O sincronismo (RF04) vem do carimbo de tempo que a aquisição aplica ao ciclo de leitura. Todas as tags lidas no mesmo ciclo de um dispositivo recebem a mesma estampa, que indica o instante da amostragem e não o da transição do processo, como é próprio da leitura periódica. O carimbo acompanha o valor até a tela sem ser alterado, o que garante a cronologia para a análise de ocorrências \cite{ZANGHI2019_SCADA_CONCEITOS}. Como todos os serviços usam o relógio do mesmo servidor, a referência de tempo é comum.
 
 \subsubsection{Níveis de Acesso}
 
@@ -172,15 +174,15 @@
 
 \subsubsection{Comando e Controle}
 
-\par O comando e o controle (RF06 a RF08) seguem as variantes da literatura \cite{ZANGHI2019_SCADA_CONCEITOS}: o comando instantâneo, que muda o estado de um equipamento, e o controle por valor de referência, que define um alvo, ambos executados como escrita Modbus pela aquisição. O comando passa pela tela, que conduz o operador, pelo \emph{back-end}, que verifica a permissão e guarda o registro, e pela aquisição, que escreve. Cada comando tem uma chave de idempotência, identificador que impede a execução dupla, e uma trava por tag, que impede dois comandos simultâneos no mesmo ponto \cite{STOUFFER2015_NIST_ICS_SECURITY}.
+\par O comando e o controle (RF06, RF07 e RF08) seguem as variantes da literatura \cite{ZANGHI2019_SCADA_CONCEITOS}: o comando instantâneo, que muda o estado de um equipamento, e o controle por valor de referência, que define um alvo, ambos executados como escrita Modbus pela aquisição. O comando passa pela tela, que conduz o operador, pelo \emph{back-end}, que verifica a permissão e guarda o registro, e pela aquisição, que escreve. Cada comando tem uma chave de idempotência, identificador que impede a execução dupla, e uma trava por tag, que impede dois comandos simultâneos no mesmo ponto \cite{STOUFFER2015_NIST_ICS_SECURITY}.
 
-\par O comando termina com a resposta do dispositivo, que já espelha o que foi aceito, sem releitura do ponto. Sem resposta no prazo, o comando falha, e quando o sistema perde o rastro, o estado é registrado como desconhecido, nunca como sucesso. Todo comando e todo reconhecimento de alarme ficam registrados com o autor e a origem. A escrita em hora marcada é feita por um evento agendado que dispara um script, com o nome do script registrado como origem.
+\par O comando termina com a resposta do dispositivo, que já espelha o que foi aceito, sem releitura do ponto. Sem resposta no prazo, o comando falha, e quando o sistema perde o rastro, o estado é registrado como desconhecido, nunca como sucesso. Todo comando e todo reconhecimento de alarme ficam registrados com o autor e a origem. A escrita em hora marcada é feita por um evento agendado que dispara um script.
 
 \subsubsection{Escalabilidade}
 
 \par A escalabilidade (RF09 e RNF02), ou seja, a capacidade de crescer, tem três frentes. Novos pontos, dispositivos e telas entram com o sistema em funcionamento, sem mexer no código. A aquisição e o \emph{worker} podem rodar em várias réplicas, isto é, cópias do mesmo serviço trabalhando juntas, e cada dispositivo fica sempre com a mesma réplica, para que leituras e escritas não se atropelem.
 
-\par Nos dados, o PostgreSQL cresce dividindo o histórico por mês, com retenção configurável, e o Redis tem um limite de memória e recusa novas escritas em vez de descartar dados em silêncio. Isso evita o limite de pontos comum nos supervisórios comerciais, embora o teto dependa da capacidade da máquina.
+\par Nos dados, o PostgreSQL guarda o histórico com retenção configurável, e o Redis tem um limite de memória e recusa novas escritas em vez de descartar dados em silêncio. Isso evita o limite de pontos comum nos supervisórios comerciais, embora o teto dependa da capacidade da máquina.
 
 \subsubsection{Integrabilidade}
 
@@ -188,11 +190,13 @@
 
 \subsubsection{Redundância}
 
-\par A redundância (RNF03) apoia-se nas réplicas e nas filas, que sobrevivem a falhas \cite{ZANGHI2019_SCADA_CONCEITOS}. Cada réplica da aquisição e do \emph{worker} retira trabalho das mesmas filas, de modo que a perda de uma é absorvida pelas demais, e o \emph{front-end} e o \emph{back-end} também rodam em duas réplicas. Os trabalhos que falham são repetidos com espera controlada, os que esgotam as tentativas ficam guardados para inspeção, e o histórico tolera pausas curtas do banco. As travas de comando têm prazo de validade, de modo que a queda de uma cópia nunca as deixa presas.
+\par A redundância (RNF03) fica simples por causa da forma como o sistema foi construído. Cada serviço roda em um contêiner criado a partir de uma imagem, e por isso ter um reserva idêntico, a réplica, é só iniciar outro contêiner com a mesma imagem, sem mudar o código. Se uma réplica cai, as demais assumem o trabalho, que é o que se espera da redundância \cite{ZANGHI2019_SCADA_CONCEITOS}.
+
+\par A aquisição e o \emph{worker} rodam em réplicas que retiram trabalho das mesmas filas, de modo que a perda de uma é absorvida pelas demais, e o \emph{front-end} e o \emph{back-end} rodam em duas réplicas. As filas também sobrevivem a falhas: os trabalhos que falham são repetidos, e as travas de comando têm prazo de validade, de modo que a queda de uma réplica nunca as deixa presas.
 
 \par O ponto mais sensível é o Redis, que concentra o valor atual, as filas e o transporte entre serviços, e por isso seu conteúdo pode ser recuperado. Quando ele volta vazio, a ausência de um marcador, o \emph{boot-marker}, aciona uma rotina que recoloca o valor de cada tag a partir da última leitura no banco, agenda de novo as tarefas periódicas e refaz o estado dos alarmes. Enquanto isso, as funções que dependem dele respondem que estão indisponíveis, e os valores recolocados ficam marcados como desatualizados até a próxima leitura.
 
-\par A replicação do PostgreSQL com comutação automática e a execução em mais de uma máquina ficam como evolução. Como os serviços não guardam dados importantes dentro de si, isso não exige mudança no código, apenas na forma de instalá-los.
+\par Como tudo roda em contêineres, levar as réplicas para mais de uma máquina e replicar o PostgreSQL fica como evolução, que muda apenas a forma de instalar os contêineres, e não o código.
 
 \subsection{Serviços}
 
@@ -243,11 +247,11 @@
 
 \subsubsection{Worker}
 
-\par O \emph{worker}, em TypeScript, não atende pedidos do navegador: apenas processa as filas de trabalho. Ele grava o histórico, atualiza o valor atual e as médias, avalia os eventos, dispara os agendados, executa as rotinas de manutenção e calcula as tags internas e as variáveis meta, pedindo a avaliação de scripts ao executor. O \emph{worker} não fala com o campo, e sua capacidade pode ser aumentada com réplicas.
+\par O \emph{worker}, em TypeScript, não atende pedidos do navegador: apenas processa as filas de trabalho. Ele grava o histórico, atualiza o valor atual, avalia os eventos, dispara os agendados, executa as rotinas de manutenção e calcula as tags internas e as variáveis meta, pedindo a avaliação de scripts ao executor. O \emph{worker} não fala com o campo, e sua capacidade pode ser aumentada com réplicas.
 
 \subsubsection{Aquisição}
 
-\par A aquisição é a fronteira com o campo e o único componente que conversa em Modbus. Ela roda em Node, sem banco de dados, e reúne duas funções. O agendador decide o instante de cada leitura, agrupa as tags de um dispositivo em uma rodada para reduzir o tráfego e não inicia um ciclo enquanto o anterior não terminar. O cliente Modbus monta o quadro, valida a resposta e os códigos de erro, decodifica os registradores, aplicando a ordem de bytes e a escala, e produz o valor na unidade de engenharia \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}.
+\par A aquisição é a fronteira com o campo e o único componente que conversa em Modbus. Ela roda em Node, sem banco de dados, e reúne duas funções. O agendador decide o instante de cada leitura e não inicia um ciclo enquanto o anterior não terminar. O cliente Modbus monta o quadro, valida a resposta e os códigos de erro, decodifica os registradores e produz o valor da tag \cite{MODBUS_TCP_IMPLEMENTATION_GUIDE}.
 
 \par Ela recebe pronta a configuração de cada dispositivo e pode rodar em réplicas, com cada dispositivo fixo em uma delas. A trava por dispositivo, no Redis, dá ao comando prioridade sobre a leitura periódica. As falhas de comunicação são contadas por dispositivo, com tempo limite e número de tentativas configuráveis. Quando uma leitura falha, o último valor é mantido e marcado como desatualizado, e a ocorrência alimenta os eventos do dispositivo, pois, em um \sigla{scada}, a ausência de um dado precisa ser tão visível quanto um limite ultrapassado.
 
@@ -259,17 +263,32 @@
 
 \par O serviço não tem credencial de banco: o \emph{back-end} ou o \emph{worker} leem o banco e enviam os valores no pedido. A conta dele no Redis tem o mínimo de permissões, e um limite global de execuções simultâneas impede que um script lento ocupe o serviço inteiro. Assim, mesmo que um script malicioso escape do interpretador, não alcança o banco, a rede interna nem os comandos de escrita do campo.
 
-\subsubsection{PostgreSQL}
+\subsubsection{Armazenamento de Dados}
 
-\par O PostgreSQL é um banco relacional de código aberto, com bom suporte a particionamento e a consultas em janelas de tempo \cite{POSTGRESQL_DOCS}, e guarda os usuários, as sessões, o cadastro, o histórico, os alarmes, as telas, os scripts e os grupos de permissões.
+\par O armazenamento é dividido em dois serviços, conforme o que cada dado precisa. O PostgreSQL guarda o que precisa durar: os usuários, as sessões, o cadastro, o histórico, os alarmes, as telas, os scripts e os grupos de permissões. O Redis guarda o que precisa ser rápido ou é temporário: o valor atual de cada tag, os trabalhos das filas, os contadores de limites, as travas e a lista de sessões revogadas, além de transportar a comunicação do Moleculer. A Tabela~\ref{tab:armazenamento} resume essa divisão.
 
-\par As conexões são separadas por finalidade, de modo que a gravação de leituras, as telas e as consultas pesadas não as disputam. As mudanças na estrutura do banco são feitas por migrações, roteiros de alteração compatíveis com a versão anterior do código e ensaiados antes da aplicação. O histórico é dividido por mês, com retenção configurável, e cada consulta nova nasce com o índice que a atende.
+{\renewcommand{\arraystretch}{1.3}\small
+\begin{xltabular}{\textwidth}{>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}X}
+        \caption{Divisão dos dados entre PostgreSQL e Redis.}
+        \label{tab:armazenamento}\\
+        \hline
+        \textbf{Serviço} & \textbf{O que guarda} \\
+        \hline
+        \endfirsthead
+        \hline
+        \textbf{Serviço} & \textbf{O que guarda} \\
+        \hline
+        \endhead
+        \endfoot
+        \multicolumn{2}{c}{Fonte: Autor.} \\
+        \endlastfoot
+        PostgreSQL & Usuários, sessões, cadastro, histórico, alarmes, telas, scripts e grupos de permissões \\
+        \hline
+        Redis & Valor atual das tags, filas de trabalho, contadores de limites, travas, sessões revogadas e transporte do Moleculer \\
+        \hline
+\end{xltabular}}
 
-\subsubsection{Redis}
-
-\par O Redis é um armazenamento de dados em memória \cite{REDIS_DOCS} com várias funções. Como memória de acesso rápido (\emph{cache}), mantém o valor atual de cada tag. Guarda os trabalhos das filas, transporta a comunicação do Moleculer e guarda os contadores de limites, as travas distribuídas e a lista de sessões revogadas.
-
-\par Os contadores e as travas têm prazo de validade. Já o último valor de cada tag não expira, e por isso o Redis é reconstruído do banco quando volta vazio. Ele só é acessível pela rede interna, e cada serviço tem uma conta com permissões próprias.
+\par No PostgreSQL, as conexões são separadas por finalidade, de modo que a gravação de leituras, as telas e as consultas pesadas não as disputam, e as mudanças na estrutura do banco são feitas por migrações, roteiros de alteração ensaiados antes da aplicação. No Redis, os contadores e as travas têm prazo de validade, mas o último valor de cada tag não expira, e por isso o Redis é reconstruído a partir do banco quando volta vazio. O Redis só é acessível pela rede interna, e cada serviço tem uma conta com permissões próprias.
 
 \subsubsection{Comunicação Moleculer e Filas}
 

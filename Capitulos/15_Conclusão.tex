@@ -5,9 +5,9 @@
 
 \subsection{Retomada dos objetivos}
 
-\par O primeiro objetivo específico era revisar os conceitos da solução, reunidos no Capítulo~2: supervisórios, Indústria~4.0, nuvem, contêineres, bancos de dados, filas, o protocolo Modbus e a execução isolada \cite{COLOMBO2014_STATE_ART_AUTOMATION,LASI_INDUSTRY_40}.
+\par O primeiro objetivo específico era revisar os conceitos da solução, reunidos no Capítulo~2: supervisórios, Indústria~4.0, nuvem, contêineres, bancos de dados, filas e o protocolo Modbus \cite{COLOMBO2014_STATE_ART_AUTOMATION,LASI_INDUSTRY_40}.
 
-\par O segundo era especificar os requisitos e projetar a arquitetura. O Capítulo~3 fixou dezessete requisitos funcionais e dez não funcionais e mostrou como cada módulo de um supervisório é atendido pelo \emph{front-end}, pelo \emph{back-end}, pelos \emph{workers}, pela aquisição, pelo executor de scripts, pelo PostgreSQL e pelo Redis.
+\par O segundo era especificar os requisitos e projetar a arquitetura. O Capítulo~3 fixou dezoito requisitos funcionais e dez não funcionais e mostrou como cada módulo de um supervisório é atendido pelo \emph{front-end}, pelo \emph{back-end}, pelos \emph{workers}, pela aquisição, pelo executor de scripts, pelo PostgreSQL e pelo Redis.
 
 \par O terceiro era implementar a aquisição via Modbus, com o registro do valor atual e do histórico. O Capítulo~4 descreveu o caminho do dado, e o ensaio E1 do Capítulo~6 confere a leitura contínua e o histórico.
 
@@ -29,9 +29,9 @@
 
 \par O efeito de réplicas não foi medido, e a redundância entre servidores não foi implantada.
 
-\par Seis requisitos estão parcialmente atendidos: RF06, RF08, RF16 e RNF01 dependem dos ensaios com a bancada, e RNF02 e RNF03 dependem de medidas com mais de uma réplica e de ensaio de queda de réplica.
+\par Seis requisitos estão parcialmente atendidos: RF06, RF08, RF17 e RNF01 dependem dos ensaios com a bancada, e RNF02 e RNF03 dependem de medidas com mais de uma réplica e de ensaio de queda de réplica.
 
-\todo[inline]{Fechar esta seção depois dos ensaios E1 a E6 da bancada: informar quais requisitos passam de parcial para atendido, os tempos de resposta do comando e o atraso do supervisório medidos, e ajustar a frase sobre o objetivo de validação em bancada.}
+\todo[inline]{Fechar esta seção depois dos ensaios E1, E2, E3, E4, E5 e E6 da bancada: informar quais requisitos passam de parcial para atendido, os tempos de resposta do comando e o atraso do supervisório medidos, e ajustar a frase sobre o objetivo de validação em bancada.}
 
 \subsection{Trabalhos futuros}
 
